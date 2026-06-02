@@ -30,20 +30,63 @@ let current = 'dashboard';
 const app = document.getElementById('app');
 
 async function mount() {
-  if (!store.state) {
-    clear(app);
-    app.className = 'app locked';
-    app.appendChild(el('div', { class: 'lockwrap' }, el('div', { class: 'lockcard', style: 'text-align:center' }, el('p', { class: 'muted', text: 'Loading…' }))));
-  }
+  if (!store.state) splashLoading('Loading…');
   await store.load();
+  await ensureProvisioned();
   route();
 }
 
-// Route from the in-memory state (no storage read) — used after setup/reset.
+// Route from the in-memory state (no storage read).
 function route() {
-  if (!store.isSetup()) return renderSetup();
   if (!store.session) return renderLogin();
   renderShell();
+}
+
+// Brief full-screen splash while loading / auto-provisioning.
+function splashLoading(msg) {
+  clear(app); app.className = 'app locked';
+  app.appendChild(el('div', { class: 'lockwrap' }, el('div', { class: 'lockcard', style: 'text-align:center' }, [
+    el('img', { src: LOGO_LIGHT, alt: 'Frendz Hostel El Nido', style: 'height:42px;margin:0 auto 12px;display:block' }),
+    el('p', { class: 'muted', text: msg || 'Loading…' }),
+  ])));
+}
+
+// First-run provisioning. A fresh device is auto-configured with the hostel's
+// official records (so it opens showing the real COH) — no "create a PIN" screen.
+// Auth is intentionally NOT created here: the manager PIN is kept per-device for
+// devices that already have one, and a full auth system is added separately later.
+// Staff sign in without a PIN (requireStaffPin stays false); manager-only actions
+// stay locked on devices that have no manager PIN.
+async function ensureProvisioned() {
+  const fresh = !store.isSetup();
+  const onCurrent = store.config.officialDataVersion === OFFICIAL_DATA_VERSION;
+  // An instance already holding official records has a beginning float or an
+  // adjustment entry — don't auto-replace it (would clobber any manual entries).
+  const looksOfficial = store.beginningBalance() > 0 || store.ledger.some((e) => e.kind === 'adjustment');
+  if (!fresh && (onCurrent || looksOfficial)) return;
+  // Fresh device → provision; legacy demo/empty instance → upgrade to the records.
+  splashLoading(fresh ? 'Loading hostel records…' : 'Updating to the latest records…');
+  store.state.config.setupComplete = true;
+  store.state.config.requireStaffPin = false;
+  if (fresh) store._audit('setup.complete', 'Front desk initialised — official records auto-loaded', { auto: true });
+  try {
+    const res = await fetch(OFFICIAL_CSV, { cache: 'no-store' });
+    if (!res.ok) throw new Error('HTTP ' + res.status);
+    applyOfficialData(await res.text());
+  } catch (e) {
+    console.error('auto-provision: could not load official records', e);
+    store.save(); // set up with an empty ledger; records can be loaded later
+  }
+}
+
+// Import the official CSV and reconcile COH to the live-sheet figure. Shared by
+// first-run provisioning and the manual Settings → "Load official data file".
+function applyOfficialData(text) {
+  const s = importSheet(store, text, { replace: true });
+  store.reconcileCOH(OFFICIAL_COH, { source: 'official data file', reason: `Reconciliation to official sheet COH ₱${pesoPlain(OFFICIAL_COH)} (live-sheet activity beyond this CSV snapshot)` });
+  store.state.config.officialDataVersion = OFFICIAL_DATA_VERSION;
+  store.save();
+  return s;
 }
 
 // ---------------------------------------------------------------- Setup
@@ -515,6 +558,10 @@ const OFFICIAL_CSV = 'data/deposit-towel-full.csv';
 // ₱47,100 + net flow). The CSV is an older snapshot, so after import we book a
 // single labelled reconciliation entry so COH ties to this official figure.
 const OFFICIAL_COH = 58800;
+// Bump this whenever the committed records / COH change. A device whose stored
+// `officialDataVersion` differs auto-loads the latest records on next open
+// (see ensureProvisioned). Lets "apply the new data" propagate without a reset.
+const OFFICIAL_DATA_VERSION = '2026-06-02-coh58800';
 async function loadOfficialData() {
   let text;
   try {
