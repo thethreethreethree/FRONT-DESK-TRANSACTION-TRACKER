@@ -31,15 +31,17 @@ export function render(ctx) {
   // ---- COH hero + side stats ----
   const heroRow = el('div', { class: 'grid coh-row' });
 
+  const begin = store.beginningBalance();
+  const formulaParts = [];
+  if (begin) formulaParts.push(el('span', { html: `Beginning <b>₱${pesoPlain(begin)}</b>` }));
+  formulaParts.push(el('span', { html: `${begin ? '+ ' : ''}Deposits <b>₱${pesoPlain(t.deposits)}</b>` }));
+  formulaParts.push(el('span', { html: `− Refunds <b>₱${pesoPlain(t.refunds)}</b>` }));
+  formulaParts.push(el('span', { html: `= <b>₱${pesoPlain(coh)}</b>` }));
   const hero = el('div', { class: 'coh-hero' }, [
     el('div', { class: 'label', text: 'Cash On Hand' }),
     el('div', { class: 'amount', html: `<span class="cur">₱</span>${pesoPlain(coh)}` }),
     el('div', { class: 'lockline' }, ['🔒 Auto-calculated · cannot be edited']),
-    el('div', { class: 'formula' }, [
-      el('span', { html: `Deposits <b>₱${pesoPlain(t.deposits)}</b>` }),
-      el('span', { html: `− Refunds <b>₱${pesoPlain(t.refunds)}</b>` }),
-      el('span', { html: `= <b>₱${pesoPlain(coh)}</b>` }),
-    ]),
+    el('div', { class: 'formula' }, formulaParts),
   ]);
   heroRow.appendChild(hero);
 

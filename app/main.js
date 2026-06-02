@@ -334,6 +334,9 @@ function renderSettings(ctx) {
   ]));
   root.appendChild(itemCard);
 
+  // Beginning balance / Cash On Hand setup
+  root.appendChild(renderBeginningBalanceCard());
+
   // GitHub backup
   root.appendChild(renderGitHubCard());
 
@@ -370,6 +373,36 @@ function renderSettings(ctx) {
     ]),
   ]));
   return root;
+}
+
+function renderBeginningBalanceCard() {
+  const begin = store.beginningBalance();
+  const net = store.netFlow();
+  const coh = store.coh();
+  const input = el('input', { class: 'input', type: 'number', step: '0.01', value: begin, style: 'max-width:200px' });
+  const cohLine = el('div', { class: 'muted', style: 'font-size:.86rem;margin-top:6px' });
+  const paint = () => {
+    const b = parseFloat(input.value || '0') || 0;
+    const c = Math.round((b + net + Number.EPSILON) * 100) / 100;
+    cohLine.innerHTML = `COH = Beginning <b>${peso(b)}</b> + Net flow <b>${net >= 0 ? '+' : ''}${peso(net)}</b> = <b>${peso(c)}</b>`;
+  };
+  input.addEventListener('input', paint); paint();
+  return el('div', { class: 'card mt-lg', style: 'max-width:720px' }, [
+    el('div', { class: 'card-h' }, [el('h3', { text: 'Beginning balance' }), el('span', { class: 'sub', text: 'opening cash float' })]),
+    el('p', { class: 'muted', style: 'margin-top:0', html: 'The cash the drawer started with, before any tracked deposit or refund. <strong>Cash On Hand = Beginning balance + Σ deposits − Σ refunds</strong> — every deposit and refund moves COH; the beginning balance is the only typed value.' }),
+    el('div', { class: 'flex gap', style: 'align-items:flex-end' }, [
+      el('div', { class: 'field', style: 'margin:0' }, [el('label', { text: 'Beginning balance (₱)' }), input]),
+      el('button', { class: 'btn primary', text: 'Save', onClick: () => {
+        managerGate(() => {
+          store.setBeginningBalance(parseFloat(input.value || '0') || 0, { source: 'manual' });
+          toast(`Beginning balance set · COH now ${peso(store.coh())}`, 'ok');
+          renderShell();
+        }, { reason: 'Approve changing the beginning balance' });
+      } }),
+    ]),
+    cohLine,
+    el('div', { class: 'hint mt', text: `Net flow from ${store.ledger.length.toLocaleString()} ledger entries: ${net >= 0 ? '+' : ''}${peso(net)} · current COH ${peso(coh)}` }),
+  ]);
 }
 
 function renderGitHubCard() {
@@ -481,7 +514,7 @@ async function loadOfficialData() {
   const body = el('div', {}, [
     el('p', { class: 'muted', style: 'margin-top:0', text: `The hostel's official record holds ${summary.count.toLocaleString()} transactions (${summary.depCount.toLocaleString()} deposits, ${summary.refCount.toLocaleString()} refunds).` }),
     el('div', { class: 'amount-preview' }, [
-      el('div', {}, [el('div', { class: 'lab', text: 'Computed Cash On Hand' }), el('div', { class: 'muted', style: 'font-size:.78rem', html: `Deposits ₱${pesoPlain(summary.deposits)} − Refunds ₱${pesoPlain(summary.refunds)}` })]),
+      el('div', {}, [el('div', { class: 'lab', text: 'Computed Cash On Hand' }), el('div', { class: 'muted', style: 'font-size:.78rem', html: `${summary.beginningBalance ? 'Beginning ₱' + pesoPlain(summary.beginningBalance) + ' + ' : ''}Deposits ₱${pesoPlain(summary.deposits)} − Refunds ₱${pesoPlain(summary.refunds)}` })]),
       el('div', { class: 'val', text: peso(summary.coh) }),
     ]),
     el('div', { class: 'pill-warn mt', html: 'This <strong>replaces</strong> the transactions on this device with the official record. Your PIN, items, GitHub settings and activity log are kept. Total COH is still being reconciled. Export a backup first if unsure.' }),
@@ -512,7 +545,7 @@ function importCSV() {
       const body = el('div', {}, [
         el('p', { class: 'muted', style: 'margin-top:0', text: `Found ${summary.count} transactions in the file.` }),
         el('div', { class: 'amount-preview' }, [
-          el('div', {}, [el('div', { class: 'lab', text: 'Computed Cash On Hand' }), el('div', { class: 'muted', style: 'font-size:.78rem', html: `Deposits ₱${pesoPlain(summary.deposits)} − Refunds ₱${pesoPlain(summary.refunds)}` })]),
+          el('div', {}, [el('div', { class: 'lab', text: 'Computed Cash On Hand' }), el('div', { class: 'muted', style: 'font-size:.78rem', html: `${summary.beginningBalance ? 'Beginning ₱' + pesoPlain(summary.beginningBalance) + ' + ' : ''}Deposits ₱${pesoPlain(summary.deposits)} − Refunds ₱${pesoPlain(summary.refunds)}` })]),
           el('div', { class: 'val', text: peso(summary.coh) }),
         ]),
         el('div', { class: 'pill-warn mt', html: 'This <strong>replaces</strong> current transactions with the spreadsheet data. Items, settings and the activity log are kept. Export a backup first if unsure.' }),

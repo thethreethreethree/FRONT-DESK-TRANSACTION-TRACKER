@@ -10,22 +10,30 @@ export function render(ctx) {
   const over = store.overReturnedByGuest();
   const rec = store.reconciliation();
 
+  // COH = beginning float + held − over-returned. Allow a cent of float drift.
+  const reconciles = Math.abs(rec.beginning + rec.held - rec.over - rec.coh) < 0.01;
   root.appendChild(pageHead(
     'Outstanding deposits',
     `${rec.positives} guests currently hold deposits`,
-    el('span', { class: `integrity ${rec.held - rec.over === rec.coh ? 'ok' : 'bad'}` }, [el('span', { class: 'dot' }), `Reconciles to COH ${peso(store.coh())}`]),
+    el('span', { class: `integrity ${reconciles ? 'ok' : 'bad'}` }, [el('span', { class: 'dot' }), `Reconciles to COH ${peso(store.coh())}`]),
   ));
 
   // reconciliation strip
-  root.appendChild(el('div', { class: 'card', style: 'margin-bottom:18px' }, [
-    el('div', { class: 'flex between aic wrap gap' }, [
-      reconCell('Held by guests', peso(rec.held), 'var(--in-700)'),
-      el('div', { class: 'muted', style: 'font-size:1.4rem', text: '−' }),
-      reconCell('Needs attention', peso(rec.over), 'var(--out-700)', `${rec.negatives} over-returned`),
-      el('div', { class: 'muted', style: 'font-size:1.4rem', text: '=' }),
-      reconCell('Cash On Hand', peso(rec.coh), 'var(--ink)', 'locked & derived'),
-    ]),
-  ]));
+  const reconRow = el('div', { class: 'flex between aic wrap gap' });
+  if (rec.beginning) {
+    reconRow.append(
+      reconCell('Beginning', peso(rec.beginning), 'var(--ink)', 'opening float'),
+      el('div', { class: 'muted', style: 'font-size:1.4rem', text: '+' }),
+    );
+  }
+  reconRow.append(
+    reconCell('Held by guests', peso(rec.held), 'var(--in-700)'),
+    el('div', { class: 'muted', style: 'font-size:1.4rem', text: '−' }),
+    reconCell('Needs attention', peso(rec.over), 'var(--out-700)', `${rec.negatives} over-returned`),
+    el('div', { class: 'muted', style: 'font-size:1.4rem', text: '=' }),
+    reconCell('Cash On Hand', peso(rec.coh), 'var(--ink)', 'locked & derived'),
+  );
+  root.appendChild(el('div', { class: 'card', style: 'margin-bottom:18px' }, [reconRow]));
 
   // needs attention (over-returned / unmatched)
   if (over.length) {

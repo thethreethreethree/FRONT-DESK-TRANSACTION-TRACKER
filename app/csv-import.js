@@ -54,6 +54,22 @@ function allIndexes(header, re) {
   return out;
 }
 
+// The sheet carries its opening cash float in a "Beginning" cell on the TOTAL
+// row (e.g. "Beginning | 47,100.00"). Pull it so COH starts from the real float.
+function detectBeginningBalance(rows) {
+  for (const r of rows) {
+    for (let i = 0; i < r.length; i++) {
+      if (/^\s*beginning\b/i.test(String(r[i] || ''))) {
+        for (let j = i + 1; j < r.length; j++) {
+          const n = num(r[j]);
+          if (!isNaN(n) && n !== 0) return round2(n);
+        }
+      }
+    }
+  }
+  return null;
+}
+
 // Detect the column layout from the header row (or fall back to the TOWEL_2 layout).
 function detectColumns(rows) {
   const hi = rows.findIndex((r) => r.some((c) => /TOWEL\s*DEPOSIT/i.test(c || '')));
@@ -203,6 +219,8 @@ export function parseSheet(text) {
   const deposits = entries.filter((e) => e.kind === 'deposit').reduce((s, e) => s + e.amount, 0);
   const refunds = entries.filter((e) => e.kind === 'refund').reduce((s, e) => s + e.amount, 0);
   const years = entries.map((e) => e.y);
+  const beginningBalance = detectBeginningBalance(rows);
+  const netFlow = round2(deposits - refunds);
   return {
     entries,
     columns: C,
@@ -210,7 +228,11 @@ export function parseSheet(text) {
       count: entries.length,
       depCount: entries.filter((e) => e.kind === 'deposit').length,
       refCount: entries.filter((e) => e.kind === 'refund').length,
-      deposits: round2(deposits), refunds: round2(refunds), coh: round2(deposits - refunds),
+      deposits: round2(deposits), refunds: round2(refunds),
+      netFlow,
+      beginningBalance,
+      // COH = opening float + net flow (mirrors the sheet's own formula).
+      coh: round2((beginningBalance || 0) + netFlow),
       dropped,
       yearMin: Math.min(...years), yearMax: Math.max(...years),
     },
@@ -259,11 +281,18 @@ export function importSheet(store, text, { replace = true } = {}) {
     });
   }
 
+  // Carry over the sheet's opening cash float so COH starts from the real
+  // beginning balance (COH = beginningBalance + Σ deposits − Σ refunds).
+  if (parsed.summary.beginningBalance != null) {
+    store.state.config.beginningBalance = parsed.summary.beginningBalance;
+  }
+
   store._suppressAudit = false;
   store.verifyIntegrity();
+  const begin = store.beginningBalance();
   store._audit('data.csv_import',
-    `Imported ${parsed.summary.count} entries from spreadsheet (${parsed.summary.depCount} deposits, ${parsed.summary.refCount} refunds) · COH ₱${parsed.summary.coh.toLocaleString()}`,
-    { count: parsed.summary.count, deposits: parsed.summary.deposits, refunds: parsed.summary.refunds, coh: parsed.summary.coh, replaced: replace });
+    `Imported ${parsed.summary.count} entries (${parsed.summary.depCount} deposits, ${parsed.summary.refCount} refunds) · beginning ₱${begin.toLocaleString()} · net ${parsed.summary.netFlow >= 0 ? '+' : ''}₱${parsed.summary.netFlow.toLocaleString()} · COH ₱${store.coh().toLocaleString()}`,
+    { count: parsed.summary.count, deposits: parsed.summary.deposits, refunds: parsed.summary.refunds, netFlow: parsed.summary.netFlow, beginningBalance: begin, coh: store.coh(), replaced: replace });
   store.save();
-  return parsed.summary;
+  return { ...parsed.summary, beginningBalance: begin, coh: store.coh() };
 }
