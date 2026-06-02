@@ -16,6 +16,7 @@
 import { sha256, stableStringify, uid, nowISO, businessDate, guessShift, pesoPlain } from './util.js';
 
 const STORAGE_KEY = 'fdtt_state_v1';
+const SESSION_KEY = 'fdtt_session'; // device-local signed-in session (not exported)
 const GENESIS = '0'.repeat(64);
 
 // ------------------------------------------------------------- IndexedDB layer
@@ -125,6 +126,7 @@ class Store {
     this.verifyIntegrity();
     this.verifyAuditIntegrity();
     if (this._migratedFromLS) { this._migratedFromLS = false; this._persist(); }
+    this._restoreSession();
     return this.state;
   }
 
@@ -161,6 +163,8 @@ class Store {
   reset() {
     const actor = this.session ? this.session.name : 'system';
     this.state = defaultState();
+    this.session = null;
+    try { localStorage.removeItem(SESSION_KEY); } catch (e) { /* ignore */ }
     this._audit('data.reset', `All data reset by ${actor}`, {});
     this.save();
   }
@@ -204,6 +208,9 @@ class Store {
       if (!Store.verifyPin(pin, c.staffPin) && !Store.verifyPin(pin, c.managerPin)) return false;
     }
     this.session = { role, name: name || (role === 'manager' ? 'Manager' : 'Staff'), at: nowISO() };
+    // Persist the session (device-local, never exported) so a refresh / back
+    // navigation keeps the user signed in instead of bouncing them to the PIN.
+    try { localStorage.setItem(SESSION_KEY, JSON.stringify(this.session)); } catch (e) { /* private mode */ }
     this._audit('auth.login', `${this.session.name} signed in as ${role}`, { role });
     this.emit();
     return true;
@@ -211,7 +218,20 @@ class Store {
   logout() {
     if (this.session) this._audit('auth.logout', `${this.session.name} signed out`, {});
     this.session = null;
+    try { localStorage.removeItem(SESSION_KEY); } catch (e) { /* ignore */ }
     this.emit();
+  }
+  // Re-hydrate a persisted session on load so refresh doesn't force re-login.
+  // Only valid once setup is complete and the role still exists in config.
+  _restoreSession() {
+    if (this.session || !this.isSetup()) return;
+    let raw = null;
+    try { raw = localStorage.getItem(SESSION_KEY); } catch (e) { return; }
+    if (!raw) return;
+    try {
+      const s = JSON.parse(raw);
+      if (s && (s.role === 'manager' || s.role === 'staff')) this.session = s;
+    } catch (e) { /* corrupt — ignore */ }
   }
   isManager() { return this.session && this.session.role === 'manager'; }
 
