@@ -30,7 +30,12 @@ export function render(ctx) {
   card.appendChild(wrap);
   root.appendChild(card);
 
+  const RENDER_CAP = 500; // keep the DOM light; filters narrow the rest
+
   function paint() {
+    // Which entries have been voided — O(1) lookups instead of O(n) per row.
+    const reversedIds = new Set();
+    for (const e of store.ledger) if (e.reversesId) reversedIds.add(e.reversesId);
     const q = search.value.toLowerCase().trim();
     let rows = store.ledger.slice().reverse();
     rows = rows.filter((e) => {
@@ -49,6 +54,8 @@ export function render(ctx) {
       wrap.appendChild(el('div', { class: 'empty' }, [el('div', { class: 'ic', text: '🔍' }), el('p', { text: 'No matching transactions.' })]));
       return;
     }
+    const total = rows.length;
+    const shown = rows.slice(0, RENDER_CAP);
     const tbl = el('table', { class: 'tbl' });
     tbl.appendChild(el('thead', {}, el('tr', {}, [
       el('th', { text: '#' }), el('th', { text: 'When' }), el('th', { text: 'Type' }),
@@ -56,8 +63,8 @@ export function render(ctx) {
       el('th', { class: 'num', text: 'Amount' }), el('th', { class: 'num', text: '' }),
     ])));
     const tb = el('tbody');
-    for (const e of rows) {
-      const reversed = store.isReversed(e.id);
+    for (const e of shown) {
+      const reversed = reversedIds.has(e.id);
       const tr = el('tr', { class: (reversed ? 'voided ' : '') + (e.kind === 'reversal' ? 'is-reversal' : '') });
       tr.append(
         el('td', {}, el('span', { class: 'seq', text: '#' + e.seq })),
@@ -73,6 +80,10 @@ export function render(ctx) {
     }
     tbl.appendChild(tb);
     wrap.appendChild(tbl);
+    if (total > shown.length) {
+      wrap.appendChild(el('div', { class: 'muted', style: 'padding:12px 16px;text-align:center;font-size:.82rem;border-top:1px solid var(--line)',
+        text: `Showing the latest ${shown.length.toLocaleString()} of ${total.toLocaleString()} matching transactions. Use search or the date filter to narrow down.` }));
+    }
   }
 
   [search, typeSel, shiftSel, dateInput].forEach((c) => c.addEventListener('input', paint));

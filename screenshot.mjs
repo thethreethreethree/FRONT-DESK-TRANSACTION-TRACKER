@@ -33,9 +33,12 @@ await page.setViewport({ width: 1440, height: 920, deviceScaleFactor: 2 });
 page.on('console', (m) => { if (m.type() === 'error') console.log('PAGE ERROR:', m.text()); });
 page.on('pageerror', (e) => console.log('PAGE EXCEPTION:', e.message));
 
-// fresh start
+// fresh start — clear BOTH localStorage and the IndexedDB state store
 await page.goto(BASE, { waitUntil: 'networkidle2' });
-await page.evaluate(() => localStorage.clear());
+await page.evaluate(async () => {
+  localStorage.clear();
+  await new Promise((res) => { const r = indexedDB.deleteDatabase('fdtt'); r.onsuccess = r.onerror = r.onblocked = () => res(); });
+});
 await page.reload({ waitUntil: 'networkidle2' });
 await sleep(400);
 
@@ -98,6 +101,44 @@ const coh = await page.evaluate(() => {
   return a ? a.textContent.trim() : '(not found)';
 });
 console.log('Dashboard COH =', coh);
+
+// --- exercise loading the official full data file (16k entries, in-browser) ---
+await page.click('[data-view="settings"]');
+await sleep(400);
+await clickText(page, 'Load official data file');
+await sleep(1200); // fetch + parse + preview modal
+await page.screenshot({ path: `${OUT}/11-official-preview.png` });
+const loadT0 = Date.now ? null : null;
+await clickText(page, 'Load & replace');
+// wait until the dashboard COH hero appears with the imported total
+await page.waitForFunction(() => {
+  const a = document.querySelector('.coh-hero .amount');
+  return a && a.textContent.trim().length > 0;
+}, { timeout: 60000 });
+await sleep(600);
+const loaded = await page.evaluate(() => {
+  const coh = document.querySelector('.coh-hero .amount');
+  const integ = document.querySelector('.integrity');
+  return { coh: coh ? coh.textContent.trim() : '(none)', integ: integ ? integ.textContent.trim() : '(none)' };
+});
+console.log('After official load → COH', loaded.coh, '|', loaded.integ);
+await page.screenshot({ path: `${OUT}/12-official-loaded.png` });
+
+// confirm it PERSISTED across reload (IndexedDB, not localStorage)
+await page.reload({ waitUntil: 'networkidle2' });
+await sleep(800);
+// sign back in (manager) if shown the login screen
+if (await page.$('.lockcard')) {
+  await page.evaluate(() => { const i = document.querySelector('.lockcard input[type=password]'); if (i) { i.value = '1234'; i.dispatchEvent(new Event('input', { bubbles: true })); } });
+  await sleep(150);
+  await clickText(page, 'Sign in');
+  await sleep(800);
+}
+const persisted = await page.evaluate(() => {
+  const a = document.querySelector('.coh-hero .amount');
+  return a ? a.textContent.trim() : '(none)';
+});
+console.log('After reload (persistence check) → COH', persisted);
 
 // capture sign-in screen + PIN recovery modal
 await clickText(page, 'Sign out');

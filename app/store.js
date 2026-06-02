@@ -8,13 +8,52 @@
 //   3. Every entry is HASH-CHAINED: entry.hash = sha256(entry-without-hash + prevHash).
 //      Any out-of-band edit to storage breaks the chain and is flagged on load.
 //
-// Persistence: localStorage (front-desk device). GitHub repo holds versioned
-// JSON backups (git history = durable, attributed audit trail).
+// Persistence: IndexedDB (front-desk device) — chosen over localStorage because
+// a full year of entries is several MB, beyond localStorage's ~5MB quota. We
+// keep a localStorage fallback for private-mode / no-IDB and migrate old data.
+// GitHub repo holds versioned JSON backups (git history = durable audit trail).
 
 import { sha256, stableStringify, uid, nowISO, businessDate, guessShift, pesoPlain } from './util.js';
 
 const STORAGE_KEY = 'fdtt_state_v1';
 const GENESIS = '0'.repeat(64);
+
+// ------------------------------------------------------------- IndexedDB layer
+const IDB_NAME = 'fdtt';
+const IDB_STORE = 'kv';
+const IDB_KEY = 'state';
+
+function idbOpen() {
+  return new Promise((resolve, reject) => {
+    if (typeof indexedDB === 'undefined') { reject(new Error('no-idb')); return; }
+    const req = indexedDB.open(IDB_NAME, 1);
+    req.onupgradeneeded = () => { req.result.createObjectStore(IDB_STORE); };
+    req.onsuccess = () => resolve(req.result);
+    req.onerror = () => reject(req.error);
+  });
+}
+async function idbGet(key) {
+  const db = await idbOpen();
+  try {
+    return await new Promise((resolve, reject) => {
+      const req = db.transaction(IDB_STORE, 'readonly').objectStore(IDB_STORE).get(key);
+      req.onsuccess = () => resolve(req.result == null ? null : req.result);
+      req.onerror = () => reject(req.error);
+    });
+  } finally { db.close(); }
+}
+async function idbSet(key, val) {
+  const db = await idbOpen();
+  try {
+    return await new Promise((resolve, reject) => {
+      const tx = db.transaction(IDB_STORE, 'readwrite');
+      tx.objectStore(IDB_STORE).put(val, key);
+      tx.oncomplete = () => resolve();
+      tx.onerror = () => reject(tx.error);
+      tx.onabort = () => reject(tx.error || new Error('idb-abort'));
+    });
+  } finally { db.close(); }
+}
 
 // ---- money helpers: integer-cents internally would be ideal, but we keep pesos
 // as numbers rounded to 2dp to stay readable. round2 guards float drift. -------
@@ -65,29 +104,54 @@ class Store {
   }
 
   // -------------------------------------------------------------- persistence
-  load() {
-    let raw = null;
-    try { raw = localStorage.getItem(STORAGE_KEY); } catch (e) { /* private mode */ }
-    if (raw) {
-      try { this.state = JSON.parse(raw); } catch (e) { this.state = defaultState(); }
-    } else {
-      this.state = defaultState();
+  // Async: reads IndexedDB; if empty, migrates any legacy localStorage state.
+  async load() {
+    let s = null;
+    try { s = await idbGet(IDB_KEY); } catch (e) { /* no idb / private mode */ }
+    if (!s) {
+      let raw = null;
+      try { raw = localStorage.getItem(STORAGE_KEY); } catch (e) { /* ignore */ }
+      if (raw) { try { s = JSON.parse(raw); } catch (e) { s = null; } }
+      if (s) this._migratedFromLS = true; // persist into IDB after shape-fix below
     }
+    this.state = s || defaultState();
     // Migrate: ensure shape
     this.state = Object.assign(defaultState(), this.state);
     this.state.config = Object.assign(defaultState().config, this.state.config || {});
     if (!Array.isArray(this.state.audit)) this.state.audit = [];
     this.verifyIntegrity();
     this.verifyAuditIntegrity();
+    if (this._migratedFromLS) { this._migratedFromLS = false; this._persist(); }
     return this.state;
   }
 
+  // Persist current state to IndexedDB. Writes are coalesced and serialized so
+  // rapid mutations never race; the in-memory state is always the source of truth.
+  _persist() {
+    this._dirty = true;
+    if (this._writing) return this._writing;
+    this._writing = (async () => {
+      try {
+        while (this._dirty) {
+          this._dirty = false;
+          try {
+            await idbSet(IDB_KEY, this.state);
+          } catch (e) {
+            // Fallback: localStorage (works only for small states / private mode).
+            try { localStorage.setItem(STORAGE_KEY, JSON.stringify(this.state)); }
+            catch (e2) { console.error('persist failed (idb + localStorage)', e, e2); }
+          }
+        }
+      } finally { this._writing = null; }
+    })();
+    return this._writing;
+  }
+
+  // Resolves once all pending writes have flushed (use before app close / export).
+  async flush() { if (this._writing) await this._writing; }
+
   save() {
-    try {
-      localStorage.setItem(STORAGE_KEY, JSON.stringify(this.state));
-    } catch (e) {
-      console.error('save failed', e);
-    }
+    this._persist();
     this.emit();
   }
 

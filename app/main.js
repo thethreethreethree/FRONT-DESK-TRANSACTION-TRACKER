@@ -29,8 +29,18 @@ const AUTO_REFRESH = new Set(['dashboard']);
 let current = 'dashboard';
 const app = document.getElementById('app');
 
-function mount() {
-  store.load();
+async function mount() {
+  if (!store.state) {
+    clear(app);
+    app.className = 'app locked';
+    app.appendChild(el('div', { class: 'lockwrap' }, el('div', { class: 'lockcard', style: 'text-align:center' }, el('p', { class: 'muted', text: 'Loading…' }))));
+  }
+  await store.load();
+  route();
+}
+
+// Route from the in-memory state (no storage read) — used after setup/reset.
+function route() {
   if (!store.isSetup()) return renderSetup();
   if (!store.session) return renderLogin();
   renderShell();
@@ -339,9 +349,13 @@ function renderSettings(ctx) {
 
   // import from the original spreadsheet
   root.appendChild(el('div', { class: 'card mt-lg', style: 'max-width:720px' }, [
-    el('div', { class: 'card-h' }, [el('h3', { text: 'Import from spreadsheet' }), el('span', { class: 'sub', text: 'the original deposit/refund CSV' })]),
-    el('p', { class: 'muted', style: 'margin-top:0', text: 'Load your existing front-desk sheet (the two-sided towel/padlock/hair-dryer layout). It rebuilds the ledger and shows the computed COH before you commit.' }),
-    el('button', { class: 'btn primary', html: '📄 Import CSV spreadsheet', onClick: importCSV }),
+    el('div', { class: 'card-h' }, [el('h3', { text: 'Spreadsheet data' }), el('span', { class: 'sub', text: 'official record + manual CSV' })]),
+    el('p', { class: 'muted', style: 'margin-top:0', html: 'The hostel\'s full deposit history ships with the app as the <strong>official data file</strong>. Load it to populate this device, or import a fresh CSV export of the two-sided towel/padlock/hair-dryer sheet.' }),
+    el('div', { class: 'flex gap wrap' }, [
+      el('button', { class: 'btn primary', html: '🗄 Load official data file', onClick: loadOfficialData }),
+      el('button', { class: 'btn', html: '📄 Import CSV spreadsheet', onClick: importCSV }),
+    ]),
+    el('div', { class: 'hint mt', text: 'Loading the official file replaces the transactions on this device. Your PIN, items and GitHub settings are kept.' }),
   ]));
 
   // security · PINs
@@ -352,7 +366,7 @@ function renderSettings(ctx) {
     el('div', { class: 'card-h' }, [el('h3', { text: 'Danger zone' })]),
     el('div', { class: 'danger-zone flex between aic wrap gap' }, [
       el('div', {}, [el('strong', { text: 'Reset all data' }), el('div', { class: 'muted', style: 'font-size:.82rem', text: 'Erases the ledger, shifts & settings on this device. Export a backup first.' })]),
-      el('button', { class: 'btn out', text: 'Reset…', onClick: () => confirmDialog({ title: 'Reset everything?', sub: 'This permanently clears local data. Make sure you exported a backup.', confirmLabel: 'Erase all data', kind: 'out', onConfirm: () => { store.reset(); store.session = null; mount(); } }) }),
+      el('button', { class: 'btn out', text: 'Reset…', onClick: () => confirmDialog({ title: 'Reset everything?', sub: 'This permanently clears local data. Make sure you exported a backup.', confirmLabel: 'Erase all data', kind: 'out', onConfirm: () => { store.reset(); store.session = null; route(); } }) }),
     ]),
   ]));
   return root;
@@ -449,6 +463,42 @@ function exportBackup() {
   store._audit('backup.export', 'Exported local backup file', { entries: store.ledger.length });
   toast('Backup exported', 'ok');
 }
+const OFFICIAL_CSV = 'data/deposit-towel-full.csv';
+async function loadOfficialData() {
+  let text;
+  try {
+    const res = await fetch(OFFICIAL_CSV, { cache: 'no-store' });
+    if (!res.ok) throw new Error(res.status);
+    text = await res.text();
+  } catch (e) {
+    toast('Could not load the official data file (data/deposit-towel-full.csv)', 'err');
+    return;
+  }
+  let summary;
+  try { summary = parseSheet(text).summary; }
+  catch (e) { toast('The official data file could not be parsed', 'err'); return; }
+  if (!summary.count) { toast('The official data file has no transactions', 'warn'); return; }
+  const body = el('div', {}, [
+    el('p', { class: 'muted', style: 'margin-top:0', text: `The hostel's official record holds ${summary.count.toLocaleString()} transactions (${summary.depCount.toLocaleString()} deposits, ${summary.refCount.toLocaleString()} refunds).` }),
+    el('div', { class: 'amount-preview' }, [
+      el('div', {}, [el('div', { class: 'lab', text: 'Computed Cash On Hand' }), el('div', { class: 'muted', style: 'font-size:.78rem', html: `Deposits ₱${pesoPlain(summary.deposits)} − Refunds ₱${pesoPlain(summary.refunds)}` })]),
+      el('div', { class: 'val', text: peso(summary.coh) }),
+    ]),
+    el('div', { class: 'pill-warn mt', html: 'This <strong>replaces</strong> the transactions on this device with the official record. Your PIN, items, GitHub settings and activity log are kept. Total COH is still being reconciled. Export a backup first if unsure.' }),
+  ]);
+  openModal({
+    title: 'Load official data file', sub: OFFICIAL_CSV, body,
+    actions: [
+      { label: 'Cancel', kind: 'ghost' },
+      { label: 'Load & replace', kind: 'primary', onClick: (close) => {
+        const s = importSheet(store, text, { replace: true });
+        toast(`Loaded ${s.count.toLocaleString()} entries · COH ${peso(s.coh)}`, 'ok');
+        close(); current = 'dashboard'; renderShell();
+      } },
+    ],
+  });
+}
+
 function importCSV() {
   const inp = el('input', { type: 'file', accept: '.csv,text/csv' });
   inp.addEventListener('change', () => {

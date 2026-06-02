@@ -11,7 +11,10 @@ export function render(ctx) {
   const todayT = store.totals((e) => e.businessDate === today);
   const outstanding = store.outstandingByGuest();
   const items = store.byItem();
-  const integ = store.verifyIntegrity();
+  // Use the cached integrity status (computed on load and after each mutation).
+  // Re-hashing the whole chain on every dashboard render would be wasteful with
+  // a large ledger; appends preserve the chain, so the cached value is accurate.
+  const integ = store.integrity;
   const shift = store.currentOpenShift();
 
   root.appendChild(pageHead(
