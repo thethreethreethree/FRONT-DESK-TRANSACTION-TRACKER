@@ -313,23 +313,44 @@ class Store {
     return Array.from(map.values()).filter((x) => Math.abs(x.held) > 0.005);
   }
 
-  // Outstanding deposits per guest (net deposit still held). Positive = owed back.
-  outstandingByGuest() {
+  // Net balance per guest (deposits − refunds attributed by name+room).
+  _guestNets() {
     const map = new Map();
     for (const e of this.state.ledger) {
       const g = (e.guest || '').toUpperCase().trim();
       const r = (e.room || '').toUpperCase().trim();
-      const key = `${g}|${r}`;
       if (!g && !r) continue;
+      const key = `${g}|${r}`;
       const cur = map.get(key) || { guest: e.guest || '', room: e.room || '', held: 0, items: {} };
       cur.held = round2(cur.held + e.amount * e.direction);
       const it = e.itemName || 'Item';
       cur.items[it] = round2((cur.items[it] || 0) + e.amount * e.direction);
       map.set(key, cur);
     }
-    return Array.from(map.values())
-      .filter((x) => x.held > 0.005)
-      .sort((a, b) => b.held - a.held);
+    return Array.from(map.values());
+  }
+
+  // Guests who still hold a deposit (owed back). Positive balances only.
+  outstandingByGuest() {
+    return this._guestNets().filter((x) => x.held > 0.005).sort((a, b) => b.held - a.held);
+  }
+
+  // Guests refunded MORE than they deposited under this exact name/room — usually
+  // a name/room mismatch or a refund of a pre-system deposit. Worth a look.
+  overReturnedByGuest() {
+    return this._guestNets().filter((x) => x.held < -0.005).sort((a, b) => a.held - b.held);
+  }
+
+  // Reconciliation that ALWAYS ties back to COH:  held − overReturned = COH.
+  reconciliation() {
+    const nets = this._guestNets();
+    const held = round2(nets.filter((x) => x.held > 0).reduce((s, x) => s + x.held, 0));
+    const over = round2(-nets.filter((x) => x.held < 0).reduce((s, x) => s + x.held, 0));
+    return {
+      held, over, coh: this.coh(),
+      positives: nets.filter((x) => x.held > 0.005).length,
+      negatives: nets.filter((x) => x.held < -0.005).length,
+    };
   }
 
   // ------------------------------------------------------------- integrity

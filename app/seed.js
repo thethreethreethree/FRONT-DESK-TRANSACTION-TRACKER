@@ -13,8 +13,8 @@ const SCRIPT = [
   ['d', 'Towel', 1, 'Rebeca D.', '303', 1, 'AM', 6, 'TC'],
   ['d', 'Towel', 1, 'James M.', '209', 1, 'AM', 6, 'TC'],
   ['d', 'Padlock', 1, 'Burhan Kayaci', '303', 1, 'AM', 6, 'TC'],
-  ['d', 'Towel', 3, 'Roxanna Jackson', '207', 3, 'AM', 6, 'TC'],
-  ['d', 'Padlock', 1, 'Roxanna Jackson', '207', 1, 'AM', 6, 'TC'],
+  ['d', 'Towel', 3, 'Roxana', '207', 3, 'AM', 6, 'TC'],
+  ['d', 'Padlock', 1, 'Roxana', '207', 1, 'AM', 6, 'TC'],
   ['d', 'Towel', 1, 'Sahra', '402', 1, 'AM', 6, 'TC'],
   ['d', 'Towel', 2, 'Ella Caton', '408', 2, 'PM', 6, 'JG'],
   ['d', 'Hair Dryer', 1, 'Roxana', '207', 1, 'PM', 6, 'JG'],
@@ -47,8 +47,8 @@ const SCRIPT = [
   ['r', 'Towel', 3, 'Roxana', '207', 3, 'PM', 3, 'MA'],
   ['r', 'Hair Dryer', 1, 'Roxana', '207', 1, 'PM', 3, 'MA'],
   ['r', 'Towel', 1, 'Marie', '402', 1, 'AM', 2, 'TC'],
-  ['r', 'Towel', 2, 'Christian', '209', 2, 'AM', 2, 'TC'],
-  ['r', 'Towel', 2, 'Rushil', '408', 2, 'PM', 1, 'JG'],
+  ['r', 'Towel', 2, 'Christian S.', '209', 2, 'AM', 2, 'TC'],
+  ['r', 'Towel', 2, 'Rushil Shah', '408', 2, 'PM', 1, 'JG'],
   ['r', 'Towel', 3, 'Mia Sultana', '402', 3, 'PM', 1, 'JG'],
 ];
 
