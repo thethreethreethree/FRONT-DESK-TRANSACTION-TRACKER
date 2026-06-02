@@ -65,6 +65,9 @@ function defaultState() {
     config: {
       brand: 'Frendz Hostel El Nido',
       currency: 'PHP',
+      // Opening cash float the drawer started with, before any tracked deposit/
+      // refund. COH = beginningBalance + Σ(deposits − refunds). Manager-set.
+      beginningBalance: 0,
       setupComplete: false,
       managerPin: null, // "salt$hash"
       staffPin: null,
@@ -385,14 +388,41 @@ class Store {
   isReversed(id) { return this.state.ledger.some((e) => e.reversesId === id); }
 
   // ----------------------------------------------------------- derived values
-  // Cash On Hand = net of all signed amounts. This IS the number; it cannot be set.
-  coh(upToSeq = Infinity) {
+  // Opening cash float — the only typed input to COH. Everything else is derived.
+  beginningBalance() {
+    const b = Number(this.state.config.beginningBalance || 0);
+    return isFinite(b) ? round2(b) : 0;
+  }
+  // Set the opening balance (manager-gated by the caller). Audited.
+  setBeginningBalance(amount, { source = '' } = {}) {
+    const before = this.beginningBalance();
+    this.state.config.beginningBalance = round2(Number(amount) || 0);
+    const after = this.beginningBalance();
+    if (after !== before) {
+      this._audit('settings.beginning_balance',
+        `Beginning balance ₱${pesoPlain(before)} → ₱${pesoPlain(after)}${source ? ' (' + source + ')' : ''}`,
+        { before, after, source });
+    }
+    this.save();
+    return after;
+  }
+
+  // Net flow from the ledger alone (deposits − refunds), excluding the opening float.
+  netFlow(upToSeq = Infinity) {
     return round2(this.state.ledger
       .filter((e) => e.seq <= upToSeq)
       .reduce((sum, e) => sum + e.amount * e.direction, 0));
   }
 
+  // Cash On Hand = opening float + net flow. The float is the only set value;
+  // every deposit (+) and refund (−) moves COH by its amount. Cannot be over-typed.
+  coh(upToSeq = Infinity) {
+    return round2(this.beginningBalance() + this.netFlow(upToSeq));
+  }
+
   // Totals split by gross deposits vs gross refunds (reversals net into each).
+  // `coh` here is the NET FLOW (deposits − refunds) for the filtered set; the
+  // opening float is added separately by coh() to get true Cash On Hand.
   totals(filterFn = () => true) {
     let deposits = 0, refunds = 0;
     for (const e of this.state.ledger) {
@@ -443,12 +473,14 @@ class Store {
     return this._guestNets().filter((x) => x.held < -0.005).sort((a, b) => a.held - b.held);
   }
 
-  // Reconciliation that ALWAYS ties back to COH:  held − overReturned = COH.
+  // Reconciliation that ALWAYS ties back to COH:
+  //   beginningBalance + held − overReturned = COH.
   reconciliation() {
     const nets = this._guestNets();
     const held = round2(nets.filter((x) => x.held > 0).reduce((s, x) => s + x.held, 0));
     const over = round2(-nets.filter((x) => x.held < 0).reduce((s, x) => s + x.held, 0));
     return {
+      beginning: this.beginningBalance(),
       held, over, coh: this.coh(),
       positives: nets.filter((x) => x.held > 0.005).length,
       negatives: nets.filter((x) => x.held < -0.005).length,
