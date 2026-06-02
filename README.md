@@ -30,6 +30,15 @@ Plus a reconciliation view that always ties back to COH and **flags refunds that
 don't match a recorded deposit** (name/room typos, or refunds of pre-system
 deposits) — the kind of slip a paper sheet hides.
 
+### Activity Log (who / what / when)
+
+A separate **append-only, hash-chained Activity Log** records every meaningful
+action — sign-ins, deposits, refunds, voids, **item edits (with before → after)**,
+item retire/restore, shift open/close, PIN changes, imports, resets and backups —
+each stamped with the person, their role, and the time. Managers review it under
+*Activity Log*. Because it's hash-chained too, the audit trail itself can't be
+quietly doctored. (The cash entries also carry who/when directly on the ledger.)
+
 > Honest scope: a serverless app is **tamper-evident**, not tamper-proof. It
 > fully prevents *unintentional* manipulation and casual fudging, and makes
 > deeper tampering visible. Committing the JSON backup to this Git repo adds a
@@ -66,9 +75,22 @@ That's it — it's all static files. Front-desk staff just bookmark the URL.
 | Role | Can do |
 |------|--------|
 | **Staff** | Record deposits & refunds, view dashboard / ledger / outstanding, close shifts |
-| **Manager** | Everything staff can, **plus** void/correct entries, configure items & amounts, export/import & reset data |
+| **Manager** | Everything staff can, **plus** void/correct entries, the Activity Log, configure items & amounts, import/export & reset data |
 
 PINs are stored only as salted SHA-256 hashes, never in plain text.
+
+### Forgot the Manager PIN?
+
+On the sign-in screen, click **"Forgot Manager PIN?"** to set a new one. Your
+ledger and history are kept, and the reset is recorded in the Activity Log.
+(In Settings, a logged-in manager can also change the Manager/Staff PINs.)
+
+## Import your existing spreadsheet
+
+*Settings → Import from spreadsheet* reads the original two-sided
+towel/padlock/hair-dryer CSV, shows the computed COH for confirmation, then
+rebuilds the ledger from it (items, settings and the Activity Log are kept). The
+parser reproduces the sheet's own totals exactly.
 
 ## Data & backup
 
@@ -102,12 +124,14 @@ serve.mjs             Tiny static dev server
 brand_assets/         Frendz logos
 app/
   util.js             Helpers + verified SHA-256
-  store.js            THE ENGINE: append-only hash-chained ledger, derived COH,
-                      integrity verify, shifts, items, reconciliation
+  store.js            THE ENGINE: append-only hash-chained ledger + activity log,
+                      derived COH, integrity verify, shifts, items, reconciliation
   seed.js             Optional demo data (Feb 3–9)
+  github.js           GitHub Contents-API backup
+  csv-import.js       Import the original deposit/refund spreadsheet
   components.js       Modal / confirm / manager-PIN gate
-  main.js             Bootstrap, setup/login, nav, shifts & settings
-  views/              dashboard · deposit · refund · ledger · outstanding
+  main.js             Bootstrap, setup/login, nav, shifts, settings, PIN recovery
+  views/              dashboard · deposit · refund · ledger · outstanding · activity
 ```
 
 ## The deposit model (from the real sheet)

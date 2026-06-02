@@ -52,6 +52,27 @@ await clickText(page, 'Create front desk');
 await page.waitForSelector('.sidebar', { timeout: 6000 });
 await sleep(600);
 
+// --- generate a few actions so the activity log has variety ---
+await page.click('[data-view="deposit"]');
+await sleep(300);
+await page.evaluate(() => {
+  const card = document.querySelector('.card.elev');
+  const set = (ph, v) => { const e = [...card.querySelectorAll('input')].find((i) => i.placeholder && i.placeholder.includes(ph)); if (e) { e.value = v; e.dispatchEvent(new Event('input', { bubbles: true })); } };
+  set('Charlie', 'Test Guest');
+  set('309', '101');
+});
+await sleep(150);
+await clickText(page, 'Record deposit');
+await sleep(400);
+// tweak an item amount on settings to log an item.update
+await page.click('[data-view="settings"]');
+await sleep(300);
+await page.evaluate(() => {
+  const amt = document.querySelector('.card input[type=number]');
+  if (amt) { amt.value = '250'; amt.dispatchEvent(new Event('change', { bubbles: true })); }
+});
+await sleep(300);
+
 const views = [
   ['dashboard', '01-dashboard'],
   ['deposit', '02-deposit'],
@@ -60,6 +81,7 @@ const views = [
   ['ledger', '05-ledger'],
   ['shifts', '06-shifts'],
   ['settings', '07-settings'],
+  ['activity', '08-activity'],
 ];
 for (const [view, name] of views) {
   await page.click(`[data-view="${view}"]`);
@@ -76,6 +98,15 @@ const coh = await page.evaluate(() => {
   return a ? a.textContent.trim() : '(not found)';
 });
 console.log('Dashboard COH =', coh);
+
+// capture sign-in screen + PIN recovery modal
+await clickText(page, 'Sign out');
+await sleep(400);
+await page.screenshot({ path: `${OUT}/09-login.png` });
+await clickText(page, 'Forgot Manager PIN');
+await sleep(300);
+await page.screenshot({ path: `${OUT}/10-pin-reset.png` });
+console.log('shot login + pin-reset');
 
 await browser.close();
 console.log('done');
