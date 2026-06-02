@@ -9,6 +9,7 @@ import * as deposit from './views/deposit.js';
 import * as refund from './views/refund.js';
 import * as outstanding from './views/outstanding.js';
 import * as ledger from './views/ledger.js';
+import * as activity from './views/activity.js';
 
 const LOGO_LIGHT = 'brand_assets/logo-el-nido.png'; // black wordmark → invert for dark bg
 
@@ -19,6 +20,7 @@ const VIEWS = {
   outstanding: { label: 'Outstanding', icon: '🧾', render: outstanding.render },
   ledger: { label: 'Ledger', icon: '📜', render: ledger.render },
   shifts: { label: 'Shifts', icon: '🕑', render: renderShifts },
+  activity: { label: 'Activity Log', icon: '🪵', mgr: true, render: activity.render },
   settings: { label: 'Settings', icon: '⚙', mgr: true, render: renderSettings },
 };
 const AUTO_REFRESH = new Set(['dashboard']);
@@ -113,10 +115,37 @@ function renderLogin() {
     el('div', { class: 'field' }, [el('label', { text: 'Name / initials' }), name]),
     pinField,
     el('button', { class: 'btn primary lg block mt', text: 'Sign in →', onClick: doLogin }),
+    el('button', { class: 'btn ghost sm block mt', text: 'Forgot Manager PIN?', onClick: openPinRecovery }),
   ]);
   app.appendChild(el('div', { class: 'lockwrap' }, card));
   syncPin();
   setTimeout(() => name.focus(), 60);
+}
+
+// Serverless recovery: lets someone at the device set a NEW Manager PIN without
+// losing data. It's deliberately recorded in the Activity Log (auth.pin_reset),
+// so the action is recoverable but never silent/anonymous.
+function openPinRecovery() {
+  const p1 = el('input', { class: 'input', type: 'password', inputmode: 'numeric', placeholder: 'New Manager PIN (4-6 digits)', autocomplete: 'off' });
+  const p2 = el('input', { class: 'input', type: 'password', inputmode: 'numeric', placeholder: 'Confirm new PIN', autocomplete: 'off' });
+  const body = el('div', {}, [
+    el('div', { class: 'pill-warn', html: 'This app has no server, so the Manager PIN is reset here on the device. Your ledger and history are <strong>kept</strong>. This reset is logged to the <strong>Activity Log</strong>.' }),
+    el('div', { class: 'field mt' }, [el('label', { text: 'New Manager PIN' }), p1]),
+    el('div', { class: 'field' }, [el('label', { text: 'Confirm' }), p2]),
+  ]);
+  openModal({
+    title: 'Reset Manager PIN', sub: 'Set a new manager PIN for this device.', body,
+    actions: [
+      { label: 'Cancel', kind: 'ghost' },
+      { label: 'Reset PIN', kind: 'primary', onClick: (close) => {
+        if ((p1.value || '').length < 4) return toast('PIN must be at least 4 digits', 'warn');
+        if (p1.value !== p2.value) return toast('PINs do not match', 'warn');
+        store.changePin('manager', p1.value, { recovery: true });
+        toast('Manager PIN reset — sign in with the new PIN', 'ok');
+        close();
+      } },
+    ],
+  });
 }
 
 // ---------------------------------------------------------------- Shell
@@ -139,6 +168,7 @@ function renderSidebar() {
   for (const id of order) addNav(nav, id);
   nav.appendChild(el('div', { class: 'nav-sep' }));
   nav.appendChild(el('div', { class: 'mgr-only', text: 'Manager' }));
+  addNav(nav, 'activity');
   addNav(nav, 'settings');
   side.appendChild(nav);
 
@@ -306,6 +336,9 @@ function renderSettings(ctx) {
     ]),
   ]));
 
+  // security · PINs
+  root.appendChild(renderSecurityCard());
+
   // danger zone
   root.appendChild(el('div', { class: 'card mt-lg', style: 'max-width:720px' }, [
     el('div', { class: 'card-h' }, [el('h3', { text: 'Danger zone' })]),
@@ -360,7 +393,7 @@ function renderGitHubCard() {
         catch (e) { toast(e.message, 'err'); }
         b.disabled = false; b.textContent = 'Test connection';
       } }),
-      el('button', { class: 'btn', text: 'Save settings', onClick: () => { saveCfg(); toast('GitHub settings saved', 'ok'); } }),
+      el('button', { class: 'btn', text: 'Save settings', onClick: () => { saveCfg(); store._audit('settings.github.update', `Updated GitHub backup target ${store.config.github.owner}/${store.config.github.repo}`, { owner: store.config.github.owner, repo: store.config.github.repo, autoOnClose: store.config.github.autoOnClose }); toast('GitHub settings saved', 'ok'); } }),
       el('button', { class: 'btn primary', html: '☁ Back up now', onClick: async (ev) => {
         saveCfg(); const b = ev.currentTarget; b.disabled = true; b.textContent = 'Backing up…';
         try { const url = await gh.backupNow('manual'); toast('Backed up to GitHub ✓', 'ok'); status.innerHTML = `Last backup: ${fmtDateTime(store.config.github.lastBackupAt)} · <a href="${url}" target="_blank" rel="noopener" style="color:var(--gold-700)">view commit</a>`; }
@@ -373,12 +406,39 @@ function renderGitHubCard() {
   return card;
 }
 
+function renderSecurityCard() {
+  const newM = el('input', { class: 'input', type: 'password', inputmode: 'numeric', placeholder: 'New Manager PIN (4-6 digits)', autocomplete: 'off' });
+  const newS = el('input', { class: 'input', type: 'password', inputmode: 'numeric', placeholder: 'New Staff PIN (blank = remove)', autocomplete: 'off' });
+  const req = el('input', { type: 'checkbox' });
+  req.checked = !!store.config.requireStaffPin;
+  return el('div', { class: 'card mt-lg', style: 'max-width:720px' }, [
+    el('div', { class: 'card-h' }, [el('h3', { text: 'Security · PINs' }), el('span', { class: 'sub', text: 'changes are recorded in the Activity Log' })]),
+    el('div', { class: 'row2' }, [
+      el('div', { class: 'field' }, [el('label', { text: 'Change Manager PIN' }), newM,
+        el('button', { class: 'btn sm mt', text: 'Update Manager PIN', onClick: () => {
+          if ((newM.value || '').length < 4) return toast('Manager PIN must be at least 4 digits', 'warn');
+          store.changePin('manager', newM.value); newM.value = ''; toast('Manager PIN updated', 'ok');
+        } }),
+      ]),
+      el('div', { class: 'field' }, [el('label', { text: 'Change Staff PIN' }), newS,
+        el('label', { class: 'flex aic gap', style: 'font-size:.84rem;cursor:pointer;margin-top:8px' }, [req, 'Require staff PIN at login']),
+        el('button', { class: 'btn sm mt', text: 'Update staff access', onClick: () => {
+          store.changePin('staff', newS.value || null);
+          store.setConfig({ requireStaffPin: req.checked });
+          newS.value = ''; toast('Staff access updated', 'ok');
+        } }),
+      ]),
+    ]),
+  ]);
+}
+
 function exportBackup() {
   const data = store.exportData();
   const blob = new Blob([JSON.stringify(data, null, 2)], { type: 'application/json' });
   const url = URL.createObjectURL(blob);
   const a = el('a', { href: url, download: `frendz-ledger-${new Date().toISOString().slice(0, 10)}.json` });
   document.body.appendChild(a); a.click(); a.remove(); URL.revokeObjectURL(url);
+  store._audit('backup.export', 'Exported local backup file', { entries: store.ledger.length });
   toast('Backup exported', 'ok');
 }
 function importBackup() {

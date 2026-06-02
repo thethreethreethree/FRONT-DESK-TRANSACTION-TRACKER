@@ -11,7 +11,7 @@
 // Persistence: localStorage (front-desk device). GitHub repo holds versioned
 // JSON backups (git history = durable, attributed audit trail).
 
-import { sha256, stableStringify, uid, nowISO, businessDate, guessShift } from './util.js';
+import { sha256, stableStringify, uid, nowISO, businessDate, guessShift, pesoPlain } from './util.js';
 
 const STORAGE_KEY = 'fdtt_state_v1';
 const GENESIS = '0'.repeat(64);
@@ -37,6 +37,7 @@ function defaultState() {
     staff: [],
     shifts: [],
     ledger: [],
+    audit: [], // append-only, hash-chained activity log (who / what / when)
   };
 }
 
@@ -59,6 +60,8 @@ class Store {
     this.session = null; // { name, role } set after login
     this._subs = new Set();
     this.integrity = { ok: true, brokenAtSeq: null };
+    this.auditIntegrity = { ok: true, brokenAtSeq: null };
+    this._suppressAudit = false; // used while bulk-loading demo/CSV data
   }
 
   // -------------------------------------------------------------- persistence
@@ -73,7 +76,9 @@ class Store {
     // Migrate: ensure shape
     this.state = Object.assign(defaultState(), this.state);
     this.state.config = Object.assign(defaultState().config, this.state.config || {});
+    if (!Array.isArray(this.state.audit)) this.state.audit = [];
     this.verifyIntegrity();
+    this.verifyAuditIntegrity();
     return this.state;
   }
 
@@ -87,7 +92,9 @@ class Store {
   }
 
   reset() {
+    const actor = this.session ? this.session.name : 'system';
     this.state = defaultState();
+    this._audit('data.reset', `All data reset by ${actor}`, {});
     this.save();
   }
 
@@ -118,6 +125,7 @@ class Store {
     if (brand) c.brand = brand;
     c.setupComplete = true;
     if (!this.state.itemTypes.length) this.state.itemTypes = seedItemTypes();
+    this._audit('setup.complete', 'Front desk initialised', { brand: c.brand });
     this.save();
   }
   login(role, pin, name) {
@@ -129,10 +137,15 @@ class Store {
       if (!Store.verifyPin(pin, c.staffPin) && !Store.verifyPin(pin, c.managerPin)) return false;
     }
     this.session = { role, name: name || (role === 'manager' ? 'Manager' : 'Staff'), at: nowISO() };
+    this._audit('auth.login', `${this.session.name} signed in as ${role}`, { role });
     this.emit();
     return true;
   }
-  logout() { this.session = null; this.emit(); }
+  logout() {
+    if (this.session) this._audit('auth.logout', `${this.session.name} signed out`, {});
+    this.session = null;
+    this.emit();
+  }
   isManager() { return this.session && this.session.role === 'manager'; }
 
   // ------------------------------------------------------------- item types
@@ -145,14 +158,26 @@ class Store {
       sortOrder: this.state.itemTypes.length, active: true, createdAt: nowISO(),
     };
     this.state.itemTypes.push(it);
+    this._audit('item.create', `Added item "${it.name}" (default ₱${pesoPlain(it.defaultAmount)})`, { name: it.name, defaultAmount: it.defaultAmount });
     this.save();
     return it;
   }
   updateItem(id, patch) {
     const it = this.itemById(id);
     if (!it) return;
+    const before = { name: it.name, defaultAmount: it.defaultAmount, active: it.active };
     if (patch.defaultAmount != null) patch.defaultAmount = round2(patch.defaultAmount);
     Object.assign(it, patch);
+    const after = { name: it.name, defaultAmount: it.defaultAmount, active: it.active };
+    let action = 'item.update';
+    let what = `Updated item "${it.name}"`;
+    if ('active' in patch && patch.active !== before.active) {
+      action = patch.active ? 'item.restore' : 'item.retire';
+      what = `${patch.active ? 'Restored' : 'Retired'} item "${it.name}"`;
+    } else if (after.defaultAmount !== before.defaultAmount) {
+      what = `Changed "${it.name}" amount ₱${pesoPlain(before.defaultAmount)} → ₱${pesoPlain(after.defaultAmount)}`;
+    }
+    this._audit(action, what, { id, before, after });
     this.save();
   }
 
@@ -175,6 +200,7 @@ class Store {
       status: 'open', note: '',
     };
     this.state.shifts.push(s);
+    this._audit('shift.open', `Opened ${s.label} shift · ${s.businessDate}`, { id: s.id, label: s.label, businessDate: s.businessDate });
     this.save();
     return s;
   }
@@ -189,6 +215,9 @@ class Store {
     s.closedBy = this.session ? this.session.name : 'system';
     s.closedAt = nowISO();
     s.status = 'closed';
+    this._audit('shift.close',
+      `Closed ${s.label} shift · expected ₱${pesoPlain(s.expectedCash)}, counted ₱${pesoPlain(s.countedCash)}, variance ${s.variance >= 0 ? '+' : ''}${pesoPlain(s.variance)}`,
+      { id: s.id, expected: s.expectedCash, counted: s.countedCash, variance: s.variance });
     this.save();
     return s;
   }
@@ -239,13 +268,16 @@ class Store {
     const shift = this.ensureShift();
     const unit = unitAmount != null ? unitAmount : (item ? item.defaultAmount : 0);
     const amt = amount != null ? amount : round2(unit * Number(qty || 1));
-    return this._append({
+    const e = this._append({
       kind: 'deposit', direction: +1,
       itemTypeId, itemName: item ? item.name : 'Item',
       qty: qty || 1, unitAmount: unit, amount: amt,
       guest, room, pax, note,
       shiftId: shift.id, shiftLabel: shift.label,
     });
+    this._audit('deposit.create', `Deposit ₱${pesoPlain(e.amount)} · ${e.itemName} ×${e.qty} · ${e.guest || e.room || '—'}`,
+      { ref: e.seq, id: e.id, amount: e.amount, item: e.itemName, guest: e.guest, room: e.room });
+    return e;
   }
 
   addRefund({ itemTypeId, qty, unitAmount, amount, guest, room, pax, note }) {
@@ -253,13 +285,16 @@ class Store {
     const shift = this.ensureShift();
     const unit = unitAmount != null ? unitAmount : (item ? item.defaultAmount : 0);
     const amt = amount != null ? amount : round2(unit * Number(qty || 1));
-    return this._append({
+    const e = this._append({
       kind: 'refund', direction: -1,
       itemTypeId, itemName: item ? item.name : 'Item',
       qty: qty || 1, unitAmount: unit, amount: amt,
       guest, room, pax, note,
       shiftId: shift.id, shiftLabel: shift.label,
     });
+    this._audit('refund.create', `Refund ₱${pesoPlain(e.amount)} · ${e.itemName} ×${e.qty} · ${e.guest || e.room || '—'}`,
+      { ref: e.seq, id: e.id, amount: e.amount, item: e.itemName, guest: e.guest, room: e.room });
+    return e;
   }
 
   // Manager-only: void/correct an existing entry by appending its inverse.
@@ -270,7 +305,7 @@ class Store {
     // already reversed?
     if (this.state.ledger.some((e) => e.reversesId === targetId)) return null;
     const shift = this.ensureShift();
-    return this._append({
+    const r = this._append({
       kind: 'reversal', direction: -t.direction,
       itemTypeId: t.itemTypeId, itemName: t.itemName,
       qty: t.qty, unitAmount: t.unitAmount, amount: t.amount,
@@ -279,6 +314,9 @@ class Store {
       reversesId: targetId,
       shiftId: shift.id, shiftLabel: shift.label,
     });
+    this._audit('txn.void', `Voided #${t.seq} (${t.kind} ${t.itemName} · ${t.guest || t.room || '—'} · ₱${pesoPlain(t.amount)})`,
+      { ref: t.seq, reversalSeq: r.seq, reason: reason || '' });
+    return r;
   }
   isReversed(id) { return this.state.ledger.some((e) => e.reversesId === id); }
 
@@ -369,6 +407,55 @@ class Store {
     return this.integrity;
   }
 
+  // ------------------------------------------------------ activity / audit log
+  // Append a tamper-evident audit event. Funnels every meaningful action so the
+  // log answers WHO did WHAT and WHEN — including before→after on edits.
+  _lastAuditHash() {
+    const A = this.state.audit;
+    return A.length ? A[A.length - 1].hash : GENESIS;
+  }
+  _audit(action, what, details = {}) {
+    if (this._suppressAudit) return null;
+    const ev = {
+      seq: this.state.audit.length + 1,
+      id: uid('aud'),
+      ts: nowISO(),
+      actor: this.session ? this.session.name : 'system',
+      role: this.session ? this.session.role : 'system',
+      action,
+      what: what || '',
+      details: details || {},
+      prevHash: this._lastAuditHash(),
+    };
+    ev.hash = sha256(stableStringify(ev));
+    this.state.audit.push(ev);
+    this.save();
+    return ev;
+  }
+  verifyAuditIntegrity() {
+    let prev = GENESIS;
+    let brokenAtSeq = null;
+    for (const ev of this.state.audit) {
+      const { hash, ...rest } = ev;
+      if (rest.prevHash !== prev) { brokenAtSeq = ev.seq; break; }
+      if (sha256(stableStringify(rest)) !== hash) { brokenAtSeq = ev.seq; break; }
+      prev = hash;
+    }
+    this.auditIntegrity = { ok: brokenAtSeq == null, brokenAtSeq };
+    return this.auditIntegrity;
+  }
+  get audit() { return this.state.audit; }
+
+  // Change a PIN. `who` is 'manager' or 'staff'. Records to the activity log.
+  changePin(who, newPin, { recovery = false } = {}) {
+    const c = this.state.config;
+    if (who === 'manager') c.managerPin = Store.hashPin(newPin);
+    else c.staffPin = newPin ? Store.hashPin(newPin) : null;
+    this._audit(recovery ? 'auth.pin_reset' : 'auth.pin_change',
+      `${recovery ? 'Recovered' : 'Changed'} ${who} PIN`, { who, recovery });
+    this.save();
+  }
+
   // ------------------------------------------------------------- export/import
   exportData() {
     return {
@@ -378,7 +465,9 @@ class Store {
         version: this.state.version,
         coh: this.coh(),
         entries: this.state.ledger.length,
+        auditEvents: this.state.audit.length,
         integrity: this.verifyIntegrity(),
+        auditIntegrity: this.verifyAuditIntegrity(),
       },
       state: this.state,
     };
@@ -388,7 +477,10 @@ class Store {
     if (!s || !Array.isArray(s.ledger)) throw new Error('Invalid backup file.');
     this.state = Object.assign(defaultState(), s);
     this.state.config = Object.assign(defaultState().config, s.config || {});
+    if (!Array.isArray(this.state.audit)) this.state.audit = [];
     this.verifyIntegrity();
+    this.verifyAuditIntegrity();
+    this._audit('data.import', `Imported backup (${this.state.ledger.length} ledger entries)`, { entries: this.state.ledger.length });
     this.save();
   }
 }

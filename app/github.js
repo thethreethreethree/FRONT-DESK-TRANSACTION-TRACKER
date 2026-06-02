@@ -84,6 +84,7 @@ export async function backupNow(reason = 'manual') {
   g.lastBackupAt = nowISO();
   g.lastBackupSha = j.content && j.content.sha;
   store.setConfig({ github: g });
+  store._audit('backup.github', `Backup committed to ${g.owner}/${g.repo}@${branch} (${reason})`, { reason, coh, entries: store.ledger.length });
   return j.commit && j.commit.html_url;
 }
 

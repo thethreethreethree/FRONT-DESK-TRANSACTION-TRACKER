@@ -61,6 +61,7 @@ function dateForOffset(offset) {
 }
 
 export function loadDemoData(store) {
+  store._suppressAudit = true; // don't flood the activity log with sample entries
   // ensure items exist (setup seeds them, but be safe)
   if (!store.itemTypes.length) {
     store.addItem({ name: 'Towel', defaultAmount: 200 });
@@ -90,7 +91,9 @@ export function loadDemoData(store) {
     }
     store.session = prev;
   }
+  store._suppressAudit = false;
   store.verifyIntegrity();
+  store._audit('data.demo_loaded', `Loaded sample data (${store.ledger.length} entries)`, { entries: store.ledger.length });
   store.save();
 }
 
