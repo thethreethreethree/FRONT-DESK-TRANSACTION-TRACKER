@@ -130,37 +130,10 @@ function renderLogin() {
     el('div', { class: 'field' }, [el('label', { text: 'Name / initials' }), name]),
     pinField,
     el('button', { class: 'btn primary lg block mt', text: 'Sign in →', onClick: doLogin }),
-    el('button', { class: 'btn ghost sm block mt', text: 'Forgot Manager PIN?', onClick: openPinRecovery }),
   ]);
   app.appendChild(el('div', { class: 'lockwrap' }, card));
   syncPin();
   setTimeout(() => name.focus(), 60);
-}
-
-// Serverless recovery: lets someone at the device set a NEW Manager PIN without
-// losing data. It's deliberately recorded in the Activity Log (auth.pin_reset),
-// so the action is recoverable but never silent/anonymous.
-function openPinRecovery() {
-  const p1 = el('input', { class: 'input', type: 'password', inputmode: 'numeric', placeholder: 'New Manager PIN (4-6 digits)', autocomplete: 'off' });
-  const p2 = el('input', { class: 'input', type: 'password', inputmode: 'numeric', placeholder: 'Confirm new PIN', autocomplete: 'off' });
-  const body = el('div', {}, [
-    el('div', { class: 'pill-warn', html: 'This app has no server, so the Manager PIN is reset here on the device. Your ledger and history are <strong>kept</strong>. This reset is logged to the <strong>Activity Log</strong>.' }),
-    el('div', { class: 'field mt' }, [el('label', { text: 'New Manager PIN' }), p1]),
-    el('div', { class: 'field' }, [el('label', { text: 'Confirm' }), p2]),
-  ]);
-  openModal({
-    title: 'Reset Manager PIN', sub: 'Set a new manager PIN for this device.', body,
-    actions: [
-      { label: 'Cancel', kind: 'ghost' },
-      { label: 'Reset PIN', kind: 'primary', onClick: (close) => {
-        if ((p1.value || '').length < 4) return toast('PIN must be at least 4 digits', 'warn');
-        if (p1.value !== p2.value) return toast('PINs do not match', 'warn');
-        store.changePin('manager', p1.value, { recovery: true });
-        toast('Manager PIN reset — sign in with the new PIN', 'ok');
-        close();
-      } },
-    ],
-  });
 }
 
 // ---------------------------------------------------------------- Shell
