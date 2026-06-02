@@ -21,6 +21,7 @@ const ACTIONS = {
   'auth.pin_reset': ['PIN reset', 'rev'],
   'setup.complete': ['Setup', 'gold'],
   'settings.beginning_balance': ['Beginning balance', 'gold'],
+  'coh.reconcile': ['COH reconciled', 'gold'],
   'data.import': ['Import', 'rev'],
   'data.reset': ['Reset', 'rev'],
   'data.demo_loaded': ['Sample data', 'gold'],
@@ -51,7 +52,7 @@ export function render(ctx) {
   for (const a of actors) actorSel.appendChild(el('option', { value: a, text: a }));
   const catSel = el('select', {}, [
     el('option', { value: '', text: 'All actions' }),
-    el('option', { value: 'deposit.create,refund.create,txn.void', text: 'Cash entries' }),
+    el('option', { value: 'deposit.create,refund.create,txn.void,coh.reconcile', text: 'Cash entries' }),
     el('option', { value: 'item.create,item.update,item.retire,item.restore,settings.beginning_balance', text: 'Item & settings' }),
     el('option', { value: 'shift.open,shift.close', text: 'Shifts' }),
     el('option', { value: 'auth.login,auth.logout,auth.pin_change,auth.pin_reset', text: 'Sign-in / PIN' }),

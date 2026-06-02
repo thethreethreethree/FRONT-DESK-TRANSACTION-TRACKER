@@ -387,6 +387,29 @@ class Store {
   }
   isReversed(id) { return this.state.ledger.some((e) => e.reversesId === id); }
 
+  // Book a single, labelled reconciliation entry so COH equals `target`. Used to
+  // tie the derived COH to the official sheet figure when the imported CSV is an
+  // older/partial snapshot — the difference is a visible, hash-chained adjustment
+  // (cash in/out), never a hidden override. Returns the entry, or null if exact.
+  reconcileCOH(target, { reason = '', source = '' } = {}) {
+    const cur = this.coh();
+    const diff = round2(Number(target) - cur);
+    if (!isFinite(diff) || Math.abs(diff) < 0.005) return null;
+    const shift = this.currentOpenShift();
+    const e = this._append({
+      kind: 'adjustment', direction: diff >= 0 ? 1 : -1,
+      itemTypeId: null, itemName: 'Adjustment',
+      qty: null, unitAmount: Math.abs(diff), amount: Math.abs(diff),
+      guest: '', room: '', pax: null,
+      note: reason || `Reconciliation to official COH ₱${pesoPlain(target)}`,
+      shiftId: shift ? shift.id : null, shiftLabel: shift ? shift.label : null,
+    });
+    this._audit('coh.reconcile',
+      `Reconciled COH ₱${pesoPlain(cur)} → ₱${pesoPlain(round2(Number(target)))} (adjustment ${diff >= 0 ? '+' : '−'}₱${pesoPlain(Math.abs(diff))})`,
+      { from: cur, to: round2(Number(target)), adjustment: diff, source });
+    return e;
+  }
+
   // ----------------------------------------------------------- derived values
   // Opening cash float — the only typed input to COH. Everything else is derived.
   beginningBalance() {
@@ -424,13 +447,18 @@ class Store {
   // `coh` here is the NET FLOW (deposits − refunds) for the filtered set; the
   // opening float is added separately by coh() to get true Cash On Hand.
   totals(filterFn = () => true) {
-    let deposits = 0, refunds = 0;
+    let deposits = 0, refunds = 0, adjustments = 0;
     for (const e of this.state.ledger) {
       if (!filterFn(e)) continue;
       const signed = e.amount * e.direction;
+      if (e.kind === 'adjustment') { adjustments += signed; continue; }
       if (signed >= 0) deposits += signed; else refunds += -signed;
     }
-    return { deposits: round2(deposits), refunds: round2(refunds), coh: round2(deposits - refunds) };
+    return {
+      deposits: round2(deposits), refunds: round2(refunds),
+      adjustments: round2(adjustments),
+      coh: round2(deposits - refunds + adjustments),
+    };
   }
 
   // Per-item breakdown of currently-held deposits.
@@ -474,14 +502,18 @@ class Store {
   }
 
   // Reconciliation that ALWAYS ties back to COH:
-  //   beginningBalance + held − overReturned = COH.
+  //   beginningBalance + held − overReturned + adjustments = COH.
+  // (Adjustment entries carry no guest, so they sit outside held/over.)
   reconciliation() {
     const nets = this._guestNets();
     const held = round2(nets.filter((x) => x.held > 0).reduce((s, x) => s + x.held, 0));
     const over = round2(-nets.filter((x) => x.held < 0).reduce((s, x) => s + x.held, 0));
+    const adjustments = round2(this.state.ledger
+      .filter((e) => e.kind === 'adjustment')
+      .reduce((s, e) => s + e.amount * e.direction, 0));
     return {
       beginning: this.beginningBalance(),
-      held, over, coh: this.coh(),
+      held, over, adjustments, coh: this.coh(),
       positives: nets.filter((x) => x.held > 0.005).length,
       negatives: nets.filter((x) => x.held < -0.005).length,
     };

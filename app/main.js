@@ -380,6 +380,7 @@ function renderBeginningBalanceCard() {
   const net = store.netFlow();
   const coh = store.coh();
   const input = el('input', { class: 'input', type: 'number', step: '0.01', value: begin, style: 'max-width:200px' });
+  const target = el('input', { class: 'input', type: 'number', step: '0.01', value: coh, placeholder: 'e.g. 58800', style: 'max-width:200px' });
   const cohLine = el('div', { class: 'muted', style: 'font-size:.86rem;margin-top:6px' });
   const paint = () => {
     const b = parseFloat(input.value || '0') || 0;
@@ -402,6 +403,19 @@ function renderBeginningBalanceCard() {
     ]),
     cohLine,
     el('div', { class: 'hint mt', text: `Net flow from ${store.ledger.length.toLocaleString()} ledger entries: ${net >= 0 ? '+' : ''}${peso(net)} · current COH ${peso(coh)}` }),
+    el('hr', { class: 'hr' }),
+    el('p', { class: 'muted', style: 'margin:0', html: 'Tie COH to the live sheet\'s figure. This books <strong>one labelled reconciliation entry</strong> (a visible cash-in/out adjustment in the ledger) — the opening float and individual transactions are untouched.' }),
+    el('div', { class: 'flex gap mt', style: 'align-items:flex-end' }, [
+      el('div', { class: 'field', style: 'margin:0' }, [el('label', { text: 'Reconcile COH to (₱)' }), target]),
+      el('button', { class: 'btn', text: 'Reconcile', onClick: () => {
+        const t = parseFloat(target.value || ''); if (!isFinite(t)) return toast('Enter a target COH', 'warn');
+        managerGate(() => {
+          const e = store.reconcileCOH(t, { source: 'manual' });
+          toast(e ? `Reconciled · COH now ${peso(store.coh())}` : 'COH already matches', 'ok');
+          renderShell();
+        }, { reason: `Approve reconciling COH to ₱${pesoPlain(t)}` });
+      } }),
+    ]),
   ]);
 }
 
@@ -497,6 +511,10 @@ function exportBackup() {
   toast('Backup exported', 'ok');
 }
 const OFFICIAL_CSV = 'data/deposit-towel-full.csv';
+// The hostel's current reconciled Cash On Hand from the live sheet (Beginning
+// ₱47,100 + net flow). The CSV is an older snapshot, so after import we book a
+// single labelled reconciliation entry so COH ties to this official figure.
+const OFFICIAL_COH = 58800;
 async function loadOfficialData() {
   let text;
   try {
@@ -511,13 +529,15 @@ async function loadOfficialData() {
   try { summary = parseSheet(text).summary; }
   catch (e) { toast('The official data file could not be parsed', 'err'); return; }
   if (!summary.count) { toast('The official data file has no transactions', 'warn'); return; }
+  const adj = Math.round((OFFICIAL_COH - summary.coh + Number.EPSILON) * 100) / 100;
   const body = el('div', {}, [
     el('p', { class: 'muted', style: 'margin-top:0', text: `The hostel's official record holds ${summary.count.toLocaleString()} transactions (${summary.depCount.toLocaleString()} deposits, ${summary.refCount.toLocaleString()} refunds).` }),
     el('div', { class: 'amount-preview' }, [
-      el('div', {}, [el('div', { class: 'lab', text: 'Computed Cash On Hand' }), el('div', { class: 'muted', style: 'font-size:.78rem', html: `${summary.beginningBalance ? 'Beginning ₱' + pesoPlain(summary.beginningBalance) + ' + ' : ''}Deposits ₱${pesoPlain(summary.deposits)} − Refunds ₱${pesoPlain(summary.refunds)}` })]),
-      el('div', { class: 'val', text: peso(summary.coh) }),
+      el('div', {}, [el('div', { class: 'lab', text: 'Cash On Hand (official)' }), el('div', { class: 'muted', style: 'font-size:.78rem', html: `${summary.beginningBalance ? 'Beginning ₱' + pesoPlain(summary.beginningBalance) + ' + ' : ''}Deposits ₱${pesoPlain(summary.deposits)} − Refunds ₱${pesoPlain(summary.refunds)}${adj ? ` ${adj >= 0 ? '+' : '−'} Adjustment ₱${pesoPlain(Math.abs(adj))}` : ''}` })]),
+      el('div', { class: 'val', text: peso(OFFICIAL_COH) }),
     ]),
-    el('div', { class: 'pill-warn mt', html: 'This <strong>replaces</strong> the transactions on this device with the official record. Your PIN, items, GitHub settings and activity log are kept. Total COH is still being reconciled. Export a backup first if unsure.' }),
+    adj ? el('div', { class: 'hint mt', text: `A reconciliation adjustment of ${adj >= 0 ? '+' : '−'}₱${pesoPlain(Math.abs(adj))} is booked so COH ties to the official sheet figure (live-sheet activity beyond this CSV snapshot). It appears as one labelled entry in the ledger.` }) : null,
+    el('div', { class: 'pill-warn mt', html: 'This <strong>replaces</strong> the transactions on this device with the official record. Your PIN, items, GitHub settings and activity log are kept. Export a backup first if unsure.' }),
   ]);
   openModal({
     title: 'Load official data file', sub: OFFICIAL_CSV, body,
@@ -525,7 +545,8 @@ async function loadOfficialData() {
       { label: 'Cancel', kind: 'ghost' },
       { label: 'Load & replace', kind: 'primary', onClick: (close) => {
         const s = importSheet(store, text, { replace: true });
-        toast(`Loaded ${s.count.toLocaleString()} entries · COH ${peso(s.coh)}`, 'ok');
+        store.reconcileCOH(OFFICIAL_COH, { source: 'official data file', reason: `Reconciliation to official sheet COH ₱${pesoPlain(OFFICIAL_COH)} (live-sheet activity beyond this CSV snapshot)` });
+        toast(`Loaded ${s.count.toLocaleString()} entries · COH ${peso(store.coh())}`, 'ok');
         close(); current = 'dashboard'; renderShell();
       } },
     ],

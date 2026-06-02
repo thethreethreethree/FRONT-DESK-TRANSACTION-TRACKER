@@ -69,7 +69,7 @@ export function render(ctx) {
       tr.append(
         el('td', {}, el('span', { class: 'seq', text: '#' + e.seq })),
         el('td', { text: fmtDateTime(e.ts) }),
-        el('td', {}, el('span', { class: `tag ${e.kind === 'deposit' ? 'dep' : e.kind === 'refund' ? 'ref' : 'rev'}`, text: e.kind })),
+        el('td', {}, el('span', { class: `tag ${e.kind === 'deposit' ? 'dep' : e.kind === 'refund' ? 'ref' : e.kind === 'adjustment' ? 'shift' : 'rev'}`, text: e.kind })),
         el('td', { text: `${e.itemName || '—'}${e.qty ? ' ×' + e.qty : ''}` }),
         el('td', {}, [el('strong', { text: e.guest || '—' }), e.room ? el('span', { class: 'muted', text: ' · ' + e.room }) : null]),
         el('td', {}, [el('span', { text: e.staff }), e.staffRole === 'manager' ? el('span', { class: 'tag role', style: 'margin-left:6px', text: 'mgr' }) : null]),

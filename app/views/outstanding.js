@@ -10,8 +10,9 @@ export function render(ctx) {
   const over = store.overReturnedByGuest();
   const rec = store.reconciliation();
 
-  // COH = beginning float + held − over-returned. Allow a cent of float drift.
-  const reconciles = Math.abs(rec.beginning + rec.held - rec.over - rec.coh) < 0.01;
+  // COH = beginning float + held − over-returned + adjustments. Cent of drift ok.
+  const adj = rec.adjustments || 0;
+  const reconciles = Math.abs(rec.beginning + rec.held - rec.over + adj - rec.coh) < 0.01;
   root.appendChild(pageHead(
     'Outstanding deposits',
     `${rec.positives} guests currently hold deposits`,
@@ -30,6 +31,14 @@ export function render(ctx) {
     reconCell('Held by guests', peso(rec.held), 'var(--in-700)'),
     el('div', { class: 'muted', style: 'font-size:1.4rem', text: '−' }),
     reconCell('Needs attention', peso(rec.over), 'var(--out-700)', `${rec.negatives} over-returned`),
+  );
+  if (adj) {
+    reconRow.append(
+      el('div', { class: 'muted', style: 'font-size:1.4rem', text: adj >= 0 ? '+' : '−' }),
+      reconCell('Adjustment', peso(Math.abs(adj)), 'var(--ink)', 'reconciliation'),
+    );
+  }
+  reconRow.append(
     el('div', { class: 'muted', style: 'font-size:1.4rem', text: '=' }),
     reconCell('Cash On Hand', peso(rec.coh), 'var(--ink)', 'locked & derived'),
   );

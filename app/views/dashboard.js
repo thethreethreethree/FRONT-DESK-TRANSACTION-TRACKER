@@ -36,6 +36,7 @@ export function render(ctx) {
   if (begin) formulaParts.push(el('span', { html: `Beginning <b>₱${pesoPlain(begin)}</b>` }));
   formulaParts.push(el('span', { html: `${begin ? '+ ' : ''}Deposits <b>₱${pesoPlain(t.deposits)}</b>` }));
   formulaParts.push(el('span', { html: `− Refunds <b>₱${pesoPlain(t.refunds)}</b>` }));
+  if (t.adjustments) formulaParts.push(el('span', { html: `${t.adjustments >= 0 ? '+' : '−'} Adjustment <b>₱${pesoPlain(Math.abs(t.adjustments))}</b>` }));
   formulaParts.push(el('span', { html: `= <b>₱${pesoPlain(coh)}</b>` }));
   const hero = el('div', { class: 'coh-hero' }, [
     el('div', { class: 'label', text: 'Cash On Hand' }),
