@@ -2,7 +2,6 @@
 import { el, $, clear, peso, pesoPlain, toast, fmtDateTime } from './util.js';
 import { store } from './store.js';
 import { pageHead, confirmDialog, managerGate, openModal } from './components.js';
-import { loadDemoData } from './seed.js';
 import * as gh from './github.js';
 import { parseSheet, importSheet } from './csv-import.js';
 import * as dashboard from './views/dashboard.js';
@@ -89,47 +88,9 @@ function applyOfficialData(text) {
   return s;
 }
 
-// ---------------------------------------------------------------- Setup
-function renderSetup() {
-  clear(app);
-  app.className = 'app locked';
-  const mgr = el('input', { class: 'input', type: 'password', inputmode: 'numeric', placeholder: 'Manager PIN (4-6 digits)', autocomplete: 'off' });
-  const mgr2 = el('input', { class: 'input', type: 'password', inputmode: 'numeric', placeholder: 'Confirm Manager PIN', autocomplete: 'off' });
-  const staff = el('input', { class: 'input', type: 'password', inputmode: 'numeric', placeholder: 'Staff PIN (optional)', autocomplete: 'off' });
-  const reqStaff = el('input', { type: 'checkbox' });
-  let useDemo = true;
-
-  const demoToggle = el('div', { class: 'role-toggle' }, [
-    el('button', { type: 'button', class: 'active', text: 'Start with sample data', onClick: (ev) => setDemo(true, ev) }),
-    el('button', { type: 'button', text: 'Start empty', onClick: (ev) => setDemo(false, ev) }),
-  ]);
-  function setDemo(v, ev) { useDemo = v; demoToggle.querySelectorAll('button').forEach((b) => b.classList.remove('active')); ev.currentTarget.classList.add('active'); }
-
-  const card = el('div', { class: 'lockcard' }, [
-    el('div', { class: 'lk-brand' }, [
-      el('img', { src: LOGO_LIGHT, alt: 'Frendz Hostel El Nido' }),
-      el('h2', { text: 'Front Desk Tracker' }),
-      el('p', { text: 'First-time setup · Frendz Hostel El Nido' }),
-    ]),
-    el('div', { class: 'field' }, [el('label', { text: 'Manager PIN' }), mgr, el('div', { class: 'hint', text: 'Unlocks voids, settings, exports & reports.' })]),
-    el('div', { class: 'field' }, [el('label', { text: 'Confirm Manager PIN' }), mgr2]),
-    el('hr', { class: 'hr' }),
-    el('div', { class: 'field' }, [el('label', { text: 'Staff PIN (optional)' }), staff]),
-    el('label', { class: 'flex aic gap', style: 'font-size:.86rem;cursor:pointer' }, [reqStaff, 'Require a PIN for staff to record entries']),
-    el('hr', { class: 'hr' }),
-    el('div', { class: 'field' }, [el('label', { text: 'Starting data' }), demoToggle, el('div', { class: 'hint', text: 'Sample data mirrors the Feb 3–9 sheet so you can explore. You can reset later in Settings.' })]),
-    el('button', { class: 'btn primary lg block mt', text: 'Create front desk →', onClick: () => {
-      if ((mgr.value || '').length < 4) return toast('Manager PIN must be at least 4 digits', 'warn');
-      if (mgr.value !== mgr2.value) return toast('Manager PINs do not match', 'warn');
-      store.completeSetup({ managerPin: mgr.value, staffPin: staff.value || null, requireStaffPin: reqStaff.checked });
-      if (useDemo) loadDemoData(store);
-      store.login('manager', mgr.value, 'Manager');
-      toast('Welcome to Frendz Front Desk!', 'ok');
-      renderShell();
-    } }),
-  ]);
-  app.appendChild(el('div', { class: 'lockwrap' }, card));
-}
+// Note: there is no first-time "create a PIN" setup screen. A fresh device is
+// auto-provisioned with the hostel's official records by ensureProvisioned(), and
+// authentication is managed separately (see ensureProvisioned / the Access model).
 
 // ---------------------------------------------------------------- Login
 function renderLogin() {
@@ -412,7 +373,7 @@ function renderSettings(ctx) {
     el('div', { class: 'card-h' }, [el('h3', { text: 'Danger zone' })]),
     el('div', { class: 'danger-zone flex between aic wrap gap' }, [
       el('div', {}, [el('strong', { text: 'Reset all data' }), el('div', { class: 'muted', style: 'font-size:.82rem', text: 'Erases the ledger, shifts & settings on this device. Export a backup first.' })]),
-      el('button', { class: 'btn out', text: 'Reset…', onClick: () => confirmDialog({ title: 'Reset everything?', sub: 'This permanently clears local data. Make sure you exported a backup.', confirmLabel: 'Erase all data', kind: 'out', onConfirm: () => { store.reset(); store.session = null; route(); } }) }),
+      el('button', { class: 'btn out', text: 'Reset…', onClick: () => confirmDialog({ title: 'Reset & reload records?', sub: 'Clears local data on this device and reloads the hostel\'s official records fresh. Export a backup first if unsure.', confirmLabel: 'Reset & reload', kind: 'out', onConfirm: async () => { store.reset(); store.session = null; await ensureProvisioned(); route(); } }) }),
     ]),
   ]));
   return root;
