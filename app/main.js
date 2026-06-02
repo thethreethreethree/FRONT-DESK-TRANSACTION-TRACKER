@@ -4,6 +4,7 @@ import { store } from './store.js';
 import { pageHead, confirmDialog, managerGate, openModal } from './components.js';
 import { loadDemoData } from './seed.js';
 import * as gh from './github.js';
+import { parseSheet, importSheet } from './csv-import.js';
 import * as dashboard from './views/dashboard.js';
 import * as deposit from './views/deposit.js';
 import * as refund from './views/refund.js';
@@ -336,6 +337,13 @@ function renderSettings(ctx) {
     ]),
   ]));
 
+  // import from the original spreadsheet
+  root.appendChild(el('div', { class: 'card mt-lg', style: 'max-width:720px' }, [
+    el('div', { class: 'card-h' }, [el('h3', { text: 'Import from spreadsheet' }), el('span', { class: 'sub', text: 'the original deposit/refund CSV' })]),
+    el('p', { class: 'muted', style: 'margin-top:0', text: 'Load your existing front-desk sheet (the two-sided towel/padlock/hair-dryer layout). It rebuilds the ledger and shows the computed COH before you commit.' }),
+    el('button', { class: 'btn primary', html: '📄 Import CSV spreadsheet', onClick: importCSV }),
+  ]));
+
   // security · PINs
   root.appendChild(renderSecurityCard());
 
@@ -441,6 +449,41 @@ function exportBackup() {
   store._audit('backup.export', 'Exported local backup file', { entries: store.ledger.length });
   toast('Backup exported', 'ok');
 }
+function importCSV() {
+  const inp = el('input', { type: 'file', accept: '.csv,text/csv' });
+  inp.addEventListener('change', () => {
+    const f = inp.files[0]; if (!f) return;
+    const r = new FileReader();
+    r.onload = () => {
+      let summary;
+      try { summary = parseSheet(r.result).summary; }
+      catch (e) { toast('Could not read that CSV', 'err'); return; }
+      if (!summary.count) { toast('No transactions found in that file', 'warn'); return; }
+      const body = el('div', {}, [
+        el('p', { class: 'muted', style: 'margin-top:0', text: `Found ${summary.count} transactions in the file.` }),
+        el('div', { class: 'amount-preview' }, [
+          el('div', {}, [el('div', { class: 'lab', text: 'Computed Cash On Hand' }), el('div', { class: 'muted', style: 'font-size:.78rem', html: `Deposits ₱${pesoPlain(summary.deposits)} − Refunds ₱${pesoPlain(summary.refunds)}` })]),
+          el('div', { class: 'val', text: peso(summary.coh) }),
+        ]),
+        el('div', { class: 'pill-warn mt', html: 'This <strong>replaces</strong> current transactions with the spreadsheet data. Items, settings and the activity log are kept. Export a backup first if unsure.' }),
+      ]);
+      openModal({
+        title: 'Import spreadsheet', sub: f.name, body,
+        actions: [
+          { label: 'Cancel', kind: 'ghost' },
+          { label: 'Replace & import', kind: 'primary', onClick: (close) => {
+            const s = importSheet(store, r.result, { replace: true });
+            toast(`Imported ${s.count} entries · COH ${peso(s.coh)}`, 'ok');
+            close(); current = 'dashboard'; renderShell();
+          } },
+        ],
+      });
+    };
+    r.readAsText(f);
+  });
+  inp.click();
+}
+
 function importBackup() {
   const inp = el('input', { type: 'file', accept: 'application/json' });
   inp.addEventListener('change', () => {
