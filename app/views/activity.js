@@ -19,6 +19,9 @@ const ACTIONS = {
   'auth.logout': ['Sign out', 'role'],
   'auth.pin_change': ['PIN changed', 'role'],
   'auth.pin_reset': ['PIN reset', 'rev'],
+  'staff.add': ['Staff added', 'gold'],
+  'staff.remove': ['Staff removed', 'rev'],
+  'staff.pin_change': ['Staff PIN', 'role'],
   'setup.complete': ['Setup', 'gold'],
   'settings.beginning_balance': ['Beginning balance', 'gold'],
   'coh.reconcile': ['COH reconciled', 'gold'],
@@ -55,7 +58,7 @@ export function render(ctx) {
     el('option', { value: 'deposit.create,refund.create,txn.void,coh.reconcile', text: 'Cash entries' }),
     el('option', { value: 'item.create,item.update,item.retire,item.restore,settings.beginning_balance', text: 'Item & settings' }),
     el('option', { value: 'shift.open,shift.close', text: 'Shifts' }),
-    el('option', { value: 'auth.login,auth.logout,auth.pin_change,auth.pin_reset', text: 'Sign-in / PIN' }),
+    el('option', { value: 'auth.login,auth.logout,auth.pin_change,auth.pin_reset,staff.add,staff.remove,staff.pin_change', text: 'Sign-in / staff / PIN' }),
     el('option', { value: 'data.import,data.reset,data.csv_import,data.demo_loaded,backup.github,backup.export', text: 'Data & backup' }),
   ]);
   const dateInput = el('input', { class: 'input', type: 'date' });

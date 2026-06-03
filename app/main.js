@@ -120,7 +120,9 @@ function renderLogin() {
   ]);
   function setRole(r, ev) { role = r; toggle.querySelectorAll('button').forEach((b) => b.classList.remove('active')); ev.currentTarget.classList.add('active'); syncPin(); }
   function syncPin() {
-    const need = role === 'manager' || store.config.requireStaffPin;
+    // Managers always need a PIN; staff need one once any staff account exists
+    // (each signs in with their own PIN) or if a shared staff PIN is required.
+    const need = role === 'manager' || store.config.requireStaffPin || store.staffList().length > 0;
     pinField.style.display = need ? '' : 'none';
   }
 
@@ -167,10 +169,14 @@ function renderSidebar() {
   const nav = el('nav', { class: 'nav' });
   const order = ['dashboard', 'deposit', 'refund', 'outstanding', 'ledger', 'shifts'];
   for (const id of order) addNav(nav, id);
-  nav.appendChild(el('div', { class: 'nav-sep' }));
-  nav.appendChild(el('div', { class: 'mgr-only', text: 'Manager' }));
-  addNav(nav, 'activity');
-  addNav(nav, 'settings');
+  // Manager-only tools (Activity Log, Settings) are hidden entirely from staff —
+  // staff have no access to admin features. (navigate() also gates, as a backstop.)
+  if (store.isManager()) {
+    nav.appendChild(el('div', { class: 'nav-sep' }));
+    nav.appendChild(el('div', { class: 'mgr-only', text: 'Manager' }));
+    addNav(nav, 'activity');
+    addNav(nav, 'settings');
+  }
   side.appendChild(nav);
 
   const s = store.session;
@@ -203,6 +209,9 @@ function navigate(id) {
 function renderCurrent() {
   const main = document.getElementById('main-view');
   if (!main) return;
+  // Backstop: a staff session can never render a manager-only view (e.g. if a
+  // manager left `current` on Settings before a staff signed in on this device).
+  if (VIEWS[current] && VIEWS[current].mgr && !store.isManager()) current = 'dashboard';
   clear(main);
   const ctx = { navigate, store };
   try {
@@ -354,6 +363,9 @@ function renderSettings(ctx) {
   // security · PINs
   root.appendChild(renderSecurityCard());
 
+  // staff accounts (each signs in with their own PIN)
+  root.appendChild(renderStaffCard());
+
   // danger zone
   root.appendChild(el('div', { class: 'card mt-lg', style: 'max-width:720px' }, [
     el('div', { class: 'card-h' }, [el('h3', { text: 'Danger zone' })]),
@@ -466,29 +478,61 @@ function renderGitHubCard() {
 }
 
 function renderSecurityCard() {
-  const newM = el('input', { class: 'input', type: 'password', inputmode: 'numeric', placeholder: 'New Manager PIN (4-6 digits)', autocomplete: 'off' });
-  const newS = el('input', { class: 'input', type: 'password', inputmode: 'numeric', placeholder: 'New Staff PIN (blank = remove)', autocomplete: 'off' });
-  const req = el('input', { type: 'checkbox' });
-  req.checked = !!store.config.requireStaffPin;
+  const newM = el('input', { class: 'input', type: 'password', inputmode: 'numeric', placeholder: 'New Manager PIN (4-6 digits)', autocomplete: 'off', style: 'max-width:280px' });
   return el('div', { class: 'card mt-lg', style: 'max-width:720px' }, [
-    el('div', { class: 'card-h' }, [el('h3', { text: 'Security · PINs' }), el('span', { class: 'sub', text: 'changes are recorded in the Activity Log' })]),
-    el('div', { class: 'row2' }, [
-      el('div', { class: 'field' }, [el('label', { text: 'Change Manager PIN' }), newM,
-        el('button', { class: 'btn sm mt', text: 'Update Manager PIN', onClick: () => {
-          if ((newM.value || '').length < 4) return toast('Manager PIN must be at least 4 digits', 'warn');
-          store.changePin('manager', newM.value); newM.value = ''; toast('Manager PIN updated', 'ok');
-        } }),
-      ]),
-      el('div', { class: 'field' }, [el('label', { text: 'Change Staff PIN' }), newS,
-        el('label', { class: 'flex aic gap', style: 'font-size:.84rem;cursor:pointer;margin-top:8px' }, [req, 'Require staff PIN at login']),
-        el('button', { class: 'btn sm mt', text: 'Update staff access', onClick: () => {
-          store.changePin('staff', newS.value || null);
-          store.setConfig({ requireStaffPin: req.checked });
-          newS.value = ''; toast('Staff access updated', 'ok');
-        } }),
-      ]),
+    el('div', { class: 'card-h' }, [el('h3', { text: 'Security · Manager PIN' }), el('span', { class: 'sub', text: 'changes are recorded in the Activity Log' })]),
+    el('p', { class: 'muted', style: 'margin-top:0', text: 'Change your own (manager) PIN. Staff accounts are managed in the Staff section below — each staff has their own PIN.' }),
+    el('div', { class: 'field', style: 'max-width:280px;margin:0' }, [el('label', { text: 'New Manager PIN' }), newM,
+      el('button', { class: 'btn sm mt', text: 'Update Manager PIN', onClick: () => {
+        if ((newM.value || '').length < 4) return toast('Manager PIN must be at least 4 digits', 'warn');
+        store.changePin('manager', newM.value); newM.value = ''; toast('Manager PIN updated', 'ok');
+      } }),
     ]),
   ]);
+}
+
+// Staff roster — manager adds front-desk accounts, each with its own PIN.
+function renderStaffCard() {
+  const card = el('div', { class: 'card mt-lg', style: 'max-width:720px' }, [
+    el('div', { class: 'card-h' }, [el('h3', { text: 'Staff' }), el('span', { class: 'sub', text: 'front-desk accounts · each signs in with their own PIN' })]),
+    el('p', { class: 'muted', style: 'margin-top:0', text: 'Add staff and give each a PIN. They sign in with that PIN to record deposits & refunds — they cannot open Settings, the Activity Log, or any manager tool.' }),
+  ]);
+  const roster = store.staffList();
+  if (roster.length) {
+    const tbl = el('table', { class: 'tbl' });
+    tbl.appendChild(el('thead', {}, el('tr', {}, [el('th', { text: 'Name' }), el('th', { text: 'Set new PIN' }), el('th', { text: '' })])));
+    const tb = el('tbody');
+    for (const s of roster) {
+      const pinI = el('input', { class: 'input', type: 'password', inputmode: 'numeric', placeholder: 'new PIN', autocomplete: 'off', style: 'width:150px;padding:7px 10px' });
+      tb.appendChild(el('tr', {}, [
+        el('td', {}, el('strong', { text: s.name })),
+        el('td', {}, el('div', { class: 'flex gap aic' }, [pinI, el('button', { class: 'btn ghost sm', text: 'Update', onClick: () => {
+          if ((pinI.value || '').length < 4) return toast('PIN must be at least 4 digits', 'warn');
+          store.setStaffPin(s.id, pinI.value); pinI.value = ''; toast(`${s.name}'s PIN updated`, 'ok');
+        } })])),
+        el('td', { class: 'right' }, el('button', { class: 'btn ghost sm', text: 'Remove', onClick: () => {
+          confirmDialog({ title: `Remove ${s.name}?`, sub: 'They can no longer sign in. Their past entries stay in the ledger.', confirmLabel: 'Remove', kind: 'out', onConfirm: () => { store.removeStaff(s.id); toast(`${s.name} removed`, 'ok'); renderShell(); } });
+        } })),
+      ]));
+    }
+    tbl.appendChild(tb);
+    card.appendChild(el('div', { class: 'table-wrap' }, tbl));
+  } else {
+    card.appendChild(el('div', { class: 'hint', text: 'No staff yet — add one below.' }));
+  }
+  const nName = el('input', { class: 'input', placeholder: 'Staff name / initials' });
+  const nPin = el('input', { class: 'input', type: 'password', inputmode: 'numeric', placeholder: 'PIN (4-6 digits)', autocomplete: 'off', style: 'max-width:180px' });
+  card.appendChild(el('div', { class: 'flex gap mt', style: 'align-items:flex-end' }, [
+    el('div', { class: 'field', style: 'flex:1;margin:0' }, [el('label', { text: 'Add staff' }), nName]),
+    el('div', { class: 'field', style: 'margin:0' }, [el('label', { text: 'PIN' }), nPin]),
+    el('button', { class: 'btn primary', text: 'Add staff', onClick: () => {
+      const name = nName.value.trim();
+      if (!name) return toast('Enter a staff name', 'warn');
+      if ((nPin.value || '').length < 4) return toast('PIN must be at least 4 digits', 'warn');
+      store.addStaff({ name, pin: nPin.value }); nName.value = ''; nPin.value = ''; toast(`${name} added`, 'ok'); renderShell();
+    } }),
+  ]));
+  return card;
 }
 
 function exportBackup() {

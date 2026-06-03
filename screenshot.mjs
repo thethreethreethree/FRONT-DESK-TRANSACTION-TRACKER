@@ -112,6 +112,17 @@ async function signInManager(page, name, pin) {
   await clickText(page, 'Sign in');
   await page.waitForSelector('.sidebar', { timeout: 8000 }).catch(() => {});
 }
+async function signInStaffWithPin(page, pin) {
+  await page.waitForSelector('.lockcard input:not([type=password])', { timeout: 20000 }).catch(() => {});
+  // staff is the default role; the PIN field shows because staff accounts exist
+  await page.evaluate((pn) => {
+    const card = document.querySelector('.lockcard');
+    const nameI = card.querySelector('input:not([type=password])'); if (nameI) { nameI.value = ''; nameI.dispatchEvent(new Event('input', { bubbles: true })); }
+    const pinI = card.querySelector('input[type=password]'); if (pinI) { pinI.value = pn; pinI.dispatchEvent(new Event('input', { bubbles: true })); }
+  }, pin);
+  await clickText(page, 'Sign in');
+  await page.waitForSelector('.sidebar', { timeout: 8000 }).catch(() => {});
+}
 const readCOH = (page) => page.evaluate(() => { const a = document.querySelector('.coh-hero .amount'); return a ? a.textContent.replace(/\s+/g, ' ').trim() : '(none)'; });
 const onDashboard = (page) => page.evaluate(() => !!document.querySelector('.coh-hero'));
 
@@ -184,11 +195,38 @@ const opKept6 = await page.evaluate(() => /walk-in guest/i.test(document.body.in
 console.log('TEST 6  stale-version guard keeps user entry → COH', coh6, '| op-entry visible:', opKept6);
 await page.screenshot({ path: `${OUT}/operation-ready.png` });
 
+// ── TEST 7: manager adds a staff account; staff signs in with NO admin access ─
+await clearAll(page);
+await page.reload(NID);
+await signInManager(page, 'Darren', '1012');     // fresh device → manager
+await sleep(700);
+await page.evaluate(() => { const b = [...document.querySelectorAll('.navbtn')].find((x) => /settings/i.test(x.innerText)); if (b) b.click(); });
+await sleep(500);
+await page.evaluate(() => {                        // fill the "Add staff" form by placeholder
+  const name = [...document.querySelectorAll('input')].find((i) => /staff name/i.test(i.placeholder || ''));
+  const pin = [...document.querySelectorAll('input')].find((i) => /^PIN \(4-6/i.test(i.placeholder || ''));
+  if (name) { name.value = 'Maria'; name.dispatchEvent(new Event('input', { bubbles: true })); }
+  if (pin) { pin.value = '2024'; pin.dispatchEvent(new Event('input', { bubbles: true })); }
+});
+await clickText(page, 'Add staff');
+await sleep(500);
+const rosterHasMaria = await page.evaluate(() => /maria/i.test(document.body.innerText));
+await clickText(page, 'Sign out');
+await sleep(400);
+await signInStaffWithPin(page, '2024');           // the new staff's own PIN
+await sleep(700);
+const staffIn = await onDashboard(page);
+const staffName = await page.evaluate(() => ((document.querySelector('.side-foot .who') || {}).textContent || '').trim());
+const noAdminNav = await page.evaluate(() => ![...document.querySelectorAll('.navbtn')].some((b) => /settings|activity/i.test(b.innerText)));
+console.log('TEST 7  add-staff → staff login: in:', staffIn, '| name:', staffName, '| roster has Maria:', rosterHasMaria, '| staff sees NO admin nav:', noAdminNav);
+await page.screenshot({ path: `${OUT}/staff-no-admin.png` });
+
 const pass = coh1 === EXPECT && stillIn && coh2 === EXPECT && coh3 === EXPECT
   && wrongBlocked && mgrIn && isManager && coh4 === EXPECT
-  && coh5 === EXPECT_OP && opKept5 && coh6 === EXPECT_OP && opKept6;
+  && coh5 === EXPECT_OP && opKept5 && coh6 === EXPECT_OP && opKept6
+  && rosterHasMaria && staffIn && /maria/i.test(staffName) && noAdminNav;
 console.log(pass
-  ? `\nALL PASS ✓ — COH ${EXPECT}; manager PIN enforced; user entries persist (close/reopen + version bump)`
+  ? `\nALL PASS ✓ — COH ${EXPECT}; manager PIN enforced; entries persist; staff accounts work + staff locked out of admin`
   : `\nFAIL ✗ — see values above`);
 await browser.close();
 process.exit(pass ? 0 : 1);

@@ -199,19 +199,32 @@ class Store {
     this._audit('setup.complete', 'Front desk initialised', { brand: c.brand });
     this.save();
   }
+  // Active staff accounts (each has its own PIN). Roster lives in state.staff.
+  staffList() { return (this.state.staff || []).filter((s) => s.active !== false); }
+
   login(role, pin, name) {
     const c = this.state.config;
+    let session = null;
     if (role === 'manager') {
       if (!Store.verifyPin(pin, c.managerPin)) return false;
-    } else if (c.requireStaffPin) {
-      // staff pin OR manager pin both allow staff actions
-      if (!Store.verifyPin(pin, c.staffPin) && !Store.verifyPin(pin, c.managerPin)) return false;
+      session = { role: 'manager', name: name || 'Manager', at: nowISO() };
+    } else {
+      // Staff: the PIN identifies the person. Match the roster first (and adopt
+      // that account's name, for accountability), then a legacy shared staff PIN,
+      // then the manager PIN (manager covering the desk), then — only if NO staff
+      // and no PIN are configured at all — an open no-PIN desk.
+      const match = this.staffList().find((s) => Store.verifyPin(pin, s.pin));
+      if (match) session = { role: 'staff', name: match.name, staffId: match.id, at: nowISO() };
+      else if (c.staffPin && Store.verifyPin(pin, c.staffPin)) session = { role: 'staff', name: name || 'Staff', at: nowISO() };
+      else if (Store.verifyPin(pin, c.managerPin)) session = { role: 'staff', name: name || 'Manager', at: nowISO() };
+      else if (this.staffList().length === 0 && !c.requireStaffPin && !c.staffPin) session = { role: 'staff', name: name || 'Staff', at: nowISO() };
+      else return false;
     }
-    this.session = { role, name: name || (role === 'manager' ? 'Manager' : 'Staff'), at: nowISO() };
+    this.session = session;
     // Persist the session (device-local, never exported) so a refresh / back
     // navigation keeps the user signed in instead of bouncing them to the PIN.
     try { localStorage.setItem(SESSION_KEY, JSON.stringify(this.session)); } catch (e) { /* private mode */ }
-    this._audit('auth.login', `${this.session.name} signed in as ${role}`, { role });
+    this._audit('auth.login', `${this.session.name} signed in as ${this.session.role}`, { role: this.session.role });
     this.emit();
     return true;
   }
@@ -602,6 +615,34 @@ class Store {
     this._audit(recovery ? 'auth.pin_reset' : 'auth.pin_change',
       `${recovery ? 'Recovered' : 'Changed'} ${who} PIN`, { who, recovery });
     this.save();
+  }
+
+  // --------------------------------------------------------------- staff roster
+  // Manager-managed front-desk accounts. Each staff signs in with their OWN PIN.
+  addStaff({ name, pin }) {
+    if (!Array.isArray(this.state.staff)) this.state.staff = [];
+    const s = { id: uid('staff'), name: String(name || '').trim(), pin: Store.hashPin(pin), active: true, createdAt: nowISO() };
+    this.state.staff.push(s);
+    this._audit('staff.add', `Added staff "${s.name}"`, { id: s.id, name: s.name });
+    this.save();
+    return s;
+  }
+  setStaffPin(id, newPin) {
+    const s = (this.state.staff || []).find((x) => x.id === id);
+    if (!s) return false;
+    s.pin = Store.hashPin(newPin);
+    this._audit('staff.pin_change', `Changed PIN for staff "${s.name}"`, { id, name: s.name });
+    this.save();
+    return true;
+  }
+  removeStaff(id) {
+    const arr = this.state.staff || [];
+    const i = arr.findIndex((x) => x.id === id);
+    if (i < 0) return false;
+    const [s] = arr.splice(i, 1);
+    this._audit('staff.remove', `Removed staff "${s.name}"`, { id, name: s.name });
+    this.save();
+    return true;
   }
 
   // ------------------------------------------------------------- export/import
