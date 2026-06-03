@@ -47,7 +47,14 @@ const data = await page.evaluate(async () => {
   };
 });
 
+const integrity = await page.evaluate(() => {
+  const t = document.body.innerText;
+  if (/integrity broken/i.test(t)) return 'BROKEN';
+  if (/verified/i.test(t)) return 'verified';
+  return '(unknown)';
+});
 console.log('LIVE URL          :', BASE);
+console.log('Integrity         :', integrity);
 console.log('COH on screen     :', coh);
 console.log('Ledger entries    :', data.total, `(deposits ${data.deposits} / refunds ${data.refunds} / adjustments ${data.adjustments})`);
 console.log('Beginning balance :', '₱' + (data.beginningBalance || 0).toLocaleString());
