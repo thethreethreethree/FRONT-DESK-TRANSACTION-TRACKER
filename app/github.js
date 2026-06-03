@@ -27,6 +27,7 @@ function b64utf8(str) {
 function api(path, opts = {}) {
   return fetch('https://api.github.com' + path, {
     ...opts,
+    cache: 'no-store', // always read the CURRENT sha — a cached/stale sha causes 409 conflicts
     headers: {
       Authorization: 'Bearer ' + getToken(),
       Accept: 'application/vnd.github+json',
@@ -53,7 +54,17 @@ export async function testConnection() {
 }
 
 // Commit the current ledger snapshot. Returns the commit URL.
+// SERIALIZED: a manual "Back up now" and the auto-sync must never PUT at the same
+// moment — they'd both read the same file SHA, one would win, and the other would
+// 409 ("does not match <sha>"). Concurrent calls queue behind the in-flight one.
+let _busy = null;
 export async function backupNow(reason = 'manual') {
+  while (_busy) { try { await _busy; } catch (e) { /* prior backup's error is its caller's */ } }
+  _busy = _commitBackup(reason);
+  try { return await _busy; } finally { _busy = null; }
+}
+
+async function _commitBackup(reason) {
   const g = cfg();
   if (!getToken()) throw new Error('No GitHub token set.');
   if (!g.owner || !g.repo) throw new Error('Set owner and repo first.');
@@ -62,35 +73,33 @@ export async function backupNow(reason = 'manual') {
 
   const json = JSON.stringify(store.exportData(), null, 2);
   const content = b64utf8(json);
-
-  // need the existing file SHA to update it
-  let sha;
-  const getRes = await api(`/repos/${g.owner}/${g.repo}/contents/${path}?ref=${encodeURIComponent(branch)}`);
-  if (getRes.ok) { const j = await getRes.json(); sha = j.sha; }
-  else if (getRes.status !== 404) throw new Error('Could not read repo (' + getRes.status + ').');
-
   const coh = store.coh();
   const message = `Front desk backup (${reason}) · COH ₱${coh} · ${store.ledger.length} entries`;
-  let putRes = await api(`/repos/${g.owner}/${g.repo}/contents/${path}`, {
-    method: 'PUT',
-    body: JSON.stringify({ message, content, branch, sha }),
-  });
-  // 409/422 = another device committed in between (our `sha` is stale). Re-read
-  // the current SHA once and retry, so two front-desk devices don't clobber each
-  // other on a blind write.
-  if (putRes.status === 409 || putRes.status === 422) {
-    const r2 = await api(`/repos/${g.owner}/${g.repo}/contents/${path}?ref=${encodeURIComponent(branch)}`);
-    const sha2 = r2.ok ? (await r2.json()).sha : undefined;
+
+  // Up to 3 attempts: re-read the CURRENT file SHA each time, then PUT. On a SHA
+  // conflict (409/422 — another device wrote in between) loop with a fresh SHA;
+  // the file is large, so the read→write window is wide enough for a conflict to
+  // slip in even when serialized locally. Any other error stops immediately.
+  let putRes, txt = '';
+  for (let attempt = 0; attempt < 3; attempt++) {
+    let sha;
+    const getRes = await api(`/repos/${g.owner}/${g.repo}/contents/${path}?ref=${encodeURIComponent(branch)}`);
+    if (getRes.ok) { const j = await getRes.json(); sha = j.sha; }
+    else if (getRes.status !== 404) throw new Error('Could not read repo (' + getRes.status + ').');
     putRes = await api(`/repos/${g.owner}/${g.repo}/contents/${path}`, {
       method: 'PUT',
-      body: JSON.stringify({ message, content, branch, sha: sha2 }),
+      body: JSON.stringify({ message, content, branch, sha }),
     });
+    if (putRes.ok) break;
+    if (putRes.status !== 409 && putRes.status !== 422) break; // not a conflict → report it
+    txt = await putRes.text();
   }
   if (!putRes.ok) {
-    const txt = await putRes.text();
+    if (!txt) txt = await putRes.text();
     let hint = ': ' + txt.slice(0, 140);
     if (putRes.status === 403) hint = ' — the token is missing "Contents: Read and write". Edit your fine-grained token (GitHub → Settings → Developer settings → Fine-grained tokens → this token → Repository permissions → Contents → Read and write), save, then try again.';
     else if (putRes.status === 401) hint = ' — token rejected (expired or invalid). Paste a fresh token.';
+    else if (putRes.status === 409 || putRes.status === 422) hint = ' — another sync was writing at the same moment; your data still saved on the previous sync and the next change will catch up.';
     throw new Error('Backup failed (' + putRes.status + ')' + hint);
   }
   const j = await putRes.json();
