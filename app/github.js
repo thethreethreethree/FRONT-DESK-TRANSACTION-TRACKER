@@ -71,10 +71,21 @@ export async function backupNow(reason = 'manual') {
 
   const coh = store.coh();
   const message = `Front desk backup (${reason}) · COH ₱${coh} · ${store.ledger.length} entries`;
-  const putRes = await api(`/repos/${g.owner}/${g.repo}/contents/${path}`, {
+  let putRes = await api(`/repos/${g.owner}/${g.repo}/contents/${path}`, {
     method: 'PUT',
     body: JSON.stringify({ message, content, branch, sha }),
   });
+  // 409/422 = another device committed in between (our `sha` is stale). Re-read
+  // the current SHA once and retry, so two front-desk devices don't clobber each
+  // other on a blind write.
+  if (putRes.status === 409 || putRes.status === 422) {
+    const r2 = await api(`/repos/${g.owner}/${g.repo}/contents/${path}?ref=${encodeURIComponent(branch)}`);
+    const sha2 = r2.ok ? (await r2.json()).sha : undefined;
+    putRes = await api(`/repos/${g.owner}/${g.repo}/contents/${path}`, {
+      method: 'PUT',
+      body: JSON.stringify({ message, content, branch, sha: sha2 }),
+    });
+  }
   if (!putRes.ok) {
     const txt = await putRes.text();
     throw new Error('Backup failed (' + putRes.status + '): ' + txt.slice(0, 140));
@@ -88,10 +99,55 @@ export async function backupNow(reason = 'manual') {
   return j.commit && j.commit.html_url;
 }
 
-// Fire-and-forget auto-backup (used on shift close). Never throws.
+// Fire-and-forget background backup (debounced auto-sync after every change).
+// Never throws and stays SILENT on success — it runs on every mutation, so a
+// toast each time would be noise. A failure shows one quiet warning. Requires a
+// token + owner/repo; the caller decides WHETHER to auto-sync (config.autoSync).
+let _warnedFail = false;
 export async function autoBackup(reason) {
   const g = cfg();
-  if (!g.enabled || !g.autoOnClose || !getToken()) return false;
-  try { await backupNow(reason); toast('Backed up to GitHub ✓', 'ok'); return true; }
-  catch (e) { console.error(e); toast('GitHub backup failed: ' + e.message, 'err'); return false; }
+  if (!getToken() || !g.owner || !g.repo) return false;
+  try { await backupNow(reason); _warnedFail = false; return true; }
+  catch (e) {
+    console.error(e);
+    if (!_warnedFail) { toast('GitHub sync failed: ' + e.message, 'err'); _warnedFail = true; }
+    return false;
+  }
+}
+
+// Pull the latest backup from the repo. Returns { payload, sha } or null.
+// With a token we use the Contents API (newest commit, no CDN cache); without a
+// token we fetch the file over the same relative path the site is served from
+// (GitHub Pages serves it straight from the repo) — so a freshly-cleared device
+// with no token can still restore. Fails SOFT (returns null) on any error/404.
+export async function fetchRemoteState() {
+  const g = cfg();
+  const path = cleanPath(g.path);
+  if (getToken() && g.owner && g.repo) {
+    try {
+      const branch = g.branch || 'main';
+      const res = await api(`/repos/${g.owner}/${g.repo}/contents/${path}?ref=${encodeURIComponent(branch)}`);
+      if (res.ok) {
+        const j = await res.json();
+        let text;
+        if (j.content) {
+          const bin = atob(j.content.replace(/\n/g, ''));
+          const bytes = Uint8Array.from(bin, (c) => c.charCodeAt(0));
+          text = new TextDecoder().decode(bytes);
+        } else if (j.download_url) {
+          // Files > 1 MB come back without inline content — fetch the blob.
+          text = await (await fetch(j.download_url, { cache: 'no-store' })).text();
+        }
+        if (text) return { payload: JSON.parse(text), sha: j.sha };
+      } else if (res.status === 404) {
+        return null;
+      }
+    } catch (e) { /* fall through to the relative fetch */ }
+  }
+  try {
+    const bust = path + (path.includes('?') ? '&' : '?') + 't=' + Date.now();
+    const res = await fetch(bust, { cache: 'no-store' });
+    if (res.ok) return { payload: await res.json(), sha: null };
+  } catch (e) { /* no remote backup reachable */ }
+  return null;
 }

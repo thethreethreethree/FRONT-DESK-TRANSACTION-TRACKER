@@ -31,8 +31,44 @@ const app = document.getElementById('app');
 async function mount() {
   if (!store.state) splashLoading('Loading…');
   await store.load();
-  await ensureProvisioned();
+  await syncFromRemote();    // pull the latest off-device records (repo = source of truth)
+  await ensureProvisioned(); // only provisions the static baseline if nothing was restored
   route();
+}
+
+// ---- GitHub auto-sync state (used by syncFromRemote AND the subscriber below).
+// `_syncSig()` is a count of real mutations that EXCLUDES our own backup commits,
+// so a backup's bookkeeping never looks like fresh data — that's what prevents a
+// self-triggering backup loop. The audit log is small (it doesn't grow with the
+// 16k imported rows), so scanning it per change is cheap.
+let _autoSyncTimer = null, _syncing = false, _lastSyncedSig = null;
+function _syncSig() {
+  const a = store.audit || [];
+  let backups = 0; for (const e of a) if (e.action === 'backup.github') backups++;
+  return a.length - backups;
+}
+
+// Make the GitHub repo the source of truth: pull the latest backup and adopt it
+// when this device is fresher-than-the-repo-empty (just cleared / brand new) or
+// the repo has recorded more activity than we hold locally. This is what lets a
+// device that cleared its cookies — or any other device — open showing the LIVE
+// records instead of the static baseline. Fails soft: if no remote backup exists
+// (or it can't be reached), we fall through to the normal CSV provisioning.
+async function syncFromRemote() {
+  let remote = null;
+  try { remote = await gh.fetchRemoteState(); } catch (e) { return; }
+  if (!remote || !remote.payload || !remote.payload.state) return;
+  const meta = remote.payload.meta || {};
+  const localFresh = !store.isSetup() || store.ledger.length === 0;
+  const remoteAudit = meta.auditEvents || 0;
+  const localAudit = (store.audit || []).length;
+  if (!(localFresh || remoteAudit > localAudit)) return; // local is already current
+  splashLoading('Syncing the latest records…');
+  try {
+    store.importData(remote.payload);
+    if (remote.sha) { const g = store.config.github || {}; g.lastBackupSha = remote.sha; store.setConfig({ github: g }); }
+    _lastSyncedSig = _syncSig(); // we just PULLED this state — don't immediately push it back
+  } catch (e) { console.error('remote sync: could not adopt backup', e); }
 }
 
 // Route from the in-memory state (no storage read).
@@ -228,6 +264,29 @@ store.subscribe(() => {
   if (AUTO_REFRESH.has(current) && document.getElementById('main-view')) renderCurrent();
 });
 
+// Auto-sync to GitHub after every change (debounced ~6 s). With a token + repo set
+// and "auto-sync" on, the repo always holds the latest, and any device that opens
+// (or clears its data) restores it. No-op without a token/repo, so offline use is
+// unaffected. Loop-safe: `_syncSig()` ignores the backup's own commit, and a change
+// that lands DURING a backup re-schedules one so nothing is missed.
+store.subscribe(() => {
+  if (!gh.hasToken()) return;
+  const g = store.config.github || {};
+  if (!g.owner || !g.repo || !g.autoSync) return;
+  clearTimeout(_autoSyncTimer);
+  _autoSyncTimer = setTimeout(runAutoSync, 6000);
+});
+async function runAutoSync() {
+  if (_syncing) { clearTimeout(_autoSyncTimer); _autoSyncTimer = setTimeout(runAutoSync, 6000); return; }
+  const sigAtStart = _syncSig();
+  if (sigAtStart === _lastSyncedSig) return;        // nothing new since the last successful sync
+  _syncing = true;
+  let ok = false;
+  try { ok = await gh.autoBackup('auto-sync'); } finally { _syncing = false; }
+  if (ok) _lastSyncedSig = sigAtStart;              // recorded exactly what we sent
+  if (_syncSig() !== _lastSyncedSig) { clearTimeout(_autoSyncTimer); _autoSyncTimer = setTimeout(runAutoSync, 6000); } // changes during the backup
+}
+
 // ============================================================ Shifts view
 function renderShifts(ctx) {
   const root = el('div');
@@ -261,8 +320,8 @@ function renderShifts(ctx) {
         if (counted.value === '') return toast('Enter the counted cash first', 'warn');
         const s = store.closeShift({ countedCash: parseFloat(counted.value), note: note.value });
         toast(`Shift ${s.label} closed · variance ${pesoPlain(s.variance)}`, Math.abs(s.variance) < 0.005 ? 'ok' : 'warn');
-        gh.autoBackup(`shift ${s.label} ${s.businessDate} close`); // fire-and-forget; no-op unless enabled
-        renderShell();
+        renderShell(); // the auto-sync subscriber backs this change up if enabled
+
       } }),
     ]));
   } else {
@@ -429,24 +488,26 @@ function renderGitHubCard() {
   const path = el('input', { class: 'input', placeholder: 'data/ledger-backup.json', value: g.path || 'data/ledger-backup.json' });
   const token = el('input', { class: 'input', type: 'password', placeholder: gh.hasToken() ? '•••••••• (saved — leave blank to keep)' : 'fine-grained PAT (Contents: read & write)', autocomplete: 'off' });
   const auto = el('input', { type: 'checkbox' });
-  auto.checked = !!g.autoOnClose;
+  // Migrate the old shift-close flag → the new every-change auto-sync.
+  auto.checked = g.autoSync === undefined ? !!g.autoOnClose : !!g.autoSync;
 
   const status = el('div', { class: 'muted', style: 'font-size:.82rem;margin-top:10px' },
-    g.lastBackupAt ? `Last backup: ${fmtDateTime(g.lastBackupAt)}` : 'No GitHub backup yet.');
+    g.lastBackupAt ? `Last sync: ${fmtDateTime(g.lastBackupAt)}` : 'Not synced yet.');
 
   const saveCfg = () => {
     store.setConfig({ github: {
       owner: owner.value.trim(), repo: repo.value.trim(),
       branch: branch.value.trim() || 'main', path: path.value.trim() || 'data/ledger-backup.json',
-      autoOnClose: auto.checked, enabled: g.enabled || false,
+      autoSync: auto.checked, enabled: g.enabled || false,
       lastBackupAt: g.lastBackupAt, lastBackupSha: g.lastBackupSha,
     } });
     if (token.value.trim()) { gh.setToken(token.value.trim()); token.value = ''; token.placeholder = '•••••••• (saved — leave blank to keep)'; }
   };
 
   const card = el('div', { class: 'card mt-lg', style: 'max-width:720px' }, [
-    el('div', { class: 'card-h' }, [el('h3', { html: '☁ GitHub backup' }), el('span', { class: 'sub', text: 'Git history = off-device audit trail' })]),
-    el('div', { class: 'pill-warn', html: 'Use a <strong>fine-grained Personal Access Token</strong> scoped to <em>only this repo</em> with <strong>Contents: Read and write</strong>. The token is stored locally on this device only — never in exports. Best on a private repo.' }),
+    el('div', { class: 'card-h' }, [el('h3', { html: '☁ GitHub sync (off-device records)' }), el('span', { class: 'sub', text: 'The repo is the source of truth' })]),
+    el('div', { class: 'pill', html: 'With a token set and <strong>auto-sync</strong> on, this device saves every change to the repo, and <strong>every device restores the latest on open</strong> — so the records survive clearing site data and stay consistent across devices. (Sync is eventually-consistent: a change can take up to ~1–2 min to reach another device.)' }),
+    el('div', { class: 'pill-warn', html: 'Use a <strong>fine-grained Personal Access Token</strong> scoped to <em>only this repo</em> with <strong>Contents: Read and write</strong>. The token is stored locally on this device only — never in exports. <strong>The repo holds the full ledger, so it should be PRIVATE.</strong>' }),
     el('div', { class: 'row2 mt' }, [
       el('div', { class: 'field' }, [el('label', { text: 'Owner' }), owner]),
       el('div', { class: 'field' }, [el('label', { text: 'Repository' }), repo]),
@@ -456,7 +517,7 @@ function renderGitHubCard() {
       el('div', { class: 'field' }, [el('label', { text: 'File path' }), path]),
     ]),
     el('div', { class: 'field' }, [el('label', { text: 'Access token' }), token]),
-    el('label', { class: 'flex aic gap', style: 'font-size:.88rem;cursor:pointer;margin-bottom:6px' }, [auto, 'Auto-backup every time a shift is closed']),
+    el('label', { class: 'flex aic gap', style: 'font-size:.88rem;cursor:pointer;margin-bottom:6px' }, [auto, 'Auto-sync after every change (recommended)']),
     el('div', { class: 'flex gap wrap mt' }, [
       el('button', { class: 'btn', text: 'Test connection', onClick: async (ev) => {
         saveCfg(); const b = ev.currentTarget; b.disabled = true; b.textContent = 'Testing…';
@@ -464,7 +525,7 @@ function renderGitHubCard() {
         catch (e) { toast(e.message, 'err'); }
         b.disabled = false; b.textContent = 'Test connection';
       } }),
-      el('button', { class: 'btn', text: 'Save settings', onClick: () => { saveCfg(); store._audit('settings.github.update', `Updated GitHub backup target ${store.config.github.owner}/${store.config.github.repo}`, { owner: store.config.github.owner, repo: store.config.github.repo, autoOnClose: store.config.github.autoOnClose }); toast('GitHub settings saved', 'ok'); } }),
+      el('button', { class: 'btn', text: 'Save settings', onClick: () => { saveCfg(); store._audit('settings.github.update', `Updated GitHub sync target ${store.config.github.owner}/${store.config.github.repo}`, { owner: store.config.github.owner, repo: store.config.github.repo, autoSync: store.config.github.autoSync }); toast('GitHub settings saved', 'ok'); } }),
       el('button', { class: 'btn primary', html: '☁ Back up now', onClick: async (ev) => {
         saveCfg(); const b = ev.currentTarget; b.disabled = true; b.textContent = 'Backing up…';
         try { const url = await gh.backupNow('manual'); toast('Backed up to GitHub ✓', 'ok'); status.innerHTML = `Last backup: ${fmtDateTime(store.config.github.lastBackupAt)} · <a href="${url}" target="_blank" rel="noopener" style="color:var(--gold-700)">view commit</a>`; }

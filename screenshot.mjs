@@ -1,12 +1,15 @@
 // screenshot.mjs — VERIFY in the user's real condition, not a clean one.
-// Reproduces three scenarios in a real browser and reads the on-screen COH.
+// Reproduces the real scenarios in a real browser and reads the on-screen COH:
+// re-provision on version bump, session persistence, fresh provisioning, the
+// manager PIN, operation-ready persistence, staff accounts + lockdown, and
+// (TEST 8) a cleared device restoring the latest records from the GitHub store.
 // The hostel's official COH was updated to ₱42,800 (sheet now runs Feb 1 → Jun 2).
 //   1. UPGRADE: a browser already on the OLD official data (version coh58800,
 //      showing ₱58,800 in IndexedDB) → bumped version must re-provision to ₱42,800.
 //   2. PERSIST: after sign-in, a reload must keep the user signed in.
 //   3. FRESH:   an empty browser must auto-provision the real records → ₱42,800.
 import { createRequire } from 'node:module';
-import { mkdirSync } from 'node:fs';
+import { mkdirSync, writeFileSync, rmSync, existsSync, renameSync } from 'node:fs';
 
 const require = createRequire('c:/Users/johns/OneDrive/Documents/GitHub/Experience Organizer/');
 const puppeteer = require('puppeteer-core');
@@ -16,10 +19,20 @@ const BASE = process.env.BASE || 'http://localhost:4173';
 const EXPECT = '₱42,800.00';
 const EXPECT_OP = '₱43,800.00';                   // baseline 42,800 + one operational +1,000 deposit
 const CURRENT_VERSION = '2026-06-03-coh42800-mgr'; // must match OFFICIAL_DATA_VERSION in main.js
+const EXPECT_RESTORE = '₱99,999.00';              // TEST 8: a figure only the GitHub backup carries
 const OUT = './temporary screenshots';
 mkdirSync(OUT, { recursive: true });
 const sleep = (ms) => new Promise((r) => setTimeout(r, ms));
 const NID = { waitUntil: 'networkidle2' };
+
+// TEST 8 stands in for the GitHub-backed store by serving data/ledger-backup.json
+// from the dev server (the same relative path Pages serves it from). It only works
+// on a local BASE (we can't write the remote Pages file). To keep TESTs 1-7 on the
+// static CSV baseline, stash any real backup file on disk first; restore it at the end.
+const LOCAL = /localhost|127\.0\.0\.1/.test(BASE);
+const BACKUP_FILE = 'data/ledger-backup.json';
+const BACKUP_BAK = 'data/ledger-backup.json.harness-bak';
+if (existsSync(BACKUP_FILE)) { if (existsSync(BACKUP_BAK)) rmSync(BACKUP_BAK, { force: true }); renameSync(BACKUP_FILE, BACKUP_BAK); }
 
 async function clickText(page, text) {
   const h = await page.evaluateHandle((t) => [...document.querySelectorAll('button')]
@@ -221,12 +234,54 @@ const noAdminNav = await page.evaluate(() => ![...document.querySelectorAll('.na
 console.log('TEST 7  add-staff → staff login: in:', staffIn, '| name:', staffName, '| roster has Maria:', rosterHasMaria, '| staff sees NO admin nav:', noAdminNav);
 await page.screenshot({ path: `${OUT}/staff-no-admin.png` });
 
+// ── TEST 8: a CLEARED device restores the latest records from the GitHub-backed
+//    store instead of falling back to the static CSV baseline. (Local dev only.) ─
+let coh8 = EXPECT_RESTORE, restoredVisible = true; // default-pass when skipped (remote BASE)
+if (LOCAL) {
+  const z = '0'.repeat(64);
+  const backup = {
+    meta: { app: 'Frendz Front Desk Transaction Tracker', exportedAt: '2026-06-03T12:00:00.000Z', version: 1, coh: 99999, entries: 1, auditEvents: 9, integrity: { ok: true }, auditIntegrity: { ok: true } },
+    state: {
+      version: 1,
+      config: { brand: 'Frendz Hostel El Nido', currency: 'PHP', beginningBalance: 47100, setupComplete: true, officialDataVersion: CURRENT_VERSION, managerPin: 'demo$demo', staffPin: null, requireStaffPin: false, createdAt: '2026-02-01T00:00:00.000Z', github: { owner: '', repo: '', branch: 'main', path: 'data/ledger-backup.json', enabled: false } },
+      itemTypes: [{ id: 'item_towel', name: 'Towel', defaultAmount: 200, sortOrder: 0, active: true, createdAt: '2026-02-01T00:00:00.000Z' }],
+      staff: [], shifts: [],
+      // Beginning 47,100 + a single +52,899 deposit = COH 99,999 — a figure that
+      // can ONLY come from the backup, never from the CSV baseline (₱42,800).
+      ledger: [{ seq: 1, id: 'restored', ts: '2026-06-02T10:00:00', kind: 'deposit', itemTypeId: 'item_towel', itemName: 'Towel', qty: 1, unitAmount: 52899, amount: 52899, direction: 1, guest: 'RESTORED-FROM-GITHUB', room: '1', pax: null, shiftId: null, shiftLabel: null, businessDate: '2026-06-02', staff: 'Darren', staffRole: 'manager', note: 'restored from off-device backup', reversesId: null, prevHash: z, hash: 'rh1' }],
+      audit: [],
+    },
+  };
+  writeFileSync(BACKUP_FILE, JSON.stringify(backup));
+  try {
+    await clearAll(page);
+    await page.reload(NID);            // syncFromRemote() should pull + adopt the backup
+    await signInStaff(page);
+    await sleep(1200);
+    coh8 = await readCOH(page);
+    // navigate to the ledger to confirm the restored entry is really there
+    await page.evaluate(() => { const b = [...document.querySelectorAll('.navbtn')].find((x) => /ledger/i.test(x.innerText)); if (b) b.click(); });
+    await sleep(600);
+    restoredVisible = await page.evaluate(() => /restored-from-github/i.test(document.body.innerText));
+  } finally {
+    rmSync(BACKUP_FILE, { force: true });
+  }
+  console.log('TEST 8  cleared device restores from GitHub backup → COH', coh8, '| restored entry visible:', restoredVisible);
+  await page.screenshot({ path: `${OUT}/github-restore.png` });
+} else {
+  console.log('TEST 8  skipped (remote BASE — a test backup can only be served on localhost)');
+}
+
+// restore any real backup file we stashed before the run
+if (existsSync(BACKUP_BAK)) { rmSync(BACKUP_FILE, { force: true }); renameSync(BACKUP_BAK, BACKUP_FILE); }
+
 const pass = coh1 === EXPECT && stillIn && coh2 === EXPECT && coh3 === EXPECT
   && wrongBlocked && mgrIn && isManager && coh4 === EXPECT
   && coh5 === EXPECT_OP && opKept5 && coh6 === EXPECT_OP && opKept6
-  && rosterHasMaria && staffIn && /maria/i.test(staffName) && noAdminNav;
+  && rosterHasMaria && staffIn && /maria/i.test(staffName) && noAdminNav
+  && (!LOCAL || (coh8 === EXPECT_RESTORE && restoredVisible));
 console.log(pass
-  ? `\nALL PASS ✓ — COH ${EXPECT}; manager PIN enforced; entries persist; staff accounts work + staff locked out of admin`
+  ? `\nALL PASS ✓ — COH ${EXPECT}; manager PIN enforced; entries persist; staff accounts work; cleared device restores latest from GitHub`
   : `\nFAIL ✗ — see values above`);
 await browser.close();
 process.exit(pass ? 0 : 1);
