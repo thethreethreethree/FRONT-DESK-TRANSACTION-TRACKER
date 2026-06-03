@@ -18,9 +18,17 @@ await page.goto(BASE, NID);
 await page.evaluate(async () => { localStorage.clear(); await new Promise((res) => { const r = indexedDB.deleteDatabase('fdtt'); r.onsuccess = r.onerror = r.onblocked = () => res(); }); });
 await page.reload(NID);
 await page.waitForSelector('.lockcard input:not([type=password])', { timeout: 25000 }).catch(() => {});
-await page.evaluate(() => { const n = document.querySelector('.lockcard input:not([type=password])'); if (n) { n.value = 'audit'; n.dispatchEvent(new Event('input', { bubbles: true })); } const b = [...document.querySelectorAll('button')].find((e) => /sign in/i.test(e.textContent)); if (b) b.click(); });
+// restored data has a staff account → staff needs a PIN; sign in as manager (Darren/1012)
+const mgrBtn = await page.evaluateHandle(() => [...document.querySelectorAll('button')].find((e) => /manager/i.test(e.textContent)));
+if (mgrBtn.asElement()) { await mgrBtn.asElement().click(); await sleep(200); }
+await page.evaluate(() => {
+  const card = document.querySelector('.lockcard');
+  const nameI = card.querySelector('input:not([type=password])'); if (nameI) { nameI.value = 'Darren'; nameI.dispatchEvent(new Event('input', { bubbles: true })); }
+  const pinI = card.querySelector('input[type=password]'); if (pinI) { pinI.value = '1012'; pinI.dispatchEvent(new Event('input', { bubbles: true })); }
+  const b = [...document.querySelectorAll('button')].find((e) => /sign in/i.test(e.textContent)); if (b) b.click();
+});
 await page.waitForSelector('.sidebar', { timeout: 15000 }).catch(() => {});
-await sleep(1800);
+await sleep(2500);
 
 const coh = await page.evaluate(() => { const a = document.querySelector('.coh-hero .amount'); return a ? a.textContent.replace(/\s+/g, ' ').trim() : '(none)'; });
 const data = await page.evaluate(async () => {
