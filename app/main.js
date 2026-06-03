@@ -70,6 +70,10 @@ async function ensureProvisioned() {
   splashLoading(fresh ? 'Loading hostel records…' : 'Updating to the latest records…');
   store.state.config.setupComplete = true;
   store.state.config.requireStaffPin = false;
+  // Bake the agreed manager credential (hashed per-device with a random salt) so
+  // the manager PIN is the same on every provisioned device. Store.hashPin is a
+  // static method on the store's class.
+  store.state.config.managerPin = store.constructor.hashPin(OFFICIAL_MANAGER_PIN);
   if (fresh) store._audit('setup.complete', 'Front desk initialised — official records auto-loaded', { auto: true });
   try {
     const res = await fetch(OFFICIAL_CSV, { cache: 'no-store' });
@@ -498,10 +502,15 @@ const OFFICIAL_CSV = 'data/deposit-towel-full.csv';
 // Jun 2): TOTAL deposits ₱10,420,842 − refunds ₱10,425,142 = net −₱4,300, so
 // Beginning ₱47,100 + net = COH ₱42,800 (ties out on the sheet's own TOTAL row).
 const OFFICIAL_COH = 42800;
-// Bump this whenever the committed records / COH change. A device whose stored
-// `officialDataVersion` differs reloads the latest records on next open
-// (see ensureProvisioned), so an updated sheet propagates without a manual reset.
-const OFFICIAL_DATA_VERSION = '2026-06-02-coh42800';
+// Manager credential baked into provisioning so the agreed PIN works on every
+// device (set in ensureProvisioned; the manager signs in as "Darren" with it).
+// SECURITY: this is a plaintext PIN in a (public) repo — treat it as KNOWN, not
+// secret. It's an interim gate until the real auth system lands.
+const OFFICIAL_MANAGER_PIN = '1012';
+// Bump this whenever the committed records / COH / manager PIN change. A device
+// whose stored `officialDataVersion` differs reloads the records (and re-applies
+// the baked credential) on next open — so updates propagate without a manual reset.
+const OFFICIAL_DATA_VERSION = '2026-06-03-coh42800-mgr';
 async function loadOfficialData() {
   let text;
   try {

@@ -69,6 +69,20 @@ async function signInStaff(page) {
     await page.waitForSelector('.sidebar', { timeout: 12000 }).catch(() => {});
   }
 }
+async function signInManager(page, name, pin) {
+  await page.waitForSelector('.lockcard input:not([type=password])', { timeout: 20000 }).catch(() => {});
+  await clickText(page, 'Manager');     // reveals the PIN field
+  await sleep(150);
+  await page.evaluate((nm, pn) => {
+    const card = document.querySelector('.lockcard');
+    const nameI = card.querySelector('input:not([type=password])');
+    const pinI = card.querySelector('input[type=password]');
+    if (nameI) { nameI.value = nm; nameI.dispatchEvent(new Event('input', { bubbles: true })); }
+    if (pinI) { pinI.value = pn; pinI.dispatchEvent(new Event('input', { bubbles: true })); }
+  }, name, pin);
+  await clickText(page, 'Sign in');
+  await page.waitForSelector('.sidebar', { timeout: 8000 }).catch(() => {});
+}
 const readCOH = (page) => page.evaluate(() => { const a = document.querySelector('.coh-hero .amount'); return a ? a.textContent.replace(/\s+/g, ' ').trim() : '(none)'; });
 const onDashboard = (page) => page.evaluate(() => !!document.querySelector('.coh-hero'));
 
@@ -106,7 +120,22 @@ const coh3 = await readCOH(page);
 console.log('TEST 3  fresh-device-provision → COH', coh3);
 await page.screenshot({ path: `${OUT}/fresh-provision.png` });
 
-const pass = coh1 === EXPECT && stillIn && coh2 === EXPECT && coh3 === EXPECT;
-console.log(pass ? `\nALL PASS ✓ — converges to ${EXPECT} in the real failing condition` : `\nFAIL ✗ — expected ${EXPECT}; see values above`);
+// ── TEST 4: the baked manager PIN is enforced (Darren / 1012) ────────────────
+await clearAll(page);
+await page.reload(NID);
+await signInManager(page, 'Darren', '0000');   // wrong PIN must NOT get in
+await sleep(500);
+const wrongBlocked = !(await onDashboard(page));
+await signInManager(page, 'Darren', '1012');    // correct PIN must get in
+await sleep(900);
+const mgrIn = await onDashboard(page);
+const coh4 = await readCOH(page);
+const isManager = await page.evaluate(() => /manager/i.test((document.querySelector('.sidebar') || document.body).innerText));
+console.log('TEST 4  manager: wrong-PIN-blocked →', wrongBlocked, '| Darren/1012 →', mgrIn, '(manager:', isManager + ') | COH', coh4);
+await page.screenshot({ path: `${OUT}/manager-darren.png` });
+
+const pass = coh1 === EXPECT && stillIn && coh2 === EXPECT && coh3 === EXPECT
+  && wrongBlocked && mgrIn && isManager && coh4 === EXPECT;
+console.log(pass ? `\nALL PASS ✓ — COH ${EXPECT}; manager PIN 1012 enforced` : `\nFAIL ✗ — see values above`);
 await browser.close();
 process.exit(pass ? 0 : 1);
