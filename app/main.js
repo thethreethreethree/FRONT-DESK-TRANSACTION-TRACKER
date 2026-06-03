@@ -59,11 +59,14 @@ function splashLoading(msg) {
 async function ensureProvisioned() {
   const fresh = !store.isSetup();
   const onCurrent = store.config.officialDataVersion === OFFICIAL_DATA_VERSION;
-  // An instance already holding official records has a beginning float or an
-  // adjustment entry — don't auto-replace it (would clobber any manual entries).
-  const looksOfficial = store.beginningBalance() > 0 || store.ledger.some((e) => e.kind === 'adjustment');
-  if (!fresh && (onCurrent || looksOfficial)) return;
-  // Fresh device → provision; legacy demo/empty instance → upgrade to the records.
+  // Already on the CURRENT official records → nothing to do.
+  if (!fresh && onCurrent) return;
+  // Otherwise (re)load the official records. This covers a fresh device, a legacy
+  // demo/empty instance, AND an instance still on an OLDER data version: bumping
+  // OFFICIAL_DATA_VERSION intentionally replaces the prior import on every device,
+  // so an updated sheet (e.g. a new COH) propagates on next open — not just on
+  // fresh installs. (No daily manual entries exist to preserve yet; gate this on
+  // the real auth/entry workflow once that lands.)
   splashLoading(fresh ? 'Loading hostel records…' : 'Updating to the latest records…');
   store.state.config.setupComplete = true;
   store.state.config.requireStaffPin = false;
@@ -491,11 +494,14 @@ const OFFICIAL_CSV = 'data/deposit-towel-full.csv';
 // The hostel's current reconciled Cash On Hand from the live sheet (Beginning
 // ₱47,100 + net flow). The CSV is an older snapshot, so after import we book a
 // single labelled reconciliation entry so COH ties to this official figure.
-const OFFICIAL_COH = 58800;
+// Updated 2026-06-02 from "DEPOSIT - Copy of TOWEL_2" (sheet now runs Feb 1 →
+// Jun 2): TOTAL deposits ₱10,420,842 − refunds ₱10,425,142 = net −₱4,300, so
+// Beginning ₱47,100 + net = COH ₱42,800 (ties out on the sheet's own TOTAL row).
+const OFFICIAL_COH = 42800;
 // Bump this whenever the committed records / COH change. A device whose stored
-// `officialDataVersion` differs auto-loads the latest records on next open
-// (see ensureProvisioned). Lets "apply the new data" propagate without a reset.
-const OFFICIAL_DATA_VERSION = '2026-06-02-coh58800';
+// `officialDataVersion` differs reloads the latest records on next open
+// (see ensureProvisioned), so an updated sheet propagates without a manual reset.
+const OFFICIAL_DATA_VERSION = '2026-06-02-coh42800';
 async function loadOfficialData() {
   let text;
   try {
