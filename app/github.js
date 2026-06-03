@@ -88,7 +88,10 @@ export async function backupNow(reason = 'manual') {
   }
   if (!putRes.ok) {
     const txt = await putRes.text();
-    throw new Error('Backup failed (' + putRes.status + '): ' + txt.slice(0, 140));
+    let hint = ': ' + txt.slice(0, 140);
+    if (putRes.status === 403) hint = ' — the token is missing "Contents: Read and write". Edit your fine-grained token (GitHub → Settings → Developer settings → Fine-grained tokens → this token → Repository permissions → Contents → Read and write), save, then try again.';
+    else if (putRes.status === 401) hint = ' — token rejected (expired or invalid). Paste a fresh token.';
+    throw new Error('Backup failed (' + putRes.status + ')' + hint);
   }
   const j = await putRes.json();
   g.enabled = true;
