@@ -61,12 +61,18 @@ async function ensureProvisioned() {
   const onCurrent = store.config.officialDataVersion === OFFICIAL_DATA_VERSION;
   // Already on the CURRENT official records → nothing to do.
   if (!fresh && onCurrent) return;
-  // Otherwise (re)load the official records. This covers a fresh device, a legacy
-  // demo/empty instance, AND an instance still on an OLDER data version: bumping
-  // OFFICIAL_DATA_VERSION intentionally replaces the prior import on every device,
-  // so an updated sheet (e.g. a new COH) propagates on next open — not just on
-  // fresh installs. (No daily manual entries exist to preserve yet; gate this on
-  // the real auth/entry workflow once that lands.)
+  // OPERATION-READY GUARD: once the hostel has recorded real operational entries,
+  // NEVER auto-replace the ledger. Those entries are the source of truth and must
+  // survive sign-off, tab close, and any future data-version bump. Imported /
+  // bootstrap rows are staffRole 'system'; anything a signed-in staff/manager
+  // created (deposits, refunds, manual reconciliations) is staffRole 'staff' /
+  // 'manager'. Explicit, destructive re-loads still go through Settings → "Load
+  // official data file" / "Reset", which warn before replacing live data.
+  const hasUserEntries = store.ledger.some((e) => e.staffRole && e.staffRole !== 'system');
+  if (!fresh && hasUserEntries) return;
+  // Otherwise (re)load the official records: a fresh device, a legacy/demo
+  // instance, or one still on an OLDER version that holds ONLY bootstrap data
+  // (safe to refresh to the current baseline + baked manager credential).
   splashLoading(fresh ? 'Loading hostel records…' : 'Updating to the latest records…');
   store.state.config.setupComplete = true;
   store.state.config.requireStaffPin = false;
@@ -597,6 +603,13 @@ function importBackup() {
   });
   inp.click();
 }
+
+// Persistence safety net: every store.save() already starts an IndexedDB write
+// immediately, but flush the coalesced write queue when the tab is hidden/closed
+// so the very last action can't be lost on a fast close. (pagehide fires on
+// close/navigate; visibilitychange covers mobile/background; both are best-effort.)
+window.addEventListener('pagehide', () => { store.flush(); });
+document.addEventListener('visibilitychange', () => { if (document.visibilityState === 'hidden') store.flush(); });
 
 // boot
 mount();

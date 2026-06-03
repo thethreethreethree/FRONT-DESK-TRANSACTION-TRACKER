@@ -14,6 +14,8 @@ const puppeteer = require('puppeteer-core');
 const CHROME = 'C:/Program Files/Google/Chrome/Application/chrome.exe';
 const BASE = process.env.BASE || 'http://localhost:4173';
 const EXPECT = '₱42,800.00';
+const EXPECT_OP = '₱43,800.00';                   // baseline 42,800 + one operational +1,000 deposit
+const CURRENT_VERSION = '2026-06-03-coh42800-mgr'; // must match OFFICIAL_DATA_VERSION in main.js
 const OUT = './temporary screenshots';
 mkdirSync(OUT, { recursive: true });
 const sleep = (ms) => new Promise((r) => setTimeout(r, ms));
@@ -60,6 +62,33 @@ async function injectOldOfficialInstance(page) {
       r.onerror = () => rej(r.error);
     });
   });
+}
+// Instance with a baseline (→ COH ₱42,800) PLUS one OPERATIONAL deposit a clerk
+// entered (staffRole 'manager', +₱1,000 → COH ₱43,800). `version` lets us test
+// both a current-version close/reopen and a stale-version reload (the guard).
+async function injectInstanceWithUserEntry(page, version) {
+  await page.evaluate(async (ver) => {
+    const z = '0'.repeat(64);
+    const E = (o) => Object.assign({ ts: '2026-06-02T10:00:00', itemTypeId: 'item_towel', itemName: 'Towel', qty: null, unitAmount: 0, amount: 0, direction: 1, guest: '', room: '', pax: null, shiftId: null, shiftLabel: null, businessDate: '2026-06-02', note: '', reversesId: null, prevHash: z, hash: 'h' + Math.random() }, o);
+    const state = {
+      version: 1,
+      config: { brand: 'Frendz Hostel El Nido', currency: 'PHP', beginningBalance: 47100, setupComplete: true, officialDataVersion: ver, managerPin: 'demo$demo', staffPin: null, requireStaffPin: false, createdAt: '2026-02-01T00:00:00.000Z', github: { owner: '', repo: '', branch: 'main', path: 'data/ledger-backup.json', enabled: false } },
+      itemTypes: [{ id: 'item_towel', name: 'Towel', defaultAmount: 200, sortOrder: 0, active: true, createdAt: '2026-02-01T00:00:00.000Z' }],
+      staff: [], shifts: [],
+      ledger: [
+        E({ seq: 1, id: 'imp', kind: 'deposit', amount: 8215, direction: 1, guest: 'IMPORT', staff: 'import', staffRole: 'system', note: 'bootstrap import' }),
+        E({ seq: 2, id: 'adj', kind: 'adjustment', itemTypeId: null, itemName: 'Adjustment', amount: 12515, direction: -1, staff: 'system', staffRole: 'system', note: 'bootstrap reconcile' }),
+        E({ seq: 3, id: 'op1', kind: 'deposit', amount: 1000, direction: 1, guest: 'WALK-IN GUEST', room: '305', staff: 'Darren', staffRole: 'manager', note: 'operational entry' }),
+      ],
+      audit: [],
+    };
+    await new Promise((res, rej) => {
+      const r = indexedDB.open('fdtt', 1);
+      r.onupgradeneeded = () => { if (!r.result.objectStoreNames.contains('kv')) r.result.createObjectStore('kv'); };
+      r.onsuccess = () => { const db = r.result; const tx = db.transaction('kv', 'readwrite'); tx.objectStore('kv').put(state, 'state'); tx.oncomplete = () => { db.close(); res(); }; tx.onerror = () => rej(tx.error); };
+      r.onerror = () => rej(r.error);
+    });
+  }, version);
 }
 async function signInStaff(page) {
   await page.waitForSelector('.lockcard input:not([type=password])', { timeout: 25000 }).catch(() => {});
@@ -134,8 +163,32 @@ const isManager = await page.evaluate(() => /manager/i.test((document.querySelec
 console.log('TEST 4  manager: wrong-PIN-blocked →', wrongBlocked, '| Darren/1012 →', mgrIn, '(manager:', isManager + ') | COH', coh4);
 await page.screenshot({ path: `${OUT}/manager-darren.png` });
 
+// ── TEST 5: a clerk's entry SURVIVES a normal close/reopen (current version) ──
+await clearAll(page);
+await injectInstanceWithUserEntry(page, CURRENT_VERSION);   // COH ₱43,800, op-entry present
+await page.reload(NID);                                     // = "close & reopen the website"
+await signInStaff(page);
+await sleep(900);
+const coh5 = await readCOH(page);
+const opKept5 = await page.evaluate(() => /walk-in guest/i.test(document.body.innerText));
+console.log('TEST 5  close/reopen keeps user entry → COH', coh5, '| op-entry visible:', opKept5);
+
+// ── TEST 6: a clerk's entry SURVIVES even a stale data-version reload (guard) ─
+await clearAll(page);
+await injectInstanceWithUserEntry(page, '2026-06-02-coh42800');  // OLDER version + real entry
+await page.reload(NID);                                          // guard must NOT wipe it
+await signInStaff(page);
+await sleep(900);
+const coh6 = await readCOH(page);
+const opKept6 = await page.evaluate(() => /walk-in guest/i.test(document.body.innerText));
+console.log('TEST 6  stale-version guard keeps user entry → COH', coh6, '| op-entry visible:', opKept6);
+await page.screenshot({ path: `${OUT}/operation-ready.png` });
+
 const pass = coh1 === EXPECT && stillIn && coh2 === EXPECT && coh3 === EXPECT
-  && wrongBlocked && mgrIn && isManager && coh4 === EXPECT;
-console.log(pass ? `\nALL PASS ✓ — COH ${EXPECT}; manager PIN 1012 enforced` : `\nFAIL ✗ — see values above`);
+  && wrongBlocked && mgrIn && isManager && coh4 === EXPECT
+  && coh5 === EXPECT_OP && opKept5 && coh6 === EXPECT_OP && opKept6;
+console.log(pass
+  ? `\nALL PASS ✓ — COH ${EXPECT}; manager PIN enforced; user entries persist (close/reopen + version bump)`
+  : `\nFAIL ✗ — see values above`);
 await browser.close();
 process.exit(pass ? 0 : 1);
