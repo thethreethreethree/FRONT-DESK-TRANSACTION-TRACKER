@@ -1,8 +1,8 @@
 // views/refund.js — return a deposit (cash OUT). Pulls from outstanding deposits
 // and guards against refunding more than is held for that guest.
-import { el, peso, pesoPlain, toast, clear } from '../util.js';
+import { el, peso, pesoPlain, toast, clear, isTowelItem } from '../util.js';
 import { store } from '../store.js';
-import { pageHead, confirmDialog } from '../components.js';
+import { pageHead, confirmDialog, towelBadges } from '../components.js';
 
 export function render(ctx) {
   const root = el('div');
@@ -41,6 +41,7 @@ export function render(ctx) {
           el('div', { class: 'g-name', text: g.guest || '(no name)' }),
           el('div', { class: 'g-room', text: g.room ? `Room ${g.room}` : '' }),
           el('div', { class: 'g-items', text: Object.entries(g.items).filter(([, v]) => v > 0).map(([k, v]) => `${k} ₱${pesoPlain(v)}`).join(' · ') }),
+          towelBadges(g.towels),
         ]),
         el('div', { class: 'g-held', text: peso(g.held) }),
       ]);
@@ -57,7 +58,7 @@ export function render(ctx) {
   for (const it of items) {
     chipWrap.appendChild(el('div', {
       class: 'chip', dataset: { id: it.id },
-      onClick: () => { selected = it; unitInput.value = it.defaultAmount; paintChips(); updatePreview(); },
+      onClick: () => { selected = it; unitInput.value = it.defaultAmount; paintChips(); updatePreview(); syncTowel(); },
     }, [el('span', { class: 'nm', text: it.name }), el('span', { class: 'amt', text: `₱${pesoPlain(it.defaultAmount)} ea` })]));
   }
 
@@ -74,6 +75,13 @@ export function render(ctx) {
   const guestInput = el('input', { class: 'input', placeholder: 'guest name', autocomplete: 'off' });
   const roomInput = el('input', { class: 'input', placeholder: 'room #', autocomplete: 'off' });
   const noteInput = el('input', { class: 'input', placeholder: 'optional', autocomplete: 'off' });
+
+  // towel tag number — only for the "Towel" item; pre-filled from the guest's
+  // deposit so staff can confirm the right tag is coming back.
+  const towelInput = el('input', { class: 'input', placeholder: 'e.g. 42', autocomplete: 'off' });
+  const towelHint = el('div', { class: 'hint', text: 'tag number on the returned towel' });
+  const towelField = el('div', { class: 'field' }, [el('label', { text: 'Towel number' }), towelInput, towelHint]);
+  function syncTowel() { towelField.style.display = (selected && isTowelItem(selected.name)) ? '' : 'none'; }
 
   function unit() { return parseFloat(unitInput.value || '0'); }
   function amount() { return Math.round(unit() * qty * 100) / 100; }
@@ -102,6 +110,14 @@ export function render(ctx) {
       const match = items.find((it) => it.name === heldItemName[0]);
       if (match) { selected = match; unitInput.value = match.defaultAmount; paintChips(); }
     }
+    // Surface the towel tag(s) this guest left at deposit so staff can confirm the
+    // right towel is coming back. Pre-fill when there's exactly one.
+    const tags = g.towels || [];
+    towelInput.value = tags.length === 1 ? tags[0] : '';
+    towelHint.textContent = tags.length
+      ? `left at deposit: ${tags.join(', ')}`
+      : 'tag number on the returned towel';
+    syncTowel();
     updatePreview();
     toast(`Loaded ${g.guest}`, 'ok');
   }
@@ -113,6 +129,7 @@ export function render(ctx) {
     el('div', { class: 'field' }, [el('label', { text: 'Room #' }), roomInput]),
   ]));
   form.appendChild(el('div', { class: 'field' }, [el('label', { text: 'Guest name' }), guestInput]));
+  form.appendChild(towelField);
   form.appendChild(el('div', { class: 'field' }, [el('label', { text: 'Note (optional)' }), noteInput]));
   form.appendChild(preview);
 
@@ -123,6 +140,7 @@ export function render(ctx) {
     const e = store.addRefund({
       itemTypeId: selected.id, qty, unitAmount: unit(), amount: amount(),
       guest: guestInput.value, room: roomInput.value, note: noteInput.value,
+      towelNo: isTowelItem(selected.name) ? towelInput.value : '',
     });
     toast(`Refund recorded · ${peso(e.amount)} · COH now ${peso(store.coh())}`, 'ok');
     ctx.navigate('dashboard');
@@ -147,6 +165,6 @@ export function render(ctx) {
   layout.appendChild(left);
   layout.appendChild(form);
   root.appendChild(layout);
-  paintChips(); updatePreview(); renderList();
+  paintChips(); updatePreview(); renderList(); syncTowel();
   return root;
 }

@@ -2,7 +2,7 @@
 // plus a reconciliation that always ties back to COH and flags mismatches.
 import { el, peso, pesoPlain, clear } from '../util.js';
 import { store } from '../store.js';
-import { pageHead } from '../components.js';
+import { pageHead, towelBadges } from '../components.js';
 
 export function render(ctx) {
   const root = el('div');
@@ -88,6 +88,7 @@ export function render(ctx) {
           el('div', { class: 'g-name', text: g.guest || '(no name)' }),
           el('div', { class: 'g-room', text: g.room ? `Room ${g.room}` : '—' }),
           el('div', { class: 'g-items', text: items.map(([k, v]) => `${k}: ₱${pesoPlain(v)}`).join('  ·  ') }),
+          towelBadges(g.towels),
         ]),
         el('div', { class: 'right' }, [
           el('div', { class: 'g-held', text: peso(g.held) }),

@@ -1,5 +1,5 @@
 // views/dashboard.js — live COH, today's flow, item breakdown, quick actions.
-import { el, peso, pesoPlain, fmtTime, businessDate } from '../util.js';
+import { el, peso, pesoPlain, fmtTime, businessDate, entryTowelNo } from '../util.js';
 import { store } from '../store.js';
 import { pageHead } from '../components.js';
 
@@ -139,7 +139,7 @@ export function render(ctx) {
             el('strong', { text: e.guest || '—' }),
             e.room ? el('span', { class: 'muted', text: `Rm ${e.room}` }) : null,
           ]),
-          el('div', { class: 'muted', style: 'font-size:.76rem;margin-top:2px', text: `${e.itemName} ×${e.qty ?? 1} · ${e.staff} · ${fmtTime(e.ts)}` }),
+          el('div', { class: 'muted', style: 'font-size:.76rem;margin-top:2px', text: `${e.itemName} ×${e.qty ?? 1}${entryTowelNo(e) ? ` · towel ${entryTowelNo(e)}` : ''} · ${e.staff} · ${fmtTime(e.ts)}` }),
         ]),
         el('div', { class: e.direction > 0 ? 'amt-in' : 'amt-out', style: reversed ? 'text-decoration:line-through;opacity:.5' : '', text: `${e.direction > 0 ? '+' : '−'}${pesoPlain(e.amount)}` }),
       ]));

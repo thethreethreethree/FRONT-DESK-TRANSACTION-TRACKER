@@ -69,6 +69,15 @@ export function managerGate(action, { reason } = {}) {
   inp.addEventListener('keydown', (e) => { if (e.key === 'Enter') tryUnlock(close); });
 }
 
+// Render a guest's towel tag(s) as small badges (or null when there are none).
+// Shared by the outstanding list and the refund picker so the look is consistent.
+export function towelBadges(towels) {
+  if (!towels || !towels.length) return null;
+  return el('div', { class: 'flex gap aic', style: 'flex-wrap:wrap;gap:6px;margin-top:5px' },
+    [el('span', { class: 'g-room', text: `Towel${towels.length > 1 ? 's' : ''}:` })]
+      .concat(towels.map((t) => el('span', { class: 'tag towel', text: t }))));
+}
+
 // section header helper
 export function pageHead(title, subtitle, right) {
   const wrap = el('div', { class: 'topbar' });

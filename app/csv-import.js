@@ -201,12 +201,16 @@ export function parseSheet(text) {
         if (n <= 0) { dropped.nonpos++; continue; }
         if (n > CAP[item]) { dropped.capped++; continue; }
         const gr = extractGuestRoom(r[side.name]);
+        // The towel-number column only applies to the Towel item. Capture it as a
+        // first-class field so it's queryable; also keep it in the note ("tags …")
+        // so the legacy display and the date/shift context stay intact.
+        const towelNo = (item === 'Towel' && side.towelNo >= 0 && r[side.towelNo]) ? String(r[side.towelNo]).trim() : '';
         const noteParts = [];
-        if (side.towelNo >= 0 && r[side.towelNo] && String(r[side.towelNo]).trim()) noteParts.push('tags ' + String(r[side.towelNo]).trim());
+        if (towelNo) noteParts.push('tags ' + towelNo);
         if (side.rem >= 0 && r[side.rem] && String(r[side.rem]).trim()) noteParts.push(String(r[side.rem]).trim());
         if (side.date >= 0 && r[side.date] && String(r[side.date]).trim()) noteParts.push(String(r[side.date]).trim());
         entries.push({
-          kind: side.who, dir: side.dir, item, amount: round2(n),
+          kind: side.who, dir: side.dir, item, amount: round2(n), towelNo,
           guest: gr.guest || '(unlabeled)', room: gr.room, pax: gr.pax,
           y: side.stream.y, m: side.stream.m, d: side.stream.d, shift: side.stream.shift,
           note: noteParts.join(' · ').slice(0, 160),
@@ -250,7 +254,7 @@ function pushEntry(state, e) {
     guest: e.guest, room: e.room, pax: e.pax,
     shiftId: null, shiftLabel: e.shift,
     businessDate: e.businessDate, staff: 'import', staffRole: 'system',
-    note: e.note, reversesId: null, prevHash,
+    note: e.note, towelNo: e.towelNo || '', reversesId: null, prevHash,
   };
   base.hash = sha256(stableStringify(base));
   state.ledger.push(base);

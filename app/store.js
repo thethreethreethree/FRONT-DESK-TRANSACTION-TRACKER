@@ -13,7 +13,7 @@
 // keep a localStorage fallback for private-mode / no-IDB and migrate old data.
 // GitHub repo holds versioned JSON backups (git history = durable audit trail).
 
-import { sha256, stableStringify, uid, nowISO, businessDate, guessShift, pesoPlain } from './util.js';
+import { sha256, stableStringify, uid, nowISO, businessDate, guessShift, pesoPlain, isTowelItem, entryTowelNo } from './util.js';
 
 const STORAGE_KEY = 'fdtt_state_v1';
 const SESSION_KEY = 'fdtt_session'; // device-local signed-in session (not exported)
@@ -354,6 +354,11 @@ class Store {
       staff: entry.staff || (this.session ? this.session.name : 'system'),
       staffRole: entry.staffRole || (this.session ? this.session.role : 'system'),
       note: (entry.note || '').trim(),
+      // Towel tag number — only the "Towel" item carries one. Stored as its own
+      // field so it's queryable; older entries keep it in the note (read via
+      // entryTowelNo). New entries hash WITH this key; pre-existing entries have
+      // no `towelNo` key, so their stored hashes still verify (chain unbroken).
+      towelNo: isTowelItem(entry.itemName) ? (entry.towelNo || '').toString().trim() : '',
       reversesId: entry.reversesId || null,
       prevHash,
     };
@@ -363,7 +368,7 @@ class Store {
     return base;
   }
 
-  addDeposit({ itemTypeId, qty, unitAmount, amount, guest, room, pax, note }) {
+  addDeposit({ itemTypeId, qty, unitAmount, amount, guest, room, pax, note, towelNo }) {
     const item = this.itemById(itemTypeId);
     const shift = this.ensureShift();
     const unit = unitAmount != null ? unitAmount : (item ? item.defaultAmount : 0);
@@ -372,7 +377,7 @@ class Store {
       kind: 'deposit', direction: +1,
       itemTypeId, itemName: item ? item.name : 'Item',
       qty: qty || 1, unitAmount: unit, amount: amt,
-      guest, room, pax, note,
+      guest, room, pax, note, towelNo,
       shiftId: shift.id, shiftLabel: shift.label,
     });
     this._audit('deposit.create', `Deposit ₱${pesoPlain(e.amount)} · ${e.itemName} ×${e.qty} · ${e.guest || e.room || '—'}`,
@@ -380,7 +385,7 @@ class Store {
     return e;
   }
 
-  addRefund({ itemTypeId, qty, unitAmount, amount, guest, room, pax, note }) {
+  addRefund({ itemTypeId, qty, unitAmount, amount, guest, room, pax, note, towelNo }) {
     const item = this.itemById(itemTypeId);
     const shift = this.ensureShift();
     const unit = unitAmount != null ? unitAmount : (item ? item.defaultAmount : 0);
@@ -389,7 +394,7 @@ class Store {
       kind: 'refund', direction: -1,
       itemTypeId, itemName: item ? item.name : 'Item',
       qty: qty || 1, unitAmount: unit, amount: amt,
-      guest, room, pax, note,
+      guest, room, pax, note, towelNo,
       shiftId: shift.id, shiftLabel: shift.label,
     });
     this._audit('refund.create', `Refund ₱${pesoPlain(e.amount)} · ${e.itemName} ×${e.qty} · ${e.guest || e.room || '—'}`,
@@ -410,6 +415,7 @@ class Store {
       itemTypeId: t.itemTypeId, itemName: t.itemName,
       qty: t.qty, unitAmount: t.unitAmount, amount: t.amount,
       guest: t.guest, room: t.room, pax: t.pax,
+      towelNo: entryTowelNo(t), // mirror the original's tag so the void row matches
       note: `VOID of #${t.seq} (${t.kind} ${t.itemName} ${t.guest}). Reason: ${reason || 'n/a'}`,
       reversesId: targetId,
       shiftId: shift.id, shiftLabel: shift.label,
@@ -514,10 +520,16 @@ class Store {
       const r = (e.room || '').toUpperCase().trim();
       if (!g && !r) continue;
       const key = `${g}|${r}`;
-      const cur = map.get(key) || { guest: e.guest || '', room: e.room || '', held: 0, items: {} };
+      const cur = map.get(key) || { guest: e.guest || '', room: e.room || '', held: 0, items: {}, towels: [] };
       cur.held = round2(cur.held + e.amount * e.direction);
       const it = e.itemName || 'Item';
       cur.items[it] = round2((cur.items[it] || 0) + e.amount * e.direction);
+      // Towel tag(s) the guest left at deposit — surfaced on outstanding/refund so
+      // staff know which tag to expect back. Collected in this single pass.
+      if (e.kind === 'deposit' && isTowelItem(e.itemName)) {
+        const tn = entryTowelNo(e);
+        if (tn && !cur.towels.includes(tn)) cur.towels.push(tn);
+      }
       map.set(key, cur);
     }
     return Array.from(map.values());

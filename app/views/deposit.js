@@ -1,5 +1,5 @@
 // views/deposit.js — record a guest deposit (cash IN). Fast keyboard entry.
-import { el, peso, pesoPlain, toast, guessShift } from '../util.js';
+import { el, peso, pesoPlain, toast, guessShift, isTowelItem } from '../util.js';
 import { store } from '../store.js';
 import { pageHead } from '../components.js';
 
@@ -25,7 +25,7 @@ export function render(ctx) {
   for (const it of items) {
     chipWrap.appendChild(el('div', {
       class: 'chip', dataset: { id: it.id },
-      onClick: () => { selected = it; unitOverride = null; unitInput.value = it.defaultAmount; paintChips(); updatePreview(); },
+      onClick: () => { selected = it; unitOverride = null; unitInput.value = it.defaultAmount; paintChips(); updatePreview(); syncTowel(); },
     }, [
       el('span', { class: 'nm', text: it.name }),
       el('span', { class: 'amt', text: `₱${pesoPlain(it.defaultAmount)} ea` }),
@@ -44,6 +44,14 @@ export function render(ctx) {
   // unit amount (override allowed)
   const unitInput = el('input', { class: 'input', type: 'number', min: '0', step: '50', value: selected ? selected.defaultAmount : 0 });
   unitInput.addEventListener('input', () => { unitOverride = parseFloat(unitInput.value || '0'); updatePreview(); });
+
+  // towel tag number — only shown for the "Towel" item (not Beach Towel etc.)
+  const towelInput = el('input', { class: 'input', placeholder: 'e.g. 42 or 87/97', autocomplete: 'off' });
+  const towelField = el('div', { class: 'field' }, [
+    el('label', { text: 'Towel number' }), towelInput,
+    el('div', { class: 'hint', text: 'tag number on the towel the guest is borrowing' }),
+  ]);
+  function syncTowel() { towelField.style.display = (selected && isTowelItem(selected.name)) ? '' : 'none'; }
 
   // guest / room / pax
   const guestInput = el('input', { class: 'input', placeholder: 'e.g. Charlie H.', autocomplete: 'off' });
@@ -72,6 +80,7 @@ export function render(ctx) {
     el('div', { class: 'field' }, [el('label', { text: 'Guest name' }), guestInput]),
     el('div', { class: 'field' }, [el('label', { text: 'Room #' }), roomInput]),
   ]));
+  card.appendChild(towelField);
   card.appendChild(el('div', { class: 'field' }, [el('label', { text: 'Note (optional)' }), noteInput]));
   card.appendChild(preview);
 
@@ -86,13 +95,14 @@ export function render(ctx) {
     const e = store.addDeposit({
       itemTypeId: selected.id, qty, unitAmount: unit(), amount: amount(),
       guest: guestInput.value, room: roomInput.value, pax: paxInput.value, note: noteInput.value,
+      towelNo: isTowelItem(selected.name) ? towelInput.value : '',
     });
     toast(`Deposit recorded · ${peso(e.amount)} · COH now ${peso(store.coh())}`, 'ok');
     ctx.navigate('dashboard');
   });
 
   root.appendChild(card);
-  paintChips(); updatePreview();
+  paintChips(); updatePreview(); syncTowel();
   setTimeout(() => guestInput.focus(), 60);
   return root;
 }

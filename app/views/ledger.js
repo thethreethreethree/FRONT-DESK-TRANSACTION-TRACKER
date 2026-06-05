@@ -1,6 +1,6 @@
 // views/ledger.js — the immutable transaction record. Searchable/filterable.
 // No edit/delete. Managers may VOID (which appends a reversal).
-import { el, peso, pesoPlain, fmtDateTime, clear, toast, escapeHtml } from '../util.js';
+import { el, peso, pesoPlain, fmtDateTime, clear, toast, escapeHtml, entryTowelNo } from '../util.js';
 import { store } from '../store.js';
 import { pageHead, managerGate, openModal } from '../components.js';
 
@@ -43,7 +43,7 @@ export function render(ctx) {
       if (shiftSel.value && e.shiftLabel !== shiftSel.value) return false;
       if (dateInput.value && e.businessDate !== dateInput.value) return false;
       if (q) {
-        const hay = `${e.guest} ${e.room} ${e.note} ${e.staff} ${e.itemName}`.toLowerCase();
+        const hay = `${e.guest} ${e.room} ${e.note} ${e.staff} ${e.itemName} ${entryTowelNo(e)}`.toLowerCase();
         if (!hay.includes(q)) return false;
       }
       return true;
@@ -59,7 +59,7 @@ export function render(ctx) {
     const tbl = el('table', { class: 'tbl' });
     tbl.appendChild(el('thead', {}, el('tr', {}, [
       el('th', { text: '#' }), el('th', { text: 'When' }), el('th', { text: 'Type' }),
-      el('th', { text: 'Item' }), el('th', { text: 'Guest / Room' }), el('th', { text: 'Staff' }),
+      el('th', { text: 'Item' }), el('th', { text: 'Towel #' }), el('th', { text: 'Guest / Room' }), el('th', { text: 'Staff' }),
       el('th', { class: 'num', text: 'Amount' }), el('th', { class: 'num', text: '' }),
     ])));
     const tb = el('tbody');
@@ -71,6 +71,7 @@ export function render(ctx) {
         el('td', { text: fmtDateTime(e.ts) }),
         el('td', {}, el('span', { class: `tag ${e.kind === 'deposit' ? 'dep' : e.kind === 'refund' ? 'ref' : e.kind === 'adjustment' ? 'shift' : 'rev'}`, text: e.kind })),
         el('td', { text: `${e.itemName || '—'}${e.qty ? ' ×' + e.qty : ''}` }),
+        el('td', {}, towelCell(e)),
         el('td', {}, [el('strong', { text: e.guest || '—' }), e.room ? el('span', { class: 'muted', text: ' · ' + e.room }) : null]),
         el('td', {}, [el('span', { text: e.staff }), e.staffRole === 'manager' ? el('span', { class: 'tag role', style: 'margin-left:6px', text: 'mgr' }) : null]),
         el('td', { class: 'num ' + (e.direction > 0 ? 'amt-in' : 'amt-out'), text: `${e.direction > 0 ? '+' : '−'}${pesoPlain(e.amount)}` }),
@@ -89,6 +90,13 @@ export function render(ctx) {
   [search, typeSel, shiftSel, dateInput].forEach((c) => c.addEventListener('input', paint));
   paint();
   return root;
+}
+
+// Towel tag cell — a badge when the entry has a number (explicit field or parsed
+// from a legacy note), a muted dash otherwise.
+function towelCell(e) {
+  const tn = entryTowelNo(e);
+  return tn ? el('span', { class: 'tag towel', text: tn }) : el('span', { class: 'muted', text: '—' });
 }
 
 function actionCell(e, reversed, paint) {

@@ -87,6 +87,47 @@ export const escapeHtml = (s) =>
   ));
 
 // ---------------------------------------------------------------------------
+// Towel tag numbers
+// ---------------------------------------------------------------------------
+// The "Towel" item (NOT "Beach Towel", padlock or hair dryer) carries a physical
+// tag number the guest leaves at the desk. New entries store it in `entry.towelNo`;
+// historical entries hold it inside the free-text note — imported deposits as
+// "tags #193 · PM SHIFT …" and hand-typed ones as a bare "#75" / "#209 and #4".
+// We never rewrite those notes (it would break the ledger hash chain), so these
+// helpers READ the number from whichever place holds it and show it in one field.
+
+// Only the item literally named "Towel" tracks a tag number — "Beach Towel" does not.
+export function isTowelItem(name) {
+  return String(name || '').trim().toLowerCase() === 'towel';
+}
+
+const tidyTowelNo = (s) => String(s || '').replace(/\s+/g, ' ').trim().slice(0, 60);
+
+// Pull a towel tag number out of a legacy note. Returns '' when there isn't one.
+export function towelNoFromNote(note) {
+  const raw = String(note || '').trim();
+  if (!raw) return '';
+  const seg = raw.split('·')[0].trim(); // the number sits before the first separator
+  // Imported deposits: "tags #193", "tags new #87/97", "tags 205".
+  const m = seg.match(/^tags\b\s*(?:new\b\s*)?(.+)$/i);
+  if (m) return tidyTowelNo(m[1]);
+  // Hand-typed deposits where the note itself is the tag: "#75", "#209 and #4".
+  // Conservative: must start with '#' or be purely numeric so prose like
+  // "excess" or "PM SHIFT APRIL" is never mistaken for a tag number.
+  if (/^#/.test(seg) || /^\d+(\s*\/\s*\d+)*$/.test(seg)) return tidyTowelNo(seg);
+  return '';
+}
+
+// The towel number to display for a ledger entry: the explicit field when set,
+// otherwise parsed from the legacy note. Only meaningful for the Towel item.
+export function entryTowelNo(e) {
+  if (!e) return '';
+  if (e.towelNo != null && String(e.towelNo).trim()) return tidyTowelNo(e.towelNo);
+  if (isTowelItem(e.itemName)) return towelNoFromNote(e.note);
+  return '';
+}
+
+// ---------------------------------------------------------------------------
 // Toast notifications
 // ---------------------------------------------------------------------------
 export function toast(msg, kind = 'ok') {
