@@ -82,6 +82,7 @@ function defaultState() {
     },
     itemTypes: [],
     staff: [],
+    admins: [], // elevated "Admin" accounts, each with its own PIN (own login tier)
     shifts: [],
     ledger: [],
     audit: [], // append-only, hash-chained activity log (who / what / when)
@@ -131,6 +132,7 @@ class Store {
     if (!Array.isArray(this.state.audit)) this.state.audit = [];
     if (!Array.isArray(this.state.towels)) this.state.towels = [];
     if (!Array.isArray(this.state.towelLog)) this.state.towelLog = [];
+    if (!Array.isArray(this.state.admins)) this.state.admins = [];
     if (!this.state.config.towelTracker) this.state.config.towelTracker = { enabled: false, startedAt: null };
     this.verifyIntegrity();
     this.verifyAuditIntegrity();
@@ -215,8 +217,12 @@ class Store {
     const c = this.state.config;
     let session = null;
     if (role === 'manager') {
-      if (!Store.verifyPin(pin, c.managerPin)) return false;
-      session = { role: 'manager', name: name || 'Manager', at: nowISO() };
+      // Admin tier. The PIN identifies the person: match an Admin account first
+      // (adopt its name for accountability), then the baked manager credential.
+      const admin = this.adminList().find((a) => Store.verifyPin(pin, a.pin));
+      if (admin) session = { role: 'manager', name: admin.name, adminId: admin.id, at: nowISO() };
+      else if (Store.verifyPin(pin, c.managerPin)) session = { role: 'manager', name: name || 'Admin', at: nowISO() };
+      else return false;
     } else {
       // Staff: the PIN identifies the person. Match the roster first (and adopt
       // that account's name, for accountability), then a legacy shared staff PIN,
@@ -820,6 +826,42 @@ class Store {
     return true;
   }
 
+  // --------------------------------------------------------------- admin roster
+  // Elevated "Admin" accounts — each signs in (Admin tier) with their own PIN and
+  // can do everything the manager tier can (Settings, voids, towel inventory, …).
+  adminList() { return (this.state.admins || []).filter((a) => a.active !== false); }
+  // True if `pin` belongs to the baked manager credential OR any Admin account.
+  // Used by the admin-approval gate so an admin can authorise from a staff desk.
+  verifyAdminPin(pin) {
+    if (Store.verifyPin(pin, this.state.config.managerPin)) return true;
+    return this.adminList().some((a) => Store.verifyPin(pin, a.pin));
+  }
+  addAdmin({ name, pin }) {
+    if (!Array.isArray(this.state.admins)) this.state.admins = [];
+    const a = { id: uid('admin'), name: String(name || '').trim(), pin: Store.hashPin(pin), active: true, createdAt: nowISO() };
+    this.state.admins.push(a);
+    this._audit('admin.add', `Added admin "${a.name}"`, { id: a.id, name: a.name });
+    this.save();
+    return a;
+  }
+  setAdminPin(id, newPin) {
+    const a = (this.state.admins || []).find((x) => x.id === id);
+    if (!a) return false;
+    a.pin = Store.hashPin(newPin);
+    this._audit('admin.pin_change', `Changed PIN for admin "${a.name}"`, { id, name: a.name });
+    this.save();
+    return true;
+  }
+  removeAdmin(id) {
+    const arr = this.state.admins || [];
+    const i = arr.findIndex((x) => x.id === id);
+    if (i < 0) return false;
+    const [a] = arr.splice(i, 1);
+    this._audit('admin.remove', `Removed admin "${a.name}"`, { id, name: a.name });
+    this.save();
+    return true;
+  }
+
   // ------------------------------------------------------------- export/import
   exportData() {
     return {
@@ -844,6 +886,7 @@ class Store {
     if (!Array.isArray(this.state.audit)) this.state.audit = [];
     if (!Array.isArray(this.state.towels)) this.state.towels = [];
     if (!Array.isArray(this.state.towelLog)) this.state.towelLog = [];
+    if (!Array.isArray(this.state.admins)) this.state.admins = [];
     if (!this.state.config.towelTracker) this.state.config.towelTracker = { enabled: false, startedAt: null };
     this.verifyIntegrity();
     this.verifyAuditIntegrity();

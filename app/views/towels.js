@@ -35,7 +35,9 @@ export function render(ctx) {
 
   if (!store.towelTracker.enabled) {
     root.appendChild(pageHead('Towel Tracker', 'Track every physical towel — available, out with a guest, or lost', null));
-    root.appendChild(renderSetup(ctx));
+    root.appendChild(store.isManager() ? renderSetup(ctx) : el('div', { class: 'card' }, el('div', { class: 'empty' }, [
+      el('div', { class: 'ic', text: '🧺' }), el('p', { text: 'The towel tracker hasn\'t been set up yet. Ask an admin to enter the inventory.' }),
+    ])));
     return root;
   }
 
@@ -59,10 +61,10 @@ export function render(ctx) {
     ]),
   ]));
 
-  // ---- manage inventory (manager) ----
-  root.appendChild(renderManage(ctx, summary));
+  // ---- manage inventory (admin only) ----
+  if (store.isManager()) root.appendChild(renderManage(ctx, summary));
 
-  // ---- status table ----
+  // ---- status table (everyone can view) ----
   root.appendChild(renderTable(ctx));
   return root;
 }
@@ -180,6 +182,7 @@ function renderTable(ctx) {
 }
 
 function actionCell(t, ctx, paint) {
+  if (!store.isManager()) return null; // inventory changes are admin-only
   if (t.status === 'lost') {
     return el('div', { class: 'flex gap', style: 'justify-content:flex-end' }, [
       el('button', { class: 'btn ghost sm', text: 'Found', onClick: () => resolve(t.no, 'found', ctx, paint) }),

@@ -39,17 +39,18 @@ export function confirmDialog({ title, sub, confirmLabel = 'Confirm', kind = 'pr
   });
 }
 
-// Run `action` only after a valid Manager PIN. If already logged in as manager,
-// runs immediately. Used to gate voids, settings, exports, staff mgmt.
+// Run `action` only after a valid Admin PIN. If already signed in at the Admin
+// tier, runs immediately. Used to gate voids, settings, towel inventory, etc.
+// Accepts any Admin account's PIN (or the baked admin credential).
 export function managerGate(action, { reason } = {}) {
   if (store.isManager()) { action(); return; }
-  const inp = el('input', { class: 'input', type: 'password', inputmode: 'numeric', placeholder: 'Manager PIN', autocomplete: 'off' });
+  const inp = el('input', { class: 'input', type: 'password', inputmode: 'numeric', placeholder: 'Admin PIN', autocomplete: 'off' });
   const errp = el('p', { class: 'hint', style: 'color:var(--danger);min-height:16px' });
   const body = el('div', {}, [
-    el('div', { class: 'field' }, [el('label', { text: 'This action needs a manager.' }), inp, errp]),
+    el('div', { class: 'field' }, [el('label', { text: 'This action needs an admin.' }), inp, errp]),
   ]);
   const tryUnlock = (close) => {
-    if (store.constructor.verifyPin(inp.value, store.config.managerPin)) {
+    if (store.verifyAdminPin(inp.value)) {
       close();
       action();
     } else {
@@ -58,8 +59,8 @@ export function managerGate(action, { reason } = {}) {
     }
   };
   const { close } = openModal({
-    title: 'Manager approval',
-    sub: reason || 'Enter the Manager PIN to continue.',
+    title: 'Admin approval',
+    sub: reason || 'Enter an Admin PIN to continue.',
     body,
     actions: [
       { label: 'Cancel', kind: 'ghost' },

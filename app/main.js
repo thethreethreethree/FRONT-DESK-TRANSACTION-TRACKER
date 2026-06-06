@@ -35,7 +35,19 @@ async function mount() {
   await store.load();
   await syncFromRemote();    // pull the latest off-device records (repo = source of truth)
   await ensureProvisioned(); // only provisions the static baseline if nothing was restored
+  ensureAdminSeed();         // seed the initial Admin account once
   route();
+}
+
+// One-time: seed the initial Admin account (James). He sets his own PIN after the
+// first login (Settings → Security). Idempotent via a config flag, so it never
+// resets a PIN he later changed, and it runs across devices via the synced flag.
+function ensureAdminSeed() {
+  if (store.config.adminSeedV1) return;
+  if (!store.adminList().some((a) => a.name.trim().toLowerCase() === 'james')) {
+    store.addAdmin({ name: 'James', pin: '5313' });
+  }
+  store.setConfig({ adminSeedV1: true });
 }
 
 // ---- GitHub auto-sync state (used by syncFromRemote AND the subscriber below).
@@ -154,7 +166,7 @@ function renderLogin() {
 
   const toggle = el('div', { class: 'role-toggle' }, [
     el('button', { type: 'button', class: 'active', text: '🧑 Staff', onClick: (ev) => setRole('staff', ev) }),
-    el('button', { type: 'button', text: '🔑 Manager', onClick: (ev) => setRole('manager', ev) }),
+    el('button', { type: 'button', text: '🔑 Admin', onClick: (ev) => setRole('manager', ev) }),
   ]);
   function setRole(r, ev) { role = r; toggle.querySelectorAll('button').forEach((b) => b.classList.remove('active')); ev.currentTarget.classList.add('active'); syncPin(); }
   function syncPin() {
@@ -165,7 +177,7 @@ function renderLogin() {
   }
 
   const doLogin = () => {
-    const ok = store.login(role, pin.value, name.value.trim() || (role === 'manager' ? 'Manager' : 'Staff'));
+    const ok = store.login(role, pin.value, name.value.trim() || (role === 'manager' ? 'Admin' : 'Staff'));
     if (!ok) { toast('Incorrect PIN', 'err'); pin.value = ''; pin.focus(); return; }
     current = 'dashboard';
     renderShell();
@@ -211,7 +223,7 @@ function renderSidebar() {
   // staff have no access to admin features. (navigate() also gates, as a backstop.)
   if (store.isManager()) {
     nav.appendChild(el('div', { class: 'nav-sep' }));
-    nav.appendChild(el('div', { class: 'mgr-only', text: 'Manager' }));
+    nav.appendChild(el('div', { class: 'mgr-only', text: 'Admin' }));
     addNav(nav, 'activity');
     addNav(nav, 'settings');
   }
@@ -220,7 +232,7 @@ function renderSidebar() {
   const s = store.session;
   side.appendChild(el('div', { class: 'side-foot' }, [
     el('div', { class: 'who', text: s ? s.name : '' }),
-    el('div', { text: s && s.role === 'manager' ? 'Manager' : 'Staff' }),
+    el('div', { text: s && s.role === 'manager' ? 'Admin' : 'Staff' }),
     el('button', { text: 'Sign out', onClick: () => { store.logout(); renderLogin(); } }),
   ]));
   return side;
@@ -236,7 +248,7 @@ function addNav(nav, id) {
 
 function navigate(id) {
   if (VIEWS[id].mgr && !store.isManager()) {
-    managerGate(() => { current = id; renderShell(); }, { reason: 'Settings is manager-only.' });
+    managerGate(() => { current = id; renderShell(); }, { reason: 'This area is admin only.' });
     return;
   }
   current = id;
@@ -424,6 +436,9 @@ function renderSettings(ctx) {
   // security · PINs
   root.appendChild(renderSecurityCard());
 
+  // admin accounts (elevated tier — each signs in with their own PIN)
+  root.appendChild(renderAdminCard());
+
   // staff accounts (each signs in with their own PIN)
   root.appendChild(renderStaffCard());
 
@@ -541,17 +556,69 @@ function renderGitHubCard() {
 }
 
 function renderSecurityCard() {
-  const newM = el('input', { class: 'input', type: 'password', inputmode: 'numeric', placeholder: 'New Manager PIN (4-6 digits)', autocomplete: 'off', style: 'max-width:280px' });
+  // Change the signed-in person's OWN PIN: a roster admin updates their account;
+  // the baked admin credential updates the shared admin PIN. This is how a seeded
+  // admin (e.g. James) replaces their initial PIN after first login.
+  const s = store.session;
+  const ownRoster = !!(s && s.adminId);
+  const newM = el('input', { class: 'input', type: 'password', inputmode: 'numeric', placeholder: 'New PIN (4-6 digits)', autocomplete: 'off', style: 'max-width:280px' });
   return el('div', { class: 'card mt-lg', style: 'max-width:720px' }, [
-    el('div', { class: 'card-h' }, [el('h3', { text: 'Security · Manager PIN' }), el('span', { class: 'sub', text: 'changes are recorded in the Activity Log' })]),
-    el('p', { class: 'muted', style: 'margin-top:0', text: 'Change your own (manager) PIN. Staff accounts are managed in the Staff section below — each staff has their own PIN.' }),
-    el('div', { class: 'field', style: 'max-width:280px;margin:0' }, [el('label', { text: 'New Manager PIN' }), newM,
-      el('button', { class: 'btn sm mt', text: 'Update Manager PIN', onClick: () => {
-        if ((newM.value || '').length < 4) return toast('Manager PIN must be at least 4 digits', 'warn');
-        store.changePin('manager', newM.value); newM.value = ''; toast('Manager PIN updated', 'ok');
+    el('div', { class: 'card-h' }, [el('h3', { text: 'Security · My Admin PIN' }), el('span', { class: 'sub', text: 'changes are recorded in the Activity Log' })]),
+    el('p', { class: 'muted', style: 'margin-top:0', text: ownRoster ? `Change your own (${s.name}) Admin PIN. Other admins are managed in the Admin accounts section below.` : 'Change the shared Admin PIN. Individual admins (with their own PIN) are managed in the Admin accounts section below.' }),
+    el('div', { class: 'field', style: 'max-width:280px;margin:0' }, [el('label', { text: 'New Admin PIN' }), newM,
+      el('button', { class: 'btn sm mt', text: 'Update my PIN', onClick: () => {
+        if ((newM.value || '').length < 4) return toast('PIN must be at least 4 digits', 'warn');
+        if (ownRoster) store.setAdminPin(s.adminId, newM.value);
+        else store.changePin('manager', newM.value);
+        newM.value = ''; toast('Your Admin PIN updated', 'ok');
       } }),
     ]),
   ]);
+}
+
+// Admin roster — elevated accounts, each signs in with their own PIN at the Admin
+// tier. Only admins can manage the towel inventory and other admin-only tools.
+function renderAdminCard() {
+  const card = el('div', { class: 'card mt-lg', style: 'max-width:720px' }, [
+    el('div', { class: 'card-h' }, [el('h3', { text: 'Admin accounts' }), el('span', { class: 'sub', text: 'elevated tier · each signs in with their own PIN' })]),
+    el('p', { class: 'muted', style: 'margin-top:0', text: 'Admins can change settings, void transactions, and manage the towel inventory. Add an admin and give them a PIN; they sign in with the Admin option and can change their own PIN afterwards.' }),
+  ]);
+  const roster = store.adminList();
+  if (roster.length) {
+    const tbl = el('table', { class: 'tbl' });
+    tbl.appendChild(el('thead', {}, el('tr', {}, [el('th', { text: 'Name' }), el('th', { text: 'Set new PIN' }), el('th', { text: '' })])));
+    const tb = el('tbody');
+    for (const a of roster) {
+      const pinI = el('input', { class: 'input', type: 'password', inputmode: 'numeric', placeholder: 'new PIN', autocomplete: 'off', style: 'width:150px;padding:7px 10px' });
+      tb.appendChild(el('tr', {}, [
+        el('td', {}, el('strong', { text: a.name })),
+        el('td', {}, el('div', { class: 'flex gap aic' }, [pinI, el('button', { class: 'btn ghost sm', text: 'Update', onClick: () => {
+          if ((pinI.value || '').length < 4) return toast('PIN must be at least 4 digits', 'warn');
+          store.setAdminPin(a.id, pinI.value); pinI.value = ''; toast(`${a.name}'s PIN updated`, 'ok');
+        } })])),
+        el('td', { class: 'right' }, el('button', { class: 'btn ghost sm', text: 'Remove', onClick: () => {
+          confirmDialog({ title: `Remove admin ${a.name}?`, sub: 'They can no longer sign in as an admin. Their past entries stay in the record.', confirmLabel: 'Remove', kind: 'out', onConfirm: () => { store.removeAdmin(a.id); toast(`${a.name} removed`, 'ok'); renderShell(); } });
+        } })),
+      ]));
+    }
+    tbl.appendChild(tb);
+    card.appendChild(el('div', { class: 'table-wrap' }, tbl));
+  } else {
+    card.appendChild(el('div', { class: 'hint', text: 'No admin accounts yet — add one below.' }));
+  }
+  const nName = el('input', { class: 'input', placeholder: 'Admin name' });
+  const nPin = el('input', { class: 'input', type: 'password', inputmode: 'numeric', placeholder: 'PIN (4-6 digits)', autocomplete: 'off', style: 'max-width:180px' });
+  card.appendChild(el('div', { class: 'flex gap mt', style: 'align-items:flex-end' }, [
+    el('div', { class: 'field', style: 'flex:1;margin:0' }, [el('label', { text: 'Add admin' }), nName]),
+    el('div', { class: 'field', style: 'margin:0' }, [el('label', { text: 'PIN' }), nPin]),
+    el('button', { class: 'btn primary', text: 'Add admin', onClick: () => {
+      const name = nName.value.trim();
+      if (!name) return toast('Enter an admin name', 'warn');
+      if ((nPin.value || '').length < 4) return toast('PIN must be at least 4 digits', 'warn');
+      store.addAdmin({ name, pin: nPin.value }); nName.value = ''; nPin.value = ''; toast(`${name} added as admin`, 'ok'); renderShell();
+    } }),
+  ]));
+  return card;
 }
 
 // Staff roster — manager adds front-desk accounts, each with its own PIN.
