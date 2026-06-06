@@ -680,24 +680,36 @@ class Store {
     return refund;
   }
 
-  // The live inventory projection. For each towel (master list ∪ any tag seen in
-  // post-baseline events) returns { no, status, holder, registered, lastEvent }.
-  // status: available | out | lost | writeoff. Pure read — safe to call per render.
+  // The live inventory projection. Returns { no, status, holder, registered, lastEvent }
+  // per towel; status: available | out | lost | writeoff. Pure read — safe per render.
+  //
+  // Registered towels SYNC from the FULL ledger history, so a number already out
+  // before it was added to inventory picks up its guest/room/dates. Unregistered
+  // numbers only count from the baseline, so thousands of historical tags don't
+  // flood the list. An "out" reading is confirmed against the depositing guest's
+  // OUTSTANDING balance — so a return booked without a tag number (the old flow)
+  // still flips the towel back to available, tying towel state to the cash truth.
   towelStatus() {
+    if (!this.towelTracker.enabled) return [];
     const baseline = this.towelBaseline();
+    const masterSet = new Set((this.state.towels || []).map((t) => t.no));
+    // Guest+room keys that currently hold a deposit (positive net).
+    const outstanding = new Set();
+    for (const g of this._guestNets()) {
+      if (g.held > 0.005) outstanding.add(`${(g.guest || '').toUpperCase().trim()}|${(g.room || '').toUpperCase().trim()}`);
+    }
     const events = new Map(); // no -> [{ type, ts, seq, guest, room, staff }]
-    if (baseline) {
-      for (const e of this.state.ledger) {
-        if (!isTowelItem(e.itemName)) continue;
-        if (e.kind !== 'deposit' && e.kind !== 'refund') continue;
-        if (e.ts < baseline) continue;
-        const toks = towelTokens(entryTowelNo(e));
-        if (!toks.length) continue;
-        const type = e.kind === 'deposit' ? 'out' : (e.towelLost ? 'lost' : 'in');
-        for (const no of toks) {
-          if (!events.has(no)) events.set(no, []);
-          events.get(no).push({ type, ts: e.ts, seq: e.seq, guest: e.guest, room: e.room, staff: e.staff });
-        }
+    for (const e of this.state.ledger) {
+      if (!isTowelItem(e.itemName)) continue;
+      if (e.kind !== 'deposit' && e.kind !== 'refund') continue;
+      const toks = towelTokens(entryTowelNo(e));
+      if (!toks.length) continue;
+      const type = e.kind === 'deposit' ? 'out' : (e.towelLost ? 'lost' : 'in');
+      for (const no of toks) {
+        // Registered → full history; unregistered → baseline-onward only.
+        if (!masterSet.has(no) && !(baseline && e.ts >= baseline)) continue;
+        if (!events.has(no)) events.set(no, []);
+        events.get(no).push({ type, ts: e.ts, seq: e.seq, guest: e.guest, room: e.room, staff: e.staff });
       }
     }
     // Latest admin resolution per towel.
@@ -706,7 +718,6 @@ class Store {
       const cur = res.get(r.no);
       if (!cur || r.ts > cur.ts) res.set(r.no, r);
     }
-    const masterSet = new Set((this.state.towels || []).map((t) => t.no));
     const allNos = new Set([...masterSet, ...events.keys()]);
     const out = [];
     for (const no of allNos) {
@@ -715,8 +726,11 @@ class Store {
       let status = 'available';
       let holder = null;
       if (last) {
-        if (last.type === 'out') { status = 'out'; holder = { guest: last.guest, room: last.room, ts: last.ts, staff: last.staff }; }
-        else if (last.type === 'lost') status = 'lost';
+        if (last.type === 'out') {
+          const key = `${(last.guest || '').toUpperCase().trim()}|${(last.room || '').toUpperCase().trim()}`;
+          if (outstanding.has(key)) { status = 'out'; holder = { guest: last.guest, room: last.room, ts: last.ts, staff: last.staff }; }
+          else status = 'available'; // deposit already settled (return may have had no tag #)
+        } else if (last.type === 'lost') status = 'lost';
         else status = 'available';
       }
       const r = res.get(no);
@@ -731,6 +745,21 @@ class Store {
       if (!isNaN(na) && !isNaN(nb) && na !== nb) return na - nb;
       return String(a.no).localeCompare(String(b.no));
     });
+    return out;
+  }
+
+  // Every deposit/refund tied to a towel number, oldest→newest — the full record
+  // behind a tag (guest, room, amount, date, staff, lost flag) for the detail view.
+  towelHistory(no) {
+    const want = normTowelNo(no);
+    if (!want) return [];
+    const out = [];
+    for (const e of this.state.ledger) {
+      if (!isTowelItem(e.itemName)) continue;
+      if (e.kind !== 'deposit' && e.kind !== 'refund') continue;
+      if (!towelTokens(entryTowelNo(e)).includes(want)) continue;
+      out.push({ seq: e.seq, ts: e.ts, kind: e.kind, guest: e.guest, room: e.room, amount: e.amount, direction: e.direction, staff: e.staff, towelLost: !!e.towelLost });
+    }
     return out;
   }
   // Headline counts for the dashboard card. `inService` excludes written-off towels.

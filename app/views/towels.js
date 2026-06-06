@@ -4,7 +4,7 @@
 // so it always agrees with the ledger; admin actions resolve lost towels.
 import { el, peso, pesoPlain, fmtDateTime, clear, toast } from '../util.js';
 import { store } from '../store.js';
-import { pageHead, managerGate, confirmDialog } from '../components.js';
+import { pageHead, managerGate, confirmDialog, openModal } from '../components.js';
 
 // Parse "1-300", "1,2,5", or a mixed/newline list into individual towel numbers.
 function parseTowelInput(str) {
@@ -196,7 +196,7 @@ function renderTable(ctx) {
       const m = STATUS_META[t.status] || { cls: 'rev', label: t.status };
       const h = t.holder;
       tb.append(el('tr', {}, [
-        el('td', {}, [el('span', { class: 'tag towel', text: t.no }), t.registered ? null : el('span', { class: 'tag rev', style: 'margin-left:6px', text: 'unregistered' })]),
+        el('td', {}, [el('span', { class: 'tag towel', style: 'cursor:pointer', title: 'View this towel\'s deposit/refund history', onClick: () => openTowelHistory(t.no), text: t.no }), t.registered ? null : el('span', { class: 'tag rev', style: 'margin-left:6px', text: 'unregistered' })]),
         el('td', {}, el('span', { class: 'tag ' + m.cls, text: m.label })),
         el('td', {}, h ? [el('strong', { text: h.guest || '—' }), h.room ? el('span', { class: 'muted', text: ' · ' + h.room }) : null] : el('span', { class: 'muted', text: '—' })),
         el('td', { text: h ? fmtDateTime(h.ts) : '—' }),
@@ -230,6 +230,36 @@ function actionCell(t, ctx, refresh) {
     return el('button', { class: 'btn ghost sm', text: 'Write off', onClick: () => resolve(t.no, 'writeoff', ctx, refresh) });
   }
   return null;
+}
+
+// The full record behind a towel number: every deposit & refund tied to it.
+function openTowelHistory(no) {
+  const hist = store.towelHistory(no);
+  const body = el('div', {});
+  if (!hist.length) {
+    body.appendChild(el('p', { class: 'muted', text: 'No deposit or refund records reference this towel number yet.' }));
+  } else {
+    const tbl = el('table', { class: 'tbl' });
+    tbl.appendChild(el('thead', {}, el('tr', {}, [
+      el('th', { text: 'When' }), el('th', { text: 'Type' }), el('th', { text: 'Guest / Room' }),
+      el('th', { class: 'num', text: 'Amount' }), el('th', { text: 'Staff' }),
+    ])));
+    const tb = el('tbody');
+    for (const h of hist) {
+      const label = h.kind === 'deposit' ? 'deposit' : (h.towelLost ? 'lost' : 'refund');
+      const cls = h.kind === 'deposit' ? 'dep' : (h.towelLost ? 'rev' : 'ref');
+      tb.append(el('tr', {}, [
+        el('td', { text: fmtDateTime(h.ts) }),
+        el('td', {}, el('span', { class: 'tag ' + cls, text: label })),
+        el('td', {}, [el('strong', { text: h.guest || '—' }), h.room ? el('span', { class: 'muted', text: ' · ' + h.room }) : null]),
+        el('td', { class: 'num ' + (h.direction > 0 ? 'amt-in' : 'amt-out'), text: `${h.direction > 0 ? '+' : '−'}${pesoPlain(h.amount)}` }),
+        el('td', { text: h.staff || '—' }),
+      ]));
+    }
+    tbl.appendChild(tb);
+    body.appendChild(el('div', { class: 'table-wrap' }, tbl));
+  }
+  openModal({ title: `Towel #${no} — history`, sub: 'Every deposit & refund tied to this towel number', body, wide: true, actions: [{ label: 'Close', kind: 'ghost' }] });
 }
 
 function resolve(no, action, ctx, refresh) {
