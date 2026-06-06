@@ -14,6 +14,7 @@ export function render(ctx) {
     el('option', { value: '', text: 'All types' }),
     el('option', { value: 'deposit', text: 'Deposits' }),
     el('option', { value: 'refund', text: 'Refunds' }),
+    el('option', { value: 'exchange', text: 'Exchanges' }),
     el('option', { value: 'reversal', text: 'Voids' }),
   ]);
   const shiftSel = el('select', {}, [
@@ -73,15 +74,18 @@ export function render(ctx) {
       tr.append(
         el('td', {}, seqCell(e, refundable, reversed, ctx)),
         el('td', { text: fmtDateTime(e.ts) }),
-        el('td', {}, el('span', { class: `tag ${e.kind === 'deposit' ? 'dep' : e.kind === 'refund' ? 'ref' : e.kind === 'adjustment' ? 'shift' : 'rev'}`, text: e.kind })),
+        el('td', {}, el('span', { class: `tag ${e.kind === 'deposit' ? 'dep' : e.kind === 'refund' ? 'ref' : e.kind === 'adjustment' ? 'shift' : e.kind === 'exchange' ? 'exg' : 'rev'}`, text: e.kind })),
         el('td', {}, [
           el('span', { text: `${e.itemName || '—'}${e.qty ? ' ×' + e.qty : ''}` }),
           e.refundsSeq ? el('span', { class: 'muted', style: 'margin-left:6px;font-size:.78rem', title: 'refund of deposit #' + e.refundsSeq, text: '↩ #' + e.refundsSeq }) : null,
+          e.exchangesSeq ? el('span', { class: 'muted', style: 'margin-left:6px;font-size:.78rem', title: 'exchange on deposit #' + e.exchangesSeq, text: '⇄ #' + e.exchangesSeq }) : null,
         ]),
         el('td', {}, towelCell(e)),
         el('td', {}, [el('strong', { text: e.guest || '—' }), e.room ? el('span', { class: 'muted', text: ' · ' + e.room }) : null]),
         el('td', {}, [el('span', { text: e.staff }), e.staffRole === 'manager' ? el('span', { class: 'tag role', style: 'margin-left:6px', text: 'mgr' }) : null]),
-        el('td', { class: 'num ' + (e.direction > 0 ? 'amt-in' : 'amt-out'), text: `${e.direction > 0 ? '+' : '−'}${pesoPlain(e.amount)}` }),
+        e.kind === 'exchange'
+          ? el('td', { class: 'num muted', title: 'no cash — deposit unchanged', text: '—' })
+          : el('td', { class: 'num ' + (e.direction > 0 ? 'amt-in' : 'amt-out'), text: `${e.direction > 0 ? '+' : '−'}${pesoPlain(e.amount)}` }),
         el('td', { class: 'num' }, actionCell(e, reversed, paint)),
       );
       tb.appendChild(tr);

@@ -90,6 +90,9 @@ export function render(ctx) {
       el('button', {
         class: 'btn out', onClick: () => ctx.navigate('refund'),
       }, [el('span', { class: 'ic', text: '↩' }), el('span', { text: 'New Refund' }), el('span', { class: 'sub', text: 'guest returns / checks out' })]),
+      el('button', {
+        class: 'btn', onClick: () => ctx.navigate('exchange'),
+      }, [el('span', { class: 'ic', text: '⇄' }), el('span', { text: 'Towel Exchange' }), el('span', { class: 'sub', text: 'swap a towel · no cash' })]),
     ]),
   ]);
   root.appendChild(quick);

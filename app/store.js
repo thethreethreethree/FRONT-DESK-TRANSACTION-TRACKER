@@ -379,6 +379,8 @@ class Store {
       // entryTowelNo). New entries hash WITH this key; pre-existing entries have
       // no `towelNo` key, so their stored hashes still verify (chain unbroken).
       towelNo: isTowelItem(entry.itemName) ? (entry.towelNo || '').toString().trim() : '',
+      // The towel handed back in an exchange (the new one going out is `towelNo`).
+      oldTowelNo: isTowelItem(entry.itemName) ? (entry.oldTowelNo || '').toString().trim() : '',
       // Marks a refund where the towel was NOT returned (reported lost). Drives the
       // towel tracker's "lost" state. Additive field — old entries lack it and still
       // verify; only set true on lost refunds.
@@ -386,6 +388,9 @@ class Store {
       // The deposit transaction this refund settles, so a deposit and its refund
       // are linked by number. Additive field — old entries lack it and still verify.
       refundsSeq: entry.refundsSeq != null && entry.refundsSeq !== '' ? Number(entry.refundsSeq) : null,
+      // The deposit an exchange belongs to. Distinct from refundsSeq: an exchange
+      // links to the deposit but does NOT settle it (the deposit stays refundable).
+      exchangesSeq: entry.exchangesSeq != null && entry.exchangesSeq !== '' ? Number(entry.exchangesSeq) : null,
       reversesId: entry.reversesId || null,
       prevHash,
     };
@@ -561,12 +566,19 @@ class Store {
       cur.items[it] = round2((cur.items[it] || 0) + e.amount * e.direction);
       if (e.kind === 'deposit') {
         if (e.ts > cur.lastTs) cur.lastTs = e.ts; // most recent deposit time (for recency sort)
-        // Towel tag(s) the guest left at deposit — surfaced on outstanding/refund.
-        if (isTowelItem(e.itemName)) { const tn = entryTowelNo(e); if (tn && !cur.towels.includes(tn)) cur.towels.push(tn); }
+        // Towel tag(s) the guest currently holds — surfaced on outstanding/refund.
+        if (isTowelItem(e.itemName)) for (const t of towelTokens(entryTowelNo(e))) if (!cur.towels.includes(t)) cur.towels.push(t);
         // Open (refundable) deposit transactions for this guest — by number.
         if (!linked.has(e.seq) && !reversed.has(e.id)) {
           cur.openDeposits.push({ seq: e.seq, ts: e.ts, itemTypeId: e.itemTypeId, itemName: e.itemName, amount: e.amount, towelNo: entryTowelNo(e) });
         }
+      } else if (e.kind === 'exchange') {
+        // Swap the guest's current towel(s): old back, new out. Deposit balance and
+        // open status are untouched (amount 0); keep its current towel up to date.
+        const oldToks = towelTokens(e.oldTowelNo), newToks = towelTokens(e.towelNo);
+        for (const t of oldToks) { const i = cur.towels.indexOf(t); if (i >= 0) cur.towels.splice(i, 1); }
+        for (const t of newToks) if (!cur.towels.includes(t)) cur.towels.push(t);
+        if (e.exchangesSeq != null) { const d = cur.openDeposits.find((x) => x.seq === e.exchangesSeq); if (d && newToks.length) d.towelNo = newToks.join(', '); }
       }
       map.set(key, cur);
     }
@@ -711,6 +723,31 @@ class Store {
     return refund;
   }
 
+  // Towel exchange: the guest swaps towel `oldTowelNo` for `newTowelNo`. The old one
+  // goes back to inventory, the new one goes out — but NO cash moves, so COH and the
+  // guest's held balance are untouched (amount 0, direction 0). Links to the original
+  // deposit via exchangesSeq WITHOUT settling it (the deposit stays refundable).
+  recordTowelExchange({ itemTypeId, guest, room, oldTowelNo, newTowelNo, exchangesSeq, note }) {
+    const oldNo = String(oldTowelNo || '').trim();
+    const newNo = String(newTowelNo || '').trim();
+    const item = this.itemById(itemTypeId);
+    const shift = this.ensureShift();
+    const extra = String(note || '').trim();
+    const e = this._append({
+      kind: 'exchange', direction: 0,
+      itemTypeId, itemName: item ? item.name : 'Towel',
+      qty: 1, unitAmount: 0, amount: 0,
+      guest, room,
+      towelNo: newNo, oldTowelNo: oldNo, exchangesSeq,
+      note: `Towel exchange: #${oldNo} → #${newNo}${exchangesSeq ? ` (deposit #${exchangesSeq})` : ''}${extra ? ' · ' + extra : ''}`,
+      shiftId: shift.id, shiftLabel: shift.label,
+    });
+    this._audit('towel.exchange',
+      `Towel exchange · ${guest || room || '—'} · #${oldNo} → #${newNo}${exchangesSeq ? ` (deposit #${exchangesSeq})` : ''}`,
+      { oldTowelNo: oldNo, newTowelNo: newNo, exchangesSeq, guest, room });
+    return e;
+  }
+
   // The live inventory projection. Returns { no, status, holder, registered, lastEvent }
   // per towel; status: available | out | lost | writeoff. Pure read — safe per render.
   //
@@ -730,18 +767,24 @@ class Store {
       if (g.held > 0.005) outstanding.add(`${(g.guest || '').toUpperCase().trim()}|${(g.room || '').toUpperCase().trim()}`);
     }
     const events = new Map(); // no -> [{ type, ts, seq, guest, room, staff }]
+    // Registered → full history; unregistered → baseline-onward only.
+    const pushEvt = (no, type, e) => {
+      if (!masterSet.has(no) && !(baseline && e.ts >= baseline)) return;
+      if (!events.has(no)) events.set(no, []);
+      events.get(no).push({ type, ts: e.ts, seq: e.seq, guest: e.guest, room: e.room, staff: e.staff });
+    };
     for (const e of this.state.ledger) {
       if (!isTowelItem(e.itemName)) continue;
+      if (e.kind === 'exchange') {
+        for (const no of towelTokens(e.towelNo)) pushEvt(no, 'out', e);     // new towel goes out
+        for (const no of towelTokens(e.oldTowelNo)) pushEvt(no, 'in', e);   // old towel returns
+        continue;
+      }
       if (e.kind !== 'deposit' && e.kind !== 'refund') continue;
       const toks = towelTokens(entryTowelNo(e));
       if (!toks.length) continue;
       const type = e.kind === 'deposit' ? 'out' : (e.towelLost ? 'lost' : 'in');
-      for (const no of toks) {
-        // Registered → full history; unregistered → baseline-onward only.
-        if (!masterSet.has(no) && !(baseline && e.ts >= baseline)) continue;
-        if (!events.has(no)) events.set(no, []);
-        events.get(no).push({ type, ts: e.ts, seq: e.seq, guest: e.guest, room: e.room, staff: e.staff });
-      }
+      for (const no of toks) pushEvt(no, type, e);
     }
     // Latest admin resolution per towel.
     const res = new Map();
@@ -789,6 +832,11 @@ class Store {
     const out = [];
     for (const e of this.state.ledger) {
       if (!isTowelItem(e.itemName)) continue;
+      if (e.kind === 'exchange') {
+        if (!towelTokens(e.towelNo).includes(want) && !towelTokens(e.oldTowelNo).includes(want)) continue;
+        out.push({ seq: e.seq, ts: e.ts, kind: 'exchange', guest: e.guest, room: e.room, amount: 0, direction: 0, staff: e.staff, towelLost: false, oldTowelNo: e.oldTowelNo, towelNo: e.towelNo });
+        continue;
+      }
       if (e.kind !== 'deposit' && e.kind !== 'refund') continue;
       if (!towelTokens(entryTowelNo(e)).includes(want)) continue;
       out.push({ seq: e.seq, ts: e.ts, kind: e.kind, guest: e.guest, room: e.room, amount: e.amount, direction: e.direction, staff: e.staff, towelLost: !!e.towelLost });

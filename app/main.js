@@ -7,6 +7,7 @@ import { parseSheet, importSheet } from './csv-import.js';
 import * as dashboard from './views/dashboard.js';
 import * as deposit from './views/deposit.js';
 import * as refund from './views/refund.js';
+import * as exchange from './views/exchange.js';
 import * as outstanding from './views/outstanding.js';
 import * as ledger from './views/ledger.js';
 import * as towels from './views/towels.js';
@@ -18,6 +19,7 @@ const VIEWS = {
   dashboard: { label: 'Dashboard', icon: '▦', render: dashboard.render },
   deposit: { label: 'New Deposit', icon: '＋', render: deposit.render },
   refund: { label: 'New Refund', icon: '↩', render: refund.render },
+  exchange: { label: 'Towel Exchange', icon: '⇄', render: exchange.render },
   outstanding: { label: 'Outstanding', icon: '🧾', render: outstanding.render },
   ledger: { label: 'Ledger', icon: '📜', render: ledger.render },
   towels: { label: 'Towel Tracker', icon: '🧺', render: towels.render },
@@ -218,7 +220,7 @@ function renderSidebar() {
     el('img', { class: 'logo', src: LOGO_LIGHT, alt: 'Frendz', style: 'filter:brightness(0) invert(1)' }),
   ]));
   const nav = el('nav', { class: 'nav' });
-  const order = ['dashboard', 'deposit', 'refund', 'outstanding', 'ledger', 'towels', 'shifts'];
+  const order = ['dashboard', 'deposit', 'refund', 'exchange', 'outstanding', 'ledger', 'towels', 'shifts'];
   for (const id of order) addNav(nav, id);
   // Manager-only tools (Activity Log, Settings) are hidden entirely from staff —
   // staff have no access to admin features. (navigate() also gates, as a backstop.)
