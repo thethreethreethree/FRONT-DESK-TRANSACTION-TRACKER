@@ -48,7 +48,7 @@ export function render(ctx) {
       if (q) {
         // Searchable by transaction # (its own seq, and the deposit # a refund
         // settles — so searching a deposit number surfaces its refund too).
-        const hay = `#${e.seq} ${e.seq} ${e.refundsSeq ? '#' + e.refundsSeq + ' ' + e.refundsSeq + ' ' : ''}${e.guest} ${e.room} ${e.note} ${e.staff} ${e.itemName} ${entryTowelNo(e)}`.toLowerCase();
+        const hay = `#${e.seq} ${e.seq} ${e.refundsSeq ? '#' + e.refundsSeq + ' ' + e.refundsSeq + ' ' : ''}${e.exchangesSeq ? '#' + e.exchangesSeq + ' ' + e.exchangesSeq + ' ' : ''}${e.guest} ${e.room} ${e.note} ${e.staff} ${e.itemName} ${entryTowelNo(e)} ${e.oldTowelNo || ''}`.toLowerCase();
         if (!hay.includes(q)) return false;
       }
       return true;
@@ -116,8 +116,15 @@ function seqCell(e, refundable, reversed, ctx) {
 }
 
 // Towel tag cell — a badge when the entry has a number (explicit field or parsed
-// from a legacy note), a muted dash otherwise.
+// from a legacy note). For an exchange, shows old → new.
 function towelCell(e) {
+  if (e.kind === 'exchange') {
+    return el('span', { class: 'flex aic gap', style: 'gap:5px;flex-wrap:wrap' }, [
+      el('span', { class: 'tag rev', text: e.oldTowelNo || '—' }),
+      el('span', { class: 'muted', text: '→' }),
+      el('span', { class: 'tag towel', text: entryTowelNo(e) || '—' }),
+    ]);
+  }
   const tn = entryTowelNo(e);
   return tn ? el('span', { class: 'tag towel', text: tn }) : el('span', { class: 'muted', text: '—' });
 }

@@ -264,13 +264,14 @@ function openTowelHistory(no) {
     ])));
     const tb = el('tbody');
     for (const h of hist) {
-      const label = h.kind === 'deposit' ? 'deposit' : (h.towelLost ? 'lost' : 'refund');
-      const cls = h.kind === 'deposit' ? 'dep' : (h.towelLost ? 'rev' : 'ref');
+      const isExg = h.kind === 'exchange';
+      const label = isExg ? 'exchange' : h.kind === 'deposit' ? 'deposit' : (h.towelLost ? 'lost' : 'refund');
+      const cls = isExg ? 'exg' : h.kind === 'deposit' ? 'dep' : (h.towelLost ? 'rev' : 'ref');
       tb.append(el('tr', {}, [
         el('td', { text: fmtDateTime(h.ts) }),
-        el('td', {}, el('span', { class: 'tag ' + cls, text: label })),
+        el('td', {}, [el('span', { class: 'tag ' + cls, text: label }), isExg ? el('span', { class: 'muted', style: 'margin-left:6px;font-size:.78rem', text: `#${h.oldTowelNo || '—'} → #${h.towelNo || '—'}` }) : null]),
         el('td', {}, [el('strong', { text: h.guest || '—' }), h.room ? el('span', { class: 'muted', text: ' · ' + h.room }) : null]),
-        el('td', { class: 'num ' + (h.direction > 0 ? 'amt-in' : 'amt-out'), text: `${h.direction > 0 ? '+' : '−'}${pesoPlain(h.amount)}` }),
+        isExg ? el('td', { class: 'num muted', text: '—' }) : el('td', { class: 'num ' + (h.direction > 0 ? 'amt-in' : 'amt-out'), text: `${h.direction > 0 ? '+' : '−'}${pesoPlain(h.amount)}` }),
         el('td', { text: h.staff || '—' }),
       ]));
     }
