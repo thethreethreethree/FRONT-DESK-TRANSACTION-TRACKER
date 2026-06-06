@@ -60,6 +60,11 @@ async function idbSet(key, val) {
 // as numbers rounded to 2dp to stay readable. round2 guards float drift. -------
 const round2 = (n) => Math.round((Number(n) + Number.EPSILON) * 100) / 100;
 
+// Chronological sort by ISO timestamp (string compare orders ISO correctly),
+// falling back to seq. Used for towel events so "most recent" means most recent
+// by transaction date, not by insert order (imported rows aren't seq-by-date).
+const byTsThenSeq = (a, b) => (a.ts < b.ts ? -1 : a.ts > b.ts ? 1 : a.seq - b.seq);
+
 function defaultState() {
   return {
     version: 1,
@@ -721,7 +726,9 @@ class Store {
     const allNos = new Set([...masterSet, ...events.keys()]);
     const out = [];
     for (const no of allNos) {
-      const evs = (events.get(no) || []).slice().sort((a, b) => a.seq - b.seq);
+      // Order by transaction DATE (when the towel actually moved), not insert seq —
+      // imported rows aren't strictly seq-ordered by date. `last` = most recent.
+      const evs = (events.get(no) || []).slice().sort(byTsThenSeq);
       const last = evs[evs.length - 1] || null;
       let status = 'available';
       let holder = null;
@@ -748,8 +755,8 @@ class Store {
     return out;
   }
 
-  // Every deposit/refund tied to a towel number, oldest→newest — the full record
-  // behind a tag (guest, room, amount, date, staff, lost flag) for the detail view.
+  // Every deposit/refund tied to a towel number, MOST RECENT first (by date) — the
+  // full record behind a tag (guest, room, amount, date, staff, lost flag).
   towelHistory(no) {
     const want = normTowelNo(no);
     if (!want) return [];
@@ -760,7 +767,7 @@ class Store {
       if (!towelTokens(entryTowelNo(e)).includes(want)) continue;
       out.push({ seq: e.seq, ts: e.ts, kind: e.kind, guest: e.guest, room: e.room, amount: e.amount, direction: e.direction, staff: e.staff, towelLost: !!e.towelLost });
     }
-    return out;
+    return out.sort((a, b) => -byTsThenSeq(a, b)); // newest first
   }
   // Headline counts for the dashboard card. `inService` excludes written-off towels.
   towelSummary() {

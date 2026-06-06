@@ -294,7 +294,7 @@ tr.is-reversal { background: repeating-linear-gradient(45deg, transparent, trans
 
 /* ------------------------------------------------------------------ Modal */
 .modal-back { position: fixed; inset: 0; background: rgba(20, 18, 16, .55); backdrop-filter: blur(3px); display: flex; align-items: center; justify-content: center; padding: 20px; z-index: 80; animation: fade .18s var(--ease-out); }
-.modal { background: var(--surface); border-radius: var(--r-lg); box-shadow: var(--sh-3); width: 100%; max-width: 460px; padding: 24px; animation: pop .22s var(--ease); }
+.modal { background: var(--surface); border-radius: var(--r-lg); box-shadow: var(--sh-3); width: 100%; max-width: 460px; padding: 24px; animation: pop .22s var(--ease); max-height: calc(100vh - 40px); overflow: auto; }
 .modal.wide { max-width: 640px; }
 .modal h3 { margin-bottom: 6px; }
 .modal .m-sub { color: var(--muted); font-size: .88rem; margin-bottom: 18px; }

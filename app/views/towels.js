@@ -236,6 +236,16 @@ function actionCell(t, ctx, refresh) {
 function openTowelHistory(no) {
   const hist = store.towelHistory(no);
   const body = el('div', {});
+  // Current state up top so the most-recent status is obvious without scrolling.
+  const cur = store.towelStatus().find((s) => s.no === no);
+  if (cur) {
+    const m = STATUS_META[cur.status] || { cls: 'rev', label: cur.status };
+    const h = cur.holder;
+    body.appendChild(el('div', { class: 'pill', style: 'margin-bottom:14px' }, [
+      el('span', { text: 'Currently ' }), el('span', { class: 'tag ' + m.cls, text: m.label }),
+      h ? el('span', { text: ` · ${h.guest || '—'}${h.room ? ' · Room ' + h.room : ''} · since ${fmtDateTime(h.ts)}` }) : null,
+    ]));
+  }
   if (!hist.length) {
     body.appendChild(el('p', { class: 'muted', text: 'No deposit or refund records reference this towel number yet.' }));
   } else {
