@@ -264,6 +264,14 @@ tr.is-reversal { background: repeating-linear-gradient(45deg, transparent, trans
 .tag.shift { background: var(--gold-50); color: var(--gold-700); }
 .tag.role { background: #ece9ff; color: #5b4bcf; }
 .tag.towel { background: #e6f4f1; color: #0f766e; font-family: var(--font-mono); }
+
+/* towel tracker: in-circulation vs retired/missing tabs */
+.towel-tabs { display: flex; gap: 8px; padding: 14px 16px 4px; flex-wrap: wrap; }
+.towel-tab { display: inline-flex; align-items: center; gap: 8px; padding: 8px 14px; border: 1px solid var(--line); background: var(--surface); border-radius: 999px; cursor: pointer; font-weight: 600; color: var(--muted); font-size: .88rem; }
+.towel-tab:hover { border-color: var(--gold); }
+.towel-tab.active { color: var(--ink); border-color: var(--gold); background: var(--gold-50); }
+.towel-tab .tab-count { font-family: var(--font-mono); font-size: .76rem; background: rgba(0,0,0,.06); padding: 1px 7px; border-radius: 999px; }
+.towel-tab.active .tab-count { background: var(--gold); color: #fff; }
 .seq { font-family: var(--font-mono); color: var(--muted); font-size: .8rem; }
 
 /* filters bar */

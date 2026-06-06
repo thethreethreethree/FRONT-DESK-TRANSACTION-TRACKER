@@ -110,44 +110,78 @@ function renderManage(ctx, summary) {
       }, { reason: 'Adding towels is a manager action.' }),
     }),
   ]));
+
+  // Reset — clears the test/old inventory so the team can start fresh. Cash ledger
+  // is never touched; only the towel-inventory layer is wiped and returned to setup.
+  card.appendChild(el('hr', { class: 'hr' }));
+  card.appendChild(el('div', { class: 'flex between aic wrap gap' }, [
+    el('div', {}, [
+      el('strong', { text: 'Reset towel tracker' }),
+      el('div', { class: 'muted', style: 'font-size:.82rem', text: 'Clears the inventory and the retired/missing records, then returns to setup. The cash ledger is not affected.' }),
+    ]),
+    el('button', {
+      class: 'btn out', text: 'Reset…',
+      onClick: () => confirmDialog({
+        title: 'Reset towel tracker?',
+        sub: 'Clears every towel in the inventory and the retired & missing records, then returns the tracker to setup so you can start fresh. This does NOT touch the cash ledger, and cannot be undone.',
+        confirmLabel: 'Reset tracker', kind: 'out',
+        onConfirm: () => { store.resetTowelTracker(); toast('Towel tracker reset — start fresh', 'ok'); ctx.navigate('towels'); },
+      }),
+    }),
+  ]));
   return card;
 }
 
+// Two records on one page: "In circulation" (available + out) is the default;
+// "Retired & missing" (written off + lost) is the archive — out of the system, so
+// it stays tucked behind its own tab rather than cluttering the live list.
+const TABS = [
+  { key: 'active', label: 'In circulation', set: ['available', 'out'], empty: 'No towels in circulation.' },
+  { key: 'archive', label: 'Retired & missing', set: ['writeoff', 'lost'], empty: 'No retired or missing towels.' },
+];
+
 function renderTable(ctx) {
   const card = el('div', { class: 'card', style: 'padding:0;overflow:hidden' });
+  let mode = 'active';
 
-  const filters = el('div', { class: 'filters', style: 'padding:14px 16px 0;margin-bottom:0' });
+  const tabBar = el('div', { class: 'towel-tabs' });
+  const tabBtns = {};
+  for (const t of TABS) {
+    const b = el('button', { class: 'towel-tab', onClick: () => { mode = t.key; sync(); } }, [
+      el('span', { text: t.label }), el('span', { class: 'tab-count', text: '0' }),
+    ]);
+    tabBtns[t.key] = b;
+    tabBar.appendChild(b);
+  }
+  card.appendChild(tabBar);
+
+  const filters = el('div', { class: 'filters', style: 'padding:12px 16px 0;margin-bottom:0' });
   const search = el('input', { class: 'input search', placeholder: 'Search towel #, guest or room…', autocomplete: 'off' });
-  const statusSel = el('select', {}, [
-    el('option', { value: '', text: 'All statuses' }),
-    el('option', { value: 'available', text: 'Available' }),
-    el('option', { value: 'out', text: 'Out' }),
-    el('option', { value: 'lost', text: 'Lost' }),
-    el('option', { value: 'writeoff', text: 'Written off' }),
-  ]);
-  filters.append(search, statusSel);
+  filters.append(search);
   card.appendChild(filters);
 
   const wrap = el('div', { class: 'table-wrap', style: 'border:0' });
   card.appendChild(wrap);
 
-  function paint() {
+  // Refresh both tab counts and the table (used after an admin action changes state).
+  function sync() {
+    const all = store.towelStatus();
+    for (const t of TABS) {
+      tabBtns[t.key].classList.toggle('active', t.key === mode);
+      tabBtns[t.key].querySelector('.tab-count').textContent = String(all.filter((x) => t.set.includes(x.status)).length);
+    }
+    paint(all);
+  }
+
+  function paint(all) {
+    const tab = TABS.find((t) => t.key === mode) || TABS[0];
     const q = search.value.toLowerCase().trim();
-    const sf = statusSel.value;
-    let rows = store.towelStatus();
-    rows = rows.filter((t) => {
-      if (sf && t.status !== sf) return false;
-      if (q) {
-        const h = t.holder || {};
-        const hay = `${t.no} ${h.guest || ''} ${h.room || ''}`.toLowerCase();
-        if (!hay.includes(q)) return false;
-      }
-      return true;
-    });
+    let rows = (all || store.towelStatus()).filter((t) => tab.set.includes(t.status));
+    if (q) rows = rows.filter((t) => { const h = t.holder || {}; return `${t.no} ${h.guest || ''} ${h.room || ''}`.toLowerCase().includes(q); });
 
     clear(wrap);
     if (!rows.length) {
-      wrap.appendChild(el('div', { class: 'empty' }, [el('div', { class: 'ic', text: '🧺' }), el('p', { text: 'No towels match.' })]));
+      wrap.appendChild(el('div', { class: 'empty' }, [el('div', { class: 'ic', text: mode === 'archive' ? '🗄' : '🧺' }), el('p', { text: q ? 'No towels match.' : tab.empty })]));
       return;
     }
     const CAP = 600;
@@ -167,38 +201,38 @@ function renderTable(ctx) {
         el('td', {}, h ? [el('strong', { text: h.guest || '—' }), h.room ? el('span', { class: 'muted', text: ' · ' + h.room }) : null] : el('span', { class: 'muted', text: '—' })),
         el('td', { text: h ? fmtDateTime(h.ts) : '—' }),
         el('td', { text: h ? (h.staff || '—') : '—' }),
-        el('td', { class: 'num' }, actionCell(t, ctx, paint)),
+        el('td', { class: 'num' }, actionCell(t, ctx, sync)),
       ]));
     }
     tbl.appendChild(tb);
     wrap.appendChild(tbl);
     if (rows.length > shown.length) {
-      wrap.appendChild(el('div', { class: 'muted', style: 'padding:12px 16px;text-align:center;font-size:.82rem;border-top:1px solid var(--line)', text: `Showing ${shown.length} of ${rows.length}. Use search or the status filter to narrow down.` }));
+      wrap.appendChild(el('div', { class: 'muted', style: 'padding:12px 16px;text-align:center;font-size:.82rem;border-top:1px solid var(--line)', text: `Showing ${shown.length} of ${rows.length}. Use search to narrow down.` }));
     }
   }
-  [search, statusSel].forEach((c) => c.addEventListener('input', paint));
-  paint();
+  search.addEventListener('input', () => paint());
+  sync();
   return card;
 }
 
-function actionCell(t, ctx, paint) {
+function actionCell(t, ctx, refresh) {
   if (!store.isManager()) return null; // inventory changes are admin-only
   if (t.status === 'lost') {
     return el('div', { class: 'flex gap', style: 'justify-content:flex-end' }, [
-      el('button', { class: 'btn ghost sm', text: 'Found', onClick: () => resolve(t.no, 'found', ctx, paint) }),
-      el('button', { class: 'btn ghost sm', text: 'Write off', onClick: () => resolve(t.no, 'writeoff', ctx, paint) }),
+      el('button', { class: 'btn ghost sm', text: 'Found', onClick: () => resolve(t.no, 'found', ctx, refresh) }),
+      el('button', { class: 'btn ghost sm', text: 'Write off', onClick: () => resolve(t.no, 'writeoff', ctx, refresh) }),
     ]);
   }
   if (t.status === 'writeoff') {
-    return el('button', { class: 'btn ghost sm', text: 'Restore', onClick: () => resolve(t.no, 'restore', ctx, paint) });
+    return el('button', { class: 'btn ghost sm', text: 'Restore', onClick: () => resolve(t.no, 'restore', ctx, refresh) });
   }
   if (t.status === 'available' && t.registered) {
-    return el('button', { class: 'btn ghost sm', text: 'Write off', onClick: () => resolve(t.no, 'writeoff', ctx, paint) });
+    return el('button', { class: 'btn ghost sm', text: 'Write off', onClick: () => resolve(t.no, 'writeoff', ctx, refresh) });
   }
   return null;
 }
 
-function resolve(no, action, ctx, paint) {
+function resolve(no, action, ctx, refresh) {
   const labels = {
     found: { title: `Mark towel #${no} found?`, sub: 'Returns it to the available inventory.', confirm: 'Mark found', kind: 'primary' },
     writeoff: { title: `Write off towel #${no}?`, sub: 'Retires it from service (lost for good / damaged). It stops counting toward your inventory.', confirm: 'Write off', kind: 'out' },
@@ -209,7 +243,7 @@ function resolve(no, action, ctx, paint) {
     onConfirm: () => managerGate(() => {
       store.resolveTowel(no, action);
       toast(`Towel #${no} updated`, 'ok');
-      paint();
+      refresh();
     }, { reason: 'Resolving towels is a manager action.' }),
   });
 }

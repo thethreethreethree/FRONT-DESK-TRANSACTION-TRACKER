@@ -598,6 +598,18 @@ class Store {
     this.save();
     return this.towelTracker;
   }
+  // Wipe the towel tracker to a clean slate (inventory list, admin resolutions,
+  // baseline) so the team can start fresh. The cash LEDGER is untouched — only the
+  // towel-inventory layer (which lives outside the hash chain). Re-enabling later
+  // sets a new baseline, so earlier test deposits won't reappear as "out".
+  resetTowelTracker() {
+    const had = (this.state.towels || []).length;
+    this.state.towels = [];
+    this.state.towelLog = [];
+    this.state.config.towelTracker = { enabled: false, startedAt: null };
+    this._audit('towel.reset', `Towel tracker reset — cleared ${had} towel${had === 1 ? '' : 's'} and returned to setup`, { clearedTowels: had });
+    this.save();
+  }
 
   // Add towel numbers to the master inventory. Accepts an array of numbers/strings;
   // de-duplicates against what's already there. Returns the list actually added.
