@@ -383,6 +383,9 @@ class Store {
       // towel tracker's "lost" state. Additive field — old entries lack it and still
       // verify; only set true on lost refunds.
       towelLost: !!entry.towelLost,
+      // The deposit transaction this refund settles, so a deposit and its refund
+      // are linked by number. Additive field — old entries lack it and still verify.
+      refundsSeq: entry.refundsSeq != null && entry.refundsSeq !== '' ? Number(entry.refundsSeq) : null,
       reversesId: entry.reversesId || null,
       prevHash,
     };
@@ -409,7 +412,7 @@ class Store {
     return e;
   }
 
-  addRefund({ itemTypeId, qty, unitAmount, amount, guest, room, pax, note, towelNo, towelLost }) {
+  addRefund({ itemTypeId, qty, unitAmount, amount, guest, room, pax, note, towelNo, towelLost, refundsSeq }) {
     const item = this.itemById(itemTypeId);
     const shift = this.ensureShift();
     const unit = unitAmount != null ? unitAmount : (item ? item.defaultAmount : 0);
@@ -418,7 +421,7 @@ class Store {
       kind: 'refund', direction: -1,
       itemTypeId, itemName: item ? item.name : 'Item',
       qty: qty || 1, unitAmount: unit, amount: amt,
-      guest, room, pax, note, towelNo, towelLost,
+      guest, room, pax, note, towelNo, towelLost, refundsSeq,
       shiftId: shift.id, shiftLabel: shift.label,
     });
     this._audit('refund.create', `Refund ₱${pesoPlain(e.amount)} · ${e.itemName} ×${e.qty} · ${e.guest || e.room || '—'}`,
@@ -538,25 +541,48 @@ class Store {
 
   // Net balance per guest (deposits − refunds attributed by name+room).
   _guestNets() {
+    // Deposits already settled by a linked refund, and reversed (voided) entries —
+    // excluded from "open deposits" so we don't offer to refund them again.
+    const linked = new Set();
+    const reversed = new Set();
+    for (const e of this.state.ledger) {
+      if (e.kind === 'refund' && e.refundsSeq != null) linked.add(e.refundsSeq);
+      if (e.reversesId) reversed.add(e.reversesId);
+    }
     const map = new Map();
     for (const e of this.state.ledger) {
       const g = (e.guest || '').toUpperCase().trim();
       const r = (e.room || '').toUpperCase().trim();
       if (!g && !r) continue;
       const key = `${g}|${r}`;
-      const cur = map.get(key) || { guest: e.guest || '', room: e.room || '', held: 0, items: {}, towels: [] };
+      const cur = map.get(key) || { guest: e.guest || '', room: e.room || '', held: 0, items: {}, towels: [], lastTs: '', openDeposits: [] };
       cur.held = round2(cur.held + e.amount * e.direction);
       const it = e.itemName || 'Item';
       cur.items[it] = round2((cur.items[it] || 0) + e.amount * e.direction);
-      // Towel tag(s) the guest left at deposit — surfaced on outstanding/refund so
-      // staff know which tag to expect back. Collected in this single pass.
-      if (e.kind === 'deposit' && isTowelItem(e.itemName)) {
-        const tn = entryTowelNo(e);
-        if (tn && !cur.towels.includes(tn)) cur.towels.push(tn);
+      if (e.kind === 'deposit') {
+        if (e.ts > cur.lastTs) cur.lastTs = e.ts; // most recent deposit time (for recency sort)
+        // Towel tag(s) the guest left at deposit — surfaced on outstanding/refund.
+        if (isTowelItem(e.itemName)) { const tn = entryTowelNo(e); if (tn && !cur.towels.includes(tn)) cur.towels.push(tn); }
+        // Open (refundable) deposit transactions for this guest — by number.
+        if (!linked.has(e.seq) && !reversed.has(e.id)) {
+          cur.openDeposits.push({ seq: e.seq, ts: e.ts, itemTypeId: e.itemTypeId, itemName: e.itemName, amount: e.amount, towelNo: entryTowelNo(e) });
+        }
       }
       map.set(key, cur);
     }
+    for (const v of map.values()) v.openDeposits.sort((a, b) => (a.ts < b.ts ? 1 : a.ts > b.ts ? -1 : b.seq - a.seq)); // newest first
     return Array.from(map.values());
+  }
+
+  // Look up a ledger entry by its sequence number (the visible transaction #).
+  entryBySeq(seq) { seq = Number(seq); return this.state.ledger.find((e) => e.seq === seq) || null; }
+
+  // Set of deposit transaction #s that are still refundable (open deposit of a guest
+  // who is currently outstanding). Drives the clickable transaction # in the ledger.
+  refundableDepositSeqs() {
+    const s = new Set();
+    for (const g of this._guestNets()) if (g.held > 0.005) for (const d of g.openDeposits) s.add(d.seq);
+    return s;
   }
 
   // Guests who still hold a deposit (owed back). Positive balances only.
@@ -660,13 +686,13 @@ class Store {
   // Settle a LOST towel: refund the held deposit (X) so the guest is cleared, and
   // keep an admin-entered charge (K, 0..X) as towel-loss income — so cash only
   // drops by X−K and COH stays exact. Books two reconciling entries + flags lost.
-  recordTowelLoss({ itemTypeId, guest, room, towelNo, deposit, charge }) {
+  recordTowelLoss({ itemTypeId, guest, room, towelNo, deposit, charge, refundsSeq }) {
     const X = round2(Number(deposit) || 0);
     const K = round2(Math.min(Math.max(Number(charge) || 0, 0), X));
     // 1) Refund the full held deposit, flagged as a lost towel (guest cleared).
     const refund = this.addRefund({
       itemTypeId, qty: 1, unitAmount: X, amount: X,
-      guest, room, towelNo, towelLost: true,
+      guest, room, towelNo, towelLost: true, refundsSeq,
       note: `Towel ${towelNo} reported LOST — deposit settled (kept ₱${pesoPlain(K)})`,
     });
     // 2) Book the kept charge back as towel-loss income so net cash out = X − K.

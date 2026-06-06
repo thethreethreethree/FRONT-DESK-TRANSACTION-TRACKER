@@ -1,6 +1,6 @@
 // views/refund.js — return a deposit (cash OUT). Pulls from outstanding deposits
 // and guards against refunding more than is held for that guest.
-import { el, peso, pesoPlain, toast, clear, isTowelItem } from '../util.js';
+import { el, peso, pesoPlain, toast, clear, isTowelItem, entryTowelNo } from '../util.js';
 import { store } from '../store.js';
 import { pageHead, confirmDialog, towelBadges } from '../components.js';
 
@@ -12,27 +12,50 @@ export function render(ctx) {
   let selected = items[0] || null;
   let qty = 1;
   let pickedGuest = null;
+  let targetSeq = null; // the deposit transaction # this refund settles (deposit ↔ refund link)
+
+  // Transaction-# badge shown at the top-right of the form once a deposit is targeted.
+  const txBadge = el('div', { class: 'tx-badge', style: 'display:none' });
+  function setTxBadge() {
+    if (targetSeq) { txBadge.style.display = ''; txBadge.textContent = 'Deposit #' + targetSeq; }
+    else { txBadge.style.display = 'none'; txBadge.textContent = ''; }
+  }
 
   const layout = el('div', { class: 'grid', style: 'grid-template-columns:340px 1fr;gap:18px;align-items:start' });
 
   // ---------------- left: outstanding guests ----------------
   const left = el('div', { class: 'card', style: 'position:sticky;top:16px' });
   left.appendChild(el('div', { class: 'card-h' }, [el('h3', { text: 'Outstanding' }), el('span', { class: 'sub', text: 'deposits held' })]));
-  const search = el('input', { class: 'input', placeholder: 'Search guest or room…', autocomplete: 'off' });
+  const search = el('input', { class: 'input', placeholder: 'Search guest, room or transaction #…', autocomplete: 'off' });
   left.appendChild(search);
   const listWrap = el('div', { class: 'mt', style: 'max-height:60vh;overflow:auto;display:flex;flex-direction:column;gap:8px' });
   left.appendChild(listWrap);
 
   function renderList() {
     clear(listWrap);
-    const q = search.value.toLowerCase().trim();
-    const data = store.outstandingByGuest().filter((g) =>
-      !q || g.guest.toLowerCase().includes(q) || g.room.toLowerCase().includes(q));
+    const q = search.value.trim();
+    const ql = q.toLowerCase();
+    const isNum = /^\d+$/.test(q);
+    // Most recent deposit first (recency-prioritised), then filter by guest/room/tx #.
+    let data = store.outstandingByGuest().slice().sort((a, b) => (a.lastTs < b.lastTs ? 1 : a.lastTs > b.lastTs ? -1 : 0));
+    if (q) {
+      data = data.filter((g) =>
+        g.guest.toLowerCase().includes(ql) || g.room.toLowerCase().includes(ql) ||
+        (isNum && (g.openDeposits || []).some((d) => String(d.seq).includes(q))));
+    }
     if (!data.length) {
-      listWrap.appendChild(el('div', { class: 'empty', style: 'padding:24px 8px' }, [el('div', { class: 'ic', text: '✓' }), el('p', { text: 'No outstanding deposits.' })]));
+      listWrap.appendChild(el('div', { class: 'empty', style: 'padding:24px 8px' }, [el('div', { class: 'ic', text: '✓' }), el('p', { text: q ? 'No matching deposits.' : 'No outstanding deposits.' })]));
       return;
     }
     for (const g of data) {
+      // Clickable transaction #s — click one to refund that specific deposit; click
+      // the card to refund the most recent. Highlight a # matched by the search.
+      const seqPills = (g.openDeposits || []).slice(0, 8).map((d) => el('span', {
+        class: 'tag dep seq-pill' + (isNum && String(d.seq).includes(q) ? ' match' : ''),
+        title: 'Refund deposit #' + d.seq,
+        onClick: (ev) => { ev.stopPropagation(); pickDeposit(d, g); toast(`Loaded deposit #${d.seq}`, 'ok'); },
+        text: '#' + d.seq,
+      }));
       const card = el('div', {
         class: 'guest-card', style: 'cursor:pointer',
         onClick: () => pick(g),
@@ -42,6 +65,7 @@ export function render(ctx) {
           el('div', { class: 'g-room', text: g.room ? `Room ${g.room}` : '' }),
           el('div', { class: 'g-items', text: Object.entries(g.items).filter(([, v]) => v > 0).map(([k, v]) => `${k} ₱${pesoPlain(v)}`).join(' · ') }),
           towelBadges(g.towels),
+          seqPills.length ? el('div', { class: 'flex gap aic', style: 'flex-wrap:wrap;gap:5px;margin-top:6px' }, seqPills) : null,
         ]),
         el('div', { class: 'g-held', text: peso(g.held) }),
       ]);
@@ -138,30 +162,42 @@ export function render(ctx) {
     previewVal,
   ]);
 
-  function pick(g) {
-    pickedGuest = g;
-    guestInput.value = g.guest;
-    roomInput.value = g.room;
-    // default qty/amount to first held item if matches a type
-    const heldItemName = Object.entries(g.items).find(([, v]) => v > 0);
-    if (heldItemName) {
-      const match = items.find((it) => it.name === heldItemName[0]);
+  // Target a specific deposit transaction: mirror its item, amount and towel #, and
+  // link the refund to it (refundsSeq) so deposit and refund share the same #.
+  function pickDeposit(dep, g) {
+    pickedGuest = g || null;
+    targetSeq = dep ? dep.seq : null;
+    if (g) { guestInput.value = g.guest; roomInput.value = g.room; }
+    if (dep) {
+      const match = items.find((it) => it.id === dep.itemTypeId) || items.find((it) => it.name === dep.itemName);
+      if (match) { selected = match; paintChips(); }
+      qty = 1; qtyInput.value = 1;
+      unitInput.value = dep.amount;            // refund exactly this deposit's amount
+      towelInput.value = dep.towelNo || '';
+    } else if (g) {
+      // No specific deposit — fall back to the most-held item type for this guest.
+      const heldItemName = Object.entries(g.items).find(([, v]) => v > 0);
+      const match = heldItemName && items.find((it) => it.name === heldItemName[0]);
       if (match) { selected = match; unitInput.value = match.defaultAmount; paintChips(); }
+      towelInput.value = (g.towels || []).join(', ');
     }
-    // Auto-fill the towel tag(s) this guest left at deposit so the refund mirrors
-    // the deposit. Fills all of them (full check-out is the common case); staff can
-    // trim the field if only some towels actually came back.
-    const tags = g.towels || [];
-    towelInput.value = tags.join(', ');
-    towelHint.textContent = tags.length
-      ? 'auto-filled from deposit — edit if only some came back'
-      : 'tag number on the returned towel';
+    towelHint.textContent = towelInput.value ? 'auto-filled from deposit — edit if only some came back' : 'tag number on the returned towel';
+    setTxBadge();
     syncTowel();
     updatePreview();
-    toast(`Loaded ${g.guest}`, 'ok');
   }
 
-  form.appendChild(el('div', { class: 'field' }, [el('label', { text: 'Item being returned' }), chipWrap]));
+  // Clicking a guest targets their MOST RECENT open deposit transaction.
+  function pick(g) {
+    const dep = (g.openDeposits && g.openDeposits[0]) || null;
+    pickDeposit(dep, g);
+    toast(dep ? `Loaded ${g.guest} · deposit #${dep.seq}` : `Loaded ${g.guest}`, 'ok');
+  }
+
+  form.appendChild(el('div', { class: 'field' }, [
+    el('div', { class: 'flex between aic', style: 'margin-bottom:8px;gap:10px' }, [el('label', { text: 'Item being returned', style: 'margin:0' }), txBadge]),
+    chipWrap,
+  ]));
   form.appendChild(el('div', { class: 'row3' }, [
     el('div', { class: 'field' }, [el('label', { text: 'Quantity' }), stepper]),
     el('div', { class: 'field' }, [el('label', { text: 'Unit amount (₱)' }), unitInput]),
@@ -181,8 +217,9 @@ export function render(ctx) {
       itemTypeId: selected.id, qty, unitAmount: unit(), amount: amount(),
       guest: guestInput.value, room: roomInput.value, note: noteInput.value,
       towelNo: isTowelItem(selected.name) ? towelInput.value : '',
+      refundsSeq: targetSeq,
     });
-    toast(`Refund recorded · ${peso(e.amount)} · COH now ${peso(store.coh())}`, 'ok');
+    toast(`Refund recorded · ${peso(e.amount)}${targetSeq ? ` · deposit #${targetSeq}` : ''} · COH now ${peso(store.coh())}`, 'ok');
     ctx.navigate('dashboard');
   }
 
@@ -190,6 +227,7 @@ export function render(ctx) {
     store.recordTowelLoss({
       itemTypeId: selected.id, guest: guestInput.value, room: roomInput.value,
       towelNo: towelInput.value.trim(), deposit: amount(), charge: chargeVal(),
+      refundsSeq: targetSeq,
     });
     toast(`Towel ${towelInput.value.trim()} marked lost · COH now ${peso(store.coh())}`, 'ok');
     ctx.navigate('dashboard');
@@ -226,5 +264,18 @@ export function render(ctx) {
   layout.appendChild(form);
   root.appendChild(layout);
   paintChips(); updatePreview(); renderList(); syncTowel();
+
+  // Arrived from the ledger's clickable transaction # → target that deposit directly.
+  const wantSeq = ctx.args && ctx.args.depositSeq;
+  if (wantSeq != null) {
+    const dep = store.entryBySeq(wantSeq);
+    if (dep && dep.kind === 'deposit') {
+      const gk = (s) => (s || '').toUpperCase().trim();
+      const g = store.outstandingByGuest().find((x) => gk(x.guest) === gk(dep.guest) && gk(x.room) === gk(dep.room))
+        || { guest: dep.guest, room: dep.room, held: dep.amount, items: {}, towels: [], openDeposits: [] };
+      pickDeposit({ seq: dep.seq, ts: dep.ts, itemTypeId: dep.itemTypeId, itemName: dep.itemName, amount: dep.amount, towelNo: entryTowelNo(dep) }, g);
+      toast(`Refunding deposit #${dep.seq} · ${dep.guest || dep.room || ''}`, 'ok');
+    }
+  }
   return root;
 }

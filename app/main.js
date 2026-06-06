@@ -28,6 +28,7 @@ const VIEWS = {
 const AUTO_REFRESH = new Set(['dashboard']);
 
 let current = 'dashboard';
+let navArgs = null; // one-shot payload passed to the next view's render (e.g. { depositSeq })
 const app = document.getElementById('app');
 
 async function mount() {
@@ -246,14 +247,14 @@ function addNav(nav, id) {
   }, [el('span', { class: 'ic', text: v.icon }), el('span', { text: v.label })]));
 }
 
-function navigate(id) {
+function navigate(id, args) {
   if (VIEWS[id].mgr && !store.isManager()) {
-    managerGate(() => { current = id; renderShell(); }, { reason: 'This area is admin only.' });
+    managerGate(() => { navArgs = args || null; current = id; renderShell(); }, { reason: 'This area is admin only.' });
     return;
   }
+  navArgs = args || null;
   current = id;
-  // update active states without full reshell to keep it snappy
-  $('.sidebar') ? renderShell() : renderShell();
+  renderShell();
 }
 
 function renderCurrent() {
@@ -263,7 +264,8 @@ function renderCurrent() {
   // manager left `current` on Settings before a staff signed in on this device).
   if (VIEWS[current] && VIEWS[current].mgr && !store.isManager()) current = 'dashboard';
   clear(main);
-  const ctx = { navigate, store };
+  const args = navArgs; navArgs = null; // consume once, so a re-render doesn't re-trigger it
+  const ctx = { navigate, store, args };
   try {
     main.appendChild(VIEWS[current].render(ctx));
   } catch (err) {

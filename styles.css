@@ -273,6 +273,13 @@ tr.is-reversal { background: repeating-linear-gradient(45deg, transparent, trans
 .towel-tab .tab-count { font-family: var(--font-mono); font-size: .76rem; background: rgba(0,0,0,.06); padding: 1px 7px; border-radius: 999px; }
 .towel-tab.active .tab-count { background: var(--gold); color: #fff; }
 .seq { font-family: var(--font-mono); color: var(--muted); font-size: .8rem; }
+.seq-link { display: inline-flex; align-items: center; gap: 5px; border: 1px solid var(--out); background: var(--out-50); color: var(--out-700); border-radius: 999px; padding: 3px 9px; cursor: pointer; font-weight: 600; }
+.seq-link:hover { background: var(--out); color: #fff; }
+.seq-link .seq-cta { font-size: .8rem; }
+.tx-badge { font-family: var(--font-mono); font-weight: 700; font-size: .82rem; color: var(--in-700); background: var(--in-50); border: 1px solid var(--in); border-radius: 999px; padding: 4px 12px; white-space: nowrap; }
+.seq-pill { cursor: pointer; font-family: var(--font-mono); }
+.seq-pill:hover { background: var(--in); color: #fff; }
+.seq-pill.match { outline: 2px solid var(--gold); }
 
 /* filters bar */
 .filters { display: flex; gap: 10px; flex-wrap: wrap; align-items: center; margin-bottom: 14px; }

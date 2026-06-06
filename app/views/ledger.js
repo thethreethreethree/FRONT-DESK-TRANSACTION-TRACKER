@@ -36,6 +36,8 @@ export function render(ctx) {
     // Which entries have been voided — O(1) lookups instead of O(n) per row.
     const reversedIds = new Set();
     for (const e of store.ledger) if (e.reversesId) reversedIds.add(e.reversesId);
+    // Deposit transaction #s that can still be refunded — their # becomes clickable.
+    const refundable = store.refundableDepositSeqs();
     const q = search.value.toLowerCase().trim();
     let rows = store.ledger.slice().reverse();
     rows = rows.filter((e) => {
@@ -67,10 +69,13 @@ export function render(ctx) {
       const reversed = reversedIds.has(e.id);
       const tr = el('tr', { class: (reversed ? 'voided ' : '') + (e.kind === 'reversal' ? 'is-reversal' : '') });
       tr.append(
-        el('td', {}, el('span', { class: 'seq', text: '#' + e.seq })),
+        el('td', {}, seqCell(e, refundable, reversed, ctx)),
         el('td', { text: fmtDateTime(e.ts) }),
         el('td', {}, el('span', { class: `tag ${e.kind === 'deposit' ? 'dep' : e.kind === 'refund' ? 'ref' : e.kind === 'adjustment' ? 'shift' : 'rev'}`, text: e.kind })),
-        el('td', { text: `${e.itemName || '—'}${e.qty ? ' ×' + e.qty : ''}` }),
+        el('td', {}, [
+          el('span', { text: `${e.itemName || '—'}${e.qty ? ' ×' + e.qty : ''}` }),
+          e.refundsSeq ? el('span', { class: 'muted', style: 'margin-left:6px;font-size:.78rem', title: 'refund of deposit #' + e.refundsSeq, text: '↩ #' + e.refundsSeq }) : null,
+        ]),
         el('td', {}, towelCell(e)),
         el('td', {}, [el('strong', { text: e.guest || '—' }), e.room ? el('span', { class: 'muted', text: ' · ' + e.room }) : null]),
         el('td', {}, [el('span', { text: e.staff }), e.staffRole === 'manager' ? el('span', { class: 'tag role', style: 'margin-left:6px', text: 'mgr' }) : null]),
@@ -90,6 +95,18 @@ export function render(ctx) {
   [search, typeSel, shiftSel, dateInput].forEach((c) => c.addEventListener('input', paint));
   paint();
   return root;
+}
+
+// Transaction # cell. For a deposit that still has an open balance (no refund yet),
+// the # is a clickable link that opens the refund form pre-filled for that deposit.
+function seqCell(e, refundable, reversed, ctx) {
+  if (e.kind === 'deposit' && !reversed && refundable.has(e.seq)) {
+    return el('button', {
+      class: 'seq seq-link', title: 'Issue a refund for this deposit',
+      onClick: () => ctx.navigate('refund', { depositSeq: e.seq }),
+    }, [el('span', { text: '#' + e.seq }), el('span', { class: 'seq-cta', text: '↩' })]);
+  }
+  return el('span', { class: 'seq', text: '#' + e.seq });
 }
 
 // Towel tag cell — a badge when the entry has a number (explicit field or parsed
