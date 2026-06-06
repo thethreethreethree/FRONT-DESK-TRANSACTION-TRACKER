@@ -148,12 +148,13 @@ export function render(ctx) {
       const match = items.find((it) => it.name === heldItemName[0]);
       if (match) { selected = match; unitInput.value = match.defaultAmount; paintChips(); }
     }
-    // Surface the towel tag(s) this guest left at deposit so staff can confirm the
-    // right towel is coming back. Pre-fill when there's exactly one.
+    // Auto-fill the towel tag(s) this guest left at deposit so the refund mirrors
+    // the deposit. Fills all of them (full check-out is the common case); staff can
+    // trim the field if only some towels actually came back.
     const tags = g.towels || [];
-    towelInput.value = tags.length === 1 ? tags[0] : '';
+    towelInput.value = tags.join(', ');
     towelHint.textContent = tags.length
-      ? `left at deposit: ${tags.join(', ')}`
+      ? 'auto-filled from deposit — edit if only some came back'
       : 'tag number on the returned towel';
     syncTowel();
     updatePreview();
