@@ -9,7 +9,7 @@ export function render(ctx) {
   root.appendChild(pageHead('Ledger', 'Every transaction, permanently recorded · COH = ' + peso(store.coh()), null));
 
   const filters = el('div', { class: 'filters' });
-  const search = el('input', { class: 'input search', placeholder: 'Search guest, room, note, staff…', autocomplete: 'off' });
+  const search = el('input', { class: 'input search', placeholder: 'Search # (e.g. 16332), guest, room, note, staff…', autocomplete: 'off' });
   const typeSel = el('select', {}, [
     el('option', { value: '', text: 'All types' }),
     el('option', { value: 'deposit', text: 'Deposits' }),
@@ -45,7 +45,9 @@ export function render(ctx) {
       if (shiftSel.value && e.shiftLabel !== shiftSel.value) return false;
       if (dateInput.value && e.businessDate !== dateInput.value) return false;
       if (q) {
-        const hay = `${e.guest} ${e.room} ${e.note} ${e.staff} ${e.itemName} ${entryTowelNo(e)}`.toLowerCase();
+        // Searchable by transaction # (its own seq, and the deposit # a refund
+        // settles — so searching a deposit number surfaces its refund too).
+        const hay = `#${e.seq} ${e.seq} ${e.refundsSeq ? '#' + e.refundsSeq + ' ' + e.refundsSeq + ' ' : ''}${e.guest} ${e.room} ${e.note} ${e.staff} ${e.itemName} ${entryTowelNo(e)}`.toLowerCase();
         if (!hay.includes(q)) return false;
       }
       return true;
