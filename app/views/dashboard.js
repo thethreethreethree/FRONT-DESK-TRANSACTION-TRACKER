@@ -1,5 +1,5 @@
 // views/dashboard.js — live COH, today's flow, item breakdown, quick actions.
-import { el, peso, pesoPlain, fmtTime, businessDate, entryTowelNo } from '../util.js';
+import { el, peso, pesoPlain, fmtTime, fmtDateTime, businessDate, entryTowelNo } from '../util.js';
 import { store } from '../store.js';
 import { pageHead } from '../components.js';
 
@@ -94,6 +94,9 @@ export function render(ctx) {
   ]);
   root.appendChild(quick);
 
+  // ---- towel tracker ----
+  root.appendChild(towelCard(ctx));
+
   // ---- item breakdown + recent activity ----
   const twoCol = el('div', { class: 'grid cols-2 mt-lg' });
 
@@ -152,6 +155,57 @@ export function render(ctx) {
 
   root.appendChild(twoCol);
   return root;
+}
+
+// Towel tracker summary for the dashboard: headline counts + who currently has a
+// towel out (guest/room/time/staff). Prompts setup when the tracker is off.
+function towelCard(ctx) {
+  const card = el('div', { class: 'card mt-lg' }, [
+    el('div', { class: 'card-h' }, [
+      el('h3', { text: '🧺 Towel tracker' }),
+      el('button', { class: 'btn ghost sm', text: 'Open tracker →', onClick: () => ctx.navigate('towels') }),
+    ]),
+  ]);
+  if (!store.towelTracker.enabled) {
+    card.appendChild(el('div', { class: 'flex between aic wrap gap' }, [
+      el('p', { class: 'muted', style: 'margin:0', text: 'Track each physical towel — available, out with a guest, or lost. Set up your inventory to begin.' }),
+      el('button', { class: 'btn primary', text: 'Set up towel tracker', onClick: () => ctx.navigate('towels') }),
+    ]));
+    return card;
+  }
+
+  const s = store.towelSummary();
+  const chip = (k, v, color) => el('div', { class: 'stat', style: 'min-width:96px' }, [
+    el('span', { class: 'k', text: k }), el('span', { class: 'v', style: `color:${color};font-size:1.5rem`, text: String(v) }),
+  ]);
+  card.appendChild(el('div', { class: 'flex gap wrap', style: 'margin-bottom:6px' }, [
+    chip('Available', s.available, 'var(--in-700)'),
+    chip('Out', s.out, 'var(--gold-700)'),
+    chip('Lost', s.lost, 'var(--out-700)'),
+    chip('In service', s.inService, 'var(--ink)'),
+  ]));
+
+  const outRows = store.towelStatus().filter((t) => t.status === 'out').slice(0, 6);
+  if (outRows.length) {
+    const list = el('div', { class: 'mt' });
+    for (const t of outRows) {
+      const h = t.holder || {};
+      list.appendChild(el('div', { class: 'flex between aic', style: 'padding:8px 2px;border-bottom:1px solid var(--line)' }, [
+        el('div', { class: 'flex gap aic', style: 'gap:8px' }, [
+          el('span', { class: 'tag towel', text: t.no }),
+          el('strong', { text: h.guest || '—' }),
+          h.room ? el('span', { class: 'muted', text: `Rm ${h.room}` }) : null,
+        ]),
+        el('div', { class: 'muted', style: 'font-size:.76rem', text: `${h.staff || '—'} · ${fmtDateTime(h.ts)}` }),
+      ]));
+    }
+    card.appendChild(list);
+    if (s.out > outRows.length) card.appendChild(el('div', { class: 'muted', style: 'font-size:.8rem;margin-top:8px', text: `+${s.out - outRows.length} more out · open the tracker for the full list.` }));
+  } else {
+    card.appendChild(el('p', { class: 'muted', style: 'margin:8px 0 0', text: 'No towels currently out.' }));
+  }
+  if (s.lost) card.appendChild(el('div', { class: 'pill-warn mt', html: `<strong>${s.lost}</strong> lost towel${s.lost === 1 ? '' : 's'} need admin review (Found / Write-off).` }));
+  return card;
 }
 
 function emptyState(icon, msg) {

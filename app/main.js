@@ -9,6 +9,7 @@ import * as deposit from './views/deposit.js';
 import * as refund from './views/refund.js';
 import * as outstanding from './views/outstanding.js';
 import * as ledger from './views/ledger.js';
+import * as towels from './views/towels.js';
 import * as activity from './views/activity.js';
 
 const LOGO_LIGHT = 'brand_assets/logo-el-nido.png'; // black wordmark → invert for dark bg
@@ -19,6 +20,7 @@ const VIEWS = {
   refund: { label: 'New Refund', icon: '↩', render: refund.render },
   outstanding: { label: 'Outstanding', icon: '🧾', render: outstanding.render },
   ledger: { label: 'Ledger', icon: '📜', render: ledger.render },
+  towels: { label: 'Towel Tracker', icon: '🧺', render: towels.render },
   shifts: { label: 'Shifts', icon: '🕑', render: renderShifts },
   activity: { label: 'Activity Log', icon: '🪵', mgr: true, render: activity.render },
   settings: { label: 'Settings', icon: '⚙', mgr: true, render: renderSettings },
@@ -203,7 +205,7 @@ function renderSidebar() {
     el('img', { class: 'logo', src: LOGO_LIGHT, alt: 'Frendz', style: 'filter:brightness(0) invert(1)' }),
   ]));
   const nav = el('nav', { class: 'nav' });
-  const order = ['dashboard', 'deposit', 'refund', 'outstanding', 'ledger', 'shifts'];
+  const order = ['dashboard', 'deposit', 'refund', 'outstanding', 'ledger', 'towels', 'shifts'];
   for (const id of order) addNav(nav, id);
   // Manager-only tools (Activity Log, Settings) are hidden entirely from staff —
   // staff have no access to admin features. (navigate() also gates, as a backstop.)

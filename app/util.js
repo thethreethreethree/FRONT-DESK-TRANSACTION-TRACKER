@@ -127,6 +127,28 @@ export function entryTowelNo(e) {
   return '';
 }
 
+// Split a towel-number string into individual tag tokens for inventory matching.
+// One deposit can release several towels: "#87/97" -> ["87","97"], "1, 2 and 3"
+// -> ["1","2","3"], "#B-094" -> ["B-094"]. A token must contain a digit, so prose
+// the note parser may have caught ("not sure", "no number yet") is dropped here.
+export function towelTokens(str) {
+  if (!str) return [];
+  const out = [];
+  const parts = String(str).replace(/#/g, ' ').replace(/\band\b/gi, ' ').split(/[\/,]+|\s+/);
+  for (const p of parts) {
+    const t = p.trim().toUpperCase();
+    if (t && t.length <= 12 && /\d/.test(t) && !out.includes(t)) out.push(t);
+  }
+  return out;
+}
+
+// Normalise a single towel number the same way towelTokens does (for lookups and
+// for the inventory master list), so "#7" / " 7 " / "7" all key to "7".
+export function normTowelNo(no) {
+  const t = towelTokens(no);
+  return t.length ? t[0] : String(no || '').trim().toUpperCase();
+}
+
 // ---------------------------------------------------------------------------
 // Toast notifications
 // ---------------------------------------------------------------------------

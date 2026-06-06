@@ -13,7 +13,7 @@
 // keep a localStorage fallback for private-mode / no-IDB and migrate old data.
 // GitHub repo holds versioned JSON backups (git history = durable audit trail).
 
-import { sha256, stableStringify, uid, nowISO, businessDate, guessShift, pesoPlain, isTowelItem, entryTowelNo } from './util.js';
+import { sha256, stableStringify, uid, nowISO, businessDate, guessShift, pesoPlain, isTowelItem, entryTowelNo, towelTokens, normTowelNo } from './util.js';
 
 const STORAGE_KEY = 'fdtt_state_v1';
 const SESSION_KEY = 'fdtt_session'; // device-local signed-in session (not exported)
@@ -75,12 +75,18 @@ function defaultState() {
       requireStaffPin: false,
       createdAt: nowISO(),
       github: { owner: '', repo: '', branch: 'main', path: 'data/ledger-backup.json', enabled: false },
+      // Towel tracker: a clean, going-forward physical-towel inventory. `startedAt`
+      // is the baseline — only towel deposits/refunds from this moment on move the
+      // inventory, because historical refunds never recorded a towel number.
+      towelTracker: { enabled: false, startedAt: null },
     },
     itemTypes: [],
     staff: [],
     shifts: [],
     ledger: [],
     audit: [], // append-only, hash-chained activity log (who / what / when)
+    towels: [],   // master towel inventory: { no, createdAt, createdBy }
+    towelLog: [], // admin resolutions for lost/written-off towels: { id, no, action, ts, by, note }
   };
 }
 
@@ -123,6 +129,9 @@ class Store {
     this.state = Object.assign(defaultState(), this.state);
     this.state.config = Object.assign(defaultState().config, this.state.config || {});
     if (!Array.isArray(this.state.audit)) this.state.audit = [];
+    if (!Array.isArray(this.state.towels)) this.state.towels = [];
+    if (!Array.isArray(this.state.towelLog)) this.state.towelLog = [];
+    if (!this.state.config.towelTracker) this.state.config.towelTracker = { enabled: false, startedAt: null };
     this.verifyIntegrity();
     this.verifyAuditIntegrity();
     if (this._migratedFromLS) { this._migratedFromLS = false; this._persist(); }
@@ -359,6 +368,10 @@ class Store {
       // entryTowelNo). New entries hash WITH this key; pre-existing entries have
       // no `towelNo` key, so their stored hashes still verify (chain unbroken).
       towelNo: isTowelItem(entry.itemName) ? (entry.towelNo || '').toString().trim() : '',
+      // Marks a refund where the towel was NOT returned (reported lost). Drives the
+      // towel tracker's "lost" state. Additive field — old entries lack it and still
+      // verify; only set true on lost refunds.
+      towelLost: !!entry.towelLost,
       reversesId: entry.reversesId || null,
       prevHash,
     };
@@ -385,7 +398,7 @@ class Store {
     return e;
   }
 
-  addRefund({ itemTypeId, qty, unitAmount, amount, guest, room, pax, note, towelNo }) {
+  addRefund({ itemTypeId, qty, unitAmount, amount, guest, room, pax, note, towelNo, towelLost }) {
     const item = this.itemById(itemTypeId);
     const shift = this.ensureShift();
     const unit = unitAmount != null ? unitAmount : (item ? item.defaultAmount : 0);
@@ -394,7 +407,7 @@ class Store {
       kind: 'refund', direction: -1,
       itemTypeId, itemName: item ? item.name : 'Item',
       qty: qty || 1, unitAmount: unit, amount: amt,
-      guest, room, pax, note, towelNo,
+      guest, room, pax, note, towelNo, towelLost,
       shiftId: shift.id, shiftLabel: shift.label,
     });
     this._audit('refund.create', `Refund ₱${pesoPlain(e.amount)} · ${e.itemName} ×${e.qty} · ${e.guest || e.room || '—'}`,
@@ -564,6 +577,156 @@ class Store {
     };
   }
 
+  // ---------------------------------------------------- towel tracker (inventory)
+  // A physical-towel inventory layered ON TOP of the cash ledger. The ledger stays
+  // the financial source of truth; this projects each Towel deposit/refund (which
+  // carry a tag number) into per-towel state: available → out → back/lost. It is a
+  // CLEAN, going-forward system: only events at/after `startedAt` count, because
+  // historical refunds never recorded a towel number (see the import history).
+  get towelTracker() { return this.state.config.towelTracker || { enabled: false, startedAt: null }; }
+  towelBaseline() { const t = this.towelTracker; return t.enabled ? (t.startedAt || null) : null; }
+  enableTowelTracker() {
+    if (this.towelTracker.enabled) return this.towelTracker;
+    this.state.config.towelTracker = { enabled: true, startedAt: nowISO() };
+    this._audit('towel.enable', 'Towel tracker enabled — inventory tracking starts now', { startedAt: this.state.config.towelTracker.startedAt });
+    this.save();
+    return this.towelTracker;
+  }
+
+  // Add towel numbers to the master inventory. Accepts an array of numbers/strings;
+  // de-duplicates against what's already there. Returns the list actually added.
+  addTowels(nos) {
+    const have = new Set((this.state.towels || []).map((t) => t.no));
+    const added = [];
+    for (const raw of nos || []) {
+      const no = normTowelNo(raw);
+      if (!no || have.has(no)) continue;
+      have.add(no);
+      this.state.towels.push({ no, createdAt: nowISO(), createdBy: this.session ? this.session.name : 'system' });
+      added.push(no);
+    }
+    if (added.length) {
+      this._audit('towel.add', `Added ${added.length} towel${added.length > 1 ? 's' : ''} to inventory`, { count: added.length, sample: added.slice(0, 50) });
+      this.save();
+    }
+    return added;
+  }
+  // Hard-remove a towel from the master list (for a typo at setup). History is kept.
+  removeTowel(no) {
+    no = normTowelNo(no);
+    const i = (this.state.towels || []).findIndex((t) => t.no === no);
+    if (i < 0) return false;
+    this.state.towels.splice(i, 1);
+    this._audit('towel.remove', `Removed towel #${no} from inventory`, { no });
+    this.save();
+    return true;
+  }
+  // Resolve a lost (or any) towel: 'found' returns it to service, 'writeoff' retires
+  // it permanently. Inventory-only (no cash); the cash was settled at refund time.
+  resolveTowel(no, action, { note = '' } = {}) {
+    no = normTowelNo(no);
+    if (!['found', 'writeoff', 'restore'].includes(action)) return null;
+    const ev = { id: uid('twl'), no, action, ts: nowISO(), by: this.session ? this.session.name : 'system', note: String(note || '').trim() };
+    this.state.towelLog.push(ev);
+    const verb = action === 'found' ? 'marked FOUND (back in service)' : action === 'writeoff' ? 'WRITTEN OFF (retired)' : 'restored';
+    this._audit('towel.' + action, `Towel #${no} ${verb}${ev.note ? ' · ' + ev.note : ''}`, { no, action });
+    this.save();
+    return ev;
+  }
+
+  // Settle a LOST towel: refund the held deposit (X) so the guest is cleared, and
+  // keep an admin-entered charge (K, 0..X) as towel-loss income — so cash only
+  // drops by X−K and COH stays exact. Books two reconciling entries + flags lost.
+  recordTowelLoss({ itemTypeId, guest, room, towelNo, deposit, charge }) {
+    const X = round2(Number(deposit) || 0);
+    const K = round2(Math.min(Math.max(Number(charge) || 0, 0), X));
+    // 1) Refund the full held deposit, flagged as a lost towel (guest cleared).
+    const refund = this.addRefund({
+      itemTypeId, qty: 1, unitAmount: X, amount: X,
+      guest, room, towelNo, towelLost: true,
+      note: `Towel ${towelNo} reported LOST — deposit settled (kept ₱${pesoPlain(K)})`,
+    });
+    // 2) Book the kept charge back as towel-loss income so net cash out = X − K.
+    if (K > 0) {
+      const shift = this.currentOpenShift();
+      this._append({
+        kind: 'adjustment', direction: +1, itemTypeId: null, itemName: 'Towel loss charge',
+        qty: null, unitAmount: K, amount: K, guest: '', room: '', pax: null,
+        note: `Towel ${towelNo} loss charge kept (${guest || room || '—'})`,
+        shiftId: shift ? shift.id : null, shiftLabel: shift ? shift.label : null,
+      });
+    }
+    this._audit('towel.lost',
+      `Towel #${towelNo} LOST · ${guest || room || '—'} · kept ₱${pesoPlain(K)} of ₱${pesoPlain(X)} (guest got ₱${pesoPlain(round2(X - K))})`,
+      { towelNo, guest, room, deposit: X, charge: K, refundedToGuest: round2(X - K) });
+    return refund;
+  }
+
+  // The live inventory projection. For each towel (master list ∪ any tag seen in
+  // post-baseline events) returns { no, status, holder, registered, lastEvent }.
+  // status: available | out | lost | writeoff. Pure read — safe to call per render.
+  towelStatus() {
+    const baseline = this.towelBaseline();
+    const events = new Map(); // no -> [{ type, ts, seq, guest, room, staff }]
+    if (baseline) {
+      for (const e of this.state.ledger) {
+        if (!isTowelItem(e.itemName)) continue;
+        if (e.kind !== 'deposit' && e.kind !== 'refund') continue;
+        if (e.ts < baseline) continue;
+        const toks = towelTokens(entryTowelNo(e));
+        if (!toks.length) continue;
+        const type = e.kind === 'deposit' ? 'out' : (e.towelLost ? 'lost' : 'in');
+        for (const no of toks) {
+          if (!events.has(no)) events.set(no, []);
+          events.get(no).push({ type, ts: e.ts, seq: e.seq, guest: e.guest, room: e.room, staff: e.staff });
+        }
+      }
+    }
+    // Latest admin resolution per towel.
+    const res = new Map();
+    for (const r of (this.state.towelLog || [])) {
+      const cur = res.get(r.no);
+      if (!cur || r.ts > cur.ts) res.set(r.no, r);
+    }
+    const masterSet = new Set((this.state.towels || []).map((t) => t.no));
+    const allNos = new Set([...masterSet, ...events.keys()]);
+    const out = [];
+    for (const no of allNos) {
+      const evs = (events.get(no) || []).slice().sort((a, b) => a.seq - b.seq);
+      const last = evs[evs.length - 1] || null;
+      let status = 'available';
+      let holder = null;
+      if (last) {
+        if (last.type === 'out') { status = 'out'; holder = { guest: last.guest, room: last.room, ts: last.ts, staff: last.staff }; }
+        else if (last.type === 'lost') status = 'lost';
+        else status = 'available';
+      }
+      const r = res.get(no);
+      if (r && (!last || r.ts >= last.ts)) {
+        if (r.action === 'found' || r.action === 'restore') { status = 'available'; holder = null; }
+        else if (r.action === 'writeoff') { status = 'writeoff'; holder = null; }
+      }
+      out.push({ no, status, holder, registered: masterSet.has(no), lastEvent: last });
+    }
+    out.sort((a, b) => {
+      const na = parseInt(a.no, 10), nb = parseInt(b.no, 10);
+      if (!isNaN(na) && !isNaN(nb) && na !== nb) return na - nb;
+      return String(a.no).localeCompare(String(b.no));
+    });
+    return out;
+  }
+  // Headline counts for the dashboard card. `inService` excludes written-off towels.
+  towelSummary() {
+    const s = this.towelStatus();
+    const c = { available: 0, out: 0, lost: 0, writeoff: 0, unregistered: 0 };
+    for (const t of s) {
+      c[t.status] = (c[t.status] || 0) + 1;
+      if (!t.registered && t.status !== 'writeoff') c.unregistered += 1;
+    }
+    c.inService = c.available + c.out + c.lost;
+    return c;
+  }
+
   // ------------------------------------------------------------- integrity
   verifyIntegrity() {
     let prev = GENESIS;
@@ -679,6 +842,9 @@ class Store {
     this.state = Object.assign(defaultState(), s);
     this.state.config = Object.assign(defaultState().config, s.config || {});
     if (!Array.isArray(this.state.audit)) this.state.audit = [];
+    if (!Array.isArray(this.state.towels)) this.state.towels = [];
+    if (!Array.isArray(this.state.towelLog)) this.state.towelLog = [];
+    if (!this.state.config.towelTracker) this.state.config.towelTracker = { enabled: false, startedAt: null };
     this.verifyIntegrity();
     this.verifyAuditIntegrity();
     this._audit('data.import', `Imported backup (${this.state.ledger.length} ledger entries)`, { entries: this.state.ledger.length });

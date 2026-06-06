@@ -81,22 +81,60 @@ export function render(ctx) {
   const towelInput = el('input', { class: 'input', placeholder: 'e.g. 42', autocomplete: 'off' });
   const towelHint = el('div', { class: 'hint', text: 'tag number on the returned towel' });
   const towelField = el('div', { class: 'field' }, [el('label', { text: 'Towel number' }), towelInput, towelHint]);
-  function syncTowel() { towelField.style.display = (selected && isTowelItem(selected.name)) ? '' : 'none'; }
+
+  // Lost-towel path: when the towel is NOT returned, staff flag it and the manager
+  // chooses how much of the deposit to keep (loss charge). Guest gets the rest back.
+  const lostCheck = el('input', { type: 'checkbox' });
+  const chargeInput = el('input', { class: 'input', type: 'number', min: '0', step: '50', placeholder: '0.00', style: 'max-width:200px' });
+  chargeInput.addEventListener('input', updatePreview);
+  const chargeField = el('div', { class: 'field', style: 'margin-top:8px' }, [
+    el('label', { text: 'Loss charge to keep (₱)' }), chargeInput,
+    el('div', { class: 'hint', text: 'kept by the hostel for the lost towel; the rest is returned to the guest' }),
+  ]);
+  const lostField = el('div', { class: 'field', style: 'background:var(--out-50);border:1px solid var(--out);border-radius:10px;padding:10px 12px' }, [
+    el('label', { class: 'flex aic gap', style: 'cursor:pointer;margin:0' }, [lostCheck, 'Towel not returned (reported lost)']),
+    chargeField,
+  ]);
+  function syncTowel() {
+    const isTowel = !!(selected && isTowelItem(selected.name));
+    towelField.style.display = isTowel ? '' : 'none';
+    lostField.style.display = isTowel ? '' : 'none';
+    if (!isTowel) lostCheck.checked = false;
+    syncLost();
+  }
+  function syncLost() {
+    chargeField.style.display = lostCheck.checked ? '' : 'none';
+    if (lostCheck.checked && chargeInput.value === '') chargeInput.value = amount(); // default = forfeit full deposit
+    updatePreview();
+  }
+  lostCheck.addEventListener('change', syncLost);
 
   function unit() { return parseFloat(unitInput.value || '0'); }
   function amount() { return Math.round(unit() * qty * 100) / 100; }
+  function isLost() { return !!(selected && isTowelItem(selected.name) && lostCheck.checked); }
+  function chargeVal() { return Math.min(Math.max(parseFloat(chargeInput.value || '0') || 0, 0), amount()); }
 
   const previewVal = el('div', { class: 'val', text: '₱0.00' });
+  const previewLab = el('div', { class: 'lab', style: 'color:var(--out-700)', text: 'Refund amount (auto)' });
   const heldNote = el('div', { class: 'muted', style: 'font-size:.78rem' });
   function updatePreview() {
-    previewVal.textContent = peso(amount());
-    if (pickedGuest) {
-      heldNote.textContent = `${pickedGuest.guest} holds ${peso(pickedGuest.held)}`;
-      heldNote.style.color = amount() > pickedGuest.held + 0.005 ? 'var(--out-700)' : 'var(--muted)';
-    } else heldNote.textContent = 'unit × quantity';
+    if (isLost()) {
+      const X = amount(), K = chargeVal(), R = Math.round((X - K) * 100) / 100;
+      previewLab.textContent = 'Guest receives (towel lost)';
+      previewVal.textContent = peso(R);
+      heldNote.innerHTML = `Settle <b>${peso(X)}</b> · keep <b>${peso(K)}</b> as loss charge · return <b>${peso(R)}</b>`;
+      heldNote.style.color = 'var(--out-700)';
+    } else {
+      previewLab.textContent = 'Refund amount (auto)';
+      previewVal.textContent = peso(amount());
+      if (pickedGuest) {
+        heldNote.textContent = `${pickedGuest.guest} holds ${peso(pickedGuest.held)}`;
+        heldNote.style.color = amount() > pickedGuest.held + 0.005 ? 'var(--out-700)' : 'var(--muted)';
+      } else { heldNote.textContent = 'unit × quantity'; heldNote.style.color = 'var(--muted)'; }
+    }
   }
   const preview = el('div', { class: 'amount-preview', style: 'border-color:var(--out);background:var(--out-50)' }, [
-    el('div', {}, [el('div', { class: 'lab', style: 'color:var(--out-700)', text: 'Refund amount (auto)' }), heldNote]),
+    el('div', {}, [previewLab, heldNote]),
     previewVal,
   ]);
 
@@ -130,6 +168,7 @@ export function render(ctx) {
   ]));
   form.appendChild(el('div', { class: 'field' }, [el('label', { text: 'Guest name' }), guestInput]));
   form.appendChild(towelField);
+  form.appendChild(lostField);
   form.appendChild(el('div', { class: 'field' }, [el('label', { text: 'Note (optional)' }), noteInput]));
   form.appendChild(preview);
 
@@ -146,10 +185,30 @@ export function render(ctx) {
     ctx.navigate('dashboard');
   }
 
+  function doLost() {
+    store.recordTowelLoss({
+      itemTypeId: selected.id, guest: guestInput.value, room: roomInput.value,
+      towelNo: towelInput.value.trim(), deposit: amount(), charge: chargeVal(),
+    });
+    toast(`Towel ${towelInput.value.trim()} marked lost · COH now ${peso(store.coh())}`, 'ok');
+    ctx.navigate('dashboard');
+  }
+
   submit.addEventListener('click', () => {
     if (!selected) { toast('Pick an item first', 'warn'); return; }
     if (!guestInput.value.trim() && !roomInput.value.trim()) { toast('Enter a guest name or room #', 'warn'); return; }
     if (amount() <= 0) { toast('Amount must be greater than 0', 'warn'); return; }
+    // Lost-towel settlement: confirm the keep/return split before booking it.
+    if (isLost()) {
+      if (!towelInput.value.trim()) { toast('Enter the towel number that was lost', 'warn'); return; }
+      const X = amount(), K = chargeVal(), R = Math.round((X - K) * 100) / 100;
+      confirmDialog({
+        title: 'Record lost towel?',
+        sub: `Settle ${peso(X)} for ${guestInput.value.trim() || roomInput.value.trim()}: keep ${peso(K)} as a loss charge, return ${peso(R)}. Towel ${towelInput.value.trim()} will be flagged lost for admin review.`,
+        confirmLabel: 'Record lost towel', kind: 'out', onConfirm: doLost,
+      });
+      return;
+    }
     // over-refund guard vs this guest's held balance
     if (pickedGuest && amount() > pickedGuest.held + 0.005) {
       confirmDialog({
