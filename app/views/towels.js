@@ -194,13 +194,21 @@ function renderTable(ctx) {
     const tb = el('tbody');
     for (const t of shown) {
       const m = STATUS_META[t.status] || { cls: 'rev', label: t.status };
-      const h = t.holder;
+      const h = t.holder;       // current holder (only when out)
+      const le = t.lastEvent;   // most recent activity, even if returned/available
+      // When out → current guest (bold). Otherwise show the last person who had it
+      // ("last: …"), so an available towel still shows its most recent link.
+      const guestCell = h
+        ? [el('strong', { text: h.guest || '—' }), h.room ? el('span', { class: 'muted', text: ' · ' + h.room }) : null]
+        : (le ? [el('span', { class: 'muted', text: `last: ${le.guest || '—'}${le.room ? ' · ' + le.room : ''}` })] : el('span', { class: 'muted', text: '—' }));
+      const when = h ? h.ts : (le ? le.ts : null);
+      const who = h ? h.staff : (le ? le.staff : null);
       tb.append(el('tr', {}, [
         el('td', {}, [el('span', { class: 'tag towel', style: 'cursor:pointer', title: 'View this towel\'s deposit/refund history', onClick: () => openTowelHistory(t.no), text: t.no }), t.registered ? null : el('span', { class: 'tag rev', style: 'margin-left:6px', text: 'unregistered' })]),
         el('td', {}, el('span', { class: 'tag ' + m.cls, text: m.label })),
-        el('td', {}, h ? [el('strong', { text: h.guest || '—' }), h.room ? el('span', { class: 'muted', text: ' · ' + h.room }) : null] : el('span', { class: 'muted', text: '—' })),
-        el('td', { text: h ? fmtDateTime(h.ts) : '—' }),
-        el('td', { text: h ? (h.staff || '—') : '—' }),
+        el('td', {}, guestCell),
+        el('td', { text: when ? fmtDateTime(when) : '—' }),
+        el('td', { text: who || '—' }),
         el('td', { class: 'num' }, actionCell(t, ctx, sync)),
       ]));
     }
