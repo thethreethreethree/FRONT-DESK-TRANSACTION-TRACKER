@@ -471,22 +471,32 @@ class Store {
   // tie the derived COH to the official sheet figure when the imported CSV is an
   // older/partial snapshot — the difference is a visible, hash-chained adjustment
   // (cash in/out), never a hidden override. Returns the entry, or null if exact.
-  reconcileCOH(target, { reason = '', source = '' } = {}) {
+  // A manual COH adjustment is accountability-critical: it must say WHY, which guest
+  // and staff were involved, and the related transaction #. These are recorded on the
+  // (visible) ledger entry AND the audit log. `source: 'official data file'` is the
+  // one automated caller (provisioning) and isn't required to fill them.
+  reconcileCOH(target, { reason = '', guest = '', staffInvolved = '', refSeq = '', source = '' } = {}) {
     const cur = this.coh();
     const diff = round2(Number(target) - cur);
     if (!isFinite(diff) || Math.abs(diff) < 0.005) return null;
     const shift = this.currentOpenShift();
+    const ref = String(refSeq || '').replace(/^#/, '').trim();
+    const parts = [];
+    if (reason) parts.push(reason);
+    if (guest) parts.push('guest ' + guest);
+    if (staffInvolved) parts.push('staff ' + staffInvolved);
+    if (ref) parts.push('ref #' + ref);
     const e = this._append({
       kind: 'adjustment', direction: diff >= 0 ? 1 : -1,
       itemTypeId: null, itemName: 'Adjustment',
       qty: null, unitAmount: Math.abs(diff), amount: Math.abs(diff),
-      guest: '', room: '', pax: null,
-      note: reason || `Reconciliation to official COH ₱${pesoPlain(target)}`,
+      guest: guest || '', room: '', pax: null,
+      note: `COH reconciliation to ₱${pesoPlain(round2(Number(target)))}${parts.length ? ' · ' + parts.join(' · ') : ''}`,
       shiftId: shift ? shift.id : null, shiftLabel: shift ? shift.label : null,
     });
     this._audit('coh.reconcile',
-      `Reconciled COH ₱${pesoPlain(cur)} → ₱${pesoPlain(round2(Number(target)))} (adjustment ${diff >= 0 ? '+' : '−'}₱${pesoPlain(Math.abs(diff))})`,
-      { from: cur, to: round2(Number(target)), adjustment: diff, source });
+      `Reconciled COH ₱${pesoPlain(cur)} → ₱${pesoPlain(round2(Number(target)))} (${diff >= 0 ? '+' : '−'}₱${pesoPlain(Math.abs(diff))})${reason ? ' · ' + reason : ''}${guest ? ' · guest ' + guest : ''}${staffInvolved ? ' · staff ' + staffInvolved : ''}${ref ? ' · ref #' + ref : ''}`,
+      { from: cur, to: round2(Number(target)), adjustment: diff, reason, guest, staffInvolved, refSeq: ref, source });
     return e;
   }
 
@@ -497,14 +507,14 @@ class Store {
     return isFinite(b) ? round2(b) : 0;
   }
   // Set the opening balance (manager-gated by the caller). Audited.
-  setBeginningBalance(amount, { source = '' } = {}) {
+  setBeginningBalance(amount, { source = '', reason = '' } = {}) {
     const before = this.beginningBalance();
     this.state.config.beginningBalance = round2(Number(amount) || 0);
     const after = this.beginningBalance();
     if (after !== before) {
       this._audit('settings.beginning_balance',
-        `Beginning balance ₱${pesoPlain(before)} → ₱${pesoPlain(after)}${source ? ' (' + source + ')' : ''}`,
-        { before, after, source });
+        `Beginning balance ₱${pesoPlain(before)} → ₱${pesoPlain(after)}${reason ? ' · ' + reason : ''}${source ? ' (' + source + ')' : ''}`,
+        { before, after, source, reason });
     }
     this.save();
     return after;

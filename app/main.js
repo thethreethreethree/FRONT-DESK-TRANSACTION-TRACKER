@@ -541,29 +541,81 @@ function renderBeginningBalanceCard() {
     el('div', { class: 'flex gap', style: 'align-items:flex-end' }, [
       el('div', { class: 'field', style: 'margin:0' }, [el('label', { text: 'Beginning balance (₱)' }), input]),
       el('button', { class: 'btn primary', text: 'Save', onClick: () => {
-        managerGate(() => {
-          store.setBeginningBalance(parseFloat(input.value || '0') || 0, { source: 'manual' });
-          toast(`Beginning balance set · COH now ${peso(store.coh())}`, 'ok');
-          renderShell();
-        }, { reason: 'Approve changing the beginning balance' });
+        const reason = el('input', { class: 'input', placeholder: 'Why is the opening float changing? (required)', autocomplete: 'off' });
+        openModal({
+          title: 'Change beginning balance', sub: 'This shifts Cash On Hand — a reason is recorded in the Activity Log.',
+          body: el('div', { class: 'field' }, [el('label', { text: `Set opening float to ₱${pesoPlain(parseFloat(input.value || '0') || 0)} — reason` }), reason]),
+          actions: [
+            { label: 'Cancel', kind: 'ghost' },
+            { label: 'Save (manager)', kind: 'primary', onClick: (close) => {
+              if (!reason.value.trim()) { toast('A reason is required', 'warn'); return; }
+              managerGate(() => {
+                store.setBeginningBalance(parseFloat(input.value || '0') || 0, { source: 'manual', reason: reason.value.trim() });
+                toast(`Beginning balance set · COH now ${peso(store.coh())}`, 'ok');
+                close(); renderShell();
+              }, { reason: 'Approve changing the beginning balance' });
+            } },
+          ],
+        });
       } }),
     ]),
     cohLine,
     el('div', { class: 'hint mt', text: `Net flow from ${store.ledger.length.toLocaleString()} ledger entries: ${net >= 0 ? '+' : ''}${peso(net)} · current COH ${peso(coh)}` }),
     el('hr', { class: 'hr' }),
-    el('p', { class: 'muted', style: 'margin:0', html: 'Tie COH to the live sheet\'s figure. This books <strong>one labelled reconciliation entry</strong> (a visible cash-in/out adjustment in the ledger) — the opening float and individual transactions are untouched.' }),
+    el('p', { class: 'muted', style: 'margin:0', html: 'Tie COH to the live sheet\'s figure. This books <strong>one labelled, fully-audited reconciliation entry</strong> — the opening float and individual transactions are untouched. A reason, the guest & staff involved, and the related transaction # are <strong>required</strong> for accountability.' }),
     el('div', { class: 'flex gap mt', style: 'align-items:flex-end' }, [
       el('div', { class: 'field', style: 'margin:0' }, [el('label', { text: 'Reconcile COH to (₱)' }), target]),
-      el('button', { class: 'btn', text: 'Reconcile', onClick: () => {
-        const t = parseFloat(target.value || ''); if (!isFinite(t)) return toast('Enter a target COH', 'warn');
-        managerGate(() => {
-          const e = store.reconcileCOH(t, { source: 'manual' });
-          toast(e ? `Reconciled · COH now ${peso(store.coh())}` : 'COH already matches', 'ok');
-          renderShell();
-        }, { reason: `Approve reconciling COH to ₱${pesoPlain(t)}` });
-      } }),
+      el('button', { class: 'btn', text: 'Reconcile…', onClick: () => openReconcileModal(target.value) }),
     ]),
   ]);
+}
+
+// COH adjustment with mandatory accountability: reason, guest involved, staff
+// involved, and the related transaction #. All recorded on the ledger entry + audit.
+function openReconcileModal(prefillTarget) {
+  const cur = store.coh();
+  const targetI = el('input', { class: 'input', type: 'number', step: '0.01', value: prefillTarget || cur, style: 'max-width:220px' });
+  const reasonI = el('textarea', { class: 'input', rows: '2', placeholder: 'Why must COH be adjusted? (required)' });
+  const guestI = el('input', { class: 'input', placeholder: 'Guest involved', autocomplete: 'off' });
+  const staffI = el('input', { class: 'input', placeholder: 'Staff involved', autocomplete: 'off' });
+  const refI = el('input', { class: 'input', placeholder: 'e.g. 16204', autocomplete: 'off' });
+  const diffLine = el('div', { class: 'muted', style: 'font-size:.85rem;margin-top:6px' });
+  const upd = () => {
+    const t = parseFloat(targetI.value || '');
+    diffLine.innerHTML = isFinite(t)
+      ? `Current COH <b>${peso(cur)}</b> → <b>${peso(t)}</b> · books a <b>${(t - cur) >= 0 ? '+' : '−'}${peso(Math.abs(Math.round((t - cur) * 100) / 100))}</b> adjustment`
+      : 'Enter a target COH';
+  };
+  targetI.addEventListener('input', upd); upd();
+  const body = el('div', {}, [
+    el('div', { class: 'field' }, [el('label', { text: 'Reconcile COH to (₱)' }), targetI, diffLine]),
+    el('div', { class: 'field' }, [el('label', { text: 'Reason (required)' }), reasonI]),
+    el('div', { class: 'row2' }, [
+      el('div', { class: 'field' }, [el('label', { text: 'Guest involved (required)' }), guestI]),
+      el('div', { class: 'field' }, [el('label', { text: 'Staff involved (required)' }), staffI]),
+    ]),
+    el('div', { class: 'field' }, [el('label', { text: 'Related transaction # (required)' }), refI, el('div', { class: 'hint', text: 'the ledger # this adjustment relates to' })]),
+    el('div', { class: 'pill-warn', html: 'A COH adjustment is a <strong>visible, permanent, audited</strong> ledger entry. Every field is required for accountability.' }),
+  ]);
+  openModal({
+    title: 'Reconcile Cash On Hand', sub: 'Manager approval required · fully audited', body, wide: true,
+    actions: [
+      { label: 'Cancel', kind: 'ghost' },
+      { label: 'Reconcile (manager)', kind: 'primary', onClick: (close) => {
+        const t = parseFloat(targetI.value || '');
+        if (!isFinite(t)) return toast('Enter a target COH', 'warn');
+        if (!reasonI.value.trim()) return toast('A reason is required', 'warn');
+        if (!guestI.value.trim()) return toast('Enter the guest involved', 'warn');
+        if (!staffI.value.trim()) return toast('Enter the staff involved', 'warn');
+        if (!refI.value.trim()) return toast('Enter the related transaction #', 'warn');
+        managerGate(() => {
+          const e = store.reconcileCOH(t, { reason: reasonI.value.trim(), guest: guestI.value.trim(), staffInvolved: staffI.value.trim(), refSeq: refI.value.trim(), source: 'manual' });
+          toast(e ? `Reconciled · COH now ${peso(store.coh())}` : 'COH already matches', 'ok');
+          close(); renderShell();
+        }, { reason: `Approve reconciling COH to ${peso(t)}` });
+      } },
+    ],
+  });
 }
 
 function renderGitHubCard() {
