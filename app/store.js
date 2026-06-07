@@ -84,6 +84,10 @@ function defaultState() {
       // is the baseline — only towel deposits/refunds from this moment on move the
       // inventory, because historical refunds never recorded a towel number.
       towelTracker: { enabled: false, startedAt: null },
+      // Dirty-towel / laundry tracking. When enabled, a returned towel becomes Dirty
+      // (held out of the available pool) until it's washed & marked Clean. `startedAt`
+      // is the cycle anchor; `hours` is the recording-period length (≥1, default 24).
+      towelRecording: { enabled: false, startedAt: null, hours: 24 },
     },
     itemTypes: [],
     staff: [],
@@ -91,8 +95,9 @@ function defaultState() {
     shifts: [],
     ledger: [],
     audit: [], // append-only, hash-chained activity log (who / what / when)
-    towels: [],   // master towel inventory: { no, createdAt, createdBy }
-    towelLog: [], // admin resolutions for lost/written-off towels: { id, no, action, ts, by, note }
+    towels: [],     // master towel inventory: { no, createdAt, createdBy }
+    towelLog: [],   // admin resolutions for lost/written-off towels: { id, no, action, ts, by, note }
+    laundryLog: [], // dirty/washing/clean transitions: { id, no, status, ts, by }
   };
 }
 
@@ -138,7 +143,9 @@ class Store {
     if (!Array.isArray(this.state.towels)) this.state.towels = [];
     if (!Array.isArray(this.state.towelLog)) this.state.towelLog = [];
     if (!Array.isArray(this.state.admins)) this.state.admins = [];
+    if (!Array.isArray(this.state.laundryLog)) this.state.laundryLog = [];
     if (!this.state.config.towelTracker) this.state.config.towelTracker = { enabled: false, startedAt: null };
+    if (!this.state.config.towelRecording) this.state.config.towelRecording = { enabled: false, startedAt: null, hours: 24 };
     this.verifyIntegrity();
     this.verifyAuditIntegrity();
     if (this._migratedFromLS) { this._migratedFromLS = false; this._persist(); }
@@ -790,8 +797,14 @@ class Store {
     const res = new Map();
     for (const r of (this.state.towelLog || [])) {
       const cur = res.get(r.no);
-      if (!cur || r.ts > cur.ts) res.set(r.no, r);
+      if (!cur || r.ts >= cur.ts) res.set(r.no, r);
     }
+    // Latest laundry action per towel (dirty/washing/clean), for the laundry overlay.
+    const rec = this.state.config.towelRecording || {};
+    const recStart = rec.enabled ? (rec.startedAt || '') : null;
+    const laundry = new Map();
+    // `>=` so the last-pushed action wins when two share a timestamp (same millisecond).
+    if (recStart != null) for (const a of (this.state.laundryLog || [])) { const c = laundry.get(a.no); if (!c || a.ts >= c.ts) laundry.set(a.no, a); }
     const allNos = new Set([...masterSet, ...events.keys()]);
     const out = [];
     for (const no of allNos) {
@@ -813,6 +826,21 @@ class Store {
       if (r && (!last || r.ts >= last.ts)) {
         if (r.action === 'found' || r.action === 'restore') { status = 'available'; holder = null; }
         else if (r.action === 'writeoff') { status = 'writeoff'; holder = null; }
+      }
+      // Laundry overlay (when recording is on): a returned towel is Dirty (held out
+      // of the available pool) until washed & marked Clean. Only returns at/after the
+      // recording start count, so old history doesn't flood the dirty list.
+      if (recStart != null && status === 'available') {
+        const lastRet = evs.filter((e) => e.type === 'in').pop();
+        const lastRetTs = lastRet ? lastRet.ts : '';
+        const ld = laundry.get(no);
+        if (ld && (!lastRetTs || ld.ts >= lastRetTs)) {
+          if (ld.status === 'washing') status = 'washing';
+          else if (ld.status === 'dirty') status = 'dirty';
+          // 'clean' → stays available
+        } else if (lastRetTs && lastRetTs >= recStart) {
+          status = 'dirty'; // came back during the recording era, not yet processed
+        }
       }
       out.push({ no, status, holder, registered: masterSet.has(no), lastEvent: last });
     }
@@ -846,13 +874,60 @@ class Store {
   // Headline counts for the dashboard card. `inService` excludes written-off towels.
   towelSummary() {
     const s = this.towelStatus();
-    const c = { available: 0, out: 0, lost: 0, writeoff: 0, unregistered: 0 };
+    const c = { available: 0, out: 0, lost: 0, writeoff: 0, dirty: 0, washing: 0, unregistered: 0 };
     for (const t of s) {
       c[t.status] = (c[t.status] || 0) + 1;
       if (!t.registered && t.status !== 'writeoff') c.unregistered += 1;
     }
-    c.inService = c.available + c.out + c.lost;
+    c.inService = c.available + c.out + c.lost + c.dirty + c.washing;
     return c;
+  }
+
+  // ----------------------------------------------- dirty-towel / laundry tracking
+  get towelRecording() { return this.state.config.towelRecording || { enabled: false, startedAt: null, hours: 24 }; }
+  // Set (and enable) the recording period: an anchor start + a length in hours (≥1).
+  // Turning this on activates dirty-towel tracking; returns from `startedAt` onward
+  // become Dirty until washed & marked Clean.
+  setTowelRecording({ startedAt, hours }) {
+    const h = Math.max(1, Math.round(Number(hours) || 24));
+    const start = startedAt || nowISO();
+    this.state.config.towelRecording = { enabled: true, startedAt: start, hours: h };
+    this._audit('towel.recording', `Towel recording period set · ${h}h cycle from ${start}`, { startedAt: start, hours: h });
+    this.save();
+    return this.towelRecording;
+  }
+  // Move towel(s) through the laundry cycle: 'dirty' (add), 'washing' (sent to
+  // laundry), 'clean' (back to available — leaves the dirty list). Inventory-only.
+  setLaundryStatus(nos, status, { by } = {}) {
+    if (!['dirty', 'washing', 'clean'].includes(status)) return [];
+    const list = Array.isArray(nos) ? nos : [nos];
+    const actor = by || (this.session ? this.session.name : 'system');
+    const done = [];
+    for (const raw of list) {
+      const no = normTowelNo(raw);
+      if (!no) continue;
+      this.state.laundryLog.push({ id: uid('lnd'), no, status, ts: nowISO(), by: actor });
+      done.push(no);
+    }
+    if (done.length) {
+      const verb = status === 'washing' ? 'sent to laundry (being washed)' : status === 'clean' ? 'marked clean' : 'marked dirty';
+      this._audit('towel.laundry', `${done.length} towel${done.length > 1 ? 's' : ''} ${verb}`, { count: done.length, status, sample: done.slice(0, 50) });
+      this.save();
+    }
+    return done;
+  }
+  // The recording window [start, end) containing `atISO` (defaults to now), tiled
+  // from the configured anchor. Returns null when recording is off. (For analytics.)
+  currentRecordingPeriod(atISO) {
+    const rec = this.towelRecording;
+    if (!rec.enabled || !rec.startedAt) return null;
+    const ms = rec.hours * 3600 * 1000;
+    const anchor = Date.parse(rec.startedAt);
+    const now = Date.parse(atISO || nowISO());
+    if (!isFinite(anchor) || !isFinite(now) || !(ms > 0)) return null;
+    const k = now >= anchor ? Math.floor((now - anchor) / ms) : 0;
+    const startN = now >= anchor ? anchor + k * ms : anchor;
+    return { start: new Date(startN).toISOString(), end: new Date(startN + ms).toISOString(), hours: rec.hours, index: k };
   }
 
   // ------------------------------------------------------------- integrity
@@ -1009,7 +1084,9 @@ class Store {
     if (!Array.isArray(this.state.towels)) this.state.towels = [];
     if (!Array.isArray(this.state.towelLog)) this.state.towelLog = [];
     if (!Array.isArray(this.state.admins)) this.state.admins = [];
+    if (!Array.isArray(this.state.laundryLog)) this.state.laundryLog = [];
     if (!this.state.config.towelTracker) this.state.config.towelTracker = { enabled: false, startedAt: null };
+    if (!this.state.config.towelRecording) this.state.config.towelRecording = { enabled: false, startedAt: null, hours: 24 };
     this.verifyIntegrity();
     this.verifyAuditIntegrity();
     this._audit('data.import', `Imported backup (${this.state.ledger.length} ledger entries)`, { entries: this.state.ledger.length });

@@ -2,7 +2,7 @@
 // of the cash ledger: each towel is Available, Out (with a guest), Lost, or written
 // off. State is a live projection of Towel deposits/refunds (store.towelStatus()),
 // so it always agrees with the ledger; admin actions resolve lost towels.
-import { el, peso, pesoPlain, fmtDateTime, clear, toast } from '../util.js';
+import { el, peso, pesoPlain, fmtDateTime, clear, toast, nowISO } from '../util.js';
 import { store } from '../store.js';
 import { pageHead, managerGate, confirmDialog, openModal } from '../components.js';
 
@@ -26,6 +26,8 @@ function parseTowelInput(str) {
 const STATUS_META = {
   available: { cls: 'dep', label: 'available' },
   out: { cls: 'shift', label: 'out' },
+  dirty: { cls: 'dirty', label: 'dirty' },
+  washing: { cls: 'exg', label: 'being washed' },
   lost: { cls: 'ref', label: 'lost' },
   writeoff: { cls: 'rev', label: 'written off' },
 };
@@ -51,22 +53,64 @@ export function render(ctx) {
     el('span', { class: 'v', style: `color:${color};font-size:1.7rem`, text: String(v) }),
     meta ? el('span', { class: 'meta', text: meta }) : null,
   ]);
+  const recOn = store.towelRecording.enabled;
   root.appendChild(el('div', { class: 'card', style: 'margin-bottom:18px' }, [
     el('div', { class: 'flex between aic wrap gap' }, [
-      stat('Available', summary.available, 'var(--in-700)', 'on the shelf'),
+      stat('Available', summary.available, 'var(--in-700)', 'clean & on the shelf'),
       stat('Out', summary.out, 'var(--gold-700)', 'with guests'),
+      recOn ? stat('Dirty', summary.dirty, '#b45309', 'returned, to wash') : null,
+      recOn ? stat('Being washed', summary.washing, '#5b4bcf', 'at the laundry') : null,
       stat('Lost', summary.lost, 'var(--out-700)', 'awaiting admin'),
       stat('Written off', summary.writeoff, 'var(--muted)', 'retired'),
-      stat('In service', summary.inService, 'var(--ink)', 'available + out + lost'),
+      stat('In service', summary.inService, 'var(--ink)', 'total held'),
     ]),
   ]));
 
-  // ---- manage inventory (admin only) ----
+  // ---- manage inventory + dirty-towel recording (admin only) ----
   if (store.isManager()) root.appendChild(renderManage(ctx, summary));
+  if (store.isManager()) root.appendChild(renderRecording(ctx));
 
   // ---- status table (everyone can view) ----
   root.appendChild(renderTable(ctx));
   return root;
+}
+
+// ISO → value for <input type=datetime-local> (local "YYYY-MM-DDTHH:mm").
+function toLocalInput(iso) {
+  const d = new Date(iso); const p = (n) => String(n).padStart(2, '0');
+  return `${d.getFullYear()}-${p(d.getMonth() + 1)}-${p(d.getDate())}T${p(d.getHours())}:${p(d.getMinutes())}`;
+}
+
+// Admin tool: set the dirty-towel recording period (cycle anchor + length in hours).
+// Enabling it turns on dirty-towel tracking; returns from the start onward become Dirty.
+function renderRecording(ctx) {
+  const rec = store.towelRecording;
+  const card = el('div', { class: 'card', style: 'margin-bottom:18px' }, [
+    el('div', { class: 'card-h' }, [el('h3', { text: 'Dirty-towel recording' }), el('span', { class: 'sub', text: 'manager only' })]),
+    el('p', { class: 'muted', style: 'margin-top:0', html: 'Turn this on to track <strong>dirty towels</strong>. From the cycle start, every towel a guest returns (refund or exchange) becomes <strong>Dirty</strong> and is held out of the Available pool until it\'s washed and marked Clean. The period length sets the day-to-day record cycle (any number of hours).' }),
+  ]);
+  if (rec.enabled) {
+    const p = store.currentRecordingPeriod();
+    card.appendChild(el('div', { class: 'pill', html: `Recording is <strong>ON</strong> · ${rec.hours}h cycle${p ? ` · current period <strong>${fmtDateTime(p.start)}</strong> → <strong>${fmtDateTime(p.end)}</strong>` : ''}` }));
+  }
+  const startInput = el('input', { class: 'input', type: 'datetime-local', value: toLocalInput(rec.startedAt || nowISO()) });
+  const hoursInput = el('input', { class: 'input', type: 'number', min: '1', step: '1', value: String(rec.hours || 24), style: 'max-width:140px' });
+  card.appendChild(el('div', { class: 'flex gap mt', style: 'align-items:flex-end;flex-wrap:wrap' }, [
+    el('div', { class: 'field', style: 'margin:0' }, [el('label', { text: 'Cycle start (date & time)' }), startInput]),
+    el('div', { class: 'field', style: 'margin:0' }, [el('label', { text: 'Period length (hours)' }), hoursInput, el('div', { class: 'hint', text: '24 = daily · 168 = weekly · any value allowed' })]),
+    el('button', {
+      class: 'btn primary', text: rec.enabled ? 'Update period' : 'Enable recording',
+      onClick: () => managerGate(() => {
+        const h = parseInt(hoursInput.value || '24', 10);
+        if (!(h >= 1)) return toast('Period must be at least 1 hour', 'warn');
+        const startISO = startInput.value ? new Date(startInput.value).toISOString() : nowISO();
+        store.setTowelRecording({ startedAt: startISO, hours: h });
+        toast(`Recording period set · ${h}h`, 'ok');
+        ctx.navigate('towels');
+      }, { reason: 'Setting the towel recording period is a manager action.' }),
+    }),
+  ]));
+  return card;
 }
 
 function renderSetup(ctx) {
@@ -143,10 +187,13 @@ const TABS = [
 function renderTable(ctx) {
   const card = el('div', { class: 'card', style: 'padding:0;overflow:hidden' });
   let mode = 'active';
+  // The Laundry tab only appears once dirty-towel recording is enabled.
+  const tabs = TABS.slice();
+  if (store.towelRecording.enabled) tabs.splice(1, 0, { key: 'laundry', label: 'Laundry', set: ['dirty', 'washing'], empty: 'No dirty towels.' });
 
   const tabBar = el('div', { class: 'towel-tabs' });
   const tabBtns = {};
-  for (const t of TABS) {
+  for (const t of tabs) {
     const b = el('button', { class: 'towel-tab', onClick: () => { mode = t.key; sync(); } }, [
       el('span', { text: t.label }), el('span', { class: 'tab-count', text: '0' }),
     ]);
@@ -163,18 +210,95 @@ function renderTable(ctx) {
   const wrap = el('div', { class: 'table-wrap', style: 'border:0' });
   card.appendChild(wrap);
 
-  // Refresh both tab counts and the table (used after an admin action changes state).
+  // Refresh both tab counts and the table (used after an action changes state).
   function sync() {
     const all = store.towelStatus();
-    for (const t of TABS) {
+    for (const t of tabs) {
       tabBtns[t.key].classList.toggle('active', t.key === mode);
       tabBtns[t.key].querySelector('.tab-count').textContent = String(all.filter((x) => t.set.includes(x.status)).length);
     }
-    paint(all);
+    if (mode === 'laundry') paintLaundry(all);
+    else paint(all);
+  }
+
+  // ---- Laundry management: checkbox list + select-all + bulk move + add-dirty ----
+  function paintLaundry(all) {
+    const q = search.value.toLowerCase().trim();
+    let rows = (all || store.towelStatus()).filter((t) => t.status === 'dirty' || t.status === 'washing');
+    if (q) rows = rows.filter((t) => { const le = t.lastEvent || {}; return `${t.no} ${le.guest || ''} ${le.room || ''}`.toLowerCase().includes(q); });
+    rows.sort((a, b) => (a.status === b.status ? 0 : a.status === 'dirty' ? -1 : 1));
+    clear(wrap);
+
+    const selected = new Set();
+    const bar = el('div', { class: 'flex between aic wrap gap', style: 'padding:12px 16px;border-bottom:1px solid var(--line)' });
+    const selAll = el('input', { type: 'checkbox', title: 'Select all' });
+    const count = el('span', { class: 'muted', style: 'font-size:.84rem' });
+    const washBtn = el('button', { class: 'btn sm', text: '🧺 Send to laundry', disabled: true });
+    const cleanBtn = el('button', { class: 'btn primary sm', text: '✓ Mark clean', disabled: true });
+    function refreshBar() {
+      count.textContent = selected.size ? `${selected.size} selected` : `${rows.length} towel${rows.length === 1 ? '' : 's'}`;
+      washBtn.disabled = cleanBtn.disabled = selected.size === 0;
+    }
+    const apply = (status) => {
+      const nos = [...selected];
+      if (!nos.length) return;
+      store.setLaundryStatus(nos, status);
+      toast(`${nos.length} towel${nos.length === 1 ? '' : 's'} ${status === 'washing' ? 'sent to laundry' : 'marked clean'}`, 'ok');
+      sync();
+    };
+    washBtn.addEventListener('click', () => apply('washing'));
+    cleanBtn.addEventListener('click', () => apply('clean'));
+    bar.append(
+      el('label', { class: 'flex aic gap', style: 'cursor:pointer;font-size:.86rem;font-weight:600' }, [selAll, 'Select all']),
+      count,
+      el('div', { class: 'flex gap', style: 'margin-left:auto' }, [washBtn, cleanBtn]),
+    );
+    wrap.appendChild(bar);
+
+    // Manually add a towel to the dirty list (e.g. one returned without going through refund).
+    const addInput = el('input', { class: 'input', placeholder: 'Add dirty towel # — e.g. 12 or 12, 13', style: 'max-width:260px;font-family:var(--font-mono)' });
+    wrap.appendChild(el('div', { class: 'flex gap aic', style: 'padding:10px 16px;border-bottom:1px solid var(--line)' }, [
+      addInput,
+      el('button', {
+        class: 'btn sm', text: '+ Add to dirty',
+        onClick: () => { const nos = parseTowelInput(addInput.value); if (!nos.length) return toast('Enter a towel number', 'warn'); store.setLaundryStatus(nos, 'dirty'); toast(`${nos.length} towel${nos.length === 1 ? '' : 's'} added to dirty`, 'ok'); sync(); },
+      }),
+    ]));
+
+    if (!rows.length) {
+      wrap.appendChild(el('div', { class: 'empty' }, [el('div', { class: 'ic', text: '🧺' }), el('p', { text: q ? 'No dirty towels match.' : 'No dirty towels — all caught up.' })]));
+      return;
+    }
+    const boxes = [];
+    const tbl = el('table', { class: 'tbl' });
+    tbl.appendChild(el('thead', {}, el('tr', {}, [
+      el('th', { text: '' }), el('th', { text: 'Towel #' }), el('th', { text: 'Status' }), el('th', { text: 'Last guest' }), el('th', { text: 'Since' }), el('th', { class: 'num', text: '' }),
+    ])));
+    const tb = el('tbody');
+    for (const t of rows.slice(0, 800)) {
+      const m = STATUS_META[t.status] || { cls: 'rev', label: t.status };
+      const le = t.lastEvent || {};
+      const box = el('input', { type: 'checkbox', onChange: (e) => { if (e.target.checked) selected.add(t.no); else selected.delete(t.no); selAll.checked = selected.size === rows.length; refreshBar(); } });
+      boxes.push(box);
+      tb.append(el('tr', {}, [
+        el('td', {}, box),
+        el('td', {}, el('span', { class: 'tag towel', style: 'cursor:pointer', title: 'History', onClick: () => openTowelHistory(t.no), text: t.no })),
+        el('td', {}, el('span', { class: 'tag ' + m.cls, text: m.label })),
+        el('td', {}, le.guest ? [el('span', { class: 'muted', text: `${le.guest}${le.room ? ' · ' + le.room : ''}` })] : el('span', { class: 'muted', text: '—' })),
+        el('td', { text: le.ts ? fmtDateTime(le.ts) : '—' }),
+        el('td', { class: 'num' }, t.status === 'dirty'
+          ? el('button', { class: 'btn ghost sm', text: 'Wash', onClick: () => { store.setLaundryStatus([t.no], 'washing'); sync(); } })
+          : el('button', { class: 'btn ghost sm', text: 'Clean', onClick: () => { store.setLaundryStatus([t.no], 'clean'); sync(); } })),
+      ]));
+    }
+    tbl.appendChild(tb);
+    wrap.appendChild(tbl);
+    selAll.addEventListener('change', () => { selected.clear(); if (selAll.checked) rows.forEach((t) => selected.add(t.no)); boxes.forEach((b) => { b.checked = selAll.checked; }); refreshBar(); });
+    refreshBar();
   }
 
   function paint(all) {
-    const tab = TABS.find((t) => t.key === mode) || TABS[0];
+    const tab = tabs.find((t) => t.key === mode) || tabs[0];
     const q = search.value.toLowerCase().trim();
     let rows = (all || store.towelStatus()).filter((t) => tab.set.includes(t.status));
     if (q) rows = rows.filter((t) => { const h = t.holder || {}; return `${t.no} ${h.guest || ''} ${h.room || ''}`.toLowerCase().includes(q); });
