@@ -300,25 +300,36 @@ function renderTable(ctx) {
     const bar = el('div', { class: 'flex between aic wrap gap', style: 'padding:12px 16px;border-bottom:1px solid var(--line)' });
     const selAll = el('input', { type: 'checkbox', title: 'Select all' });
     const count = el('span', { class: 'muted', style: 'font-size:.84rem' });
+    const dirtyBtn = el('button', { class: 'btn sm', html: '↩ Back to dirty', disabled: true, title: 'Revert to dirty (admin)' });
     const washBtn = el('button', { class: 'btn sm', text: '🧺 Send to laundry', disabled: true });
     const cleanBtn = el('button', { class: 'btn primary sm', text: '✓ Mark clean', disabled: true });
+    const removeBtn = el('button', { class: 'btn ghost sm', text: '✕ Remove', disabled: true, title: 'Take off the list (back to available)' });
+    const btns = [dirtyBtn, washBtn, cleanBtn, removeBtn];
     function refreshBar() {
       count.textContent = selected.size ? `${selected.size} selected` : `${rows.length} towel${rows.length === 1 ? '' : 's'}`;
-      washBtn.disabled = cleanBtn.disabled = selected.size === 0;
+      btns.forEach((b) => { b.disabled = selected.size === 0; });
     }
-    const apply = (status) => {
+    // Apply a laundry status to the selection. `admin` gates the action behind a PIN.
+    const apply = (status, { admin } = {}) => {
       const nos = [...selected];
       if (!nos.length) return;
-      store.setLaundryStatus(nos, status);
-      toast(`${nos.length} towel${nos.length === 1 ? '' : 's'} ${status === 'washing' ? 'sent to laundry' : 'marked clean'}`, 'ok');
-      sync();
+      const run = () => {
+        store.setLaundryStatus(nos, status);
+        const verb = { washing: 'sent to laundry', clean: 'marked clean', dirty: 'moved back to dirty', remove: 'removed from the list' }[status];
+        toast(`${nos.length} towel${nos.length === 1 ? '' : 's'} ${verb}`, 'ok');
+        sync();
+      };
+      if (admin) managerGate(run, { reason: 'Reverting towels back to dirty is a manager action.' });
+      else run();
     };
+    dirtyBtn.addEventListener('click', () => apply('dirty', { admin: true }));
     washBtn.addEventListener('click', () => apply('washing'));
     cleanBtn.addEventListener('click', () => apply('clean'));
+    removeBtn.addEventListener('click', () => apply('remove'));
     bar.append(
       el('label', { class: 'flex aic gap', style: 'cursor:pointer;font-size:.86rem;font-weight:600' }, [selAll, 'Select all']),
       count,
-      el('div', { class: 'flex gap', style: 'margin-left:auto' }, [washBtn, cleanBtn]),
+      el('div', { class: 'flex gap wrap', style: 'margin-left:auto' }, btns),
     );
     wrap.appendChild(bar);
 
@@ -353,9 +364,16 @@ function renderTable(ctx) {
         el('td', {}, el('span', { class: 'tag ' + m.cls, text: m.label })),
         el('td', {}, le.guest ? [el('span', { class: 'muted', text: `${le.guest}${le.room ? ' · ' + le.room : ''}` })] : el('span', { class: 'muted', text: '—' })),
         el('td', { text: le.ts ? fmtDateTime(le.ts) : '—' }),
-        el('td', { class: 'num' }, t.status === 'dirty'
-          ? el('button', { class: 'btn ghost sm', text: 'Wash', onClick: () => { store.setLaundryStatus([t.no], 'washing'); sync(); } })
-          : el('button', { class: 'btn ghost sm', text: 'Clean', onClick: () => { store.setLaundryStatus([t.no], 'clean'); sync(); } })),
+        el('td', { class: 'num' }, el('div', { class: 'flex gap', style: 'justify-content:flex-end' }, t.status === 'dirty'
+          ? [
+            el('button', { class: 'btn ghost sm', text: 'Wash', onClick: () => { store.setLaundryStatus([t.no], 'washing'); sync(); } }),
+            el('button', { class: 'btn ghost sm', text: 'Remove', onClick: () => { store.setLaundryStatus([t.no], 'remove'); toast(`Towel #${t.no} removed from the list`, 'ok'); sync(); } }),
+          ]
+          : [
+            el('button', { class: 'btn ghost sm', text: 'Clean', onClick: () => { store.setLaundryStatus([t.no], 'clean'); sync(); } }),
+            el('button', { class: 'btn ghost sm', text: '↩ Dirty', title: 'Back to dirty (admin)', onClick: () => managerGate(() => { store.setLaundryStatus([t.no], 'dirty'); toast(`Towel #${t.no} back to dirty`, 'ok'); sync(); }, { reason: 'Reverting a towel back to dirty is a manager action.' }) }),
+            el('button', { class: 'btn ghost sm', text: 'Remove', onClick: () => { store.setLaundryStatus([t.no], 'remove'); toast(`Towel #${t.no} removed from the list`, 'ok'); sync(); } }),
+          ])),
       ]));
     }
     tbl.appendChild(tb);

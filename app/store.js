@@ -800,8 +800,11 @@ class Store {
       if (!cur || r.ts >= cur.ts) res.set(r.no, r);
     }
     // Latest laundry action per towel (dirty/washing/clean), for the laundry overlay.
+    // The dirty baseline is the TOWEL-TRACKER setup time (not the recording cycle
+    // anchor), so a returned towel is Dirty LIVE — immediately on refund/exchange —
+    // regardless of the analytics cycle start. The cycle anchor only drives reports.
     const rec = this.state.config.towelRecording || {};
-    const recStart = rec.enabled ? (rec.startedAt || '') : null;
+    const recStart = rec.enabled ? this.towelBaseline() : null;
     const laundry = new Map();
     // `>=` so the last-pushed action wins when two share a timestamp (same millisecond).
     if (recStart != null) for (const a of (this.state.laundryLog || [])) { const c = laundry.get(a.no); if (!c || a.ts >= c.ts) laundry.set(a.no, a); }
@@ -898,8 +901,11 @@ class Store {
   }
   // Move towel(s) through the laundry cycle: 'dirty' (add), 'washing' (sent to
   // laundry), 'clean' (back to available — leaves the dirty list). Inventory-only.
+  // status: 'dirty' (add / revert back to dirty), 'washing' (sent to laundry),
+  // 'clean' (washed → available, counts in analytics), 'remove' (off the list →
+  // available, a correction — NOT counted as cleaned).
   setLaundryStatus(nos, status, { by } = {}) {
-    if (!['dirty', 'washing', 'clean'].includes(status)) return [];
+    if (!['dirty', 'washing', 'clean', 'remove'].includes(status)) return [];
     const list = Array.isArray(nos) ? nos : [nos];
     const actor = by || (this.session ? this.session.name : 'system');
     const done = [];
@@ -910,7 +916,7 @@ class Store {
       done.push(no);
     }
     if (done.length) {
-      const verb = status === 'washing' ? 'sent to laundry (being washed)' : status === 'clean' ? 'marked clean' : 'marked dirty';
+      const verb = { washing: 'sent to laundry (being washed)', clean: 'marked clean', dirty: 'marked dirty', remove: 'removed from the laundry list' }[status];
       this._audit('towel.laundry', `${done.length} towel${done.length > 1 ? 's' : ''} ${verb}`, { count: done.length, status, sample: done.slice(0, 50) });
       this.save();
     }
@@ -934,8 +940,10 @@ class Store {
   // started: `dirty` = a towel came back (refund/exchange) or was added dirty,
   // `wash` = sent to laundry, `clean` = marked clean. Foundation for period reports.
   _laundryEvents() {
-    const rec = this.towelRecording;
-    const recStart = rec.startedAt || '';
+    // Floor at the tracker baseline (same as the live dirty list). Dirty INFLOW is
+    // guest returns only (refund/exchange) — manual add / back-to-dirty are NOT
+    // inflow, so reverting a towel never inflates the analytics.
+    const recStart = this.towelBaseline() || '';
     const dirty = [], wash = [], clean = [];
     for (const e of this.state.ledger) {
       if (!isTowelItem(e.itemName) || e.ts < recStart) continue;
@@ -946,7 +954,6 @@ class Store {
       if (a.ts < recStart) continue;
       if (a.status === 'washing') wash.push(a.ts);
       else if (a.status === 'clean') clean.push(a.ts);
-      else if (a.status === 'dirty') dirty.push(a.ts); // manual add to the dirty list
     }
     return { dirty, wash, clean };
   }
