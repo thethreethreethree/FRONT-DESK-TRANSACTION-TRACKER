@@ -599,10 +599,12 @@ class Store {
   entryBySeq(seq) { seq = Number(seq); return this.state.ledger.find((e) => e.seq === seq) || null; }
 
   // ------------------------------------------------------- passport deposits
-  // A passport is a non-cash deposit (₱0): the guest leaves their passport, tied to
-  // a MEWS reservation #, and we hold it until check-out. Since the cash value is 0
-  // it never appears in the cash "outstanding" list, so it's tracked here separately.
-  // Held = passport deposits not yet returned (no linked return, not voided).
+  // A passport can SUBSTITUTE for the cash deposit on any item: the guest borrows
+  // (e.g.) a ₱1,000 towel but leaves their passport instead of cash. So the deposit's
+  // cash value is ₱0 (COH untouched), the item still goes OUT, the passport is held
+  // (tied to a MEWS reservation #), and the deposit's nominal value is kept for
+  // reference. A passport-held deposit is any deposit with a `mewsRes` set. Because
+  // it's ₱0 it never shows in the cash "outstanding" list — tracked here instead.
   heldPassports() {
     const linked = new Set(); const reversed = new Set();
     for (const e of this.state.ledger) {
@@ -611,31 +613,33 @@ class Store {
     }
     const out = [];
     for (const e of this.state.ledger) {
-      if (e.kind !== 'deposit' || !isPassportItem(e.itemName)) continue;
+      if (e.kind !== 'deposit' || !e.mewsRes) continue;
       if (linked.has(e.seq) || reversed.has(e.id)) continue;
-      out.push({ seq: e.seq, ts: e.ts, guest: e.guest, room: e.room, mewsRes: e.mewsRes || '', staff: e.staff, pax: e.pax });
+      out.push({ seq: e.seq, ts: e.ts, guest: e.guest, room: e.room, mewsRes: e.mewsRes || '', staff: e.staff, pax: e.pax, itemName: e.itemName, towelNo: entryTowelNo(e), value: e.unitAmount || 0 });
     }
     out.sort((a, b) => (a.ts < b.ts ? 1 : a.ts > b.ts ? -1 : b.seq - a.seq)); // newest first
     return out;
   }
 
-  // Return a held passport: books a ₱0 refund linked to the deposit (so it leaves
-  // the held list). No cash moves. Returns the entry, or null if already returned.
+  // Return a held passport AND the item it secured: books a ₱0 refund linked to the
+  // deposit, carrying the item/towel # so the towel tracker marks the towel back.
+  // No cash moves. Returns the entry, or null if already returned.
   returnPassport(seq) {
     const dep = this.entryBySeq(seq);
-    if (!dep || dep.kind !== 'deposit' || !isPassportItem(dep.itemName)) return null;
+    if (!dep || dep.kind !== 'deposit' || !dep.mewsRes) return null;
     if (this.state.ledger.some((e) => e.kind === 'refund' && e.refundsSeq === dep.seq)) return null; // already returned
     const shift = this.ensureShift();
+    const towelNo = entryTowelNo(dep);
     const e = this._append({
       kind: 'refund', direction: -1, // amount 0 → COH unaffected; -1 just marks it a return
       itemTypeId: dep.itemTypeId, itemName: dep.itemName,
-      qty: 1, unitAmount: 0, amount: 0,
-      guest: dep.guest, room: dep.room, mewsRes: dep.mewsRes, refundsSeq: dep.seq,
-      note: `Passport returned${dep.mewsRes ? ` · MEWS ${dep.mewsRes}` : ''} (deposit #${dep.seq})`,
+      qty: dep.qty || 1, unitAmount: 0, amount: 0,
+      guest: dep.guest, room: dep.room, mewsRes: dep.mewsRes, towelNo, refundsSeq: dep.seq,
+      note: `Passport + ${dep.itemName || 'item'} returned${dep.mewsRes ? ` · MEWS ${dep.mewsRes}` : ''} (deposit #${dep.seq})`,
       shiftId: shift.id, shiftLabel: shift.label,
     });
     this._audit('passport.return', `Passport returned · ${dep.guest || dep.room || '—'}${dep.mewsRes ? ` · MEWS ${dep.mewsRes}` : ''} (deposit #${dep.seq})`,
-      { seq: dep.seq, guest: dep.guest, room: dep.room, mewsRes: dep.mewsRes });
+      { seq: dep.seq, guest: dep.guest, room: dep.room, mewsRes: dep.mewsRes, itemName: dep.itemName });
     return e;
   }
 
@@ -811,10 +815,21 @@ class Store {
     if (!this.towelTracker.enabled) return [];
     const baseline = this.towelBaseline();
     const masterSet = new Set((this.state.towels || []).map((t) => t.no));
-    // Guest+room keys that currently hold a deposit (positive net).
+    // Guest+room keys that currently "hold" — i.e. their towel is genuinely still
+    // out. Cash deposits show via a positive net; PASSPORT deposits are ₱0 cash but
+    // the item is still out, so a guest with an OPEN passport deposit counts too.
     const outstanding = new Set();
+    const gk = (e) => `${(e.guest || '').toUpperCase().trim()}|${(e.room || '').toUpperCase().trim()}`;
     for (const g of this._guestNets()) {
       if (g.held > 0.005) outstanding.add(`${(g.guest || '').toUpperCase().trim()}|${(g.room || '').toUpperCase().trim()}`);
+    }
+    const linkedReturns = new Set(); const reversedDep = new Set();
+    for (const e of this.state.ledger) {
+      if (e.kind === 'refund' && e.refundsSeq != null) linkedReturns.add(e.refundsSeq);
+      if (e.reversesId) reversedDep.add(e.reversesId);
+    }
+    for (const e of this.state.ledger) {
+      if (e.kind === 'deposit' && e.mewsRes && !linkedReturns.has(e.seq) && !reversedDep.has(e.id)) outstanding.add(gk(e));
     }
     const events = new Map(); // no -> [{ type, ts, seq, guest, room, staff }]
     // Registered → full history; unregistered → baseline-onward only.

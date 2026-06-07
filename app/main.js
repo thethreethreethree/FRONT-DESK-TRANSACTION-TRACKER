@@ -41,18 +41,19 @@ async function mount() {
   await syncFromRemote();    // pull the latest off-device records (repo = source of truth)
   await ensureProvisioned(); // only provisions the static baseline if nothing was restored
   ensureAdminSeed();         // seed the initial Admin account once
-  ensurePassportItem();      // make the non-cash "Passport" deposit item available
+  ensurePassportItem();      // retire the (mis-)seeded standalone Passport item
   route();
 }
 
-// One-time: add a "Passport" deposit item (₱0, non-cash) so staff can pick it.
-// Idempotent via a config flag so it doesn't reappear if an admin retires it.
+// Passport is a PAYMENT METHOD (Cash | Passport) on a normal item deposit, not its
+// own item. An earlier build briefly seeded a standalone "Passport" item — retire it
+// once so it no longer shows as a deposit chip. Existing passport deposits are keyed
+// by their MEWS #, so retiring the item doesn't affect them.
 function ensurePassportItem() {
-  if (store.config.passportItemSeeded) return;
-  if (!store.itemTypes.some((it) => it.name.trim().toLowerCase() === 'passport')) {
-    store.addItem({ name: 'Passport', defaultAmount: 0 });
-  }
-  store.setConfig({ passportItemSeeded: true });
+  if (store.config.passportItemRetired) return;
+  const it = store.itemTypes.find((x) => x.name.trim().toLowerCase() === 'passport');
+  if (it && it.active) store.updateItem(it.id, { active: false });
+  store.setConfig({ passportItemRetired: true });
 }
 
 // One-time: seed the initial Admin account (James). He sets his own PIN after the

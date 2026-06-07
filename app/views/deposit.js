@@ -1,5 +1,5 @@
 // views/deposit.js — record a guest deposit (cash IN). Fast keyboard entry.
-import { el, peso, pesoPlain, toast, guessShift, isTowelItem, isPassportItem } from '../util.js';
+import { el, peso, pesoPlain, toast, guessShift, isTowelItem } from '../util.js';
 import { store } from '../store.js';
 import { pageHead } from '../components.js';
 
@@ -53,18 +53,28 @@ export function render(ctx) {
   ]);
   function syncTowel() { towelField.style.display = (selected && isTowelItem(selected.name)) ? '' : 'none'; }
 
-  // passport (non-cash): ₱0 deposit, MEWS reservation # required, no unit amount.
-  function isPassport() { return !!(selected && isPassportItem(selected.name)); }
+  // Payment method: Cash (normal) or Passport. A passport SUBSTITUTES for the cash —
+  // the item still goes out at its deposit value, but ₱0 cash is taken (COH untouched)
+  // and the passport is held against a MEWS reservation #.
+  let method = 'cash';
+  const methodToggle = el('div', { class: 'role-toggle' }, [
+    el('button', { type: 'button', class: 'active', html: '💵&nbsp; Cash', onClick: (ev) => setMethod('cash', ev) }),
+    el('button', { type: 'button', html: '🛂&nbsp; Passport', onClick: (ev) => setMethod('passport', ev) }),
+  ]);
+  function setMethod(m, ev) {
+    method = m;
+    methodToggle.querySelectorAll('button').forEach((b) => b.classList.remove('active'));
+    ev.currentTarget.classList.add('active');
+    syncPassport();
+  }
+  function isPassport() { return method === 'passport'; }
   const mewsInput = el('input', { class: 'input', placeholder: 'e.g. RES-48213', autocomplete: 'off' });
   const mewsField = el('div', { class: 'field' }, [
     el('label', { text: 'MEWS reservation #' }), mewsInput,
     el('div', { class: 'hint', text: 'required — the booking this passport is held against' }),
   ]);
   function syncPassport() {
-    const p = isPassport();
-    mewsField.style.display = p ? '' : 'none';
-    unitInput.disabled = p;
-    if (p) { unitOverride = 0; unitInput.value = 0; }
+    mewsField.style.display = isPassport() ? '' : 'none';
     updatePreview();
   }
 
@@ -78,12 +88,13 @@ export function render(ctx) {
   const previewVal = el('div', { class: 'val', text: '₱0.00' });
   const previewLab = el('div', { class: 'lab', text: 'Deposit amount (auto)' });
   const previewSub = el('div', { class: 'muted', style: 'font-size:.78rem', text: 'unit × quantity' });
-  function unit() { return isPassport() ? 0 : (unitOverride != null ? unitOverride : (selected ? selected.defaultAmount : 0)); }
-  function amount() { return Math.round(unit() * qty * 100) / 100; }
+  function unit() { return unitOverride != null ? unitOverride : (selected ? selected.defaultAmount : 0); }
+  function value() { return Math.round(unit() * qty * 100) / 100; } // nominal deposit value
+  function amount() { return isPassport() ? 0 : value(); }          // cash actually taken
   function updatePreview() {
-    previewVal.textContent = peso(amount());
-    previewLab.textContent = isPassport() ? 'No cash — passport held' : 'Deposit amount (auto)';
-    previewSub.textContent = isPassport() ? 'collateral only · COH unchanged' : 'unit × quantity';
+    previewVal.textContent = peso(value());
+    previewLab.textContent = isPassport() ? `Deposit value · ${peso(value())} (passport)` : 'Deposit amount (auto)';
+    previewSub.textContent = isPassport() ? 'paid by passport — no cash, COH unchanged' : 'unit × quantity';
   }
 
   const preview = el('div', { class: 'amount-preview' }, [
@@ -97,6 +108,7 @@ export function render(ctx) {
     el('div', { class: 'field' }, [el('label', { text: 'Unit amount (₱)' }), unitInput, el('div', { class: 'hint', text: 'editable — note the reason if changed' })]),
     el('div', { class: 'field' }, [el('label', { text: 'PAX (optional)' }), paxInput]),
   ]));
+  card.appendChild(el('div', { class: 'field' }, [el('label', { text: 'Deposit paid by' }), methodToggle]));
   card.appendChild(el('div', { class: 'row2' }, [
     el('div', { class: 'field' }, [el('label', { text: 'Guest name' }), guestInput]),
     el('div', { class: 'field' }, [el('label', { text: 'Room #' }), roomInput]),
@@ -123,7 +135,7 @@ export function render(ctx) {
       mewsRes: isPassport() ? mewsInput.value : '',
     });
     toast(isPassport()
-      ? `Passport held · ${guestInput.value.trim() || roomInput.value.trim()} · MEWS ${mewsInput.value.trim()}`
+      ? `Passport held for ${selected.name} (${peso(value())}) · ${guestInput.value.trim() || roomInput.value.trim()} · MEWS ${mewsInput.value.trim()}`
       : `Deposit recorded · ${peso(e.amount)} · COH now ${peso(store.coh())}`, 'ok');
     ctx.navigate(isPassport() ? 'passports' : 'dashboard');
   });

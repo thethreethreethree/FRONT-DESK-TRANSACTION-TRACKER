@@ -1,16 +1,17 @@
 // views/passports.js — passports held as deposits. A passport is non-cash (₱0)
 // collateral tied to a MEWS reservation #, so it never shows in the cash
 // "outstanding" list — it's tracked here. Return one at check-out.
-import { el, fmtDateTime, clear, toast } from '../util.js';
+import { el, peso, fmtDateTime, clear, toast } from '../util.js';
 import { store } from '../store.js';
 import { pageHead, confirmDialog } from '../components.js';
 
 export function render(ctx) {
   const root = el('div');
   const held = store.heldPassports();
+  const totalValue = held.reduce((s, p) => s + (p.value || 0), 0);
   root.appendChild(pageHead('Passports held',
-    `${held.length} passport${held.length === 1 ? '' : 's'} currently held · no cash value`,
-    el('button', { class: 'btn in', html: '＋&nbsp; New passport deposit', onClick: () => ctx.navigate('deposit') })));
+    `${held.length} passport${held.length === 1 ? '' : 's'} held in lieu of cash · ${peso(totalValue)} deposit value`,
+    el('button', { class: 'btn in', html: '＋&nbsp; New deposit', onClick: () => ctx.navigate('deposit') })));
 
   const card = el('div', { class: 'card', style: 'padding:0;overflow:hidden' });
   const filters = el('div', { class: 'filters', style: 'padding:14px 16px 0;margin-bottom:0' });
@@ -31,7 +32,8 @@ export function render(ctx) {
     }
     const tbl = el('table', { class: 'tbl' });
     tbl.appendChild(el('thead', {}, el('tr', {}, [
-      el('th', { text: '#' }), el('th', { text: 'Guest / Room' }), el('th', { text: 'MEWS res #' }),
+      el('th', { text: '#' }), el('th', { text: 'Guest / Room' }), el('th', { text: 'For (item)' }),
+      el('th', { class: 'num', text: 'Value' }), el('th', { text: 'MEWS res #' }),
       el('th', { text: 'Held since' }), el('th', { text: 'Taken by' }), el('th', { class: 'num', text: '' }),
     ])));
     const tb = el('tbody');
@@ -39,16 +41,18 @@ export function render(ctx) {
       tb.append(el('tr', {}, [
         el('td', {}, el('span', { class: 'seq', text: '#' + p.seq })),
         el('td', {}, [el('strong', { text: p.guest || '—' }), p.room ? el('span', { class: 'muted', text: ' · ' + p.room }) : null]),
+        el('td', {}, [el('span', { text: p.itemName || '—' }), p.towelNo ? el('span', { class: 'tag towel', style: 'margin-left:6px', text: p.towelNo }) : null]),
+        el('td', { class: 'num', text: p.value ? peso(p.value) : '—' }),
         el('td', {}, p.mewsRes ? el('span', { class: 'tag mews', text: p.mewsRes }) : el('span', { class: 'muted', text: '—' })),
         el('td', { text: fmtDateTime(p.ts) }),
         el('td', { text: p.staff || '—' }),
         el('td', { class: 'num' }, el('button', {
           class: 'btn out sm', text: '↩ Return',
           onClick: () => confirmDialog({
-            title: 'Return this passport?',
-            sub: `Hand back ${p.guest || p.room || 'the guest'}'s passport${p.mewsRes ? ` (MEWS ${p.mewsRes})` : ''}. It will be removed from the held list. No cash is involved.`,
-            confirmLabel: 'Return passport', kind: 'out',
-            onConfirm: () => { store.returnPassport(p.seq); toast('Passport returned', 'ok'); paint(); },
+            title: 'Return passport & item?',
+            sub: `Hand back ${p.guest || p.room || 'the guest'}'s passport${p.mewsRes ? ` (MEWS ${p.mewsRes})` : ''} and close the ${p.itemName || 'item'}${p.towelNo ? ' #' + p.towelNo : ''} deposit. No cash is involved.`,
+            confirmLabel: 'Return', kind: 'out',
+            onConfirm: () => { store.returnPassport(p.seq); toast('Passport & item returned', 'ok'); paint(); },
           }),
         })),
       ]));
