@@ -305,6 +305,57 @@ async function runAutoSync() {
   if (_syncSig() !== _lastSyncedSig) { clearTimeout(_autoSyncTimer); _autoSyncTimer = setTimeout(runAutoSync, 6000); } // changes during the backup
 }
 
+// ---- Live pull: keep this device current WITHOUT a manual refresh. -----------
+// Front desks run more than one device/tab; pulling only on page-load meant a
+// deposit/refund made elsewhere stayed invisible here until a hard refresh — which
+// led to re-entering data. We now poll on a short interval AND whenever the tab
+// regains focus. To avoid re-downloading the multi-MB ledger every time, we first
+// do a CHEAP sha check (gh.remoteFileSha) and only fetch+adopt when it changed.
+let _polling = false;
+async function pollRemote() {
+  if (_polling || _syncing || !store.session) return;
+  _polling = true;
+  try {
+    if (gh.hasToken()) {
+      const sha = await gh.remoteFileSha();
+      const known = (store.config.github || {}).lastBackupSha;
+      if (!sha || sha === known) return; // nothing new since our last sync — cheap exit
+    }
+    let remote = null;
+    try { remote = await gh.fetchRemoteState(); } catch (e) { return; }
+    if (!remote || !remote.payload || !remote.payload.state) return;
+    const remoteAudit = (remote.payload.meta || {}).auditEvents || 0;
+    const localAudit = (store.audit || []).length;
+    if (remoteAudit <= localAudit) { // sha moved but not newer (e.g. our own push) — just record it
+      if (remote.sha) { const g = store.config.github || {}; g.lastBackupSha = remote.sha; store.setConfig({ github: g }); }
+      return;
+    }
+    // Adopt the newer state SILENTLY (suppress the data.import audit so polling
+    // doesn't bloat the log or echo a push back), then refresh the view if safe.
+    store._suppressAudit = true;
+    try { store.importData(remote.payload); } finally { store._suppressAudit = false; }
+    if (remote.sha) { const g = store.config.github || {}; g.lastBackupSha = remote.sha; store.setConfig({ github: g }); } // re-read config after import
+    _lastSyncedSig = _syncSig();
+    refreshIfSafe();
+  } finally { _polling = false; }
+}
+
+// Re-render the current view after adopting remote changes — but NEVER clobber a
+// form being filled or an input being typed in (that would lose the user's entry).
+function refreshIfSafe() {
+  if (!store.session) { route(); return; }
+  if (!document.getElementById('main-view')) return;
+  const FORM_VIEWS = new Set(['deposit', 'refund', 'exchange']);
+  const ae = document.activeElement;
+  const typing = ae && /^(INPUT|TEXTAREA|SELECT)$/.test(ae.tagName || '');
+  if (FORM_VIEWS.has(current) || typing) return; // data is in memory; reflects on next navigation
+  renderCurrent();
+}
+
+setInterval(() => { if (document.visibilityState === 'visible') pollRemote(); }, 15000);
+document.addEventListener('visibilitychange', () => { if (document.visibilityState === 'visible') pollRemote(); });
+window.addEventListener('focus', pollRemote);
+
 // ============================================================ Shifts view
 function renderShifts(ctx) {
   const root = el('div');

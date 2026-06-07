@@ -127,6 +127,22 @@ export async function autoBackup(reason) {
   }
 }
 
+// CHEAP change-check: return the current blob SHA of the backup file without
+// downloading it (the Contents API returns metadata only for files > 1 MB — ours
+// is several MB). Lets the live poll detect "did another device write?" cheaply,
+// and only fetch the full ledger when the SHA actually changed. Token-only; returns
+// null on no-token / error (caller falls back to a full fetch).
+export async function remoteFileSha() {
+  const g = cfg();
+  if (!getToken() || !g.owner || !g.repo) return null;
+  try {
+    const branch = g.branch || 'main';
+    const res = await api(`/repos/${g.owner}/${g.repo}/contents/${cleanPath(g.path)}?ref=${encodeURIComponent(branch)}`);
+    if (res.ok) { const j = await res.json(); return j.sha || null; }
+  } catch (e) { /* ignore */ }
+  return null;
+}
+
 // Pull the latest backup from the repo. Returns { payload, sha } or null.
 // With a token we use the Contents API (newest commit, no CDN cache); without a
 // token we fetch the file over the same relative path the site is served from
