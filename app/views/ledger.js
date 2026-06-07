@@ -48,7 +48,7 @@ export function render(ctx) {
       if (q) {
         // Searchable by transaction # (its own seq, and the deposit # a refund
         // settles — so searching a deposit number surfaces its refund too).
-        const hay = `#${e.seq} ${e.seq} ${e.refundsSeq ? '#' + e.refundsSeq + ' ' + e.refundsSeq + ' ' : ''}${e.exchangesSeq ? '#' + e.exchangesSeq + ' ' + e.exchangesSeq + ' ' : ''}${e.guest} ${e.room} ${e.note} ${e.staff} ${e.itemName} ${entryTowelNo(e)} ${e.oldTowelNo || ''}`.toLowerCase();
+        const hay = `#${e.seq} ${e.seq} ${e.refundsSeq ? '#' + e.refundsSeq + ' ' + e.refundsSeq + ' ' : ''}${e.exchangesSeq ? '#' + e.exchangesSeq + ' ' + e.exchangesSeq + ' ' : ''}${e.guest} ${e.room} ${e.note} ${e.staff} ${e.itemName} ${entryTowelNo(e)} ${e.oldTowelNo || ''} ${e.mewsRes || ''}`.toLowerCase();
         if (!hay.includes(q)) return false;
       }
       return true;
@@ -79,6 +79,7 @@ export function render(ctx) {
           el('span', { text: `${e.itemName || '—'}${e.qty ? ' ×' + e.qty : ''}` }),
           e.refundsSeq ? el('span', { class: 'muted', style: 'margin-left:6px;font-size:.78rem', title: 'refund of deposit #' + e.refundsSeq, text: '↩ #' + e.refundsSeq }) : null,
           e.exchangesSeq ? el('span', { class: 'muted', style: 'margin-left:6px;font-size:.78rem', title: 'exchange on deposit #' + e.exchangesSeq, text: '⇄ #' + e.exchangesSeq }) : null,
+          e.mewsRes ? el('span', { class: 'tag mews', style: 'margin-left:6px', title: 'MEWS reservation #', text: e.mewsRes }) : null,
         ]),
         el('td', {}, towelCell(e)),
         el('td', {}, [el('strong', { text: e.guest || '—' }), e.room ? el('span', { class: 'muted', text: ' · ' + e.room }) : null]),

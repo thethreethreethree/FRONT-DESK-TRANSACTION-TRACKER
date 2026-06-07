@@ -101,6 +101,12 @@ export function isTowelItem(name) {
   return String(name || '').trim().toLowerCase() === 'towel';
 }
 
+// The "Passport" item is a non-cash deposit: ₱0 value, a MEWS reservation # is
+// required, and the passport itself is held until returned.
+export function isPassportItem(name) {
+  return String(name || '').trim().toLowerCase() === 'passport';
+}
+
 const tidyTowelNo = (s) => String(s || '').replace(/\s+/g, ' ').trim().slice(0, 60);
 
 // Pull a towel tag number out of a legacy note. Returns '' when there isn't one.

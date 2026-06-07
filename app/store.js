@@ -13,7 +13,7 @@
 // keep a localStorage fallback for private-mode / no-IDB and migrate old data.
 // GitHub repo holds versioned JSON backups (git history = durable audit trail).
 
-import { sha256, stableStringify, uid, nowISO, businessDate, guessShift, pesoPlain, isTowelItem, entryTowelNo, towelTokens, normTowelNo } from './util.js';
+import { sha256, stableStringify, uid, nowISO, businessDate, guessShift, pesoPlain, isTowelItem, entryTowelNo, towelTokens, normTowelNo, isPassportItem } from './util.js';
 
 const STORAGE_KEY = 'fdtt_state_v1';
 const SESSION_KEY = 'fdtt_session'; // device-local signed-in session (not exported)
@@ -398,6 +398,8 @@ class Store {
       // The deposit an exchange belongs to. Distinct from refundsSeq: an exchange
       // links to the deposit but does NOT settle it (the deposit stays refundable).
       exchangesSeq: entry.exchangesSeq != null && entry.exchangesSeq !== '' ? Number(entry.exchangesSeq) : null,
+      // MEWS reservation # — required on Passport deposits (non-cash collateral).
+      mewsRes: (entry.mewsRes || '').toString().trim(),
       reversesId: entry.reversesId || null,
       prevHash,
     };
@@ -407,7 +409,7 @@ class Store {
     return base;
   }
 
-  addDeposit({ itemTypeId, qty, unitAmount, amount, guest, room, pax, note, towelNo }) {
+  addDeposit({ itemTypeId, qty, unitAmount, amount, guest, room, pax, note, towelNo, mewsRes }) {
     const item = this.itemById(itemTypeId);
     const shift = this.ensureShift();
     const unit = unitAmount != null ? unitAmount : (item ? item.defaultAmount : 0);
@@ -416,7 +418,7 @@ class Store {
       kind: 'deposit', direction: +1,
       itemTypeId, itemName: item ? item.name : 'Item',
       qty: qty || 1, unitAmount: unit, amount: amt,
-      guest, room, pax, note, towelNo,
+      guest, room, pax, note, towelNo, mewsRes,
       shiftId: shift.id, shiftLabel: shift.label,
     });
     this._audit('deposit.create', `Deposit ₱${pesoPlain(e.amount)} · ${e.itemName} ×${e.qty} · ${e.guest || e.room || '—'}`,
@@ -595,6 +597,47 @@ class Store {
 
   // Look up a ledger entry by its sequence number (the visible transaction #).
   entryBySeq(seq) { seq = Number(seq); return this.state.ledger.find((e) => e.seq === seq) || null; }
+
+  // ------------------------------------------------------- passport deposits
+  // A passport is a non-cash deposit (₱0): the guest leaves their passport, tied to
+  // a MEWS reservation #, and we hold it until check-out. Since the cash value is 0
+  // it never appears in the cash "outstanding" list, so it's tracked here separately.
+  // Held = passport deposits not yet returned (no linked return, not voided).
+  heldPassports() {
+    const linked = new Set(); const reversed = new Set();
+    for (const e of this.state.ledger) {
+      if (e.kind === 'refund' && e.refundsSeq != null) linked.add(e.refundsSeq);
+      if (e.reversesId) reversed.add(e.reversesId);
+    }
+    const out = [];
+    for (const e of this.state.ledger) {
+      if (e.kind !== 'deposit' || !isPassportItem(e.itemName)) continue;
+      if (linked.has(e.seq) || reversed.has(e.id)) continue;
+      out.push({ seq: e.seq, ts: e.ts, guest: e.guest, room: e.room, mewsRes: e.mewsRes || '', staff: e.staff, pax: e.pax });
+    }
+    out.sort((a, b) => (a.ts < b.ts ? 1 : a.ts > b.ts ? -1 : b.seq - a.seq)); // newest first
+    return out;
+  }
+
+  // Return a held passport: books a ₱0 refund linked to the deposit (so it leaves
+  // the held list). No cash moves. Returns the entry, or null if already returned.
+  returnPassport(seq) {
+    const dep = this.entryBySeq(seq);
+    if (!dep || dep.kind !== 'deposit' || !isPassportItem(dep.itemName)) return null;
+    if (this.state.ledger.some((e) => e.kind === 'refund' && e.refundsSeq === dep.seq)) return null; // already returned
+    const shift = this.ensureShift();
+    const e = this._append({
+      kind: 'refund', direction: -1, // amount 0 → COH unaffected; -1 just marks it a return
+      itemTypeId: dep.itemTypeId, itemName: dep.itemName,
+      qty: 1, unitAmount: 0, amount: 0,
+      guest: dep.guest, room: dep.room, mewsRes: dep.mewsRes, refundsSeq: dep.seq,
+      note: `Passport returned${dep.mewsRes ? ` · MEWS ${dep.mewsRes}` : ''} (deposit #${dep.seq})`,
+      shiftId: shift.id, shiftLabel: shift.label,
+    });
+    this._audit('passport.return', `Passport returned · ${dep.guest || dep.room || '—'}${dep.mewsRes ? ` · MEWS ${dep.mewsRes}` : ''} (deposit #${dep.seq})`,
+      { seq: dep.seq, guest: dep.guest, room: dep.room, mewsRes: dep.mewsRes });
+    return e;
+  }
 
   // Set of deposit transaction #s that are still refundable (open deposit of a guest
   // who is currently outstanding). Drives the clickable transaction # in the ledger.

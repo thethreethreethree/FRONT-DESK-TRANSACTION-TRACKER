@@ -11,6 +11,7 @@ import * as exchange from './views/exchange.js';
 import * as outstanding from './views/outstanding.js';
 import * as ledger from './views/ledger.js';
 import * as towels from './views/towels.js';
+import * as passports from './views/passports.js';
 import * as activity from './views/activity.js';
 
 const LOGO_LIGHT = 'brand_assets/logo-el-nido.png'; // black wordmark → invert for dark bg
@@ -22,6 +23,7 @@ const VIEWS = {
   exchange: { label: 'Towel Exchange', icon: '⇄', render: exchange.render },
   outstanding: { label: 'Outstanding', icon: '🧾', render: outstanding.render },
   ledger: { label: 'Ledger', icon: '📜', render: ledger.render },
+  passports: { label: 'Passports', icon: '🛂', render: passports.render },
   towels: { label: 'Towel Tracker', icon: '🧺', render: towels.render },
   shifts: { label: 'Shifts', icon: '🕑', render: renderShifts },
   activity: { label: 'Activity Log', icon: '🪵', mgr: true, render: activity.render },
@@ -39,7 +41,18 @@ async function mount() {
   await syncFromRemote();    // pull the latest off-device records (repo = source of truth)
   await ensureProvisioned(); // only provisions the static baseline if nothing was restored
   ensureAdminSeed();         // seed the initial Admin account once
+  ensurePassportItem();      // make the non-cash "Passport" deposit item available
   route();
+}
+
+// One-time: add a "Passport" deposit item (₱0, non-cash) so staff can pick it.
+// Idempotent via a config flag so it doesn't reappear if an admin retires it.
+function ensurePassportItem() {
+  if (store.config.passportItemSeeded) return;
+  if (!store.itemTypes.some((it) => it.name.trim().toLowerCase() === 'passport')) {
+    store.addItem({ name: 'Passport', defaultAmount: 0 });
+  }
+  store.setConfig({ passportItemSeeded: true });
 }
 
 // One-time: seed the initial Admin account (James). He sets his own PIN after the
@@ -220,7 +233,7 @@ function renderSidebar() {
     el('img', { class: 'logo', src: LOGO_LIGHT, alt: 'Frendz', style: 'filter:brightness(0) invert(1)' }),
   ]));
   const nav = el('nav', { class: 'nav' });
-  const order = ['dashboard', 'deposit', 'refund', 'exchange', 'outstanding', 'ledger', 'towels', 'shifts'];
+  const order = ['dashboard', 'deposit', 'refund', 'exchange', 'outstanding', 'ledger', 'passports', 'towels', 'shifts'];
   for (const id of order) addNav(nav, id);
   // Manager-only tools (Activity Log, Settings) are hidden entirely from staff —
   // staff have no access to admin features. (navigate() also gates, as a backstop.)

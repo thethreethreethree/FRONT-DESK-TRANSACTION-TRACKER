@@ -1,5 +1,5 @@
 // views/deposit.js — record a guest deposit (cash IN). Fast keyboard entry.
-import { el, peso, pesoPlain, toast, guessShift, isTowelItem } from '../util.js';
+import { el, peso, pesoPlain, toast, guessShift, isTowelItem, isPassportItem } from '../util.js';
 import { store } from '../store.js';
 import { pageHead } from '../components.js';
 
@@ -25,7 +25,7 @@ export function render(ctx) {
   for (const it of items) {
     chipWrap.appendChild(el('div', {
       class: 'chip', dataset: { id: it.id },
-      onClick: () => { selected = it; unitOverride = null; unitInput.value = it.defaultAmount; paintChips(); updatePreview(); syncTowel(); },
+      onClick: () => { selected = it; unitOverride = null; unitInput.value = it.defaultAmount; paintChips(); updatePreview(); syncTowel(); syncPassport(); },
     }, [
       el('span', { class: 'nm', text: it.name }),
       el('span', { class: 'amt', text: `₱${pesoPlain(it.defaultAmount)} ea` }),
@@ -53,6 +53,21 @@ export function render(ctx) {
   ]);
   function syncTowel() { towelField.style.display = (selected && isTowelItem(selected.name)) ? '' : 'none'; }
 
+  // passport (non-cash): ₱0 deposit, MEWS reservation # required, no unit amount.
+  function isPassport() { return !!(selected && isPassportItem(selected.name)); }
+  const mewsInput = el('input', { class: 'input', placeholder: 'e.g. RES-48213', autocomplete: 'off' });
+  const mewsField = el('div', { class: 'field' }, [
+    el('label', { text: 'MEWS reservation #' }), mewsInput,
+    el('div', { class: 'hint', text: 'required — the booking this passport is held against' }),
+  ]);
+  function syncPassport() {
+    const p = isPassport();
+    mewsField.style.display = p ? '' : 'none';
+    unitInput.disabled = p;
+    if (p) { unitOverride = 0; unitInput.value = 0; }
+    updatePreview();
+  }
+
   // guest / room / pax
   const guestInput = el('input', { class: 'input', placeholder: 'e.g. Charlie H.', autocomplete: 'off' });
   const roomInput = el('input', { class: 'input', placeholder: 'e.g. 309', autocomplete: 'off' });
@@ -61,12 +76,18 @@ export function render(ctx) {
 
   // amount preview
   const previewVal = el('div', { class: 'val', text: '₱0.00' });
-  function unit() { return unitOverride != null ? unitOverride : (selected ? selected.defaultAmount : 0); }
+  const previewLab = el('div', { class: 'lab', text: 'Deposit amount (auto)' });
+  const previewSub = el('div', { class: 'muted', style: 'font-size:.78rem', text: 'unit × quantity' });
+  function unit() { return isPassport() ? 0 : (unitOverride != null ? unitOverride : (selected ? selected.defaultAmount : 0)); }
   function amount() { return Math.round(unit() * qty * 100) / 100; }
-  function updatePreview() { previewVal.textContent = peso(amount()); }
+  function updatePreview() {
+    previewVal.textContent = peso(amount());
+    previewLab.textContent = isPassport() ? 'No cash — passport held' : 'Deposit amount (auto)';
+    previewSub.textContent = isPassport() ? 'collateral only · COH unchanged' : 'unit × quantity';
+  }
 
   const preview = el('div', { class: 'amount-preview' }, [
-    el('div', {}, [el('div', { class: 'lab', text: 'Deposit amount (auto)' }), el('div', { class: 'muted', style: 'font-size:.78rem', text: 'unit × quantity' })]),
+    el('div', {}, [previewLab, previewSub]),
     previewVal,
   ]);
 
@@ -81,6 +102,7 @@ export function render(ctx) {
     el('div', { class: 'field' }, [el('label', { text: 'Room #' }), roomInput]),
   ]));
   card.appendChild(towelField);
+  card.appendChild(mewsField);
   card.appendChild(el('div', { class: 'field' }, [el('label', { text: 'Note (optional)' }), noteInput]));
   card.appendChild(preview);
 
@@ -91,18 +113,23 @@ export function render(ctx) {
   submit.addEventListener('click', () => {
     if (!selected) { toast('Pick an item first', 'warn'); return; }
     if (!guestInput.value.trim() && !roomInput.value.trim()) { toast('Enter a guest name or room #', 'warn'); return; }
-    if (amount() <= 0) { toast('Amount must be greater than 0', 'warn'); return; }
+    if (isPassport()) {
+      if (!mewsInput.value.trim()) { toast('Enter the MEWS reservation number', 'warn'); return; }
+    } else if (amount() <= 0) { toast('Amount must be greater than 0', 'warn'); return; }
     const e = store.addDeposit({
       itemTypeId: selected.id, qty, unitAmount: unit(), amount: amount(),
       guest: guestInput.value, room: roomInput.value, pax: paxInput.value, note: noteInput.value,
       towelNo: isTowelItem(selected.name) ? towelInput.value : '',
+      mewsRes: isPassport() ? mewsInput.value : '',
     });
-    toast(`Deposit recorded · ${peso(e.amount)} · COH now ${peso(store.coh())}`, 'ok');
-    ctx.navigate('dashboard');
+    toast(isPassport()
+      ? `Passport held · ${guestInput.value.trim() || roomInput.value.trim()} · MEWS ${mewsInput.value.trim()}`
+      : `Deposit recorded · ${peso(e.amount)} · COH now ${peso(store.coh())}`, 'ok');
+    ctx.navigate(isPassport() ? 'passports' : 'dashboard');
   });
 
   root.appendChild(card);
-  paintChips(); updatePreview(); syncTowel();
+  paintChips(); updatePreview(); syncTowel(); syncPassport();
   setTimeout(() => guestInput.focus(), 60);
   return root;
 }
