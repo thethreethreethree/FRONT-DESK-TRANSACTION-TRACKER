@@ -930,6 +930,55 @@ class Store {
     return { start: new Date(startN).toISOString(), end: new Date(startN + ms).toISOString(), hours: rec.hours, index: k };
   }
 
+  // Timestamps (one per physical towel) of laundry-relevant events since recording
+  // started: `dirty` = a towel came back (refund/exchange) or was added dirty,
+  // `wash` = sent to laundry, `clean` = marked clean. Foundation for period reports.
+  _laundryEvents() {
+    const rec = this.towelRecording;
+    const recStart = rec.startedAt || '';
+    const dirty = [], wash = [], clean = [];
+    for (const e of this.state.ledger) {
+      if (!isTowelItem(e.itemName) || e.ts < recStart) continue;
+      if (e.kind === 'refund' && !e.towelLost) for (const t of towelTokens(entryTowelNo(e))) dirty.push(e.ts);
+      else if (e.kind === 'exchange') for (const t of towelTokens(e.oldTowelNo)) dirty.push(e.ts);
+    }
+    for (const a of (this.state.laundryLog || [])) {
+      if (a.ts < recStart) continue;
+      if (a.status === 'washing') wash.push(a.ts);
+      else if (a.status === 'clean') clean.push(a.ts);
+      else if (a.status === 'dirty') dirty.push(a.ts); // manual add to the dirty list
+    }
+    return { dirty, wash, clean };
+  }
+
+  // Per-period laundry report (oldest→newest), `count` windows back from the current
+  // one. granularity: 'day' = one recording cycle, 'week' = 7 cycles, 'month' = 30.
+  // Each row: { index, start, end, dirtyIn, sentToWash, cleaned }.
+  laundryPeriodReport(granularity = 'day', count = 30) {
+    const rec = this.towelRecording;
+    if (!rec.enabled || !rec.startedAt) return [];
+    const mult = granularity === 'week' ? 7 : granularity === 'month' ? 30 : 1;
+    const ms = rec.hours * mult * 3600 * 1000;
+    const anchor = Date.parse(rec.startedAt);
+    const now = Date.parse(nowISO());
+    if (!isFinite(anchor) || !(ms > 0)) return [];
+    const curIdx = now >= anchor ? Math.floor((now - anchor) / ms) : 0;
+    const ev = this._laundryEvents();
+    const inWin = (arr, s, e) => { let n = 0; for (const ts of arr) { const t = Date.parse(ts); if (t >= s && t < e) n++; } return n; };
+    const rows = [];
+    for (let i = Math.max(0, curIdx - count + 1); i <= curIdx; i++) {
+      const s = anchor + i * ms, e = s + ms;
+      rows.push({ index: i, start: new Date(s).toISOString(), end: new Date(e).toISOString(), dirtyIn: inWin(ev.dirty, s, e), sentToWash: inWin(ev.wash, s, e), cleaned: inWin(ev.clean, s, e) });
+    }
+    return rows;
+  }
+
+  // Current period vs the previous one, for the analytics comparison.
+  laundryCompare(granularity = 'day') {
+    const rows = this.laundryPeriodReport(granularity, 2);
+    return { granularity, current: rows[rows.length - 1] || null, previous: rows.length >= 2 ? rows[rows.length - 2] : null };
+  }
+
   // ------------------------------------------------------------- integrity
   verifyIntegrity() {
     let prev = GENESIS;

@@ -66,6 +66,9 @@ export function render(ctx) {
     ]),
   ]));
 
+  // ---- laundry analytics + CSV (everyone, once recording is on) ----
+  if (recOn) root.appendChild(renderAnalytics(ctx));
+
   // ---- manage inventory + dirty-towel recording (admin only) ----
   if (store.isManager()) root.appendChild(renderManage(ctx, summary));
   if (store.isManager()) root.appendChild(renderRecording(ctx));
@@ -73,6 +76,70 @@ export function render(ctx) {
   // ---- status table (everyone can view) ----
   root.appendChild(renderTable(ctx));
   return root;
+}
+
+// Period-over-period change label (▲/▼ % vs the previous period).
+function laundryDelta(cur, prev) {
+  if (prev == null) return { text: '', color: 'var(--muted)' };
+  if (prev === 0) return { text: cur === 0 ? 'no change' : 'new', color: 'var(--muted)' };
+  const d = cur - prev;
+  if (d === 0) return { text: 'no change', color: 'var(--muted)' };
+  return { text: `${d > 0 ? '▲' : '▼'} ${Math.abs(Math.round((d / prev) * 100))}% vs prev`, color: d > 0 ? '#b45309' : 'var(--in-700)' };
+}
+const csvField = (v) => { const s = String(v == null ? '' : v); return /[",\n]/.test(s) ? '"' + s.replace(/"/g, '""') + '"' : s; };
+function downloadCSV(filename, text) {
+  const blob = new Blob([text], { type: 'text/csv;charset=utf-8' });
+  const url = URL.createObjectURL(blob);
+  const a = el('a', { href: url, download: filename });
+  document.body.appendChild(a); a.click(); a.remove(); URL.revokeObjectURL(url);
+}
+function exportLaundryCSV(granularity) {
+  const count = granularity === 'day' ? 30 : 12;
+  const rows = store.laundryPeriodReport(granularity, count);
+  if (!rows.length) { toast('No records yet for this period', 'warn'); return; }
+  const lines = [['Period start', 'Period end', 'Dirty in', 'Sent to laundry', 'Cleaned'].join(',')];
+  for (const r of rows) lines.push([csvField(fmtDateTime(r.start)), csvField(fmtDateTime(r.end)), r.dirtyIn, r.sentToWash, r.cleaned].join(','));
+  const stamp = new Date(Date.parse(nowISO())).toISOString().slice(0, 10);
+  downloadCSV(`towel-laundry-${granularity}-${stamp}.csv`, lines.join('\n'));
+  toast(`Exported ${rows.length} ${granularity} record${rows.length === 1 ? '' : 's'}`, 'ok');
+}
+
+// Laundry analytics: current period vs previous for Day / Week / Month, plus CSV export.
+function renderAnalytics(ctx) {
+  const rec = store.towelRecording;
+  const card = el('div', { class: 'card', style: 'margin-bottom:18px' }, [
+    el('div', { class: 'card-h' }, [el('h3', { text: 'Laundry analytics' }), el('span', { class: 'sub', text: `day = ${rec.hours}h cycle · week = 7 · month = 30` })]),
+  ]);
+  const panel = (label, sub, g) => {
+    const c = store.laundryCompare(g);
+    const cur = c.current || { dirtyIn: 0, sentToWash: 0 };
+    const prev = c.previous;
+    const dd = laundryDelta(cur.dirtyIn, prev ? prev.dirtyIn : null);
+    const dw = laundryDelta(cur.sentToWash, prev ? prev.sentToWash : null);
+    const line = (k, v, d) => el('div', { style: 'margin-top:4px' }, [
+      el('span', { class: 'muted', text: k + ' ' }), el('strong', { text: String(v) }),
+      d.text ? el('span', { style: `margin-left:6px;font-size:.78rem;color:${d.color}`, text: d.text }) : null,
+    ]);
+    return el('div', { style: 'min-width:200px;flex:1' }, [
+      el('div', { class: 'k', style: 'font-size:.76rem;letter-spacing:.08em;text-transform:uppercase;color:var(--muted);font-weight:700', text: label }),
+      el('div', { class: 'muted', style: 'font-size:.76rem;margin-bottom:4px', text: sub }),
+      line('Dirty in', cur.dirtyIn, dd),
+      line('Sent to laundry', cur.sentToWash, dw),
+    ]);
+  };
+  card.appendChild(el('div', { class: 'flex gap wrap', style: 'gap:28px' }, [
+    panel('Today', 'vs previous day', 'day'),
+    panel('This week', 'vs previous week', 'week'),
+    panel('This month', 'vs previous month', 'month'),
+  ]));
+  card.appendChild(el('hr', { class: 'hr' }));
+  card.appendChild(el('div', { class: 'flex gap wrap aic' }, [
+    el('span', { class: 'muted', style: 'font-size:.84rem', text: 'Export records to CSV:' }),
+    el('button', { class: 'btn sm', html: '⬇ Day', onClick: () => exportLaundryCSV('day') }),
+    el('button', { class: 'btn sm', html: '⬇ Week', onClick: () => exportLaundryCSV('week') }),
+    el('button', { class: 'btn sm', html: '⬇ Month', onClick: () => exportLaundryCSV('month') }),
+  ]));
+  return card;
 }
 
 // ISO → value for <input type=datetime-local> (local "YYYY-MM-DDTHH:mm").
