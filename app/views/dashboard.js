@@ -207,7 +207,7 @@ function towelCard(ctx) {
   } else {
     card.appendChild(el('p', { class: 'muted', style: 'margin:8px 0 0', text: 'No towels currently out.' }));
   }
-  if (s.lost) card.appendChild(el('div', { class: 'pill-warn mt', html: `<strong>${s.lost}</strong> lost towel${s.lost === 1 ? '' : 's'} need admin review (Found / Write-off).` }));
+  if (s.lost) { const lt = store.lostTowelStats(); card.appendChild(el('div', { class: 'pill-warn mt', html: `<strong>${s.lost}</strong> lost towel${s.lost === 1 ? '' : 's'} · <strong>₱${pesoPlain(lt.value)}</strong> deposit value forfeited — need admin review (Found / Write-off).` })); }
   return card;
 }
 

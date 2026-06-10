@@ -794,29 +794,39 @@ class Store {
   // Settle a LOST towel: refund the held deposit (X) so the guest is cleared, and
   // keep an admin-entered charge (K, 0..X) as towel-loss income — so cash only
   // drops by X−K and COH stays exact. Books two reconciling entries + flags lost.
-  recordTowelLoss({ itemTypeId, guest, room, towelNo, deposit, charge, refundsSeq }) {
-    const X = round2(Number(deposit) || 0);
-    const K = round2(Math.min(Math.max(Number(charge) || 0, 0), X));
-    // 1) Refund the full held deposit, flagged as a lost towel (guest cleared).
-    const refund = this.addRefund({
-      itemTypeId, qty: 1, unitAmount: X, amount: X,
+  recordTowelLoss({ itemTypeId, guest, room, towelNo, deposit, refundsSeq }) {
+    const item = this.itemById(itemTypeId);
+    const value = round2(Number(deposit) || 0); // the deposit the guest forfeits
+    const shift = this.ensureShift();
+    // A lost towel moves NO cash. The deposit the guest already paid stays in the
+    // drawer — they simply don't get it back, and they're not charged anything extra.
+    // So COH is unchanged. We book a ₱0 entry that flags the towel LOST (drives the
+    // inventory status + the lost indicator) and closes the deposit so it can't be
+    // refunded. `unitAmount` carries the forfeited value for the indicator only — it
+    // does NOT affect COH (amount is 0).
+    const e = this._append({
+      kind: 'refund', direction: -1, itemTypeId, itemName: item ? item.name : 'Towel',
+      qty: 1, unitAmount: value, amount: 0, // amount 0 → COH unchanged (no addition/subtraction)
       guest, room, towelNo, towelLost: true, refundsSeq,
-      note: `Towel ${towelNo} reported LOST — deposit settled (kept ₱${pesoPlain(K)})`,
+      note: `Towel ${towelNo} LOST — ₱${pesoPlain(value)} deposit forfeited (kept, no refund · no cash change)`,
+      shiftId: shift.id, shiftLabel: shift.label,
     });
-    // 2) Book the kept charge back as towel-loss income so net cash out = X − K.
-    if (K > 0) {
-      const shift = this.currentOpenShift();
-      this._append({
-        kind: 'adjustment', direction: +1, itemTypeId: null, itemName: 'Towel loss charge',
-        qty: null, unitAmount: K, amount: K, guest: '', room: '', pax: null,
-        note: `Towel ${towelNo} loss charge kept (${guest || room || '—'})`,
-        shiftId: shift ? shift.id : null, shiftLabel: shift ? shift.label : null,
-      });
+    this._audit('towel.lost', `Towel #${towelNo} LOST · ${guest || room || '—'} · ₱${pesoPlain(value)} deposit forfeited (no cash change)`,
+      { towelNo, guest, room, value });
+    return e;
+  }
+
+  // Lost-towel indicator: how many towels are currently lost and the total cash
+  // value forfeited on them (the deposits the hostel kept). Pure read.
+  lostTowelStats() {
+    const lost = this.towelStatus().filter((t) => t.status === 'lost');
+    const valueByNo = new Map();
+    for (const e of this.state.ledger) {
+      if (e.kind === 'refund' && e.towelLost) for (const no of towelTokens(entryTowelNo(e))) valueByNo.set(no, e.unitAmount || 0); // latest wins (ledger order)
     }
-    this._audit('towel.lost',
-      `Towel #${towelNo} LOST · ${guest || room || '—'} · kept ₱${pesoPlain(K)} of ₱${pesoPlain(X)} (guest got ₱${pesoPlain(round2(X - K))})`,
-      { towelNo, guest, room, deposit: X, charge: K, refundedToGuest: round2(X - K) });
-    return refund;
+    let value = 0;
+    for (const t of lost) value = round2(value + (valueByNo.get(t.no) || 0));
+    return { count: lost.length, value };
   }
 
   // Towel exchange: the guest swaps towel `oldTowelNo` for `newTowelNo`. The old one

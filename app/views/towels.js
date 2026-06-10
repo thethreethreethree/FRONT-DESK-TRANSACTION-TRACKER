@@ -54,13 +54,14 @@ export function render(ctx) {
     meta ? el('span', { class: 'meta', text: meta }) : null,
   ]);
   const recOn = store.towelRecording.enabled;
+  const lostStats = store.lostTowelStats();
   root.appendChild(el('div', { class: 'card', style: 'margin-bottom:18px' }, [
     el('div', { class: 'flex between aic wrap gap' }, [
       stat('Available', summary.available, 'var(--in-700)', 'clean & on the shelf'),
       stat('Out', summary.out, 'var(--gold-700)', 'with guests'),
       recOn ? stat('Dirty', summary.dirty, '#b45309', 'returned, to wash') : null,
       recOn ? stat('Being washed', summary.washing, '#5b4bcf', 'at the laundry') : null,
-      stat('Lost', summary.lost, 'var(--out-700)', 'awaiting admin'),
+      stat('Lost', summary.lost, 'var(--out-700)', `₱${pesoPlain(lostStats.value)} forfeited`),
       stat('Written off', summary.writeoff, 'var(--muted)', 'retired'),
       stat('In service', summary.inService, 'var(--ink)', 'total held'),
     ]),

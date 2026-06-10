@@ -106,18 +106,13 @@ export function render(ctx) {
   const towelHint = el('div', { class: 'hint', text: 'tag number on the returned towel' });
   const towelField = el('div', { class: 'field' }, [el('label', { text: 'Towel number' }), towelInput, towelHint]);
 
-  // Lost-towel path: when the towel is NOT returned, staff flag it and the manager
-  // chooses how much of the deposit to keep (loss charge). Guest gets the rest back.
+  // Lost-towel path: the guest doesn't return the towel. They forfeit the deposit
+  // they already paid (kept, not refunded) and aren't charged extra — so NO cash
+  // moves. We just flag the towel lost; the deposit value is tracked as an indicator.
   const lostCheck = el('input', { type: 'checkbox' });
-  const chargeInput = el('input', { class: 'input', type: 'number', min: '0', step: '50', placeholder: '0.00', style: 'max-width:200px' });
-  chargeInput.addEventListener('input', updatePreview);
-  const chargeField = el('div', { class: 'field', style: 'margin-top:8px' }, [
-    el('label', { text: 'Loss charge to keep (₱)' }), chargeInput,
-    el('div', { class: 'hint', text: 'kept by the hostel for the lost towel; the rest is returned to the guest' }),
-  ]);
   const lostField = el('div', { class: 'field', style: 'background:var(--out-50);border:1px solid var(--out);border-radius:10px;padding:10px 12px' }, [
     el('label', { class: 'flex aic gap', style: 'cursor:pointer;margin:0' }, [lostCheck, 'Towel not returned (reported lost)']),
-    chargeField,
+    el('div', { class: 'hint', style: 'margin-top:6px', text: 'No cash changes — the guest forfeits the deposit (they don\'t get it back, and pay nothing extra). The towel is flagged lost.' }),
   ]);
   function syncTowel() {
     const isTowel = !!(selected && isTowelItem(selected.name));
@@ -126,27 +121,21 @@ export function render(ctx) {
     if (!isTowel) lostCheck.checked = false;
     syncLost();
   }
-  function syncLost() {
-    chargeField.style.display = lostCheck.checked ? '' : 'none';
-    if (lostCheck.checked && chargeInput.value === '') chargeInput.value = amount(); // default = forfeit full deposit
-    updatePreview();
-  }
+  function syncLost() { updatePreview(); }
   lostCheck.addEventListener('change', syncLost);
 
   function unit() { return parseFloat(unitInput.value || '0'); }
   function amount() { return Math.round(unit() * qty * 100) / 100; }
   function isLost() { return !!(selected && isTowelItem(selected.name) && lostCheck.checked); }
-  function chargeVal() { return Math.min(Math.max(parseFloat(chargeInput.value || '0') || 0, 0), amount()); }
 
   const previewVal = el('div', { class: 'val', text: '₱0.00' });
   const previewLab = el('div', { class: 'lab', style: 'color:var(--out-700)', text: 'Refund amount (auto)' });
   const heldNote = el('div', { class: 'muted', style: 'font-size:.78rem' });
   function updatePreview() {
     if (isLost()) {
-      const X = amount(), K = chargeVal(), R = Math.round((X - K) * 100) / 100;
-      previewLab.textContent = 'Guest receives (towel lost)';
-      previewVal.textContent = peso(R);
-      heldNote.innerHTML = `Settle <b>${peso(X)}</b> · keep <b>${peso(K)}</b> as loss charge · return <b>${peso(R)}</b>`;
+      previewLab.textContent = 'Towel lost — no cash change';
+      previewVal.textContent = peso(0);
+      heldNote.innerHTML = `Deposit <b>${peso(amount())}</b> forfeited (kept, not refunded) · COH unchanged`;
       heldNote.style.color = 'var(--out-700)';
     } else {
       previewLab.textContent = 'Refund amount (auto)';
@@ -226,24 +215,23 @@ export function render(ctx) {
   function doLost() {
     store.recordTowelLoss({
       itemTypeId: selected.id, guest: guestInput.value, room: roomInput.value,
-      towelNo: towelInput.value.trim(), deposit: amount(), charge: chargeVal(),
+      towelNo: towelInput.value.trim(), deposit: amount(),
       refundsSeq: targetSeq,
     });
-    toast(`Towel ${towelInput.value.trim()} marked lost · COH now ${peso(store.coh())}`, 'ok');
-    ctx.navigate('dashboard');
+    toast(`Towel ${towelInput.value.trim()} marked lost · no cash change`, 'ok');
+    ctx.navigate('towels');
   }
 
   submit.addEventListener('click', () => {
     if (!selected) { toast('Pick an item first', 'warn'); return; }
     if (!guestInput.value.trim() && !roomInput.value.trim()) { toast('Enter a guest name or room #', 'warn'); return; }
     if (amount() <= 0) { toast('Amount must be greater than 0', 'warn'); return; }
-    // Lost-towel settlement: confirm the keep/return split before booking it.
+    // Lost towel: no cash moves — the guest forfeits the deposit. Confirm, then flag.
     if (isLost()) {
       if (!towelInput.value.trim()) { toast('Enter the towel number that was lost', 'warn'); return; }
-      const X = amount(), K = chargeVal(), R = Math.round((X - K) * 100) / 100;
       confirmDialog({
         title: 'Record lost towel?',
-        sub: `Settle ${peso(X)} for ${guestInput.value.trim() || roomInput.value.trim()}: keep ${peso(K)} as a loss charge, return ${peso(R)}. Towel ${towelInput.value.trim()} will be flagged lost for admin review.`,
+        sub: `Towel ${towelInput.value.trim()} will be flagged LOST. ${guestInput.value.trim() || roomInput.value.trim()} forfeits the ${peso(amount())} deposit — it stays in the drawer, no refund, no extra charge. Cash On Hand does not change.`,
         confirmLabel: 'Record lost towel', kind: 'out', onConfirm: doLost,
       });
       return;
