@@ -3,7 +3,7 @@
 // "outstanding" list — it's tracked here. Return one at check-out.
 import { el, peso, fmtDateTime, clear, toast } from '../util.js';
 import { store } from '../store.js';
-import { pageHead, confirmDialog } from '../components.js';
+import { pageHead, confirmDialog, openModal } from '../components.js';
 
 export function render(ctx) {
   const root = el('div');
@@ -46,15 +46,41 @@ export function render(ctx) {
         el('td', {}, p.mewsRes ? el('span', { class: 'tag mews', text: p.mewsRes }) : el('span', { class: 'muted', text: '—' })),
         el('td', { text: fmtDateTime(p.ts) }),
         el('td', { text: p.staff || '—' }),
-        el('td', { class: 'num' }, el('button', {
-          class: 'btn out sm', text: '↩ Return',
-          onClick: () => confirmDialog({
-            title: 'Return passport & item?',
-            sub: `Hand back ${p.guest || p.room || 'the guest'}'s passport${p.mewsRes ? ` (MEWS ${p.mewsRes})` : ''} and close the ${p.itemName || 'item'}${p.towelNo ? ' #' + p.towelNo : ''} deposit. No cash is involved.`,
-            confirmLabel: 'Return', kind: 'out',
-            onConfirm: () => { store.returnPassport(p.seq); toast('Passport & item returned', 'ok'); paint(); },
+        el('td', { class: 'num' }, el('div', { class: 'flex gap', style: 'justify-content:flex-end' }, [
+          el('button', {
+            class: 'btn sm', html: '💵&nbsp; To cash', title: 'Guest pays the deposit in cash; passport returned',
+            onClick: () => {
+              const amt = el('input', { class: 'input', type: 'number', min: '0', step: '50', value: p.value || 0, style: 'max-width:200px' });
+              openModal({
+                title: 'Convert passport to cash',
+                sub: `${p.guest || p.room || 'The guest'} pays the deposit in cash and gets their passport back`,
+                body: el('div', {}, [
+                  el('p', { class: 'muted', style: 'margin-top:0', html: `The <strong>${p.itemName || 'item'}${p.towelNo ? ' #' + p.towelNo : ''}</strong> stays out — now backed by cash instead of the passport. The passport is returned and a new cash deposit is recorded (Cash On Hand rises).` }),
+                  el('div', { class: 'field' }, [el('label', { text: 'Cash deposit amount (₱)' }), amt]),
+                ]),
+                actions: [
+                  { label: 'Cancel', kind: 'ghost' },
+                  { label: 'Convert to cash', kind: 'primary', onClick: (close) => {
+                    const v = parseFloat(amt.value || '');
+                    if (!(v > 0)) { toast('Enter a cash amount', 'warn'); return; }
+                    const r = store.convertPassportToCash(p.seq, { amount: v });
+                    if (r) toast(`Converted to cash · COH now ${peso(store.coh())}`, 'ok'); else toast('Could not convert', 'err');
+                    close(); paint();
+                  } },
+                ],
+              });
+            },
           }),
-        })),
+          el('button', {
+            class: 'btn out sm', text: '↩ Return',
+            onClick: () => confirmDialog({
+              title: 'Return passport & item?',
+              sub: `Hand back ${p.guest || p.room || 'the guest'}'s passport${p.mewsRes ? ` (MEWS ${p.mewsRes})` : ''} and close the ${p.itemName || 'item'}${p.towelNo ? ' #' + p.towelNo : ''} deposit. No cash is involved.`,
+              confirmLabel: 'Return', kind: 'out',
+              onConfirm: () => { store.returnPassport(p.seq); toast('Passport & item returned', 'ok'); paint(); },
+            }),
+          }),
+        ])),
       ]));
     }
     tbl.appendChild(tb);

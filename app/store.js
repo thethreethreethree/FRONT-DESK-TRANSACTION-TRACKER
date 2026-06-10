@@ -653,6 +653,38 @@ class Store {
     return e;
   }
 
+  // Convert a passport deposit to CASH: the guest pays the deposit, gets their
+  // passport back, and the item stays out — now backed by cash. Books a ₱0
+  // passport-close (linked, WITHOUT a towel # so the item is NOT marked returned —
+  // it never came back) PLUS a normal cash deposit (carries the towel #), so COH
+  // rises by `amount` and the guest now holds a regular cash deposit.
+  convertPassportToCash(seq, { amount } = {}) {
+    const dep = this.entryBySeq(seq);
+    if (!dep || dep.kind !== 'deposit' || !dep.mewsRes) return null;
+    if (this.state.ledger.some((e) => e.kind === 'refund' && e.refundsSeq === dep.seq)) return null; // already settled
+    const value = round2(amount != null ? Number(amount) : Number(dep.unitAmount || 0));
+    if (!(value > 0)) return null;
+    const shift = this.ensureShift();
+    const close = this._append({
+      kind: 'refund', direction: -1, // amount 0 → COH unaffected by the close itself
+      itemTypeId: dep.itemTypeId, itemName: dep.itemName,
+      qty: 1, unitAmount: 0, amount: 0,
+      guest: dep.guest, room: dep.room, mewsRes: dep.mewsRes, refundsSeq: dep.seq,
+      note: `Passport returned — deposit converted to cash (was deposit ${dep.seq})`,
+      shiftId: shift.id, shiftLabel: shift.label,
+    });
+    const cash = this.addDeposit({
+      itemTypeId: dep.itemTypeId, qty: dep.qty || 1, unitAmount: value, amount: value,
+      guest: dep.guest, room: dep.room, pax: dep.pax,
+      towelNo: entryTowelNo(dep),
+      note: `Cash deposit (converted from passport, was deposit ${dep.seq})`,
+    });
+    this._audit('passport.convert',
+      `Passport → cash · ${dep.guest || dep.room || '—'}${dep.mewsRes ? ` · MEWS ${dep.mewsRes}` : ''} · ₱${pesoPlain(value)} (deposit #${dep.seq} → #${cash.seq})`,
+      { fromSeq: dep.seq, toSeq: cash.seq, amount: value, guest: dep.guest, room: dep.room, mewsRes: dep.mewsRes });
+    return { close, cash, value };
+  }
+
   // Set of deposit transaction #s that are still refundable (open deposit of a guest
   // who is currently outstanding). Drives the clickable transaction # in the ledger.
   refundableDepositSeqs() {
