@@ -1,11 +1,11 @@
 {
   "meta": {
     "app": "Frendz Front Desk Transaction Tracker",
-    "exportedAt": "2026-06-14T13:01:26.954Z",
+    "exportedAt": "2026-06-14T13:04:24.568Z",
     "version": 1,
-    "coh": 18600,
-    "entries": 16646,
-    "auditEvents": 1172,
+    "coh": 31000,
+    "entries": 16647,
+    "auditEvents": 1174,
     "integrity": {
       "ok": true,
       "brokenAtSeq": null
@@ -33,8 +33,8 @@
         "path": "data/ledger-backup.json",
         "autoSync": true,
         "enabled": true,
-        "lastBackupAt": "2026-06-14T12:59:35.013Z",
-        "lastBackupSha": "37de495d39622053852eae01a6f1bc248c2532c2"
+        "lastBackupAt": "2026-06-14T13:00:36.602Z",
+        "lastBackupSha": "ea769f4e7d503f87024111ada0131bce20096f81"
       },
       "towelTracker": {
         "enabled": true,
@@ -401552,6 +401552,36 @@
         "reversesId": null,
         "prevHash": "053c3387cb34e03c9d8cbb7d80e86b909854f7038e7dbeebfaad2ee6814b3b88",
         "hash": "0e37ea32d596010f3a1e9efe6d93f985cf95ee7a7f431b42626dbc4da660d1dc"
+      },
+      {
+        "seq": 16647,
+        "id": "txn_mqdk13p2_1_ntzksg",
+        "ts": "2026-06-14T09:00:54.902Z",
+        "kind": "adjustment",
+        "itemTypeId": null,
+        "itemName": "Adjustment",
+        "qty": null,
+        "unitAmount": 12400,
+        "amount": 12400,
+        "direction": 1,
+        "guest": "N/A",
+        "room": "",
+        "pax": null,
+        "shiftId": "shift_mpy3b19n_5_j6nxol",
+        "shiftLabel": "PM",
+        "businessDate": "2026-06-14",
+        "staff": "Darren",
+        "staffRole": "manager",
+        "note": "COH reconciliation to ₱31,000.00 · 10,000Adjustment from Admin(Rose Approval),+6,000Admin withheld,+15,000 FO Cashier total Count. · guest N/A · staff Admin+Darren · ref #N/A",
+        "towelNo": "",
+        "oldTowelNo": "",
+        "towelLost": false,
+        "refundsSeq": null,
+        "exchangesSeq": null,
+        "mewsRes": "",
+        "reversesId": null,
+        "prevHash": "0e37ea32d596010f3a1e9efe6d93f985cf95ee7a7f431b42626dbc4da660d1dc",
+        "hash": "aca1f65d8d6eef391089d559ef21799ed43dc2fb73d9e1a4c22796ac4f92da34"
       }
     ],
     "audit": [
@@ -421833,61 +421863,105 @@
       },
       {
         "seq": 1169,
-        "id": "aud_mqdiiqoy_e_i2yfd5",
-        "ts": "2026-06-14T08:18:38.626Z",
-        "actor": "Jeca",
-        "role": "staff",
-        "action": "backup.github",
-        "what": "Backup committed to thethreethreethree/FRONT-DESK-TRANSACTION-TRACKER@main (auto-sync)",
+        "id": "aud_mqdk13p2_2_h5ydkl",
+        "ts": "2026-06-14T09:00:54.902Z",
+        "actor": "Darren",
+        "role": "manager",
+        "action": "coh.reconcile",
+        "what": "Reconciled COH ₱18,600.00 → ₱31,000.00 (+₱12,400.00) · 10,000Adjustment from Admin(Rose Approval),+6,000Admin withheld,+15,000 FO Cashier total Count. · guest N/A · staff Admin+Darren · ref #N/A",
         "details": {
-          "reason": "auto-sync",
-          "coh": 18600,
-          "entries": 16646
+          "from": 18600,
+          "to": 31000,
+          "adjustment": 12400,
+          "reason": "10,000Adjustment from Admin(Rose Approval),+6,000Admin withheld,+15,000 FO Cashier total Count.",
+          "guest": "N/A",
+          "staffInvolved": "Admin+Darren",
+          "refSeq": "N/A",
+          "source": "manual"
         },
         "prevHash": "ac41e45b84131cb01e105dadf05dd2ec0097a768f8afa667ef21d74b055a70ac",
-        "hash": "c820634429597c8fa22106ae4a03c70201b9881f76ee1204d7662a89d2ddae1a"
+        "hash": "34ead8718c56902a3df79f7e6e0ab296c32d1a9cc66e85c588ac62cac941c583"
       },
       {
         "seq": 1170,
-        "id": "aud_mqdsjqaa_1_lpefww",
-        "ts": "2026-06-14T12:59:20.914Z",
-        "actor": "Jeca",
-        "role": "staff",
-        "action": "auth.logout",
-        "what": "Jeca signed out",
-        "details": {},
-        "prevHash": "c820634429597c8fa22106ae4a03c70201b9881f76ee1204d7662a89d2ddae1a",
-        "hash": "7aca8b77b873bda15eb058bdc04e01cec4bcf0f7bf28c2eebd8f9a3150fe33ce"
-      },
-      {
-        "seq": 1171,
-        "id": "aud_mqdsk15y_2_92otig",
-        "ts": "2026-06-14T12:59:35.014Z",
-        "actor": "system",
-        "role": "system",
+        "id": "aud_mqdk1ei3_3_lrpeli",
+        "ts": "2026-06-14T09:01:08.907Z",
+        "actor": "Darren",
+        "role": "manager",
         "action": "backup.github",
         "what": "Backup committed to thethreethreethree/FRONT-DESK-TRANSACTION-TRACKER@main (auto-sync)",
         "details": {
           "reason": "auto-sync",
-          "coh": 18600,
-          "entries": 16646
+          "coh": 31000,
+          "entries": 16647
         },
-        "prevHash": "7aca8b77b873bda15eb058bdc04e01cec4bcf0f7bf28c2eebd8f9a3150fe33ce",
-        "hash": "ae874d02bfcd021222965b448f7851c968a13dc9b1a32ddf690a1fb2ad9bd35b"
+        "prevHash": "34ead8718c56902a3df79f7e6e0ab296c32d1a9cc66e85c588ac62cac941c583",
+        "hash": "5b92a91f54dfc2f9a0a725ac2dd64e75a6bd2ca2fac1abfffee283b01f20624d"
+      },
+      {
+        "seq": 1171,
+        "id": "aud_mqdskvdz_4_f0iid8",
+        "ts": "2026-06-14T13:00:14.183Z",
+        "actor": "Darren",
+        "role": "manager",
+        "action": "settings.github.update",
+        "what": "Updated GitHub sync target thethreethreethree/FRONT-DESK-TRANSACTION-TRACKER",
+        "details": {
+          "owner": "thethreethreethree",
+          "repo": "FRONT-DESK-TRANSACTION-TRACKER",
+          "autoSync": true
+        },
+        "prevHash": "5b92a91f54dfc2f9a0a725ac2dd64e75a6bd2ca2fac1abfffee283b01f20624d",
+        "hash": "fbe0661456c0c45c680bce31f360c118ae8b6c54f10af1bf5a78e5cb21a4177a"
       },
       {
         "seq": 1172,
-        "id": "aud_mqdsk1fe_3_30yc2o",
-        "ts": "2026-06-14T12:59:35.354Z",
+        "id": "aud_mqdsl6c4_5_3c5uef",
+        "ts": "2026-06-14T13:00:28.372Z",
         "actor": "Darren",
         "role": "manager",
-        "action": "auth.login",
-        "what": "Darren signed in as manager",
+        "action": "backup.github",
+        "what": "Backup committed to thethreethreethree/FRONT-DESK-TRANSACTION-TRACKER@main (auto-sync)",
         "details": {
-          "role": "manager"
+          "reason": "auto-sync",
+          "coh": 31000,
+          "entries": 16647
         },
-        "prevHash": "ae874d02bfcd021222965b448f7851c968a13dc9b1a32ddf690a1fb2ad9bd35b",
-        "hash": "51f9f55ee06d4ec2cc08bbbd2eabd49abee3cf6ffc235d8776a12fa414155cf6"
+        "prevHash": "fbe0661456c0c45c680bce31f360c118ae8b6c54f10af1bf5a78e5cb21a4177a",
+        "hash": "25fd0a7f3ffc2dbecb62d8ede00b9f8b9131718bad9416fff96f4caac7e3abf1"
+      },
+      {
+        "seq": 1173,
+        "id": "aud_mqdslcoq_6_s9df1d",
+        "ts": "2026-06-14T13:00:36.602Z",
+        "actor": "Darren",
+        "role": "manager",
+        "action": "backup.github",
+        "what": "Backup committed to thethreethreethree/FRONT-DESK-TRANSACTION-TRACKER@main (manual)",
+        "details": {
+          "reason": "manual",
+          "coh": 31000,
+          "entries": 16647
+        },
+        "prevHash": "25fd0a7f3ffc2dbecb62d8ede00b9f8b9131718bad9416fff96f4caac7e3abf1",
+        "hash": "4422144c27dad463d71d6e3dc8b4c12b8d295f4ded5ebfaed31225b22c2d83ab"
+      },
+      {
+        "seq": 1174,
+        "id": "aud_mqdsq3ye_7_hhfsdc",
+        "ts": "2026-06-14T13:04:18.566Z",
+        "actor": "Darren",
+        "role": "manager",
+        "action": "towel.add",
+        "what": "Added 1 towel to inventory",
+        "details": {
+          "count": 1,
+          "sample": [
+            "26"
+          ]
+        },
+        "prevHash": "4422144c27dad463d71d6e3dc8b4c12b8d295f4ded5ebfaed31225b22c2d83ab",
+        "hash": "13e09e926a26cbb3bf7ddaa8b3dcf1932a48a544b4a91c0fd841038beb5e0fb9"
       }
     ],
     "towels": [
@@ -422935,6 +423009,11 @@
         "no": "456",
         "createdAt": "2026-06-11T01:14:27.537Z",
         "createdBy": "James"
+      },
+      {
+        "no": "26",
+        "createdAt": "2026-06-14T13:04:18.566Z",
+        "createdBy": "Darren"
       }
     ],
     "towelLog": [],
