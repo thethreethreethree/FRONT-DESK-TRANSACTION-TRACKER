@@ -1,11 +1,11 @@
 {
   "meta": {
     "app": "Frendz Front Desk Transaction Tracker",
-    "exportedAt": "2026-06-14T12:59:26.931Z",
+    "exportedAt": "2026-06-14T13:00:20.193Z",
     "version": 1,
-    "coh": 18600,
-    "entries": 16646,
-    "auditEvents": 1170,
+    "coh": 31000,
+    "entries": 16647,
+    "auditEvents": 1171,
     "integrity": {
       "ok": true,
       "brokenAtSeq": null
@@ -33,8 +33,8 @@
         "path": "data/ledger-backup.json",
         "autoSync": true,
         "enabled": true,
-        "lastBackupAt": "2026-06-14T08:18:38.488Z",
-        "lastBackupSha": "d33d814354bf2dfbcaf509c8368d94e52d529da0"
+        "lastBackupAt": "2026-06-14T09:01:08.907Z",
+        "lastBackupSha": "1ce1f0c553c7747c55568db846c38c3d6f1f27ec"
       },
       "towelTracker": {
         "enabled": true,
@@ -401552,6 +401552,36 @@
         "reversesId": null,
         "prevHash": "053c3387cb34e03c9d8cbb7d80e86b909854f7038e7dbeebfaad2ee6814b3b88",
         "hash": "0e37ea32d596010f3a1e9efe6d93f985cf95ee7a7f431b42626dbc4da660d1dc"
+      },
+      {
+        "seq": 16647,
+        "id": "txn_mqdk13p2_1_ntzksg",
+        "ts": "2026-06-14T09:00:54.902Z",
+        "kind": "adjustment",
+        "itemTypeId": null,
+        "itemName": "Adjustment",
+        "qty": null,
+        "unitAmount": 12400,
+        "amount": 12400,
+        "direction": 1,
+        "guest": "N/A",
+        "room": "",
+        "pax": null,
+        "shiftId": "shift_mpy3b19n_5_j6nxol",
+        "shiftLabel": "PM",
+        "businessDate": "2026-06-14",
+        "staff": "Darren",
+        "staffRole": "manager",
+        "note": "COH reconciliation to ₱31,000.00 · 10,000Adjustment from Admin(Rose Approval),+6,000Admin withheld,+15,000 FO Cashier total Count. · guest N/A · staff Admin+Darren · ref #N/A",
+        "towelNo": "",
+        "oldTowelNo": "",
+        "towelLost": false,
+        "refundsSeq": null,
+        "exchangesSeq": null,
+        "mewsRes": "",
+        "reversesId": null,
+        "prevHash": "0e37ea32d596010f3a1e9efe6d93f985cf95ee7a7f431b42626dbc4da660d1dc",
+        "hash": "aca1f65d8d6eef391089d559ef21799ed43dc2fb73d9e1a4c22796ac4f92da34"
       }
     ],
     "audit": [
@@ -421833,31 +421863,56 @@
       },
       {
         "seq": 1169,
-        "id": "aud_mqdiiqoy_e_i2yfd5",
-        "ts": "2026-06-14T08:18:38.626Z",
-        "actor": "Jeca",
-        "role": "staff",
+        "id": "aud_mqdk13p2_2_h5ydkl",
+        "ts": "2026-06-14T09:00:54.902Z",
+        "actor": "Darren",
+        "role": "manager",
+        "action": "coh.reconcile",
+        "what": "Reconciled COH ₱18,600.00 → ₱31,000.00 (+₱12,400.00) · 10,000Adjustment from Admin(Rose Approval),+6,000Admin withheld,+15,000 FO Cashier total Count. · guest N/A · staff Admin+Darren · ref #N/A",
+        "details": {
+          "from": 18600,
+          "to": 31000,
+          "adjustment": 12400,
+          "reason": "10,000Adjustment from Admin(Rose Approval),+6,000Admin withheld,+15,000 FO Cashier total Count.",
+          "guest": "N/A",
+          "staffInvolved": "Admin+Darren",
+          "refSeq": "N/A",
+          "source": "manual"
+        },
+        "prevHash": "ac41e45b84131cb01e105dadf05dd2ec0097a768f8afa667ef21d74b055a70ac",
+        "hash": "34ead8718c56902a3df79f7e6e0ab296c32d1a9cc66e85c588ac62cac941c583"
+      },
+      {
+        "seq": 1170,
+        "id": "aud_mqdk1ei3_3_lrpeli",
+        "ts": "2026-06-14T09:01:08.907Z",
+        "actor": "Darren",
+        "role": "manager",
         "action": "backup.github",
         "what": "Backup committed to thethreethreethree/FRONT-DESK-TRANSACTION-TRACKER@main (auto-sync)",
         "details": {
           "reason": "auto-sync",
-          "coh": 18600,
-          "entries": 16646
+          "coh": 31000,
+          "entries": 16647
         },
-        "prevHash": "ac41e45b84131cb01e105dadf05dd2ec0097a768f8afa667ef21d74b055a70ac",
-        "hash": "c820634429597c8fa22106ae4a03c70201b9881f76ee1204d7662a89d2ddae1a"
+        "prevHash": "34ead8718c56902a3df79f7e6e0ab296c32d1a9cc66e85c588ac62cac941c583",
+        "hash": "5b92a91f54dfc2f9a0a725ac2dd64e75a6bd2ca2fac1abfffee283b01f20624d"
       },
       {
-        "seq": 1170,
-        "id": "aud_mqdsjqaa_1_lpefww",
-        "ts": "2026-06-14T12:59:20.914Z",
-        "actor": "Jeca",
-        "role": "staff",
-        "action": "auth.logout",
-        "what": "Jeca signed out",
-        "details": {},
-        "prevHash": "c820634429597c8fa22106ae4a03c70201b9881f76ee1204d7662a89d2ddae1a",
-        "hash": "7aca8b77b873bda15eb058bdc04e01cec4bcf0f7bf28c2eebd8f9a3150fe33ce"
+        "seq": 1171,
+        "id": "aud_mqdskvdz_4_f0iid8",
+        "ts": "2026-06-14T13:00:14.183Z",
+        "actor": "Darren",
+        "role": "manager",
+        "action": "settings.github.update",
+        "what": "Updated GitHub sync target thethreethreethree/FRONT-DESK-TRANSACTION-TRACKER",
+        "details": {
+          "owner": "thethreethreethree",
+          "repo": "FRONT-DESK-TRANSACTION-TRACKER",
+          "autoSync": true
+        },
+        "prevHash": "5b92a91f54dfc2f9a0a725ac2dd64e75a6bd2ca2fac1abfffee283b01f20624d",
+        "hash": "fbe0661456c0c45c680bce31f360c118ae8b6c54f10af1bf5a78e5cb21a4177a"
       }
     ],
     "towels": [
