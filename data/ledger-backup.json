@@ -1,10 +1,10 @@
 {
   "meta": {
     "app": "Frendz Front Desk Transaction Tracker",
-    "exportedAt": "2026-06-15T23:34:50.082Z",
+    "exportedAt": "2026-06-15T23:35:20.172Z",
     "version": 1,
-    "coh": 34000,
-    "entries": 16683,
+    "coh": 32000,
+    "entries": 16685,
     "auditEvents": 1263,
     "integrity": {
       "ok": true,
@@ -33,8 +33,8 @@
         "path": "data/ledger-backup.json",
         "autoSync": true,
         "enabled": true,
-        "lastBackupAt": "2026-06-15T23:34:31.354Z",
-        "lastBackupSha": "d3bc50e503f008ec589c34b9c6fb73fe491fe93c"
+        "lastBackupAt": "2026-06-15T23:33:44.010Z",
+        "lastBackupSha": "001324fc97d3a85662f993ca87dfe8d9f45bc3b3"
       },
       "towelTracker": {
         "enabled": true,
@@ -402662,6 +402662,66 @@
         "reversesId": null,
         "prevHash": "b7a77cdb14d72b910ceecc937c1a9546392129926209a808e0db967ce5cab2ae",
         "hash": "89bd5ad8adf086b62dcfc6c830a282bec7a8f3e1742b846c38f8db64ab0b8723"
+      },
+      {
+        "seq": 16684,
+        "id": "txn_mqfume8d_u_sdwhz4",
+        "ts": "2026-06-15T23:32:56.845Z",
+        "kind": "refund",
+        "itemTypeId": "item_mpxxdbc3_2_s3d7ag",
+        "itemName": "Towel",
+        "qty": 1,
+        "unitAmount": 1000,
+        "amount": 1000,
+        "direction": -1,
+        "guest": "COLIN",
+        "room": "308",
+        "pax": null,
+        "shiftId": "shift_mpy3b19n_5_j6nxol",
+        "shiftLabel": "PM",
+        "businessDate": "2026-06-16",
+        "staff": "veronica",
+        "staffRole": "staff",
+        "note": "",
+        "towelNo": "10",
+        "oldTowelNo": "",
+        "towelLost": false,
+        "refundsSeq": 16627,
+        "exchangesSeq": null,
+        "mewsRes": "",
+        "reversesId": null,
+        "prevHash": "89bd5ad8adf086b62dcfc6c830a282bec7a8f3e1742b846c38f8db64ab0b8723",
+        "hash": "57980880dd1c6529a502d7cb0df555ae78c0e4f1b740ff0ce08be98edb13d8af"
+      },
+      {
+        "seq": 16685,
+        "id": "txn_mqfun3fy_x_hj5xfc",
+        "ts": "2026-06-15T23:33:29.518Z",
+        "kind": "refund",
+        "itemTypeId": "item_mpxxdbc3_2_s3d7ag",
+        "itemName": "Towel",
+        "qty": 1,
+        "unitAmount": 1000,
+        "amount": 1000,
+        "direction": -1,
+        "guest": "ILSE",
+        "room": "308",
+        "pax": null,
+        "shiftId": "shift_mpy3b19n_5_j6nxol",
+        "shiftLabel": "PM",
+        "businessDate": "2026-06-16",
+        "staff": "veronica",
+        "staffRole": "staff",
+        "note": "",
+        "towelNo": "4",
+        "oldTowelNo": "",
+        "towelLost": false,
+        "refundsSeq": 16622,
+        "exchangesSeq": null,
+        "mewsRes": "",
+        "reversesId": null,
+        "prevHash": "57980880dd1c6529a502d7cb0df555ae78c0e4f1b740ff0ce08be98edb13d8af",
+        "hash": "647e0de2c2bf9d10280979e130e4201fc62e54963bfd7bad1d70c845ca9ae0f1"
       }
     ],
     "audit": [
@@ -424448,102 +424508,101 @@
       },
       {
         "seq": 1258,
-        "id": "aud_mqfumk8y_1_d3jgys",
-        "ts": "2026-06-15T23:33:04.642Z",
-        "actor": "Darren",
-        "role": "manager",
-        "action": "data.import",
-        "what": "Imported backup (16683 ledger entries)",
+        "id": "aud_mqfpimoa_t_glair4",
+        "ts": "2026-06-15T21:10:03.082Z",
+        "actor": "veronica",
+        "role": "staff",
+        "action": "backup.github",
+        "what": "Backup committed to thethreethreethree/FRONT-DESK-TRANSACTION-TRACKER@main (auto-sync)",
         "details": {
+          "reason": "auto-sync",
+          "coh": 34000,
           "entries": 16683
         },
         "prevHash": "074f9e4920a415e2d9f94765171d360443fedd3ecad18252aadbf3204f6f0047",
-        "hash": "60fa48977a9081e6ee35961bb76c287af4516328c2ca04523c29b9cd939b92a1"
+        "hash": "e3bf1d2a798366ea125cb9c285f4bb40bd144d1daac8e238b204022300157db9"
       },
       {
         "seq": 1259,
-        "id": "aud_mqfungzv_1_j2bqw9",
-        "ts": "2026-06-15T23:33:47.083Z",
-        "actor": "Darren",
-        "role": "manager",
-        "action": "towel.add",
-        "what": "Added 1 towel to inventory",
+        "id": "aud_mqfume8d_v_pb0n1a",
+        "ts": "2026-06-15T23:32:56.845Z",
+        "actor": "veronica",
+        "role": "staff",
+        "action": "refund.create",
+        "what": "Refund ₱1,000.00 · Towel ×1 · COLIN",
         "details": {
-          "count": 1,
-          "sample": [
-            "08"
-          ]
+          "ref": 16684,
+          "id": "txn_mqfume8d_u_sdwhz4",
+          "amount": 1000,
+          "item": "Towel",
+          "guest": "COLIN",
+          "room": "308"
         },
-        "prevHash": "60fa48977a9081e6ee35961bb76c287af4516328c2ca04523c29b9cd939b92a1",
-        "hash": "dee0739663c1ea10ef5da45530a647cd52490988569fb25db1a3f9034a07ae07"
+        "prevHash": "e3bf1d2a798366ea125cb9c285f4bb40bd144d1daac8e238b204022300157db9",
+        "hash": "6200eb1d9abe0f88fcef2cf38970ce357c99ab29d03a423196e5901f02bdacce"
       },
       {
         "seq": 1260,
-        "id": "aud_mqfunvli_2_6zwqaa",
-        "ts": "2026-06-15T23:34:06.006Z",
-        "actor": "Darren",
-        "role": "manager",
+        "id": "aud_mqfumpm4_w_l03djm",
+        "ts": "2026-06-15T23:33:11.596Z",
+        "actor": "veronica",
+        "role": "staff",
         "action": "backup.github",
         "what": "Backup committed to thethreethreethree/FRONT-DESK-TRANSACTION-TRACKER@main (auto-sync)",
         "details": {
           "reason": "auto-sync",
-          "coh": 34000,
-          "entries": 16683
+          "coh": 33000,
+          "entries": 16684
         },
-        "prevHash": "dee0739663c1ea10ef5da45530a647cd52490988569fb25db1a3f9034a07ae07",
-        "hash": "37dba2477c21a07cca3ff6a613da28a50c6bbdcb99e19778b837f1a9b09a7752"
+        "prevHash": "6200eb1d9abe0f88fcef2cf38970ce357c99ab29d03a423196e5901f02bdacce",
+        "hash": "c5bcf1683c4cf1d355b5a22889158d2b2c9a596931693a6b08397a9b248152e8"
       },
       {
         "seq": 1261,
-        "id": "aud_mqfuo4dv_3_fhriys",
-        "ts": "2026-06-15T23:34:17.395Z",
-        "actor": "Darren",
-        "role": "manager",
-        "action": "towel.add",
-        "what": "Added 2 towels to inventory",
+        "id": "aud_mqfun3fy_y_r5tdcg",
+        "ts": "2026-06-15T23:33:29.518Z",
+        "actor": "veronica",
+        "role": "staff",
+        "action": "refund.create",
+        "what": "Refund ₱1,000.00 · Towel ×1 · ILSE",
         "details": {
-          "count": 2,
-          "sample": [
-            "165",
-            "303"
-          ]
+          "ref": 16685,
+          "id": "txn_mqfun3fy_x_hj5xfc",
+          "amount": 1000,
+          "item": "Towel",
+          "guest": "ILSE",
+          "room": "308"
         },
-        "prevHash": "37dba2477c21a07cca3ff6a613da28a50c6bbdcb99e19778b837f1a9b09a7752",
-        "hash": "f33ae9d2bcd0d0214648c13c4506d23e2b10d4875a5c1356782129d77b6e9c70"
+        "prevHash": "c5bcf1683c4cf1d355b5a22889158d2b2c9a596931693a6b08397a9b248152e8",
+        "hash": "dfd933935e793d4cdc4c5fbb8ae2763ed99bebfe046e07105755c6a8abbc97d8"
       },
       {
         "seq": 1262,
-        "id": "aud_mqfuof5m_4_jv5qfb",
-        "ts": "2026-06-15T23:34:31.354Z",
-        "actor": "Darren",
-        "role": "manager",
+        "id": "aud_mqfunemi_z_2nn1ql",
+        "ts": "2026-06-15T23:33:44.010Z",
+        "actor": "veronica",
+        "role": "staff",
         "action": "backup.github",
         "what": "Backup committed to thethreethreethree/FRONT-DESK-TRANSACTION-TRACKER@main (auto-sync)",
         "details": {
           "reason": "auto-sync",
-          "coh": 34000,
-          "entries": 16683
+          "coh": 32000,
+          "entries": 16685
         },
-        "prevHash": "f33ae9d2bcd0d0214648c13c4506d23e2b10d4875a5c1356782129d77b6e9c70",
-        "hash": "cbc72019b4c46a198a9ba4cc8fd6d30d9646d794b21c3d7b7437ed60e311723d"
+        "prevHash": "dfd933935e793d4cdc4c5fbb8ae2763ed99bebfe046e07105755c6a8abbc97d8",
+        "hash": "19b0d0a59735aa2adaa6d277a8bcd4db114ea56fe1258a649907945d839f518a"
       },
       {
         "seq": 1263,
-        "id": "aud_mqfuooyq_5_uye9tl",
-        "ts": "2026-06-15T23:34:44.066Z",
-        "actor": "Darren",
-        "role": "manager",
-        "action": "towel.add",
-        "what": "Added 2 towels to inventory",
-        "details": {
-          "count": 2,
-          "sample": [
-            "405",
-            "415"
-          ]
-        },
-        "prevHash": "cbc72019b4c46a198a9ba4cc8fd6d30d9646d794b21c3d7b7437ed60e311723d",
-        "hash": "ab8c9664e877660851e31e2f3feb599b48faf53564195cf2942765354154ed7a"
+        "id": "aud_mqfupbx2_10_rkb3d6",
+        "ts": "2026-06-15T23:35:13.814Z",
+        "actor": "veronica",
+        "role": "staff",
+        "action": "auth.logout",
+        "what": "veronica signed out",
+        "details": {},
+        "prevHash": "19b0d0a59735aa2adaa6d277a8bcd4db114ea56fe1258a649907945d839f518a",
+        "hash": "fb4b3f5d95289fc27af3cd112e2217a520b4deb099b1360a73e9d8c20d6a09fe"
       }
     ],
     "towels": [
@@ -425595,31 +425654,6 @@
       {
         "no": "26",
         "createdAt": "2026-06-14T13:04:18.566Z",
-        "createdBy": "Darren"
-      },
-      {
-        "no": "08",
-        "createdAt": "2026-06-15T23:33:47.083Z",
-        "createdBy": "Darren"
-      },
-      {
-        "no": "165",
-        "createdAt": "2026-06-15T23:34:17.395Z",
-        "createdBy": "Darren"
-      },
-      {
-        "no": "303",
-        "createdAt": "2026-06-15T23:34:17.395Z",
-        "createdBy": "Darren"
-      },
-      {
-        "no": "405",
-        "createdAt": "2026-06-15T23:34:44.066Z",
-        "createdBy": "Darren"
-      },
-      {
-        "no": "415",
-        "createdAt": "2026-06-15T23:34:44.066Z",
         "createdBy": "Darren"
       }
     ],
