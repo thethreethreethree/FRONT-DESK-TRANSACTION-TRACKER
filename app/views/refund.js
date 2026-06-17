@@ -12,6 +12,7 @@ export function render(ctx) {
   let selected = items[0] || null;
   let qty = 1;
   let pickedGuest = null;
+  let pickedDep = null; // the specific open deposit being returned (its own balance governs)
   let targetSeq = null; // the deposit transaction # this refund settles (deposit ↔ refund link)
 
   // Transaction-# badge shown at the top-right of the form once a deposit is targeted.
@@ -140,7 +141,11 @@ export function render(ctx) {
     } else {
       previewLab.textContent = 'Refund amount (auto)';
       previewVal.textContent = peso(amount());
-      if (pickedGuest) {
+      if (pickedDep) {
+        // A specific deposit # is loaded — its own balance is what's owed (the # decides).
+        heldNote.textContent = `Deposit #${pickedDep.seq} · holds ${peso(pickedDep.amount)}`;
+        heldNote.style.color = amount() > pickedDep.amount + 0.005 ? 'var(--out-700)' : 'var(--muted)';
+      } else if (pickedGuest) {
         heldNote.textContent = `${pickedGuest.guest} holds ${peso(pickedGuest.held)}`;
         heldNote.style.color = amount() > pickedGuest.held + 0.005 ? 'var(--out-700)' : 'var(--muted)';
       } else { heldNote.textContent = 'unit × quantity'; heldNote.style.color = 'var(--muted)'; }
@@ -155,6 +160,7 @@ export function render(ctx) {
   // link the refund to it (refundsSeq) so deposit and refund share the same #.
   function pickDeposit(dep, g) {
     pickedGuest = g || null;
+    pickedDep = dep || null;
     targetSeq = dep ? dep.seq : null;
     if (g) { guestInput.value = g.guest; roomInput.value = g.room; }
     if (dep) {
@@ -236,11 +242,14 @@ export function render(ctx) {
       });
       return;
     }
-    // over-refund guard vs this guest's held balance
-    if (pickedGuest && amount() > pickedGuest.held + 0.005) {
+    // over-refund guard — against the specific deposit's balance when one is loaded
+    // (the transaction # decides), otherwise the guest's overall held balance.
+    const cap = pickedDep ? pickedDep.amount : (pickedGuest ? pickedGuest.held : null);
+    const capWho = pickedDep ? `Deposit #${pickedDep.seq}` : (pickedGuest ? pickedGuest.guest : '');
+    if (cap != null && amount() > cap + 0.005) {
       confirmDialog({
         title: 'Refund exceeds held deposit',
-        sub: `${pickedGuest.guest} only holds ${peso(pickedGuest.held)}, but you're refunding ${peso(amount())}. This would push their balance negative. Proceed anyway?`,
+        sub: `${capWho} only holds ${peso(cap)}, but you're refunding ${peso(amount())}. This would push the balance negative. Proceed anyway?`,
         confirmLabel: 'Refund anyway', kind: 'out', onConfirm: doRefund,
       });
       return;

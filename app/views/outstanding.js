@@ -58,9 +58,9 @@ export function render(ctx) {
         el('div', {}, [
           el('div', { class: 'g-name', text: g.guest || '(no name)' }),
           el('div', { class: 'g-room', text: g.room ? `Room ${g.room}` : '—' }),
-          el('div', { class: 'g-items', text: Object.entries(g.items).filter(([, v]) => Math.abs(v) > 0.005).map(([k, v]) => `${k}: ₱${pesoPlain(v)}`).join('  ·  ') }),
+          el('div', { class: 'g-items', text: Object.entries(g.netItems || g.items).filter(([, v]) => Math.abs(v) > 0.005).map(([k, v]) => `${k}: ₱${pesoPlain(v)}`).join('  ·  ') }),
         ]),
-        el('div', { class: 'g-held', style: 'color:var(--out-700)', text: peso(g.held) }),
+        el('div', { class: 'g-held', style: 'color:var(--out-700)', text: peso(g.over) }),
       ]));
     }
     att.appendChild(list);

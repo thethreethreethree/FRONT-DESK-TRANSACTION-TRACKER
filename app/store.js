@@ -563,46 +563,80 @@ class Store {
     return Array.from(map.values()).filter((x) => Math.abs(x.held) > 0.005);
   }
 
-  // Net balance per guest (deposits − refunds attributed by name+room).
+  // Net balance per guest+room, settled BY TRANSACTION #.
+  //
+  // Each NATIVE (live) deposit is its own open balance, drawn down only by a refund
+  // that (a) links to it via `refundsSeq` / `reversesId`, or failing that (b) is a
+  // LATER refund under the same guest+room. A refund can NEVER settle a deposit
+  // created after it — that closes the cross-stay "namesake" hole where, e.g., a
+  // 2025 refund for one LUISA in room 403 wrongly netted against a 2026 deposit by a
+  // different LUISA in 403. Each deposit #, therefore, keeps its own true value.
+  //
+  // IMPORTED history (id `imp_*` / staff `import`) is left exactly as it was — a
+  // single net bucket per guest+room — because those 8k+ refunds were never linked by
+  // number and re-deriving them would only resurrect stale tags. `held − over` equals
+  // the old plain name+room net to the cent, so COH reconciliation is unchanged.
   _guestNets() {
-    // Deposits already settled by a linked refund, and reversed (voided) entries —
-    // excluded from "open deposits" so we don't offer to refund them again.
-    const linked = new Set();
-    const reversed = new Set();
-    for (const e of this.state.ledger) {
-      if (e.kind === 'refund' && e.refundsSeq != null) linked.add(e.refundsSeq);
-      if (e.reversesId) reversed.add(e.reversesId);
-    }
-    const map = new Map();
+    const isImport = (e) => (typeof e.id === 'string' && e.id.startsWith('imp_')) || e.staff === 'import';
+    const groups = new Map();
     for (const e of this.state.ledger) {
       const g = (e.guest || '').toUpperCase().trim();
       const r = (e.room || '').toUpperCase().trim();
       if (!g && !r) continue;
-      const key = `${g}|${r}`;
-      const cur = map.get(key) || { guest: e.guest || '', room: e.room || '', held: 0, items: {}, towels: [], lastTs: '', openDeposits: [] };
-      cur.held = round2(cur.held + e.amount * e.direction);
-      const it = e.itemName || 'Item';
-      cur.items[it] = round2((cur.items[it] || 0) + e.amount * e.direction);
-      if (e.kind === 'deposit') {
-        if (e.ts > cur.lastTs) cur.lastTs = e.ts; // most recent deposit time (for recency sort)
-        // Towel tag(s) the guest currently holds — surfaced on outstanding/refund.
-        if (isTowelItem(e.itemName)) for (const t of towelTokens(entryTowelNo(e))) if (!cur.towels.includes(t)) cur.towels.push(t);
-        // Open (refundable) deposit transactions for this guest — by number.
-        if (!linked.has(e.seq) && !reversed.has(e.id)) {
-          cur.openDeposits.push({ seq: e.seq, ts: e.ts, itemTypeId: e.itemTypeId, itemName: e.itemName, amount: e.amount, towelNo: entryTowelNo(e) });
-        }
-      } else if (e.kind === 'exchange') {
-        // Swap the guest's current towel(s): old back, new out. Deposit balance and
-        // open status are untouched (amount 0); keep its current towel up to date.
-        const oldToks = towelTokens(e.oldTowelNo), newToks = towelTokens(e.towelNo);
-        for (const t of oldToks) { const i = cur.towels.indexOf(t); if (i >= 0) cur.towels.splice(i, 1); }
-        for (const t of newToks) if (!cur.towels.includes(t)) cur.towels.push(t);
-        if (e.exchangesSeq != null) { const d = cur.openDeposits.find((x) => x.seq === e.exchangesSeq); if (d && newToks.length) d.towelNo = newToks.join(', '); }
-      }
-      map.set(key, cur);
+      let cur = groups.get(`${g}|${r}`);
+      if (!cur) { cur = { guest: e.guest || '', room: e.room || '', entries: [] }; groups.set(`${g}|${r}`, cur); }
+      if (!cur.guest && e.guest) cur.guest = e.guest;
+      if (!cur.room && e.room) cur.room = e.room;
+      cur.entries.push(e);
     }
-    for (const v of map.values()) v.openDeposits.sort((a, b) => (a.ts < b.ts ? 1 : a.ts > b.ts ? -1 : b.seq - a.seq)); // newest first
-    return Array.from(map.values());
+    const out = [];
+    for (const cur of groups.values()) {
+      const entries = cur.entries.slice().sort((a, b) => (a.ts < b.ts ? -1 : a.ts > b.ts ? 1 : a.seq - b.seq));
+      let legacyNet = 0, nativeOrphan = 0, lastTs = '';
+      const legacyItems = {}, netItems = {}, legacyTowels = [];
+      const lots = [], bySeq = new Map(), byId = new Map(); // native open deposit lots
+      for (const e of entries) {
+        const signed = e.amount * e.direction;
+        const it = e.itemName || 'Item';
+        netItems[it] = round2((netItems[it] || 0) + signed); // raw net (for the over/attention view)
+        if (isImport(e)) { // history: one net bucket, untouched
+          legacyNet = round2(legacyNet + signed);
+          legacyItems[it] = round2((legacyItems[it] || 0) + signed);
+          if (e.kind === 'deposit' && isTowelItem(e.itemName)) for (const t of towelTokens(entryTowelNo(e))) if (!legacyTowels.includes(t)) legacyTowels.push(t);
+          continue;
+        }
+        if (e.kind === 'deposit') { // a native deposit opens its own lot
+          if (e.ts > lastTs) lastTs = e.ts;
+          const lot = { seq: e.seq, ts: e.ts, itemTypeId: e.itemTypeId, itemName: e.itemName, towelNo: entryTowelNo(e), remaining: e.amount };
+          lots.push(lot); bySeq.set(e.seq, lot); byId.set(e.id, lot);
+        } else if (e.kind === 'exchange') {
+          // Swap the held tag on the linked lot; balance/open status unchanged (amount 0).
+          if (e.exchangesSeq != null) { const d = bySeq.get(e.exchangesSeq); const nt = towelTokens(e.towelNo); if (d && nt.length) d.towelNo = nt.join(', '); }
+        } else if (signed < 0) { // a native settlement: link → reversal → later same-key lots
+          let need = -signed;
+          if (e.reversesId && byId.has(e.reversesId)) { const l = byId.get(e.reversesId); const u = Math.min(l.remaining, need); l.remaining = round2(l.remaining - u); need = round2(need - u); }
+          if (need > 0.005 && e.refundsSeq != null && bySeq.has(e.refundsSeq)) { const l = bySeq.get(e.refundsSeq); const u = Math.min(l.remaining, need); l.remaining = round2(l.remaining - u); need = round2(need - u); }
+          for (const l of lots) { if (need <= 0.005) break; if (l.remaining <= 0.005 || l.ts > e.ts) continue; const u = Math.min(l.remaining, need); l.remaining = round2(l.remaining - u); need = round2(need - u); }
+          if (need > 0.005) nativeOrphan = round2(nativeOrphan + need); // refunded more than any matching deposit
+        } else if (signed > 0) { // positive non-deposit (e.g. reversal of a refund) — also a lot
+          const lot = { seq: e.seq, ts: e.ts, itemTypeId: e.itemTypeId, itemName: e.itemName, towelNo: entryTowelNo(e), remaining: e.amount };
+          lots.push(lot); if (e.seq != null) bySeq.set(e.seq, lot);
+        }
+      }
+      const open = lots.filter((l) => l.remaining > 0.005);
+      const held = round2(open.reduce((s, l) => s + l.remaining, 0) + Math.max(0, legacyNet));
+      const over = round2(nativeOrphan + Math.max(0, -legacyNet));
+      // held-consistent item + towel breakdown (open native lots, plus legacy if it nets positive)
+      const items = {}; const towels = [];
+      for (const l of open) { const it = l.itemName || 'Item'; items[it] = round2((items[it] || 0) + l.remaining); if (isTowelItem(l.itemName)) for (const t of towelTokens(l.towelNo)) if (!towels.includes(t)) towels.push(t); }
+      if (legacyNet > 0.005) { for (const [k, v] of Object.entries(legacyItems)) if (v > 0.005) items[k] = round2((items[k] || 0) + v); for (const t of legacyTowels) if (!towels.includes(t)) towels.push(t); }
+      const openDeposits = open
+        .filter((l) => typeof l.seq === 'number')
+        .map((l) => ({ seq: l.seq, ts: l.ts, itemTypeId: l.itemTypeId, itemName: l.itemName, amount: l.remaining, towelNo: l.towelNo }))
+        .sort((a, b) => (a.ts < b.ts ? 1 : a.ts > b.ts ? -1 : b.seq - a.seq)); // newest first
+      out.push({ guest: cur.guest, room: cur.room, held, over, items, netItems, towels, lastTs, openDeposits });
+    }
+    return out;
   }
 
   // Look up a ledger entry by its sequence number (the visible transaction #).
@@ -701,7 +735,7 @@ class Store {
   // Guests refunded MORE than they deposited under this exact name/room — usually
   // a name/room mismatch or a refund of a pre-system deposit. Worth a look.
   overReturnedByGuest() {
-    return this._guestNets().filter((x) => x.held < -0.005).sort((a, b) => a.held - b.held);
+    return this._guestNets().filter((x) => x.over > 0.005).sort((a, b) => b.over - a.over);
   }
 
   // Reconciliation that ALWAYS ties back to COH:
@@ -709,8 +743,8 @@ class Store {
   // (Adjustment entries carry no guest, so they sit outside held/over.)
   reconciliation() {
     const nets = this._guestNets();
-    const held = round2(nets.filter((x) => x.held > 0).reduce((s, x) => s + x.held, 0));
-    const over = round2(-nets.filter((x) => x.held < 0).reduce((s, x) => s + x.held, 0));
+    const held = round2(nets.reduce((s, x) => s + Math.max(0, x.held), 0));
+    const over = round2(nets.reduce((s, x) => s + Math.max(0, x.over), 0));
     const adjustments = round2(this.state.ledger
       .filter((e) => e.kind === 'adjustment')
       .reduce((s, e) => s + e.amount * e.direction, 0));
@@ -718,7 +752,7 @@ class Store {
       beginning: this.beginningBalance(),
       held, over, adjustments, coh: this.coh(),
       positives: nets.filter((x) => x.held > 0.005).length,
-      negatives: nets.filter((x) => x.held < -0.005).length,
+      negatives: nets.filter((x) => x.over > 0.005).length,
     };
   }
 
