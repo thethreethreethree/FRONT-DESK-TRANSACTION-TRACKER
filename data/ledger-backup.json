@@ -1,11 +1,11 @@
 {
   "meta": {
     "app": "Frendz Front Desk Transaction Tracker",
-    "exportedAt": "2026-06-17T07:16:30.555Z",
+    "exportedAt": "2026-06-17T10:27:33.682Z",
     "version": 1,
-    "coh": 43400,
-    "entries": 16717,
-    "auditEvents": 1368,
+    "coh": 45400,
+    "entries": 16718,
+    "auditEvents": 1372,
     "integrity": {
       "ok": true,
       "brokenAtSeq": null
@@ -33,8 +33,8 @@
         "path": "data/ledger-backup.json",
         "autoSync": true,
         "enabled": true,
-        "lastBackupAt": "2026-06-17T07:11:39.000Z",
-        "lastBackupSha": "38bd9f5aa76e2c4e91097231134581491d1fff31"
+        "lastBackupAt": "2026-06-17T07:16:39.404Z",
+        "lastBackupSha": "cf2dce99789febeff0a78ffa18531255e01dac2e"
       },
       "towelTracker": {
         "enabled": true,
@@ -403689,6 +403689,36 @@
         "reversesId": null,
         "prevHash": "562d562a02b571e7ecaf2b3063cd9afdf5896c894356e66d03c9cc48bb64593d",
         "hash": "f0d71290b18b3a11edd1f00ec25d5329a4604ac8d43a2306c38c6fb1cc0c40bf"
+      },
+      {
+        "seq": 16718,
+        "id": "txn_mqhxfygt_1_j3n8yt",
+        "ts": "2026-06-17T10:27:27.677Z",
+        "kind": "deposit",
+        "itemTypeId": "item_mpxxdbc3_2_s3d7ag",
+        "itemName": "Towel",
+        "qty": 2,
+        "unitAmount": 1000,
+        "amount": 2000,
+        "direction": 1,
+        "guest": "DAISY",
+        "room": "308",
+        "pax": null,
+        "shiftId": "shift_mpy3b19n_5_j6nxol",
+        "shiftLabel": "PM",
+        "businessDate": "2026-06-17",
+        "staff": "Jeca",
+        "staffRole": "staff",
+        "note": "",
+        "towelNo": "209 260",
+        "oldTowelNo": "",
+        "towelLost": false,
+        "refundsSeq": null,
+        "exchangesSeq": null,
+        "mewsRes": "",
+        "reversesId": null,
+        "prevHash": "f0d71290b18b3a11edd1f00ec25d5329a4604ac8d43a2306c38c6fb1cc0c40bf",
+        "hash": "a6a3b3776c4be002d757b48b3da22d6c6191d16b879f65e21eab6a66cfb7bf3d"
       }
     ],
     "audit": [
@@ -427290,6 +427320,67 @@
         },
         "prevHash": "1869c29842a7c1d83e26cbb3636fe9713529c3349a3c9283113fcbe8091da12f",
         "hash": "6880a1edee7b3603f365d1f86474d6a56486a05527ddde6b76254cd7406fc674"
+      },
+      {
+        "seq": 1369,
+        "id": "aud_mqhqml1m_e_d0rwbl",
+        "ts": "2026-06-17T07:16:39.562Z",
+        "actor": "Chalyn",
+        "role": "staff",
+        "action": "backup.github",
+        "what": "Backup committed to thethreethreethree/FRONT-DESK-TRANSACTION-TRACKER@main (auto-sync)",
+        "details": {
+          "reason": "auto-sync",
+          "coh": 43400,
+          "entries": 16717
+        },
+        "prevHash": "6880a1edee7b3603f365d1f86474d6a56486a05527ddde6b76254cd7406fc674",
+        "hash": "43020e3a07187dc2e220201f039bb8e7ad13bac83c7b1fecf2d48c24935e758f"
+      },
+      {
+        "seq": 1370,
+        "id": "aud_mqhxeszp_1_6dvzdy",
+        "ts": "2026-06-17T10:26:33.925Z",
+        "actor": "Chalyn",
+        "role": "staff",
+        "action": "auth.logout",
+        "what": "Chalyn signed out",
+        "details": {},
+        "prevHash": "43020e3a07187dc2e220201f039bb8e7ad13bac83c7b1fecf2d48c24935e758f",
+        "hash": "00b8d8c36b03aaeaa5acc684236187ee395f629a8cd441347d36ff7ea7b94779"
+      },
+      {
+        "seq": 1371,
+        "id": "aud_mqhxey8z_2_36vcu4",
+        "ts": "2026-06-17T10:26:40.739Z",
+        "actor": "Jeca",
+        "role": "staff",
+        "action": "auth.login",
+        "what": "Jeca signed in as staff",
+        "details": {
+          "role": "staff"
+        },
+        "prevHash": "00b8d8c36b03aaeaa5acc684236187ee395f629a8cd441347d36ff7ea7b94779",
+        "hash": "c8b03fce3e8fc76b9a1899a60eb7575305dba4ab9247b71e0c8a72368dbb59ff"
+      },
+      {
+        "seq": 1372,
+        "id": "aud_mqhxfygu_2_mylnxl",
+        "ts": "2026-06-17T10:27:27.678Z",
+        "actor": "Jeca",
+        "role": "staff",
+        "action": "deposit.create",
+        "what": "Deposit ₱2,000.00 · Towel ×2 · DAISY",
+        "details": {
+          "ref": 16718,
+          "id": "txn_mqhxfygt_1_j3n8yt",
+          "amount": 2000,
+          "item": "Towel",
+          "guest": "DAISY",
+          "room": "308"
+        },
+        "prevHash": "c8b03fce3e8fc76b9a1899a60eb7575305dba4ab9247b71e0c8a72368dbb59ff",
+        "hash": "c62b115551dbd98d43f6ca46b9596232d6240050f740eccb007b05d98ad46808"
       }
     ],
     "towels": [
