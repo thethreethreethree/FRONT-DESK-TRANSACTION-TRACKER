@@ -1,11 +1,11 @@
 {
   "meta": {
     "app": "Frendz Front Desk Transaction Tracker",
-    "exportedAt": "2026-06-20T03:48:54.344Z",
+    "exportedAt": "2026-06-20T03:49:18.719Z",
     "version": 1,
-    "coh": 58900,
-    "entries": 16812,
-    "auditEvents": 1614,
+    "coh": 58400,
+    "entries": 16813,
+    "auditEvents": 1616,
     "integrity": {
       "ok": true,
       "brokenAtSeq": null
@@ -33,8 +33,8 @@
         "path": "data/ledger-backup.json",
         "autoSync": true,
         "enabled": true,
-        "lastBackupAt": "2026-06-20T03:48:37.338Z",
-        "lastBackupSha": "36c74b56795470c2cd7f7bbb6b4c767e3bab60ae"
+        "lastBackupAt": "2026-06-20T03:49:03.012Z",
+        "lastBackupSha": "d56643ec9e7bef53b8c82ba683dae7ebed4003bd"
       },
       "towelTracker": {
         "enabled": true,
@@ -406539,6 +406539,36 @@
         "reversesId": null,
         "prevHash": "2afc080b31cbcc70c709456485b25a50e92ba81b04d4a65f1293440d7257c570",
         "hash": "bdd4981966b235d46e579147fde2c6ec6d90f6ed346e9478836a0b5851188cc8"
+      },
+      {
+        "seq": 16813,
+        "id": "txn_mqltjczy_1g_xpdjwa",
+        "ts": "2026-06-20T03:49:12.718Z",
+        "kind": "refund",
+        "itemTypeId": "item_mpxxdbc8_4_mb0zqa",
+        "itemName": "Hair Dryer",
+        "qty": 1,
+        "unitAmount": 500,
+        "amount": 500,
+        "direction": -1,
+        "guest": "LI ZHE",
+        "room": "406",
+        "pax": null,
+        "shiftId": "shift_mpy3b19n_5_j6nxol",
+        "shiftLabel": "PM",
+        "businessDate": "2026-06-20",
+        "staff": "GINO",
+        "staffRole": "staff",
+        "note": "",
+        "towelNo": "",
+        "oldTowelNo": "",
+        "towelLost": false,
+        "refundsSeq": null,
+        "exchangesSeq": null,
+        "mewsRes": "",
+        "reversesId": null,
+        "prevHash": "bdd4981966b235d46e579147fde2c6ec6d90f6ed346e9478836a0b5851188cc8",
+        "hash": "f8a2c00f4dd82f876c807fe028319c6917e423fef35799d5a4ccaf844142f990"
       }
     ],
     "audit": [
@@ -434283,6 +434313,41 @@
         },
         "prevHash": "7ba24f008bc8b2e6b291536dd584bb18f37a84c455935acb3e37c15e01650f33",
         "hash": "27a0212250787e0cbd7f9751a72d448b6eb595ed46b872f4cb1400516d354b01"
+      },
+      {
+        "seq": 1615,
+        "id": "aud_mqltj5ic_1f_5kiqkx",
+        "ts": "2026-06-20T03:49:03.012Z",
+        "actor": "GINO",
+        "role": "staff",
+        "action": "backup.github",
+        "what": "Backup committed to thethreethreethree/FRONT-DESK-TRANSACTION-TRACKER@main (auto-sync)",
+        "details": {
+          "reason": "auto-sync",
+          "coh": 58900,
+          "entries": 16812
+        },
+        "prevHash": "27a0212250787e0cbd7f9751a72d448b6eb595ed46b872f4cb1400516d354b01",
+        "hash": "5aa6475358f9940e609525c4433bdffa24d06499aacf389c02d7d3739aaf34d4"
+      },
+      {
+        "seq": 1616,
+        "id": "aud_mqltjczy_1h_p4gnvc",
+        "ts": "2026-06-20T03:49:12.718Z",
+        "actor": "GINO",
+        "role": "staff",
+        "action": "refund.create",
+        "what": "Refund ₱500.00 · Hair Dryer ×1 · LI ZHE",
+        "details": {
+          "ref": 16813,
+          "id": "txn_mqltjczy_1g_xpdjwa",
+          "amount": 500,
+          "item": "Hair Dryer",
+          "guest": "LI ZHE",
+          "room": "406"
+        },
+        "prevHash": "5aa6475358f9940e609525c4433bdffa24d06499aacf389c02d7d3739aaf34d4",
+        "hash": "5fdbc6a61890ddfd42891c16657061214b242cfbda4b4046e359137f70869da4"
       }
     ],
     "towels": [
