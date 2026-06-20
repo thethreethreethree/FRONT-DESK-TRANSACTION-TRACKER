@@ -1,11 +1,11 @@
 {
   "meta": {
     "app": "Frendz Front Desk Transaction Tracker",
-    "exportedAt": "2026-06-19T23:28:50.919Z",
+    "exportedAt": "2026-06-20T03:41:51.083Z",
     "version": 1,
-    "coh": 74900,
-    "entries": 16800,
-    "auditEvents": 1591,
+    "coh": 73900,
+    "entries": 16801,
+    "auditEvents": 1592,
     "integrity": {
       "ok": true,
       "brokenAtSeq": null
@@ -34,7 +34,7 @@
         "autoSync": true,
         "enabled": true,
         "lastBackupAt": "2026-06-19T23:28:44.911Z",
-        "lastBackupSha": "2b369307ea01809fa2d6ce8eee0270b168dd1cc5"
+        "lastBackupSha": "3115ef8b2a0459f601488602591ceca33d0d7549"
       },
       "towelTracker": {
         "enabled": true,
@@ -406179,6 +406179,36 @@
         "reversesId": null,
         "prevHash": "172f87b5998d588c1afd2b460c4694c75f28e297dd20a73d10d149e5d6978b5e",
         "hash": "2ef949f487142b5051eeffc153db081c2b3c136af6c0fbfb881076fd926bbb8a"
+      },
+      {
+        "seq": 16801,
+        "id": "txn_mqlt9rlb_g_gvldhh",
+        "ts": "2026-06-20T03:41:45.071Z",
+        "kind": "refund",
+        "itemTypeId": "item_mpxxdbc3_2_s3d7ag",
+        "itemName": "Towel",
+        "qty": 1,
+        "unitAmount": 1000,
+        "amount": 1000,
+        "direction": -1,
+        "guest": "MARY ANNE",
+        "room": "303",
+        "pax": null,
+        "shiftId": "shift_mpy3b19n_5_j6nxol",
+        "shiftLabel": "PM",
+        "businessDate": "2026-06-20",
+        "staff": "GINO",
+        "staffRole": "staff",
+        "note": "",
+        "towelNo": "478",
+        "oldTowelNo": "",
+        "towelLost": false,
+        "refundsSeq": null,
+        "exchangesSeq": null,
+        "mewsRes": "",
+        "reversesId": null,
+        "prevHash": "2ef949f487142b5051eeffc153db081c2b3c136af6c0fbfb881076fd926bbb8a",
+        "hash": "76d347b05059d686fb3ccf3c676103fd70c66dc94810f827cd822db36a07d833"
       }
     ],
     "audit": [
@@ -433519,6 +433549,25 @@
         },
         "prevHash": "ab2d5e02c2215dda18109d1c6f4a1f14b8025f415d37eabe5ee58f3ff53f4499",
         "hash": "fd796fd247e28ba0bfad84df87a9897941555b151a842f7995f74d0b944ace3d"
+      },
+      {
+        "seq": 1592,
+        "id": "aud_mqlt9rlb_h_fv8ixj",
+        "ts": "2026-06-20T03:41:45.071Z",
+        "actor": "GINO",
+        "role": "staff",
+        "action": "refund.create",
+        "what": "Refund ₱1,000.00 · Towel ×1 · MARY ANNE",
+        "details": {
+          "ref": 16801,
+          "id": "txn_mqlt9rlb_g_gvldhh",
+          "amount": 1000,
+          "item": "Towel",
+          "guest": "MARY ANNE",
+          "room": "303"
+        },
+        "prevHash": "fd796fd247e28ba0bfad84df87a9897941555b151a842f7995f74d0b944ace3d",
+        "hash": "4c45de9f9917cd35799fa72820d1bc2ab02adfc19e7bdccffc24d9d2b018953e"
       }
     ],
     "towels": [
