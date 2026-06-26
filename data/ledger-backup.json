@@ -1,11 +1,11 @@
 {
   "meta": {
     "app": "Frendz Front Desk Transaction Tracker",
-    "exportedAt": "2026-06-26T12:13:39.110Z",
+    "exportedAt": "2026-06-26T12:14:36.144Z",
     "version": 1,
-    "coh": 49400,
-    "entries": 17024,
-    "auditEvents": 2046,
+    "coh": 53400,
+    "entries": 17026,
+    "auditEvents": 2049,
     "integrity": {
       "ok": true,
       "brokenAtSeq": null
@@ -33,7 +33,7 @@
         "path": "data/ledger-backup.json",
         "autoSync": true,
         "enabled": true,
-        "lastBackupAt": "2026-06-26T12:12:42.288Z",
+        "lastBackupAt": "2026-06-26T12:13:46.298Z",
         "lastBackupSha": "75f28a937b150fff1fdaa0b0fa2fba950c8dffa1"
       },
       "towelTracker": {
@@ -412906,6 +412906,66 @@
         "reversesId": null,
         "prevHash": "cb9c867e21a4f0b1a280308c539d2a1c2af7b38b6b627aedd198825d4c96c70c",
         "hash": "f6cd14e503d91fe1a9e35913f790262d929059ed0fe8e38780e27232e62f0952"
+      },
+      {
+        "seq": 17025,
+        "id": "txn_mquw7d5v_22_by10lf",
+        "ts": "2026-06-26T12:13:47.491Z",
+        "kind": "deposit",
+        "itemTypeId": "item_mpxxdbc3_2_s3d7ag",
+        "itemName": "Towel",
+        "qty": 3,
+        "unitAmount": 1000,
+        "amount": 3000,
+        "direction": 1,
+        "guest": "LEO",
+        "room": "304",
+        "pax": null,
+        "shiftId": "shift_mpy3b19n_5_j6nxol",
+        "shiftLabel": "PM",
+        "businessDate": "2026-06-26",
+        "staff": "Rebecca",
+        "staffRole": "staff",
+        "note": "",
+        "towelNo": "17 29 65",
+        "oldTowelNo": "",
+        "towelLost": false,
+        "refundsSeq": null,
+        "exchangesSeq": null,
+        "mewsRes": "",
+        "reversesId": null,
+        "prevHash": "f6cd14e503d91fe1a9e35913f790262d929059ed0fe8e38780e27232e62f0952",
+        "hash": "4235b47cc6d2c9544aa741509a546d88c1d38924ecce6c5744b71e46f6137561"
+      },
+      {
+        "seq": 17026,
+        "id": "txn_mquw8218_24_5yf3j2",
+        "ts": "2026-06-26T12:14:19.724Z",
+        "kind": "deposit",
+        "itemTypeId": "item_mpxxdbc3_2_s3d7ag",
+        "itemName": "Towel",
+        "qty": 1,
+        "unitAmount": 1000,
+        "amount": 1000,
+        "direction": 1,
+        "guest": "ZORICA",
+        "room": "402",
+        "pax": null,
+        "shiftId": "shift_mpy3b19n_5_j6nxol",
+        "shiftLabel": "PM",
+        "businessDate": "2026-06-26",
+        "staff": "Rebecca",
+        "staffRole": "staff",
+        "note": "",
+        "towelNo": "282",
+        "oldTowelNo": "",
+        "towelLost": false,
+        "refundsSeq": null,
+        "exchangesSeq": null,
+        "mewsRes": "",
+        "reversesId": null,
+        "prevHash": "4235b47cc6d2c9544aa741509a546d88c1d38924ecce6c5744b71e46f6137561",
+        "hash": "3d41997b321ba0422d22fc1ba742b3ccc1abcd5dc77b2e4d22cf6b09343c8688"
       }
     ],
     "audit": [
@@ -448098,6 +448158,60 @@
         },
         "prevHash": "4af94a7fa2c12de800487638408b9ab845976b9f01a7da301642cb24eb6bf528",
         "hash": "5753243b1a0f254af69e4ef643f7fb1d627dda992905500779b9ab01fc120e0a"
+      },
+      {
+        "seq": 2047,
+        "id": "aud_mquw7c8r_21_rq41fz",
+        "ts": "2026-06-26T12:13:46.299Z",
+        "actor": "Rebecca",
+        "role": "staff",
+        "action": "backup.github",
+        "what": "Backup committed to thethreethreethree/FRONT-DESK-TRANSACTION-TRACKER@main (auto-sync)",
+        "details": {
+          "reason": "auto-sync",
+          "coh": 49400,
+          "entries": 17024
+        },
+        "prevHash": "5753243b1a0f254af69e4ef643f7fb1d627dda992905500779b9ab01fc120e0a",
+        "hash": "93725a8b287d84e58b216e2b7b0362b800c5363a340e8fac6b5e398ac7b4e419"
+      },
+      {
+        "seq": 2048,
+        "id": "aud_mquw7d5v_23_yvkm1c",
+        "ts": "2026-06-26T12:13:47.491Z",
+        "actor": "Rebecca",
+        "role": "staff",
+        "action": "deposit.create",
+        "what": "Deposit ₱3,000.00 · Towel ×3 · LEO",
+        "details": {
+          "ref": 17025,
+          "id": "txn_mquw7d5v_22_by10lf",
+          "amount": 3000,
+          "item": "Towel",
+          "guest": "LEO",
+          "room": "304"
+        },
+        "prevHash": "93725a8b287d84e58b216e2b7b0362b800c5363a340e8fac6b5e398ac7b4e419",
+        "hash": "e4c1ba6e6547cac7f28f59036d6bcb3340e30de1d7650935d09ef66f9b41c835"
+      },
+      {
+        "seq": 2049,
+        "id": "aud_mquw8218_25_b7q9yt",
+        "ts": "2026-06-26T12:14:19.724Z",
+        "actor": "Rebecca",
+        "role": "staff",
+        "action": "deposit.create",
+        "what": "Deposit ₱1,000.00 · Towel ×1 · ZORICA",
+        "details": {
+          "ref": 17026,
+          "id": "txn_mquw8218_24_5yf3j2",
+          "amount": 1000,
+          "item": "Towel",
+          "guest": "ZORICA",
+          "room": "402"
+        },
+        "prevHash": "e4c1ba6e6547cac7f28f59036d6bcb3340e30de1d7650935d09ef66f9b41c835",
+        "hash": "475ef1b605b878cee1c2ea5925f2c56acdb1a2f3bfd6f7c9f9e00faac672ccad"
       }
     ],
     "towels": [
