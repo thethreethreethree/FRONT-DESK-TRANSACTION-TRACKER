@@ -1,11 +1,11 @@
 {
   "meta": {
     "app": "Frendz Front Desk Transaction Tracker",
-    "exportedAt": "2026-06-27T11:37:44.414Z",
+    "exportedAt": "2026-06-27T11:38:18.760Z",
     "version": 1,
-    "coh": 56400,
-    "entries": 17067,
-    "auditEvents": 2146,
+    "coh": 58400,
+    "entries": 17069,
+    "auditEvents": 2149,
     "integrity": {
       "ok": true,
       "brokenAtSeq": null
@@ -33,7 +33,7 @@
         "path": "data/ledger-backup.json",
         "autoSync": true,
         "enabled": true,
-        "lastBackupAt": "2026-06-27T11:34:35.426Z",
+        "lastBackupAt": "2026-06-27T11:37:51.163Z",
         "lastBackupSha": "e035fc60f389bdebf64dc4d17cf988fd2688cc64"
       },
       "towelTracker": {
@@ -414196,6 +414196,66 @@
         "reversesId": null,
         "prevHash": "b19c424924199295746c3a467e488a3ec1456919bfa7bc700708b3518ec4651a",
         "hash": "0f81c19f3a3597c880f227f1b506fb34962fcd3cab57a0f2edf67c0ea4d7e375"
+      },
+      {
+        "seq": 17068,
+        "id": "txn_mqwacyhx_26_cxxlx2",
+        "ts": "2026-06-27T11:37:49.221Z",
+        "kind": "deposit",
+        "itemTypeId": "item_mpxxdbc3_2_s3d7ag",
+        "itemName": "Towel",
+        "qty": 1,
+        "unitAmount": 1000,
+        "amount": 1000,
+        "direction": 1,
+        "guest": "SAM",
+        "room": "209",
+        "pax": null,
+        "shiftId": "shift_mpy3b19n_5_j6nxol",
+        "shiftLabel": "PM",
+        "businessDate": "2026-06-27",
+        "staff": "DARREN",
+        "staffRole": "manager",
+        "note": "",
+        "towelNo": "401",
+        "oldTowelNo": "",
+        "towelLost": false,
+        "refundsSeq": null,
+        "exchangesSeq": null,
+        "mewsRes": "",
+        "reversesId": null,
+        "prevHash": "0f81c19f3a3597c880f227f1b506fb34962fcd3cab57a0f2edf67c0ea4d7e375",
+        "hash": "f05f48777f534b6593585d2e3a0a7b617649078901da784ead5678cf2ec18575"
+      },
+      {
+        "seq": 17069,
+        "id": "txn_mqwadeet_29_e7ei8s",
+        "ts": "2026-06-27T11:38:09.845Z",
+        "kind": "deposit",
+        "itemTypeId": "item_mpxxdbc3_2_s3d7ag",
+        "itemName": "Towel",
+        "qty": 1,
+        "unitAmount": 1000,
+        "amount": 1000,
+        "direction": 1,
+        "guest": "HERMINE",
+        "room": "209",
+        "pax": null,
+        "shiftId": "shift_mpy3b19n_5_j6nxol",
+        "shiftLabel": "PM",
+        "businessDate": "2026-06-27",
+        "staff": "DARREN",
+        "staffRole": "manager",
+        "note": "",
+        "towelNo": "139",
+        "oldTowelNo": "",
+        "towelLost": false,
+        "refundsSeq": null,
+        "exchangesSeq": null,
+        "mewsRes": "",
+        "reversesId": null,
+        "prevHash": "f05f48777f534b6593585d2e3a0a7b617649078901da784ead5678cf2ec18575",
+        "hash": "412e7050574280c154d08be0db7bbdb4ebeecedacd9585f868dffedb5ae179a7"
       }
     ],
     "audit": [
@@ -451119,6 +451179,60 @@
         },
         "prevHash": "85190aeeb97422aa797e59fc61fd2e342fa8cb4659f2d5b12249041147d54e22",
         "hash": "6a73255155d3583852a2eaf5a0e9560f92fa2c7865d7c1ff1b8844268df4846e"
+      },
+      {
+        "seq": 2147,
+        "id": "aud_mqwacyhy_27_5lr8hh",
+        "ts": "2026-06-27T11:37:49.222Z",
+        "actor": "DARREN",
+        "role": "manager",
+        "action": "deposit.create",
+        "what": "Deposit ₱1,000.00 · Towel ×1 · SAM",
+        "details": {
+          "ref": 17068,
+          "id": "txn_mqwacyhx_26_cxxlx2",
+          "amount": 1000,
+          "item": "Towel",
+          "guest": "SAM",
+          "room": "209"
+        },
+        "prevHash": "6a73255155d3583852a2eaf5a0e9560f92fa2c7865d7c1ff1b8844268df4846e",
+        "hash": "f9f43feb42853d287e686b017a2cffc6b84a56b16aa634e9c4ee968c09697c2e"
+      },
+      {
+        "seq": 2148,
+        "id": "aud_mqwaczzw_28_hhpers",
+        "ts": "2026-06-27T11:37:51.164Z",
+        "actor": "DARREN",
+        "role": "manager",
+        "action": "backup.github",
+        "what": "Backup committed to thethreethreethree/FRONT-DESK-TRANSACTION-TRACKER@main (auto-sync)",
+        "details": {
+          "reason": "auto-sync",
+          "coh": 56400,
+          "entries": 17068
+        },
+        "prevHash": "f9f43feb42853d287e686b017a2cffc6b84a56b16aa634e9c4ee968c09697c2e",
+        "hash": "e9c0a2decc2b2790a516cca1be4355af8bf0340fcc545b2753fee73d6e814622"
+      },
+      {
+        "seq": 2149,
+        "id": "aud_mqwadeet_2a_awefnm",
+        "ts": "2026-06-27T11:38:09.845Z",
+        "actor": "DARREN",
+        "role": "manager",
+        "action": "deposit.create",
+        "what": "Deposit ₱1,000.00 · Towel ×1 · HERMINE",
+        "details": {
+          "ref": 17069,
+          "id": "txn_mqwadeet_29_e7ei8s",
+          "amount": 1000,
+          "item": "Towel",
+          "guest": "HERMINE",
+          "room": "209"
+        },
+        "prevHash": "e9c0a2decc2b2790a516cca1be4355af8bf0340fcc545b2753fee73d6e814622",
+        "hash": "056c9e50eca9a4b7f0c8d5efa69cbe97c23ca10fa132a8a83fa4b54bf2c26273"
       }
     ],
     "towels": [
