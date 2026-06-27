@@ -1,11 +1,11 @@
 {
   "meta": {
     "app": "Frendz Front Desk Transaction Tracker",
-    "exportedAt": "2026-06-27T09:23:20.846Z",
+    "exportedAt": "2026-06-27T09:26:10.767Z",
     "version": 1,
-    "coh": 49400,
-    "entries": 17061,
-    "auditEvents": 2135,
+    "coh": 50400,
+    "entries": 17062,
+    "auditEvents": 2137,
     "integrity": {
       "ok": true,
       "brokenAtSeq": null
@@ -33,8 +33,8 @@
         "path": "data/ledger-backup.json",
         "autoSync": true,
         "enabled": true,
-        "lastBackupAt": "2026-06-27T05:29:31.255Z",
-        "lastBackupSha": "ee17ee13ecde47beefe66249c25a53bd3302fda7"
+        "lastBackupAt": "2026-06-27T09:23:29.672Z",
+        "lastBackupSha": "dc58dadf762f98a2052fc019d01a7cc34f42057e"
       },
       "towelTracker": {
         "enabled": true,
@@ -414016,6 +414016,36 @@
         "reversesId": null,
         "prevHash": "25b9e39ab425fafc40d2f4267aae0b0aff8aa8baec39518849f8777a15ac5ff4",
         "hash": "7a12e8889c574d9694d9c587da3e37b0dbad226055936e8e5b79aad6ef5d4be9"
+      },
+      {
+        "seq": 17062,
+        "id": "txn_mqw5njdd_1q_k95w0x",
+        "ts": "2026-06-27T09:26:04.753Z",
+        "kind": "reversal",
+        "itemTypeId": "item_mpxxdbc3_2_s3d7ag",
+        "itemName": "Towel",
+        "qty": 1,
+        "unitAmount": 1000,
+        "amount": 1000,
+        "direction": 1,
+        "guest": "SAM",
+        "room": "408",
+        "pax": null,
+        "shiftId": "shift_mpy3b19n_5_j6nxol",
+        "shiftLabel": "PM",
+        "businessDate": "2026-06-27",
+        "staff": "DARREN",
+        "staffRole": "manager",
+        "note": "VOID of #17051 (refund Towel SAM). Reason: Mistakenly put the refund as cash instead of ID.",
+        "towelNo": "255",
+        "oldTowelNo": "",
+        "towelLost": false,
+        "refundsSeq": null,
+        "exchangesSeq": null,
+        "mewsRes": "",
+        "reversesId": "txn_mqvul1do_r_ubsp8v",
+        "prevHash": "7a12e8889c574d9694d9c587da3e37b0dbad226055936e8e5b79aad6ef5d4be9",
+        "hash": "dde1482f94cfbfe14cc85a40b03e8f18317a2e903074417217cee8e769f2c7f2"
       }
     ],
     "audit": [
@@ -450748,6 +450778,38 @@
         },
         "prevHash": "451ed1d9318bca81c823d624ac81272050943695e3efdbfe5cc66c2b063ebe4c",
         "hash": "d776bce8d25f234b7bd41bf260aff6afb35bc19c798ddb059fdac27340ea8f52"
+      },
+      {
+        "seq": 2136,
+        "id": "aud_mqw5k7pk_1p_7ptrir",
+        "ts": "2026-06-27T09:23:29.672Z",
+        "actor": "DARREN",
+        "role": "manager",
+        "action": "backup.github",
+        "what": "Backup committed to thethreethreethree/FRONT-DESK-TRANSACTION-TRACKER@main (auto-sync)",
+        "details": {
+          "reason": "auto-sync",
+          "coh": 49400,
+          "entries": 17061
+        },
+        "prevHash": "d776bce8d25f234b7bd41bf260aff6afb35bc19c798ddb059fdac27340ea8f52",
+        "hash": "92a861830e359544ee527d1d2eba0944101fab18ce8667af035e70397787fbfa"
+      },
+      {
+        "seq": 2137,
+        "id": "aud_mqw5njdd_1r_hwf0hd",
+        "ts": "2026-06-27T09:26:04.753Z",
+        "actor": "DARREN",
+        "role": "manager",
+        "action": "txn.void",
+        "what": "Voided #17051 (refund Towel · SAM · ₱1,000.00)",
+        "details": {
+          "ref": 17051,
+          "reversalSeq": 17062,
+          "reason": "Mistakenly put the refund as cash instead of ID."
+        },
+        "prevHash": "92a861830e359544ee527d1d2eba0944101fab18ce8667af035e70397787fbfa",
+        "hash": "0a4a630fb0576b96ef0f2724073a6b6c3ca0d9ff6aaad8204e8fb1da78dcda7a"
       }
     ],
     "towels": [
