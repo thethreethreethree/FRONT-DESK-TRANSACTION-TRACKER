@@ -1,11 +1,11 @@
 {
   "meta": {
     "app": "Frendz Front Desk Transaction Tracker",
-    "exportedAt": "2026-06-29T21:37:56.256Z",
+    "exportedAt": "2026-06-29T21:38:26.348Z",
     "version": 1,
     "coh": 47400,
-    "entries": 17129,
-    "auditEvents": 2287,
+    "entries": 17130,
+    "auditEvents": 2289,
     "integrity": {
       "ok": true,
       "brokenAtSeq": null
@@ -33,8 +33,8 @@
         "path": "data/ledger-backup.json",
         "autoSync": true,
         "enabled": true,
-        "lastBackupAt": "2026-06-29T13:18:34.034Z",
-        "lastBackupSha": "c915e7abe12d6bf5e575892ba44bcbc4eab4a7a7"
+        "lastBackupAt": "2026-06-29T21:38:05.161Z",
+        "lastBackupSha": "d779ea115b854a89b1d251f36ff211cf2e70a60f"
       },
       "towelTracker": {
         "enabled": true,
@@ -416056,6 +416056,36 @@
         "reversesId": null,
         "prevHash": "24e84efb6ea2d417d6d70288555f83297e1fffbd5d1949f4d1f3849c755c9d6a",
         "hash": "75c62ce2a4fc1cedaec4daf3ff82789beaa99e30c8074263592a3a1db1e6b728"
+      },
+      {
+        "seq": 17130,
+        "id": "txn_mqzqoxmj_4_ej8vnp",
+        "ts": "2026-06-29T21:38:20.347Z",
+        "kind": "exchange",
+        "itemTypeId": "item_mpxxdbc3_2_s3d7ag",
+        "itemName": "Towel",
+        "qty": 1,
+        "unitAmount": 0,
+        "amount": 0,
+        "direction": 0,
+        "guest": "ZORICA",
+        "room": "402",
+        "pax": null,
+        "shiftId": "shift_mpy3b19n_5_j6nxol",
+        "shiftLabel": "PM",
+        "businessDate": "2026-06-30",
+        "staff": "Rebecca",
+        "staffRole": "staff",
+        "note": "Towel exchange: #282 → #119 (deposit #17026)",
+        "towelNo": "119",
+        "oldTowelNo": "282",
+        "towelLost": false,
+        "refundsSeq": null,
+        "exchangesSeq": 17026,
+        "mewsRes": "",
+        "reversesId": null,
+        "prevHash": "75c62ce2a4fc1cedaec4daf3ff82789beaa99e30c8074263592a3a1db1e6b728",
+        "hash": "a6ed250bd8b0dfa158e358dfdda47486f4f539c21517f892917311eead94c45e"
       }
     ],
     "audit": [
@@ -455366,6 +455396,40 @@
         },
         "prevHash": "8dc51059a9ea8ca8c730b7c9414c5f47ed9ec1e224e19d05be04e9747c07355c",
         "hash": "20446b930b07a63437d187001067dadba76c45d607cd2bb49edcc3cb13520a89"
+      },
+      {
+        "seq": 2288,
+        "id": "aud_mqzqolwq_3_y207fw",
+        "ts": "2026-06-29T21:38:05.162Z",
+        "actor": "Rebecca",
+        "role": "staff",
+        "action": "backup.github",
+        "what": "Backup committed to thethreethreethree/FRONT-DESK-TRANSACTION-TRACKER@main (auto-sync)",
+        "details": {
+          "reason": "auto-sync",
+          "coh": 47400,
+          "entries": 17129
+        },
+        "prevHash": "20446b930b07a63437d187001067dadba76c45d607cd2bb49edcc3cb13520a89",
+        "hash": "711aec266782429997825d23506689c9721061aee85e2f14ae3322b4d2155392"
+      },
+      {
+        "seq": 2289,
+        "id": "aud_mqzqoxmk_5_fv5929",
+        "ts": "2026-06-29T21:38:20.348Z",
+        "actor": "Rebecca",
+        "role": "staff",
+        "action": "towel.exchange",
+        "what": "Towel exchange · ZORICA · #282 → #119 (deposit #17026)",
+        "details": {
+          "oldTowelNo": "282",
+          "newTowelNo": "119",
+          "exchangesSeq": 17026,
+          "guest": "ZORICA",
+          "room": "402"
+        },
+        "prevHash": "711aec266782429997825d23506689c9721061aee85e2f14ae3322b4d2155392",
+        "hash": "7ec80f359e737e3060aebdfa1f7d25bbd1eb1c52ac8a4aef248a9228c1d800f9"
       }
     ],
     "towels": [
