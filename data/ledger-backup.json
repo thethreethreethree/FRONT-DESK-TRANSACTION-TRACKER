@@ -1,11 +1,11 @@
 {
   "meta": {
     "app": "Frendz Front Desk Transaction Tracker",
-    "exportedAt": "2026-07-01T04:54:53.291Z",
+    "exportedAt": "2026-07-01T04:55:18.397Z",
     "version": 1,
     "coh": 27400,
-    "entries": 17171,
-    "auditEvents": 2384,
+    "entries": 17172,
+    "auditEvents": 2386,
     "integrity": {
       "ok": true,
       "brokenAtSeq": null
@@ -33,8 +33,8 @@
         "path": "data/ledger-backup.json",
         "autoSync": true,
         "enabled": true,
-        "lastBackupAt": "2026-07-01T04:48:59.454Z",
-        "lastBackupSha": "0a700510c6f8311aab38bd8e0a2bb8e4c5984683"
+        "lastBackupAt": "2026-07-01T04:55:03.043Z",
+        "lastBackupSha": "c3b82c56e32f3cea71e1a1bc94fe2ee9b7d82472"
       },
       "towelTracker": {
         "enabled": true,
@@ -417316,6 +417316,36 @@
         "reversesId": null,
         "prevHash": "d2e5eaf83497c6d67f8f98a4125d16f404e3bc01af55c22ac059b43cf46e327b",
         "hash": "7ea19cd958fa7bb28f2e922428559153fd29127156baea8449f076ca9aa7e5e8"
+      },
+      {
+        "seq": 17172,
+        "id": "txn_mr1lqlmn_13_x5ond6",
+        "ts": "2026-07-01T04:55:12.383Z",
+        "kind": "exchange",
+        "itemTypeId": "item_mpxxdbc3_2_s3d7ag",
+        "itemName": "Towel",
+        "qty": 1,
+        "unitAmount": 0,
+        "amount": 0,
+        "direction": 0,
+        "guest": "Daniel",
+        "room": "308",
+        "pax": null,
+        "shiftId": "shift_mpy3b19n_5_j6nxol",
+        "shiftLabel": "PM",
+        "businessDate": "2026-07-01",
+        "staff": "Monie",
+        "staffRole": "staff",
+        "note": "Towel exchange: #135 → #270 (deposit #17066) · MISSING TOWEL #16",
+        "towelNo": "270",
+        "oldTowelNo": "135",
+        "towelLost": false,
+        "refundsSeq": null,
+        "exchangesSeq": 17066,
+        "mewsRes": "",
+        "reversesId": null,
+        "prevHash": "7ea19cd958fa7bb28f2e922428559153fd29127156baea8449f076ca9aa7e5e8",
+        "hash": "caed5f2ed916cb11f6eb70b3a5a7e09b7571b2fa03feff995a669963383d9125"
       }
     ],
     "audit": [
@@ -458350,6 +458380,40 @@
         },
         "prevHash": "d49430ed4e9e1e29b7d570683d78cfdf5d5c5bc39560dbbdc5422eae42af40de",
         "hash": "6d5cdd5643518e285cefeb790a77e63a36d9d6b66081f5fedf1950fb16bce9f1"
+      },
+      {
+        "seq": 2385,
+        "id": "aud_mr1lqef8_12_247c5a",
+        "ts": "2026-07-01T04:55:03.044Z",
+        "actor": "Monie",
+        "role": "staff",
+        "action": "backup.github",
+        "what": "Backup committed to thethreethreethree/FRONT-DESK-TRANSACTION-TRACKER@main (auto-sync)",
+        "details": {
+          "reason": "auto-sync",
+          "coh": 27400,
+          "entries": 17171
+        },
+        "prevHash": "6d5cdd5643518e285cefeb790a77e63a36d9d6b66081f5fedf1950fb16bce9f1",
+        "hash": "5bd725071cd3f348174b9c7805e47a03d4c430cd09346e3f7bac98eaeda21979"
+      },
+      {
+        "seq": 2386,
+        "id": "aud_mr1lqlmn_14_msg3ly",
+        "ts": "2026-07-01T04:55:12.383Z",
+        "actor": "Monie",
+        "role": "staff",
+        "action": "towel.exchange",
+        "what": "Towel exchange · Daniel · #135 → #270 (deposit #17066)",
+        "details": {
+          "oldTowelNo": "135",
+          "newTowelNo": "270",
+          "exchangesSeq": 17066,
+          "guest": "Daniel",
+          "room": "308"
+        },
+        "prevHash": "5bd725071cd3f348174b9c7805e47a03d4c430cd09346e3f7bac98eaeda21979",
+        "hash": "f22bacc7d43f78bd6e9340de35e918e585bca70c2f585f72a643721d305f585d"
       }
     ],
     "towels": [
