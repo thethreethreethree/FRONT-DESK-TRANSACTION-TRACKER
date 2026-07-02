@@ -580,6 +580,11 @@ class Store {
     const isImport = (e) => (typeof e.id === 'string' && e.id.startsWith('imp_')) || e.staff === 'import';
     const groups = new Map();
     for (const e of this.state.ledger) {
+      // Adjustments are COH-level reconciliations, never a guest holding — they are
+      // accounted for solely by reconciliation().adjustments. Including one here (e.g.
+      // an adjustment mis-tagged with a guest like "N/A") would double-count it: once
+      // in `held` and again in `adjustments`, breaking held−over == coh−beginning−adj.
+      if (e.kind === 'adjustment') continue;
       const g = (e.guest || '').toUpperCase().trim();
       const r = (e.room || '').toUpperCase().trim();
       if (!g && !r) continue;

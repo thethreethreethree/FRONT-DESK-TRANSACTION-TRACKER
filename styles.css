@@ -83,6 +83,22 @@ button { font-family: inherit; }
 .app { display: grid; grid-template-columns: 248px 1fr; min-height: 100vh; }
 .app.locked { display: block; }
 
+/* Sync-health banner (internet outage / sync fault / discrepancy) — fixed at top,
+   its measured height (--sync-banner-h) offsets the shell so it never overlaps. */
+#sync-banner { display: none; position: fixed; top: 0; left: 0; right: 0; z-index: 200;
+  padding: 9px 18px; font-size: .9rem; line-height: 1.35; box-shadow: 0 3px 12px rgba(20, 18, 16, .22); }
+#sync-banner.show { display: block; }
+#sync-banner.red { background: #b3261e; color: #fff; }
+#sync-banner.amber { background: #f6c445; color: #3a2d00; }
+#sync-banner .sb-inner { display: flex; align-items: flex-start; gap: 10px; max-width: 1180px; margin: 0 auto; }
+#sync-banner .sb-ico { font-size: 1.1rem; line-height: 1.25; flex: none; }
+#sync-banner .sb-txt { min-width: 0; }
+#sync-banner .sb-hint { opacity: .92; font-weight: 400; }
+body.has-sync-banner .app { margin-top: var(--sync-banner-h, 44px); }
+@media (min-width: 881px) {
+  body.has-sync-banner .sidebar { top: var(--sync-banner-h, 44px); height: calc(100vh - var(--sync-banner-h, 44px)); }
+}
+
 .sidebar {
   background: linear-gradient(180deg, var(--ink-900), var(--ink));
   color: #efece6;

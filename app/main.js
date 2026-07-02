@@ -3,6 +3,7 @@ import { el, $, clear, peso, pesoPlain, toast, fmtDateTime } from './util.js';
 import { store } from './store.js';
 import { pageHead, confirmDialog, managerGate, openModal } from './components.js';
 import * as gh from './github.js';
+import * as health from './sync-health.js';
 import { parseSheet, importSheet } from './csv-import.js';
 import * as dashboard from './views/dashboard.js';
 import * as deposit from './views/deposit.js';
@@ -42,6 +43,9 @@ async function mount() {
   await ensureProvisioned(); // only provisions the static baseline if nothing was restored
   ensureAdminSeed();         // seed the initial Admin account once
   ensurePassportItem();      // retire the (mis-)seeded standalone Passport item
+  // Outage/sync watchdog: warn the moment entries stop reaching backup. On reconnect,
+  // pull anything we missed and flush our own pending changes straight away.
+  health.init({ onReconnect: () => { pollRemote(); clearTimeout(_autoSyncTimer); _autoSyncTimer = setTimeout(runAutoSync, 800); } });
   route();
 }
 
@@ -315,6 +319,7 @@ async function runAutoSync() {
   _syncing = true;
   let ok = false;
   try { ok = await gh.autoBackup('auto-sync'); } finally { _syncing = false; }
+  health.recordSync(ok);                            // drives the outage/sync-fault banner
   if (ok) _lastSyncedSig = sigAtStart;              // recorded exactly what we sent
   if (_syncSig() !== _lastSyncedSig) { clearTimeout(_autoSyncTimer); _autoSyncTimer = setTimeout(runAutoSync, 6000); } // changes during the backup
 }
@@ -350,6 +355,7 @@ async function pollRemote() {
     try { store.importData(remote.payload); } finally { store._suppressAudit = false; }
     if (remote.sha) { const g = store.config.github || {}; g.lastBackupSha = remote.sha; store.setConfig({ github: g }); } // re-read config after import
     _lastSyncedSig = _syncSig();
+    health.checkData();  // re-verify integrity + reconciliation on the state we just adopted
     refreshIfSafe();
   } finally { _polling = false; }
 }
