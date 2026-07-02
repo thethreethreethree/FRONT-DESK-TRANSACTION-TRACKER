@@ -1,11 +1,11 @@
 {
   "meta": {
     "app": "Frendz Front Desk Transaction Tracker",
-    "exportedAt": "2026-07-02T13:34:49.892Z",
+    "exportedAt": "2026-07-02T18:00:13.312Z",
     "version": 1,
-    "coh": 34400,
-    "entries": 17203,
-    "auditEvents": 2469,
+    "coh": 33400,
+    "entries": 17204,
+    "auditEvents": 2470,
     "integrity": {
       "ok": true,
       "brokenAtSeq": null
@@ -418276,6 +418276,36 @@
         "reversesId": null,
         "prevHash": "8eaf31904f45fc4e17920cea28252e2bbc6f6fcb0a92c10d1f94d0d7c6d4828a",
         "hash": "930c4282422a00bc2003a125358089fb05342c3dfba63230ca09844e92ac3b8c"
+      },
+      {
+        "seq": 17204,
+        "id": "txn_mr3t7zlq_1_8qk71s",
+        "ts": "2026-07-02T18:00:13.310Z",
+        "kind": "refund",
+        "itemTypeId": "item_mpxxdbc3_2_s3d7ag",
+        "itemName": "Towel",
+        "qty": 1,
+        "unitAmount": 1000,
+        "amount": 1000,
+        "direction": -1,
+        "guest": "CAMERON",
+        "room": "208",
+        "pax": null,
+        "shiftId": "shift_mpy3b19n_5_j6nxol",
+        "shiftLabel": "PM",
+        "businessDate": "2026-07-03",
+        "staff": "system",
+        "staffRole": "system",
+        "note": "<system error revision> Refund lost during Jun 27 internet outage — CAMERON (room 208) checked out and was paid ₱1,000, but the refund never saved (it was mis-logged as exchange #17060). Re-recording to balance Cash On Hand. Owner-authorized.",
+        "towelNo": "450",
+        "oldTowelNo": "",
+        "towelLost": false,
+        "refundsSeq": 16965,
+        "exchangesSeq": null,
+        "mewsRes": "",
+        "reversesId": null,
+        "prevHash": "930c4282422a00bc2003a125358089fb05342c3dfba63230ca09844e92ac3b8c",
+        "hash": "e3dc5fbbdbd0912d6e4875cb9c88763d11a6585c83ec8e5a805ce1b5fbecd8d7"
       }
     ],
     "audit": [
@@ -460729,6 +460759,29 @@
         },
         "prevHash": "102b61a7653935905f4b6bbb3a644e452b158a3bcef63f34e8e8c1b16fcc33a6",
         "hash": "a87bf2a71e3a8b8ea74cf0cd6de285bf71b996209de5abd1c21952803a5e86e9"
+      },
+      {
+        "seq": 2470,
+        "id": "aud_mr3t7zls_2_zyzvnv",
+        "ts": "2026-07-02T18:00:13.312Z",
+        "actor": "system",
+        "role": "system",
+        "action": "refund.create",
+        "what": "<system error revision> Refund ₱1,000 · Towel · CAMERON (settles deposit #16965 · Jun 27 outage recovery)",
+        "details": {
+          "ref": 17204,
+          "id": "txn_mr3t7zlq_1_8qk71s",
+          "amount": 1000,
+          "item": "Towel",
+          "guest": "CAMERON",
+          "room": "208",
+          "refundsSeq": 16965,
+          "systemErrorRevision": true,
+          "misloggedExchangeSeq": 17060,
+          "authorizedBy": "owner"
+        },
+        "prevHash": "a87bf2a71e3a8b8ea74cf0cd6de285bf71b996209de5abd1c21952803a5e86e9",
+        "hash": "fd8aeab229aa3d7bf92b6c53ab1c153fb4fc8224442046e5f0f0012f6710fbc6"
       }
     ],
     "towels": [
