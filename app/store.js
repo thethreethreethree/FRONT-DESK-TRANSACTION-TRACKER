@@ -1299,5 +1299,28 @@ class Store {
   }
 }
 
+// Is a fetched remote backup safe to ADOPT over our local state?
+//
+// The old sync gate compared `auditEvents` counts — but that number counts logins and
+// backup commits, not just records. A device with more logins yet an OLDER ledger
+// therefore refused a genuine record update, then re-pushed its stale ledger and wiped
+// whatever the remote had added — e.g. a <system error revision> correction that kept
+// reverting no matter how many times it was pushed.
+//
+// This gate is LEDGER-based and loss-safe: adopt only when the remote already contains
+// every ledger entry we hold (so nothing local is lost) AND is strictly ahead — it has
+// records we don't (a pushed correction/txn), or an identical ledger with newer
+// non-ledger changes (config/towels/shifts). If our ledger holds an entry the remote
+// lacks (we're ahead, or the two branches diverged), we DON'T adopt — we keep our
+// records and let our own backup push carry them out. This makes an authoritative
+// correction propagate to every device instead of losing a last-write-wins race.
+export function remoteAdoptable(remoteLedger, remoteAudit, localLedger, localAudit) {
+  const rL = remoteLedger || [], lL = localLedger || [];
+  const rIds = new Set(rL.map((e) => e && e.id));
+  for (const e of lL) if (!rIds.has(e && e.id)) return false; // remote would drop a local record → never clobber ourselves
+  if (rL.length > lL.length) return true;                     // remote has records we lack (e.g. a pushed correction) → adopt
+  return (remoteAudit || 0) > (localAudit || 0);              // same ledger; adopt only for newer non-ledger changes
+}
+
 export const store = new Store();
 export { round2, GENESIS };

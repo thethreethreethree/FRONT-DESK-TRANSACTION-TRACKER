@@ -1,6 +1,6 @@
 // main.js — bootstrap, lock screens (setup/login), shell, nav, router.
 import { el, $, clear, peso, pesoPlain, toast, fmtDateTime } from './util.js';
-import { store } from './store.js';
+import { store, remoteAdoptable } from './store.js';
 import { pageHead, confirmDialog, managerGate, openModal } from './components.js';
 import * as gh from './github.js';
 import * as health from './sync-health.js';
@@ -95,9 +95,8 @@ async function syncFromRemote() {
   if (!remote || !remote.payload || !remote.payload.state) return;
   const meta = remote.payload.meta || {};
   const localFresh = !store.isSetup() || store.ledger.length === 0;
-  const remoteAudit = meta.auditEvents || 0;
-  const localAudit = (store.audit || []).length;
-  if (!(localFresh || remoteAudit > localAudit)) return; // local is already current
+  const adoptable = remoteAdoptable((remote.payload.state || {}).ledger, meta.auditEvents, store.ledger, (store.audit || []).length);
+  if (!(localFresh || adoptable)) return; // local is already current / would lose local records
   splashLoading('Syncing the latest records…');
   try {
     store.importData(remote.payload);
@@ -343,10 +342,11 @@ async function pollRemote() {
     let remote = null;
     try { remote = await gh.fetchRemoteState(); } catch (e) { return; }
     if (!remote || !remote.payload || !remote.payload.state) return;
-    const remoteAudit = (remote.payload.meta || {}).auditEvents || 0;
-    const localAudit = (store.audit || []).length;
-    if (remoteAudit <= localAudit) { // sha moved but not newer (e.g. our own push) — just record it
-      if (remote.sha) { const g = store.config.github || {}; g.lastBackupSha = remote.sha; store.setConfig({ github: g }); }
+    // Adopt only when the remote is loss-safe AND strictly ahead by LEDGER content
+    // (not audit-count) — this is what stops a stale device from re-pushing over a
+    // pushed <system error revision> correction. See store.remoteAdoptable.
+    if (!remoteAdoptable((remote.payload.state || {}).ledger, (remote.payload.meta || {}).auditEvents, store.ledger, (store.audit || []).length)) {
+      if (remote.sha) { const g = store.config.github || {}; g.lastBackupSha = remote.sha; store.setConfig({ github: g }); } // record sha; nothing to adopt
       return;
     }
     // Adopt the newer state SILENTLY (suppress the data.import audit so polling
