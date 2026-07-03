@@ -1,11 +1,11 @@
 {
   "meta": {
     "app": "Frendz Front Desk Transaction Tracker",
-    "exportedAt": "2026-07-02T18:41:25.646Z",
+    "exportedAt": "2026-07-03T03:10:57.252Z",
     "version": 1,
     "coh": 33400,
-    "entries": 17204,
-    "auditEvents": 2473,
+    "entries": 17205,
+    "auditEvents": 2476,
     "integrity": {
       "ok": true,
       "brokenAtSeq": null
@@ -34,7 +34,7 @@
         "autoSync": true,
         "enabled": true,
         "lastBackupAt": "2026-07-02T18:17:59.474Z",
-        "lastBackupSha": "87fd92573ccdc53f163c5068d958d12b433d9343"
+        "lastBackupSha": "c84543dc7f5c5da37a54d195749cae48a76a197f"
       },
       "towelTracker": {
         "enabled": true,
@@ -418306,6 +418306,36 @@
         "reversesId": null,
         "prevHash": "930c4282422a00bc2003a125358089fb05342c3dfba63230ca09844e92ac3b8c",
         "hash": "b1952e696e79514495d203944bdbf54f06f654d05d38d2aa2b7cd3884b520a96"
+      },
+      {
+        "seq": 17205,
+        "id": "txn_mr4cvzcf_2_9sqa42",
+        "ts": "2026-07-03T03:10:45.423Z",
+        "kind": "refund",
+        "itemTypeId": "item_mpxxdbc3_2_s3d7ag",
+        "itemName": "Towel",
+        "qty": 1,
+        "unitAmount": 0,
+        "amount": 0,
+        "direction": -1,
+        "guest": "CARLOS",
+        "room": "203",
+        "pax": null,
+        "shiftId": "shift_mpy3b19n_5_j6nxol",
+        "shiftLabel": "PM",
+        "businessDate": "2026-07-03",
+        "staff": "Rebecca",
+        "staffRole": "staff",
+        "note": "Passport + Towel returned · MEWS 124605 (deposit #17202)",
+        "towelNo": "212 7 175",
+        "oldTowelNo": "",
+        "towelLost": false,
+        "refundsSeq": 17202,
+        "exchangesSeq": null,
+        "mewsRes": "124605",
+        "reversesId": null,
+        "prevHash": "b1952e696e79514495d203944bdbf54f06f654d05d38d2aa2b7cd3884b520a96",
+        "hash": "3407827726c1ae4b374ac8f6dfa784aebfdd2066f87468133ae4292f6e456536"
       }
     ],
     "audit": [
@@ -460828,6 +460858,50 @@
         },
         "prevHash": "361503696e573589f72cab04c8355cac8d5919d8f380d64ea9906564a0226a88",
         "hash": "5e5fa44c6d925dc556d8f3edf3d688f7fbf20c075e322686f6b38cf061e3f655"
+      },
+      {
+        "seq": 2474,
+        "id": "aud_mr3vbvy6_1_sthv4y",
+        "ts": "2026-07-02T18:59:14.430Z",
+        "actor": "Rebecca",
+        "role": "staff",
+        "action": "data.import",
+        "what": "Imported backup (17204 ledger entries)",
+        "details": {
+          "entries": 17204
+        },
+        "prevHash": "5e5fa44c6d925dc556d8f3edf3d688f7fbf20c075e322686f6b38cf061e3f655",
+        "hash": "400374d31d31e67ef682a9fbd8a14fe57c97162c8d94c6035e0855953c5897b5"
+      },
+      {
+        "seq": 2475,
+        "id": "aud_mr4cvzcf_3_g1lvih",
+        "ts": "2026-07-03T03:10:45.423Z",
+        "actor": "Rebecca",
+        "role": "staff",
+        "action": "passport.return",
+        "what": "Passport returned · CARLOS · MEWS 124605 (deposit #17202)",
+        "details": {
+          "seq": 17202,
+          "guest": "CARLOS",
+          "room": "203",
+          "mewsRes": "124605",
+          "itemName": "Towel"
+        },
+        "prevHash": "400374d31d31e67ef682a9fbd8a14fe57c97162c8d94c6035e0855953c5897b5",
+        "hash": "21d21570b1521847fc548309314dbb7408e57f4f17bde24110ceaff5046bb2de"
+      },
+      {
+        "seq": 2476,
+        "id": "aud_mr4cw3qs_4_eyhg2q",
+        "ts": "2026-07-03T03:10:51.124Z",
+        "actor": "Rebecca",
+        "role": "staff",
+        "action": "auth.logout",
+        "what": "Rebecca signed out",
+        "details": {},
+        "prevHash": "21d21570b1521847fc548309314dbb7408e57f4f17bde24110ceaff5046bb2de",
+        "hash": "ac147f9999384dd710c8c4ca56c0aa49bc48d87cb6b761160802d9e6a9785971"
       }
     ],
     "towels": [
