@@ -893,6 +893,34 @@ class Store {
     return e;
   }
 
+  // Admin-only towel-number CORRECTION: fix the tag recorded against an open deposit
+  // (mis-typed at deposit, or the guest is actually holding a different towel) WITHOUT
+  // issuing a refund. Mechanically it is a cash-neutral tag change — kind 'exchange',
+  // amount 0, direction 0 — so it flows through EVERY projection: _guestNets swaps the
+  // lot's tag (→ Outstanding), towelStatus moves the old tag to available and the new
+  // one to out (→ Towel Tracker), and it lands in the ledger + activity log. The
+  // deposit stays open and refundable; COH and the held balance are untouched.
+  recordTowelNumberChange({ itemTypeId, guest, room, oldTowelNo, newTowelNo, exchangesSeq, note }) {
+    const oldNo = String(oldTowelNo || '').trim();
+    const newNo = String(newTowelNo || '').trim();
+    const item = this.itemById(itemTypeId);
+    const shift = this.ensureShift();
+    const extra = String(note || '').trim();
+    const e = this._append({
+      kind: 'exchange', direction: 0,
+      itemTypeId, itemName: item ? item.name : 'Towel',
+      qty: 1, unitAmount: 0, amount: 0,
+      guest, room,
+      towelNo: newNo, oldTowelNo: oldNo, exchangesSeq,
+      note: `Towel # corrected: #${oldNo || '—'} → #${newNo}${exchangesSeq ? ` (deposit #${exchangesSeq})` : ''} · admin${extra ? ' · ' + extra : ''}`,
+      shiftId: shift.id, shiftLabel: shift.label,
+    });
+    this._audit('towel.correct',
+      `Towel # corrected · ${guest || room || '—'} · #${oldNo || '—'} → #${newNo}${exchangesSeq ? ` (deposit #${exchangesSeq})` : ''}`,
+      { oldTowelNo: oldNo, newTowelNo: newNo, exchangesSeq, guest, room, correction: true });
+    return e;
+  }
+
   // The live inventory projection. Returns { no, status, holder, registered, lastEvent }
   // per towel; status: available | out | lost | writeoff. Pure read — safe per render.
   //

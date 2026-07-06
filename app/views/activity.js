@@ -9,6 +9,8 @@ const ACTIONS = {
   'deposit.create': ['Deposit', 'dep'],
   'refund.create': ['Refund', 'ref'],
   'txn.void': ['Void', 'rev'],
+  'towel.exchange': ['Towel exchange', 'dep'],
+  'towel.correct': ['Towel # corrected', 'gold'],
   'shift.open': ['Shift open', 'shift'],
   'shift.close': ['Shift close', 'shift'],
   'item.create': ['Item added', 'gold'],

@@ -2,7 +2,7 @@
 // and guards against refunding more than is held for that guest.
 import { el, peso, pesoPlain, toast, clear, isTowelItem, entryTowelNo } from '../util.js';
 import { store } from '../store.js';
-import { pageHead, confirmDialog, towelBadges } from '../components.js';
+import { pageHead, confirmDialog, towelBadges, openModal, managerGate } from '../components.js';
 
 export function render(ctx) {
   const root = el('div');
@@ -105,7 +105,15 @@ export function render(ctx) {
   // deposit so staff can confirm the right tag is coming back.
   const towelInput = el('input', { class: 'input', placeholder: 'e.g. 42', autocomplete: 'off' });
   const towelHint = el('div', { class: 'hint', text: 'tag number on the returned towel' });
-  const towelField = el('div', { class: 'field' }, [el('label', { text: 'Towel number' }), towelInput, towelHint]);
+  // Admin-only: correct the towel tag on the loaded deposit WITHOUT a refund. Records a
+  // cash-neutral tag change that reflects across Outstanding + the Towel Tracker.
+  const editTowelBtn = el('button', { type: 'button', class: 'btn ghost sm', text: 'Edit Towel Number', onClick: () => openTowelEdit() });
+  const towelField = el('div', { class: 'field' }, [
+    el('div', { class: 'flex between aic', style: 'margin-bottom:8px;gap:10px' }, [
+      el('label', { text: 'Towel number', style: 'margin:0' }), editTowelBtn,
+    ]),
+    towelInput, towelHint,
+  ]);
 
   // Lost-towel path: the guest doesn't return the towel. They forfeit the deposit
   // they already paid (kept, not refunded) and aren't charged extra — so NO cash
@@ -187,6 +195,47 @@ export function render(ctx) {
     const dep = (g.openDeposits && g.openDeposits[0]) || null;
     pickDeposit(dep, g);
     toast(dep ? `Loaded ${g.guest} · deposit #${dep.seq}` : `Loaded ${g.guest}`, 'ok');
+  }
+
+  // Admin action — correct the towel tag on the loaded deposit WITHOUT issuing a refund.
+  // The deposit stays open (no cash moves); the change flows through Outstanding and the
+  // Towel Tracker via a cash-neutral tag change (store.recordTowelNumberChange).
+  function openTowelEdit() {
+    if (!targetSeq || !pickedDep) { toast('Load a deposit first — click a guest or a #', 'warn'); return; }
+    const curNo = String(pickedDep.towelNo || '').trim();
+    const newInput = el('input', { class: 'input', placeholder: 'correct towel number', autocomplete: 'off' });
+    const reasonInput = el('input', { class: 'input', placeholder: 'reason (optional)', autocomplete: 'off' });
+    const err = el('div', { class: 'hint', style: 'color:var(--danger);min-height:16px' });
+    const body = el('div', {}, [
+      el('div', { class: 'field' }, [el('label', { text: 'Current towel number' }), el('div', { class: 'pill', text: curNo || '— (none recorded)' })]),
+      el('div', { class: 'field' }, [el('label', { text: 'New towel number' }), newInput, err]),
+      el('div', { class: 'field' }, [el('label', { text: 'Reason (optional)' }), reasonInput]),
+    ]);
+    const save = (close) => {
+      const nn = newInput.value.trim();
+      if (!nn) { err.textContent = 'Enter the corrected towel number.'; newInput.focus(); return; }
+      if (nn.toUpperCase() === curNo.toUpperCase()) { err.textContent = 'That is already the current number.'; return; }
+      close();
+      // Admin-gated (runs immediately for an Admin, else prompts for an Admin PIN).
+      managerGate(() => {
+        store.recordTowelNumberChange({
+          itemTypeId: pickedDep.itemTypeId || (selected && selected.id) || null,
+          guest: guestInput.value, room: roomInput.value,
+          oldTowelNo: curNo, newTowelNo: nn, exchangesSeq: targetSeq, note: reasonInput.value,
+        });
+        toast(`Towel # updated · #${curNo || '—'} → #${nn} · deposit #${targetSeq} · no refund`, 'ok');
+        ctx.navigate('refund');
+      }, { reason: 'Editing a towel number is an admin action.' });
+    };
+    openModal({
+      title: 'Edit towel number',
+      sub: `Deposit #${targetSeq} · ${guestInput.value || roomInput.value || '—'} — corrects the tag on this deposit. No cash is refunded and the deposit stays open.`,
+      body,
+      actions: [
+        { label: 'Cancel', kind: 'ghost' },
+        { label: 'Save towel #', kind: 'primary', onClick: save },
+      ],
+    });
   }
 
   form.appendChild(el('div', { class: 'field' }, [
