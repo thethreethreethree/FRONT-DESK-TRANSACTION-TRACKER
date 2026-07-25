@@ -1,11 +1,11 @@
 {
   "meta": {
     "app": "Frendz Front Desk Transaction Tracker",
-    "exportedAt": "2026-07-25T12:13:36.007Z",
+    "exportedAt": "2026-07-25T12:13:57.833Z",
     "version": 1,
-    "coh": 28000,
-    "entries": 17672,
-    "auditEvents": 3334,
+    "coh": 29000,
+    "entries": 17673,
+    "auditEvents": 3338,
     "integrity": {
       "ok": true,
       "brokenAtSeq": null
@@ -33,8 +33,8 @@
         "path": "data/ledger-backup.json",
         "autoSync": true,
         "enabled": true,
-        "lastBackupAt": "2026-07-25T12:13:30.004Z",
-        "lastBackupSha": "da6984b98f57c3c6db916c4e3806ec17a1c94fe0"
+        "lastBackupAt": "2026-07-25T12:13:47.162Z",
+        "lastBackupSha": "375307b99c567b478c76397ecda192a06da087ff"
       },
       "towelTracker": {
         "enabled": true,
@@ -432353,6 +432353,36 @@
         "reversesId": null,
         "prevHash": "ef14686e5d5105b7cafd063059ccc368283cb8b3e1f9e52c7290dbadb5cd3fa2",
         "hash": "9904f079c7b38c0264677d99d32905a93b6dc3aa1d19d6f0af36a69dafca09ab"
+      },
+      {
+        "seq": 17673,
+        "id": "txn_ms0byy3q_1y_ftvuf9",
+        "ts": "2026-07-25T12:13:41.798Z",
+        "kind": "deposit",
+        "itemTypeId": "item_mpxxdbc3_2_s3d7ag",
+        "itemName": "Towel",
+        "qty": 1,
+        "unitAmount": 1000,
+        "amount": 1000,
+        "direction": 1,
+        "guest": "AMAYA",
+        "room": "404",
+        "pax": null,
+        "shiftId": "shift_mpy3b19n_5_j6nxol",
+        "shiftLabel": "PM",
+        "businessDate": "2026-07-25",
+        "staff": "Marie",
+        "staffRole": "staff",
+        "note": "",
+        "towelNo": "188",
+        "oldTowelNo": "",
+        "towelLost": false,
+        "refundsSeq": null,
+        "exchangesSeq": null,
+        "mewsRes": "",
+        "reversesId": null,
+        "prevHash": "9904f079c7b38c0264677d99d32905a93b6dc3aa1d19d6f0af36a69dafca09ab",
+        "hash": "a49b0f902fadd751679c2a2e5602a8f02416a2d7e2dd85ba676d620e26d94e60"
       }
     ],
     "audit": [
@@ -489525,6 +489555,67 @@
         },
         "prevHash": "1cb2e52f31dace2b2970861638b518e4803de1d164722cc6878174f3f1f04cd0",
         "hash": "61bc2437b38f665a7aff5471488830c52da76ef0a5520007d5584e20de0bb536"
+      },
+      {
+        "seq": 3335,
+        "id": "aud_ms0byy3q_1z_4z9jkf",
+        "ts": "2026-07-25T12:13:41.798Z",
+        "actor": "Marie",
+        "role": "staff",
+        "action": "deposit.create",
+        "what": "Deposit ₱1,000.00 · Towel ×1 · AMAYA",
+        "details": {
+          "ref": 17673,
+          "id": "txn_ms0byy3q_1y_ftvuf9",
+          "amount": 1000,
+          "item": "Towel",
+          "guest": "AMAYA",
+          "room": "404"
+        },
+        "prevHash": "61bc2437b38f665a7aff5471488830c52da76ef0a5520007d5584e20de0bb536",
+        "hash": "73355e6f40337521379938a893cef916d427bdcda08248dd4550c8887ffe6c4a"
+      },
+      {
+        "seq": 3336,
+        "id": "aud_ms0bz0ge_20_2127tg",
+        "ts": "2026-07-25T12:13:44.846Z",
+        "actor": "Marie",
+        "role": "staff",
+        "action": "auth.logout",
+        "what": "Marie signed out",
+        "details": {},
+        "prevHash": "73355e6f40337521379938a893cef916d427bdcda08248dd4550c8887ffe6c4a",
+        "hash": "3f25e66cb49e38ad25db368409fae37db6be9bbec6fcc8c3660eb79f4ba4817e"
+      },
+      {
+        "seq": 3337,
+        "id": "aud_ms0bz28q_21_ifmmgo",
+        "ts": "2026-07-25T12:13:47.162Z",
+        "actor": "system",
+        "role": "system",
+        "action": "backup.github",
+        "what": "Backup committed to thethreethreethree/FRONT-DESK-TRANSACTION-TRACKER@main (auto-sync)",
+        "details": {
+          "reason": "auto-sync",
+          "coh": 28000,
+          "entries": 17673
+        },
+        "prevHash": "3f25e66cb49e38ad25db368409fae37db6be9bbec6fcc8c3660eb79f4ba4817e",
+        "hash": "021b1fe548e8a29f111c589fd04f27c21260be80841ff4add4997f2f2357b205"
+      },
+      {
+        "seq": 3338,
+        "id": "aud_ms0bz5ub_22_3avjmx",
+        "ts": "2026-07-25T12:13:51.827Z",
+        "actor": "Monie",
+        "role": "staff",
+        "action": "auth.login",
+        "what": "Monie signed in as staff",
+        "details": {
+          "role": "staff"
+        },
+        "prevHash": "021b1fe548e8a29f111c589fd04f27c21260be80841ff4add4997f2f2357b205",
+        "hash": "1b1b35a266c14a39008a9a8ab48079aa7fddd1a057479c617d3369378e3e6811"
       }
     ],
     "towels": [
