@@ -1,11 +1,11 @@
 {
   "meta": {
     "app": "Frendz Front Desk Transaction Tracker",
-    "exportedAt": "2026-07-29T04:25:47.676Z",
+    "exportedAt": "2026-07-29T04:26:02.573Z",
     "version": 1,
-    "coh": 45200,
-    "entries": 17766,
-    "auditEvents": 3559,
+    "coh": 45000,
+    "entries": 17767,
+    "auditEvents": 3561,
     "integrity": {
       "ok": true,
       "brokenAtSeq": null
@@ -33,8 +33,8 @@
         "path": "data/ledger-backup.json",
         "autoSync": true,
         "enabled": true,
-        "lastBackupAt": "2026-07-29T04:25:41.674Z",
-        "lastBackupSha": "f2d043d36148f0a788908033539b1714b6fcdac1"
+        "lastBackupAt": "2026-07-29T04:25:56.465Z",
+        "lastBackupSha": "fcbb51554ce75a739efac4466a3d1055e84d065a"
       },
       "towelTracker": {
         "enabled": true,
@@ -435173,6 +435173,36 @@
         "reversesId": null,
         "prevHash": "f9f4aa31de08fb2ff174b6cdb29700945c407d1f1d32c8f09554fbfe8bf5894f",
         "hash": "da98cbb2d105ae1277f1f03d76301d4b9b8b1e3e8dc497efa831f72573316a94"
+      },
+      {
+        "seq": 17767,
+        "id": "txn_ms5l0qyl_1u_u6gueq",
+        "ts": "2026-07-29T04:25:53.277Z",
+        "kind": "refund",
+        "itemTypeId": "item_mpxxdbc8_3_0avyxn",
+        "itemName": "Padlock",
+        "qty": 1,
+        "unitAmount": 200,
+        "amount": 200,
+        "direction": -1,
+        "guest": "DENNIS",
+        "room": "203",
+        "pax": null,
+        "shiftId": "shift_mpy3b19n_5_j6nxol",
+        "shiftLabel": "PM",
+        "businessDate": "2026-07-29",
+        "staff": "Marie",
+        "staffRole": "staff",
+        "note": "",
+        "towelNo": "",
+        "oldTowelNo": "",
+        "towelLost": false,
+        "refundsSeq": 17716,
+        "exchangesSeq": null,
+        "mewsRes": "",
+        "reversesId": null,
+        "prevHash": "da98cbb2d105ae1277f1f03d76301d4b9b8b1e3e8dc497efa831f72573316a94",
+        "hash": "a16708c76671d14f6a64c70712e324577f768127c22184eea016cc3ac28edf05"
       }
     ],
     "audit": [
@@ -496147,6 +496177,41 @@
         },
         "prevHash": "fabe9e85d1b00f02e3f9b660fbfc0aa7d69075fcf77eb841a423a73f74cb896b",
         "hash": "2fe57f802004989fd2e7fb88c36310bf2f2f020bb96b87e1a2a2403393028f91"
+      },
+      {
+        "seq": 3560,
+        "id": "aud_ms5l0qym_1v_8vug25",
+        "ts": "2026-07-29T04:25:53.278Z",
+        "actor": "Marie",
+        "role": "staff",
+        "action": "refund.create",
+        "what": "Refund ₱200.00 · Padlock ×1 · DENNIS",
+        "details": {
+          "ref": 17767,
+          "id": "txn_ms5l0qyl_1u_u6gueq",
+          "amount": 200,
+          "item": "Padlock",
+          "guest": "DENNIS",
+          "room": "203"
+        },
+        "prevHash": "2fe57f802004989fd2e7fb88c36310bf2f2f020bb96b87e1a2a2403393028f91",
+        "hash": "403f89e8869837a7ef9f1469f4d55c5c841707c3c6efb8782e7e263618f89ba5"
+      },
+      {
+        "seq": 3561,
+        "id": "aud_ms5l0tf5_1w_qny10i",
+        "ts": "2026-07-29T04:25:56.465Z",
+        "actor": "Marie",
+        "role": "staff",
+        "action": "backup.github",
+        "what": "Backup committed to thethreethreethree/FRONT-DESK-TRANSACTION-TRACKER@main (auto-sync)",
+        "details": {
+          "reason": "auto-sync",
+          "coh": 45200,
+          "entries": 17767
+        },
+        "prevHash": "403f89e8869837a7ef9f1469f4d55c5c841707c3c6efb8782e7e263618f89ba5",
+        "hash": "6c1f2ec2da0c609598225d65fe9c369ffe156a7f2876b5cddede4f89e9a688fb"
       }
     ],
     "towels": [
