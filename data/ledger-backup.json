@@ -1,11 +1,11 @@
 {
   "meta": {
     "app": "Frendz Front Desk Transaction Tracker",
-    "exportedAt": "2026-08-03T03:31:57.668Z",
+    "exportedAt": "2026-08-03T03:32:24.361Z",
     "version": 1,
-    "coh": 56200,
-    "entries": 17867,
-    "auditEvents": 3807,
+    "coh": 55200,
+    "entries": 17868,
+    "auditEvents": 3809,
     "integrity": {
       "ok": true,
       "brokenAtSeq": null
@@ -33,8 +33,8 @@
         "path": "data/ledger-backup.json",
         "autoSync": true,
         "enabled": true,
-        "lastBackupAt": "2026-08-03T03:31:46.114Z",
-        "lastBackupSha": "1bface36f1400678fa56ce70f30625cb49719ac6"
+        "lastBackupAt": "2026-08-03T03:32:18.132Z",
+        "lastBackupSha": "00fe4fe2d374358fe457462f69122947f0331356"
       },
       "towelTracker": {
         "enabled": true,
@@ -438203,6 +438203,36 @@
         "reversesId": null,
         "prevHash": "7220e10fda9768196bf30d468d75d7bb8b6d27491bfaadc3e0fd3d5b3623f065",
         "hash": "5805febc4f23701f7e8048f7ec406708458178b43c3df5fa039898ab1e1b3455"
+      },
+      {
+        "seq": 17868,
+        "id": "txn_mscob200_4a_w24aah",
+        "ts": "2026-08-03T03:32:16.224Z",
+        "kind": "refund",
+        "itemTypeId": "item_mpxxdbc3_2_s3d7ag",
+        "itemName": "Towel",
+        "qty": 1,
+        "unitAmount": 1000,
+        "amount": 1000,
+        "direction": -1,
+        "guest": "VALERIA",
+        "room": "307",
+        "pax": null,
+        "shiftId": "shift_mpy3b19n_5_j6nxol",
+        "shiftLabel": "PM",
+        "businessDate": "2026-08-03",
+        "staff": "Chalyn",
+        "staffRole": "staff",
+        "note": "",
+        "towelNo": "23",
+        "oldTowelNo": "",
+        "towelLost": false,
+        "refundsSeq": 17825,
+        "exchangesSeq": null,
+        "mewsRes": "",
+        "reversesId": null,
+        "prevHash": "5805febc4f23701f7e8048f7ec406708458178b43c3df5fa039898ab1e1b3455",
+        "hash": "0b9b3e5a9d6658ada3380f25b2a302086d618d6ce0301d8986a212147b79dfb2"
       }
     ],
     "audit": [
@@ -503352,6 +503382,41 @@
         },
         "prevHash": "21d4a10bdd37b455661a655d6964570bcc8da5ff0f78508a818a9b943432fd1b",
         "hash": "928ded4457092f9473b764a5538c25d1ea2d78fccec74f5d43c5491f6ee36fa6"
+      },
+      {
+        "seq": 3808,
+        "id": "aud_mscob200_4b_301htb",
+        "ts": "2026-08-03T03:32:16.224Z",
+        "actor": "Chalyn",
+        "role": "staff",
+        "action": "refund.create",
+        "what": "Refund ₱1,000.00 · Towel ×1 · VALERIA",
+        "details": {
+          "ref": 17868,
+          "id": "txn_mscob200_4a_w24aah",
+          "amount": 1000,
+          "item": "Towel",
+          "guest": "VALERIA",
+          "room": "307"
+        },
+        "prevHash": "928ded4457092f9473b764a5538c25d1ea2d78fccec74f5d43c5491f6ee36fa6",
+        "hash": "53be553d78fe5cfa4682a08e5362cc594d1db4b51bd3d226586db727af6bde4b"
+      },
+      {
+        "seq": 3809,
+        "id": "aud_mscob3k2_4c_rlbxp1",
+        "ts": "2026-08-03T03:32:18.242Z",
+        "actor": "Chalyn",
+        "role": "staff",
+        "action": "backup.github",
+        "what": "Backup committed to thethreethreethree/FRONT-DESK-TRANSACTION-TRACKER@main (auto-sync)",
+        "details": {
+          "reason": "auto-sync",
+          "coh": 56200,
+          "entries": 17868
+        },
+        "prevHash": "53be553d78fe5cfa4682a08e5362cc594d1db4b51bd3d226586db727af6bde4b",
+        "hash": "82233ee52e690b038ad1dd4431fdbf967354093a9f7dce37ac23159c4586b987"
       }
     ],
     "towels": [
