@@ -1,11 +1,11 @@
 {
   "meta": {
     "app": "Frendz Front Desk Transaction Tracker",
-    "exportedAt": "2026-08-11T07:35:42.611Z",
+    "exportedAt": "2026-08-11T07:41:28.042Z",
     "version": 1,
     "coh": 41200,
-    "entries": 17995,
-    "auditEvents": 4149,
+    "entries": 17997,
+    "auditEvents": 4153,
     "integrity": {
       "ok": true,
       "brokenAtSeq": null
@@ -33,8 +33,8 @@
         "path": "data/ledger-backup.json",
         "autoSync": true,
         "enabled": true,
-        "lastBackupAt": "2026-08-11T05:45:31.905Z",
-        "lastBackupSha": "ad1b6dba9b36a5a0744e7cf15fa6d67d6c59a085"
+        "lastBackupAt": "2026-08-11T07:36:32.610Z",
+        "lastBackupSha": "7ecd664bc1330cdca015a019635f37a8567364fd"
       },
       "towelTracker": {
         "enabled": true,
@@ -442043,6 +442043,66 @@
         "reversesId": null,
         "prevHash": "5dae679542a1f95183848702f3990f22149d2a128ed108d283c8ef14f924a77b",
         "hash": "f4cdf7a5edbbd58fff538a29dc1b51fe77871760a3479b0c8098edfb958aa854"
+      },
+      {
+        "seq": 17996,
+        "id": "txn_msocjubv_3_cajj3o",
+        "ts": "2026-08-11T07:36:24.907Z",
+        "kind": "reversal",
+        "itemTypeId": "item_mpxxdbc3_2_s3d7ag",
+        "itemName": "Towel",
+        "qty": 1,
+        "unitAmount": 1000,
+        "amount": 1000,
+        "direction": -1,
+        "guest": "THOMAS",
+        "room": "185",
+        "pax": null,
+        "shiftId": "shift_mpy3b19n_5_j6nxol",
+        "shiftLabel": "PM",
+        "businessDate": "2026-08-11",
+        "staff": "darren",
+        "staffRole": "manager",
+        "note": "VOID of #17986 (deposit Towel THOMAS). Reason: Mistakenly put as deposit. Should be refund",
+        "towelNo": "1000",
+        "oldTowelNo": "",
+        "towelLost": false,
+        "refundsSeq": null,
+        "exchangesSeq": null,
+        "mewsRes": "",
+        "reversesId": "txn_mso62mmw_14_e76vj7",
+        "prevHash": "f4cdf7a5edbbd58fff538a29dc1b51fe77871760a3479b0c8098edfb958aa854",
+        "hash": "a67f5c8d128113770beb98baac95808bd60f604dfa64bfbbb29df57e9c8b038e"
+      },
+      {
+        "seq": 17997,
+        "id": "txn_msocq7lc_1_ulm0w7",
+        "ts": "2026-08-11T07:41:22.032Z",
+        "kind": "reversal",
+        "itemTypeId": "item_mpxxdbc3_2_s3d7ag",
+        "itemName": "Towel",
+        "qty": 1,
+        "unitAmount": 1000,
+        "amount": 1000,
+        "direction": 1,
+        "guest": "THOMAS",
+        "room": "185",
+        "pax": null,
+        "shiftId": "shift_mpy3b19n_5_j6nxol",
+        "shiftLabel": "PM",
+        "businessDate": "2026-08-11",
+        "staff": "darren",
+        "staffRole": "manager",
+        "note": "VOID of #17987 (refund Towel THOMAS). Reason: Mistake putting 2 refund here in the system.",
+        "towelNo": "1000",
+        "oldTowelNo": "",
+        "towelLost": false,
+        "refundsSeq": null,
+        "exchangesSeq": null,
+        "mewsRes": "",
+        "reversesId": "txn_mso63q88_17_yovvta",
+        "prevHash": "a67f5c8d128113770beb98baac95808bd60f604dfa64bfbbb29df57e9c8b038e",
+        "hash": "88e20ef3343c7f3d127f5d2ffefd91ebf60e8744ca42c454db8855928969e9bb"
       }
     ],
     "audit": [
@@ -512886,6 +512946,68 @@
         "details": {},
         "prevHash": "2f92e2bde84eceaa289d941ed99aff5ecc0333685857623cff11343635da92ce",
         "hash": "b66ea149a8e87babbab9bcab71b888e3f72fa21ccb4ca72589568323e0ba84ff"
+      },
+      {
+        "seq": 4150,
+        "id": "aud_msocj0i1_2_0yvyl2",
+        "ts": "2026-08-11T07:35:46.249Z",
+        "actor": "darren",
+        "role": "manager",
+        "action": "auth.login",
+        "what": "darren signed in as manager",
+        "details": {
+          "role": "manager"
+        },
+        "prevHash": "b66ea149a8e87babbab9bcab71b888e3f72fa21ccb4ca72589568323e0ba84ff",
+        "hash": "53ad971144e3ef15b5b43770f4f8c53bacc00eb7dde73053a0e8e4469a851dff"
+      },
+      {
+        "seq": 4151,
+        "id": "aud_msocjubv_4_di5s86",
+        "ts": "2026-08-11T07:36:24.907Z",
+        "actor": "darren",
+        "role": "manager",
+        "action": "txn.void",
+        "what": "Voided #17986 (deposit Towel · THOMAS · ₱1,000.00)",
+        "details": {
+          "ref": 17986,
+          "reversalSeq": 17996,
+          "reason": "Mistakenly put as deposit. Should be refund"
+        },
+        "prevHash": "53ad971144e3ef15b5b43770f4f8c53bacc00eb7dde73053a0e8e4469a851dff",
+        "hash": "9d3e7b01dc0d22ef8f4e54de83d900baf0c6312ea619d23b5105f17f39b0270f"
+      },
+      {
+        "seq": 4152,
+        "id": "aud_msock09u_5_nn8s2d",
+        "ts": "2026-08-11T07:36:32.610Z",
+        "actor": "darren",
+        "role": "manager",
+        "action": "backup.github",
+        "what": "Backup committed to thethreethreethree/FRONT-DESK-TRANSACTION-TRACKER@main (auto-sync)",
+        "details": {
+          "reason": "auto-sync",
+          "coh": 41200,
+          "entries": 17996
+        },
+        "prevHash": "9d3e7b01dc0d22ef8f4e54de83d900baf0c6312ea619d23b5105f17f39b0270f",
+        "hash": "cb175b7e9d36effd5745fa1303e48af2a3822559f4000e6a1ff9d615b114a821"
+      },
+      {
+        "seq": 4153,
+        "id": "aud_msocq7ld_2_c5mwiu",
+        "ts": "2026-08-11T07:41:22.033Z",
+        "actor": "darren",
+        "role": "manager",
+        "action": "txn.void",
+        "what": "Voided #17987 (refund Towel · THOMAS · ₱1,000.00)",
+        "details": {
+          "ref": 17987,
+          "reversalSeq": 17997,
+          "reason": "Mistake putting 2 refund here in the system."
+        },
+        "prevHash": "cb175b7e9d36effd5745fa1303e48af2a3822559f4000e6a1ff9d615b114a821",
+        "hash": "13448067cd89756e3ecefbe09c5ff2a194cfbb92271df936e1ad19ca4efeca70"
       }
     ],
     "towels": [
