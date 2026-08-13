@@ -36,9 +36,12 @@ const MONTH_NAMES = ['JANUARY', 'FEBRUARY', 'MARCH', 'APRIL', 'MAY', 'JUNE', 'JU
 // EL NIDO rows are a whole private van at a flat 8,000 → 7,000 + 1,000 no matter
 // how many pax ride it (rows 12 and 13 charge the same for 5 and 8 pax). Both
 // are editable in Travelista → Settings; nothing here is hard-coded downstream.
+// The ids are FIXED, not generated: a booking hashes its destinationId, so two
+// devices seeding independently must land on the same id or the same booking
+// would hash differently on each. See seedStarterOnce().
 const SEED_DESTINATIONS = [
-  { name: 'PPS', fare: 750, fareBasis: 'per_pax', commission: 100, commissionBasis: 'per_pax' },
-  { name: 'EL NIDO', fare: 8000, fareBasis: 'flat', commission: 1000, commissionBasis: 'flat' },
+  { id: 'dest_pps', name: 'PPS', fare: 750, fareBasis: 'per_pax', commission: 100, commissionBasis: 'per_pax' },
+  { id: 'dest_elnido', name: 'EL NIDO', fare: 8000, fareBasis: 'flat', commission: 1000, commissionBasis: 'flat' },
 ];
 const SEED_BOOKERS = ['MARIE', 'BECCA', 'DARREN', 'GINO', 'CHALYN', 'MONIE'];
 
@@ -113,12 +116,12 @@ export const tv = {
     let touched = false;
     if (!t.destinations.length) {
       t.destinations = SEED_DESTINATIONS.map((d, i) => Object.assign({
-        id: uid('dest'), sortOrder: i, active: true, createdAt: nowISO(),
+        sortOrder: i, active: true, createdAt: nowISO(),
       }, d));
       touched = true;
     }
     if (!t.bookers.length) {
-      t.bookers = SEED_BOOKERS.map((n) => ({ id: uid('bkr'), name: n, active: true, createdAt: nowISO() }));
+      t.bookers = SEED_BOOKERS.map((n) => ({ id: 'bkr_' + n.toLowerCase(), name: n, active: true, createdAt: nowISO() }));
       touched = true;
     }
     if (!t.config.startedAt) { t.config.startedAt = nowISO(); touched = true; }
@@ -244,7 +247,10 @@ export const tv = {
     return base;
   },
 
-  addBooking({ departureDate, guest, destinationId, pax, fare, total, commission, bookedBy, remarks }) {
+  // `id` / `ts` / `staff` are normally left blank (generated per entry). The seed
+  // loader passes them explicitly so the same 15 rows hash IDENTICALLY on every
+  // device — see seedStarterOnce() for why that matters to sync.
+  addBooking({ departureDate, guest, destinationId, pax, fare, total, commission, bookedBy, remarks, id, ts, staff, staffRole }) {
     const d = this.destinationById(destinationId);
     const q = this.quote({ destinationId, pax, fare });
     const tot = total != null && total !== '' ? round2(total) : q.total;
@@ -258,6 +264,7 @@ export const tv = {
       pax, fare: q.fare, fareBasis: q.fareBasis,
       total: tot, commission: comm, travelistaShare: round2(tot - comm),
       bookedBy, remarks, periodKey: per ? per.key : '',
+      id, ts, staff, staffRole, businessDate: ts ? ymd : undefined,
     });
     store._audit('tv.booking.create',
       `Travelista booking #${e.seq} · ${e.guest || '—'} · ${e.destination} ×${e.pax} pax · ₱${e.total.toLocaleString()} (commission ₱${e.commission.toLocaleString()})`,
@@ -480,30 +487,70 @@ export const tv = {
   },
 };
 
-// The Aug 1–15, 2026 sheet, as handed over. Offered as an explicit one-click
-// load in Settings rather than seeded automatically — the live record is the
-// team's, and silently inserting 15 rows they might also type by hand would
-// double-count real money.
+// The Aug 1–15, 2026 sheet, exactly as handed over — the record this system was
+// built from, so it IS the opening state rather than optional sample data.
+//
+// Every row carries a FIXED id, timestamp, business date and staff. That makes
+// the seed byte-for-byte identical on every device that lays it down. It matters
+// because sync adopts by entry id: if two devices seeded independently with
+// generated ids, each would hold 15 bookings the other lacks, neither backup
+// would be adoptable, and the two would diverge permanently. Fixed ids make the
+// same seed CONVERGE instead — the second device recognises the first's rows as
+// the very rows it holds. Order below is the sheet's own row order.
 export const STARTER_SHEET = {
+  version: 'aug-1-15-2026',
   label: 'Aug. 1-15, 2026 (Travelista_monitoring)',
   rows: [
-    { date: '2026-08-01', guest: 'SILUNA DON', dest: 'PPS', pax: 3, fare: 750, total: 2250, commission: 300, by: 'MARIE', remarks: '' },
-    { date: '2026-08-01', guest: 'INGA BHATT', dest: 'PPS', pax: 1, fare: 750, total: 750, commission: 100, by: 'BECCA', remarks: '' },
-    { date: '2026-08-02', guest: 'ALBERT MARSHALL', dest: 'PPS', pax: 1, fare: 750, total: 750, commission: 100, by: 'DARREN', remarks: '' },
-    { date: '2026-08-04', guest: 'LUKAS HORST', dest: 'PPS', pax: 1, fare: 750, total: 750, commission: 100, by: 'MARIE', remarks: '' },
-    { date: '2026-08-04', guest: 'KATHLEEN PALOMAR', dest: 'PPS', pax: 2, fare: 750, total: 1500, commission: 200, by: 'GINO', remarks: '' },
-    { date: '2026-08-05', guest: 'NIKLAS SCHEMER', dest: 'PPS', pax: 4, fare: 750, total: 3000, commission: 400, by: 'GINO', remarks: '' },
-    { date: '2026-08-07', guest: 'ELISABET FERRETE', dest: 'PPS', pax: 2, fare: 750, total: 1500, commission: 200, by: 'GINO', remarks: '' },
-    { date: '2026-08-09', guest: 'WILLIAN DB', dest: 'PPS', pax: 1, fare: 750, total: 750, commission: 100, by: 'GINO', remarks: '' },
-    { date: '2026-08-08', guest: 'MANAR ALI', dest: 'PPS', pax: 1, fare: 750, total: 750, commission: 100, by: 'CHALYN', remarks: '' },
-    { date: '2026-08-08', guest: 'BENJAMIN DOMMACH', dest: 'PPS', pax: 1, fare: 750, total: 750, commission: 100, by: 'CHALYN', remarks: '' },
-    { date: '2026-08-08', guest: 'NEREA S VEGA', dest: 'PPS', pax: 1, fare: 750, total: 750, commission: 100, by: 'MONIE', remarks: '' },
-    { date: '2026-08-08', guest: 'CARLOTTA TOSI', dest: 'EL NIDO', pax: 5, fare: 8000, total: 8000, commission: 1000, by: 'CHALYN', remarks: 'PRIVATE VAN' },
-    { date: '2026-08-09', guest: 'BELEN GUTIEREZ', dest: 'EL NIDO', pax: 8, fare: 8000, total: 8000, commission: 1000, by: 'BECCA', remarks: 'PRIVATE VAN' },
-    { date: '2026-08-10', guest: 'HISHAM AL BALUSHI', dest: 'PPS', pax: 2, fare: 750, total: 1500, commission: 200, by: 'BECCA', remarks: '' },
-    { date: '2026-08-10', guest: 'CARAYOL GASPERD', dest: 'PPS', pax: 1, fare: 750, total: 750, commission: 100, by: 'DARREN', remarks: '' },
+    { no: 1, date: '2026-08-01', guest: 'SILUNA DON', dest: 'PPS', pax: 3, fare: 750, total: 2250, commission: 300, by: 'MARIE', remarks: '' },
+    { no: 2, date: '2026-08-01', guest: 'INGA BHATT', dest: 'PPS', pax: 1, fare: 750, total: 750, commission: 100, by: 'BECCA', remarks: '' },
+    { no: 3, date: '2026-08-02', guest: 'ALBERT MARSHALL', dest: 'PPS', pax: 1, fare: 750, total: 750, commission: 100, by: 'DARREN', remarks: '' },
+    { no: 4, date: '2026-08-04', guest: 'LUKAS HORST', dest: 'PPS', pax: 1, fare: 750, total: 750, commission: 100, by: 'MARIE', remarks: '' },
+    { no: 5, date: '2026-08-04', guest: 'KATHLEEN PALOMAR', dest: 'PPS', pax: 2, fare: 750, total: 1500, commission: 200, by: 'GINO', remarks: '' },
+    { no: 6, date: '2026-08-05', guest: 'NIKLAS SCHEMER', dest: 'PPS', pax: 4, fare: 750, total: 3000, commission: 400, by: 'GINO', remarks: '' },
+    { no: 7, date: '2026-08-07', guest: 'ELISABET FERRETE', dest: 'PPS', pax: 2, fare: 750, total: 1500, commission: 200, by: 'GINO', remarks: '' },
+    // The sheet writes this one "9-August-2026" while its neighbours use "9-Aug-2026" — same date, kept in sheet order.
+    { no: 8, date: '2026-08-09', guest: 'WILLIAN DB', dest: 'PPS', pax: 1, fare: 750, total: 750, commission: 100, by: 'GINO', remarks: '' },
+    { no: 9, date: '2026-08-08', guest: 'MANAR ALI', dest: 'PPS', pax: 1, fare: 750, total: 750, commission: 100, by: 'CHALYN', remarks: '' },
+    { no: 10, date: '2026-08-08', guest: 'BENJAMIN DOMMACH', dest: 'PPS', pax: 1, fare: 750, total: 750, commission: 100, by: 'CHALYN', remarks: '' },
+    { no: 11, date: '2026-08-08', guest: 'NEREA S VEGA', dest: 'PPS', pax: 1, fare: 750, total: 750, commission: 100, by: 'MONIE', remarks: '' },
+    { no: 12, date: '2026-08-08', guest: 'CARLOTTA TOSI', dest: 'EL NIDO', pax: 5, fare: 8000, total: 8000, commission: 1000, by: 'CHALYN', remarks: 'PRIVATE VAN' },
+    { no: 13, date: '2026-08-09', guest: 'BELEN GUTIEREZ', dest: 'EL NIDO', pax: 8, fare: 8000, total: 8000, commission: 1000, by: 'BECCA', remarks: 'PRIVATE VAN' },
+    { no: 14, date: '2026-08-10', guest: 'HISHAM AL BALUSHI', dest: 'PPS', pax: 2, fare: 750, total: 1500, commission: 200, by: 'BECCA', remarks: '' },
+    { no: 15, date: '2026-08-10', guest: 'CARAYOL GASPERD', dest: 'PPS', pax: 1, fare: 750, total: 750, commission: 100, by: 'DARREN', remarks: '' },
   ],
 };
+// Stamp each starter row with its fixed identity (see the note above).
+function starterRows() {
+  return STARTER_SHEET.rows.map((r) => Object.assign({}, r, {
+    id: `tv_seed_${STARTER_SHEET.version}_${String(r.no).padStart(2, '0')}`,
+    ts: `${r.date}T02:00:00.000Z`,   // 10:00 PH — a stable, sheet-derived timestamp
+    staff: 'sheet', staffRole: 'system',
+  }));
+}
+
+// Lay the sheet down ONCE, on whichever device opens the app first; every other
+// device then receives it through the normal backup/adopt path. Guarded twice —
+// by a synced config flag AND by the presence of the seed's own ids — so it can
+// never run a second time and double the money, even if the flag is lost.
+export function seedStarterOnce() {
+  const rows = starterRows();
+  if (store.config.travelistaSeedV1 === STARTER_SHEET.version) return null;
+  const have = new Set(tv.entries.map((e) => e.id));
+  if (rows.some((r) => have.has(r.id))) { // already present (adopted from another device)
+    store.setConfig({ travelistaSeedV1: STARTER_SHEET.version });
+    return null;
+  }
+  const res = importRows(rows, { source: STARTER_SHEET.label + ' — opening record' });
+  store.setConfig({ travelistaSeedV1: STARTER_SHEET.version });
+  return res;
+}
+// True once the sheet is on this device, so Settings can say so instead of
+// offering a load that would duplicate it.
+export function starterLoaded() {
+  if (store.config.travelistaSeedV1 === STARTER_SHEET.version) return true;
+  const have = new Set(tv.entries.map((e) => e.id));
+  return starterRows().some((r) => have.has(r.id));
+}
 
 // Load a set of sheet rows into the record. Used by the starter loader and the
 // CSV importer. Each row is appended through the normal chain (so it is hashed,
@@ -528,6 +575,7 @@ export function importRows(rows, { source = 'import' } = {}) {
         departureDate: r.date || r.departureDate, guest: r.guest, destinationId: d.id,
         pax: r.pax, fare: r.fare, total: r.total, commission: r.commission,
         bookedBy: by, remarks: r.remarks || '',
+        id: r.id, ts: r.ts, staff: r.staff, staffRole: r.staffRole, // set only by the seed
       });
       added += 1; total = round2(total + e.total);
     }

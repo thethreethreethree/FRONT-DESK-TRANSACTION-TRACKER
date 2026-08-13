@@ -1,7 +1,7 @@
 // views/tv-settings.js — Travelista setup (admin): the rate table, the booker
 // roster, the opening cash float, the reporting period, and sheet import/export.
 import { el, peso, pesoPlain, toast } from '../util.js';
-import { tv, STARTER_SHEET, importRows, parseTravelistaCSV, fmtYMD } from '../travelista.js';
+import { tv, STARTER_SHEET, importRows, parseTravelistaCSV, fmtYMD, seedStarterOnce, starterLoaded } from '../travelista.js';
 import { store } from '../store.js';
 import { pageHead, confirmDialog, managerGate, openModal } from '../components.js';
 
@@ -173,14 +173,20 @@ function cashCard(ctx) {
 // ------------------------------------------------------------- sheet data I/O
 function dataCard(ctx) {
   const count = tv.bookings().length;
+  const loaded = starterLoaded();
   const card = el('div', { class: 'card mt-lg', style: 'max-width:720px' }, [
     el('div', { class: 'card-h' }, [el('h3', { text: 'Sheet data' }), el('span', { class: 'sub', text: 'import & export' })]),
-    el('p', { class: 'muted', style: 'margin-top:0', html: 'Import a CSV export of the Travelista_monitoring sheet (columns are matched by name), or load the starter period that shipped with this build. Imported rows go through the <strong>same append-only chain</strong> as typed ones — hashed, audited and reversible.' }),
+    el('p', { class: 'muted', style: 'margin-top:0', html: 'Import a CSV export of the Travelista_monitoring sheet — columns are matched by name, so a re-ordered export still reads. Imported rows go through the <strong>same append-only chain</strong> as typed ones: hashed, audited and reversible.' }),
+    // The opening record (Aug 1-15) loads itself once on every device, so the
+    // manual button is a recovery path, not the normal route. Say which it is.
+    loaded
+      ? el('div', { class: 'pill', html: `<strong>${STARTER_SHEET.label}</strong> is loaded as the opening record. It lays itself down once per hostel and syncs to every device — there is nothing to load by hand.` })
+      : el('div', { class: 'pill-warn', html: `<strong>${STARTER_SHEET.label}</strong> is not on this device yet. It normally loads itself on open; use the button below if it hasn't.` }),
     el('div', { class: 'flex gap wrap mt' }, [
       el('button', { class: 'btn primary', html: '📄&nbsp; Import CSV', onClick: () => importCSV(ctx) }),
-      el('button', { class: 'btn', html: `🗄&nbsp; Load starter · ${STARTER_SHEET.label}`, onClick: () => loadStarter(ctx, count) }),
+      loaded ? null : el('button', { class: 'btn', html: `🗄&nbsp; Load ${STARTER_SHEET.label}`, onClick: () => loadStarter(ctx, count) }),
     ]),
-    count ? el('div', { class: 'hint mt', text: `${count} booking${count === 1 ? '' : 's'} on record. Importing ADDS rows — it never replaces, so re-importing the same sheet will double it.` }) : null,
+    count ? el('div', { class: 'hint mt', text: `${count} booking${count === 1 ? '' : 's'} on record. Importing ADDS rows — it never replaces, so re-importing the same sheet would double it.` }) : null,
   ]);
   return card;
 }
@@ -206,10 +212,12 @@ function loadStarter(ctx, existing) {
       { label: 'Cancel', kind: 'ghost' },
       { label: 'Load 15 bookings', kind: 'primary', onClick: (close) => {
         managerGate(() => {
-          const r = importRows(rows, { source: STARTER_SHEET.label });
-          toast(`Loaded ${r.added} bookings · ₱${pesoPlain(r.total)}`, 'ok');
+          // Same guarded path the automatic seed uses — so this can never be the
+          // second copy of the sheet, however many times it's pressed.
+          const r = seedStarterOnce();
+          toast(r ? `Loaded ${r.added} bookings · ₱${pesoPlain(r.total)}` : 'The sheet is already loaded', r ? 'ok' : 'warn');
           close(); ctx.navigate('tv-bookings');
-        }, { reason: 'Approve loading the starter sheet' });
+        }, { reason: 'Approve loading the opening sheet' });
       } },
     ],
   });

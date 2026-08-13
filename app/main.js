@@ -5,7 +5,7 @@ import { pageHead, confirmDialog, managerGate, openModal } from './components.js
 import * as gh from './github.js';
 import * as health from './sync-health.js';
 import { parseSheet, importSheet } from './csv-import.js';
-import { tv } from './travelista.js';
+import { tv, seedStarterOnce } from './travelista.js';
 import * as dashboard from './views/dashboard.js';
 import * as deposit from './views/deposit.js';
 import * as refund from './views/refund.js';
@@ -82,6 +82,7 @@ async function mount() {
   await ensureProvisioned(); // only provisions the static baseline if nothing was restored
   ensureAdminSeed();         // seed the initial Admin account once
   ensurePassportItem();      // retire the (mis-)seeded standalone Passport item
+  ensureTravelistaSeed();    // lay down the Aug 1-15 sheet once, across all devices
   // Outage/sync watchdog: warn the moment entries stop reaching backup. On reconnect,
   // pull anything we missed and flush our own pending changes straight away.
   health.init({ onReconnect: () => { pollRemote(); clearTimeout(_autoSyncTimer); _autoSyncTimer = setTimeout(runAutoSync, 800); } });
@@ -97,6 +98,16 @@ function ensurePassportItem() {
   const it = store.itemTypes.find((x) => x.name.trim().toLowerCase() === 'passport');
   if (it && it.active) store.updateItem(it.id, { active: false });
   store.setConfig({ passportItemRetired: true });
+}
+
+// One-time: lay down the Travelista sheet the system was built from (Aug 1-15,
+// 2026), so every device opens with the real opening record instead of an empty
+// system. Runs AFTER syncFromRemote, so a device that already received the sheet
+// from another device recognises it and doesn't re-add it. Idempotent by a synced
+// config flag AND by the seed rows' own fixed ids — see seedStarterOnce().
+function ensureTravelistaSeed() {
+  try { seedStarterOnce(); }
+  catch (e) { console.error('travelista seed', e); } // never block boot on it
 }
 
 // One-time: seed the initial Admin account (James). He sets his own PIN after the
