@@ -98,6 +98,35 @@ function defaultState() {
     towels: [],     // master towel inventory: { no, createdAt, createdBy }
     towelLog: [],   // admin resolutions for lost/written-off towels: { id, no, action, ts, by, note }
     laundryLog: [], // dirty/washing/clean transitions: { id, no, status, ts, by }
+    // Travelista Management & Tracking — the SECOND system (van/boat ticket
+    // bookings & commissions). It lives in the same state object (one backup
+    // file, one sync, one login) but keeps its OWN append-only hash chain, so
+    // the front-desk deposit ledger above is never touched by it. See the note
+    // on defaultTravelista() for why the two cash figures must stay separate.
+    travelista: defaultTravelista(),
+  };
+}
+
+// The Travelista sub-state. Deliberately a SEPARATE record chain from `ledger`.
+//
+// WHY: the two systems both say "cash on hand" but mean different money. The
+// front desk's COH is guest deposits the hostel HOLDS AND OWES BACK — its
+// correctness rests on `beginning + held − over + adjustments = COH`. Travelista
+// cash is ticket money COLLECTED, most of which is payable to the travelista
+// operator and the rest is the hostel's commission. Posting bookings into the
+// deposit ledger would put revenue inside that reconciliation and break it. So:
+// same app, same integrity discipline, two independent chains.
+export function defaultTravelista() {
+  return {
+    enabled: false,        // flipped on the first booking / on setup
+    config: {
+      beginningCash: 0,    // opening float of the travelista cash box
+      startedAt: null,
+      periodMode: 'half',  // 'half' = 1–15 / 16–end (matches the sheet), 'month'
+    },
+    destinations: [],      // rate table: fare + commission per destination
+    bookers: [],           // who booked the guest ("Booked By:" on the sheet)
+    entries: [],           // append-only, hash-chained: booking | payout | reversal
   };
 }
 
@@ -121,6 +150,7 @@ class Store {
     this._subs = new Set();
     this.integrity = { ok: true, brokenAtSeq: null };
     this.auditIntegrity = { ok: true, brokenAtSeq: null };
+    this.travelistaIntegrity = { ok: true, brokenAtSeq: null };
     this._suppressAudit = false; // used while bulk-loading demo/CSV data
   }
 
@@ -146,8 +176,10 @@ class Store {
     if (!Array.isArray(this.state.laundryLog)) this.state.laundryLog = [];
     if (!this.state.config.towelTracker) this.state.config.towelTracker = { enabled: false, startedAt: null };
     if (!this.state.config.towelRecording) this.state.config.towelRecording = { enabled: false, startedAt: null, hours: 24 };
+    this._normalizeTravelista();
     this.verifyIntegrity();
     this.verifyAuditIntegrity();
+    this.verifyTravelistaIntegrity();
     if (this._migratedFromLS) { this._migratedFromLS = false; this._persist(); }
     this._restoreSession();
     return this.state;
@@ -1163,6 +1195,37 @@ class Store {
     return { granularity, current: rows[rows.length - 1] || null, previous: rows.length >= 2 ? rows[rows.length - 2] : null };
   }
 
+  // -------------------------------------------------- travelista (2nd system)
+  // Shape-fix on load/import, exactly like the towel arrays above: a backup
+  // written before this system existed has no `travelista` key, and must open
+  // without error on every device.
+  get travelista() { return this.state.travelista; }
+  _normalizeTravelista() {
+    const d = defaultTravelista();
+    const t = this.state.travelista && typeof this.state.travelista === 'object' ? this.state.travelista : {};
+    t.config = Object.assign(d.config, t.config || {});
+    if (!Array.isArray(t.destinations)) t.destinations = [];
+    if (!Array.isArray(t.bookers)) t.bookers = [];
+    if (!Array.isArray(t.entries)) t.entries = [];
+    t.enabled = !!t.enabled || t.entries.length > 0;
+    this.state.travelista = t;
+    return t;
+  }
+  // The Travelista chain is verified the same way as the ledger — same hash
+  // discipline, its own genesis, so a break in one never masks the other.
+  verifyTravelistaIntegrity() {
+    let prev = GENESIS;
+    let brokenAtSeq = null;
+    for (const e of (this.state.travelista && this.state.travelista.entries) || []) {
+      const { hash, ...rest } = e;
+      if (rest.prevHash !== prev) { brokenAtSeq = e.seq; break; }
+      if (sha256(stableStringify(rest)) !== hash) { brokenAtSeq = e.seq; break; }
+      prev = hash;
+    }
+    this.travelistaIntegrity = { ok: brokenAtSeq == null, brokenAtSeq };
+    return this.travelistaIntegrity;
+  }
+
   // ------------------------------------------------------------- integrity
   verifyIntegrity() {
     let prev = GENESIS;
@@ -1304,6 +1367,9 @@ class Store {
         auditEvents: this.state.audit.length,
         integrity: this.verifyIntegrity(),
         auditIntegrity: this.verifyAuditIntegrity(),
+        // Second system — carried in the same payload so one backup restores both.
+        travelistaEntries: ((this.state.travelista || {}).entries || []).length,
+        travelistaIntegrity: this.verifyTravelistaIntegrity(),
       },
       state: this.state,
     };
@@ -1320,8 +1386,10 @@ class Store {
     if (!Array.isArray(this.state.laundryLog)) this.state.laundryLog = [];
     if (!this.state.config.towelTracker) this.state.config.towelTracker = { enabled: false, startedAt: null };
     if (!this.state.config.towelRecording) this.state.config.towelRecording = { enabled: false, startedAt: null, hours: 24 };
+    this._normalizeTravelista();
     this.verifyIntegrity();
     this.verifyAuditIntegrity();
+    this.verifyTravelistaIntegrity();
     this._audit('data.import', `Imported backup (${this.state.ledger.length} ledger entries)`, { entries: this.state.ledger.length });
     this.save();
   }
@@ -1342,12 +1410,21 @@ class Store {
 // lacks (we're ahead, or the two branches diverged), we DON'T adopt — we keep our
 // records and let our own backup push carry them out. This makes an authoritative
 // correction propagate to every device instead of losing a last-write-wins race.
-export function remoteAdoptable(remoteLedger, remoteAudit, localLedger, localAudit) {
+// TRAVELISTA: the second system's records live in the SAME backup payload, so
+// they need the same loss-safety. Without this, two devices with an identical
+// towel ledger would fall through to the audit-count tiebreak and the one with
+// more logins would silently overwrite the other's bookings — the exact class of
+// fault that lost refunds before. Both chains must be covered for adoption.
+export function remoteAdoptable(remoteLedger, remoteAudit, localLedger, localAudit, remoteTv, localTv) {
   const rL = remoteLedger || [], lL = localLedger || [];
   const rIds = new Set(rL.map((e) => e && e.id));
   for (const e of lL) if (!rIds.has(e && e.id)) return false; // remote would drop a local record → never clobber ourselves
+  const rT = remoteTv || [], lT = localTv || [];
+  const rtIds = new Set(rT.map((e) => e && e.id));
+  for (const e of lT) if (!rtIds.has(e && e.id)) return false; // same guarantee for travelista bookings/payouts
   if (rL.length > lL.length) return true;                     // remote has records we lack (e.g. a pushed correction) → adopt
-  return (remoteAudit || 0) > (localAudit || 0);              // same ledger; adopt only for newer non-ledger changes
+  if (rT.length > lT.length) return true;                     // remote has travelista records we lack → adopt
+  return (remoteAudit || 0) > (localAudit || 0);              // same records; adopt only for newer non-ledger changes
 }
 
 export const store = new Store();

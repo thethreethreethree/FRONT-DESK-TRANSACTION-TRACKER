@@ -362,11 +362,49 @@ tr.is-reversal { background: repeating-linear-gradient(45deg, transparent, trans
 .pill strong { color: inherit; }
 .danger-zone { border: 1px dashed var(--out); border-radius: var(--r); padding: 16px; background: var(--out-50); }
 
+/* ------------------------------------------------- System picker & switcher
+   Two systems (towel tracking / travelista) share this shell. The picker is a
+   lock-screen-style choice after sign-in; the sidebar badge always says which
+   system you are in, because acting in the wrong one is the costly mistake. */
+.lockcard.wide { max-width: 700px; }
+.sysgrid { display: grid; grid-template-columns: 1fr 1fr; gap: 14px; }
+.syscard {
+  display: flex; flex-direction: column; align-items: flex-start; gap: 6px;
+  text-align: left; padding: 20px 18px; border: 1px solid var(--line-strong);
+  border-radius: var(--r-xl); background: var(--surface-2); cursor: pointer;
+  font: inherit; color: var(--text); transition: transform .12s ease, box-shadow .12s ease, border-color .12s ease;
+}
+.syscard:hover { transform: translateY(-2px); border-color: var(--gold); box-shadow: var(--sh-gold); background: #fff; }
+.syscard:focus-visible { outline: 3px solid var(--gold-100); outline-offset: 2px; }
+.syscard .ic { font-size: 1.7rem; line-height: 1; }
+.syscard .nm { font-weight: 700; font-size: .98rem; }
+.syscard .bl { color: var(--muted); font-size: .8rem; line-height: 1.45; }
+.syscard .fig { margin-top: 8px; padding-top: 10px; border-top: 1px dashed var(--line-strong); width: 100%; display: flex; flex-direction: column; gap: 2px; }
+.syscard .fig b { font-family: var(--mono, ui-monospace, monospace); font-size: 1.05rem; color: var(--ink); }
+.syscard .fig small { color: var(--muted); font-size: .72rem; }
+
+.sysbadge {
+  display: flex; align-items: center; gap: 8px; width: 100%; margin: 0 0 10px;
+  padding: 9px 11px; border-radius: var(--r); cursor: pointer; font: inherit;
+  background: rgba(255, 255, 255, .07); border: 1px solid rgba(255, 255, 255, .12);
+  color: #fff; transition: background .12s ease, border-color .12s ease;
+}
+.sysbadge:hover { background: rgba(255, 255, 255, .13); border-color: var(--gold); }
+.sysbadge .ic { font-size: 1rem; }
+.sysbadge .nm { font-size: .8rem; font-weight: 600; flex: 1; text-align: left; }
+.sysbadge .sw { font-size: .64rem; letter-spacing: .1em; text-transform: uppercase; color: var(--gold); }
+
 /* ----------------------------------------------------------- Responsive */
 @media (max-width: 880px) {
   .app { grid-template-columns: 1fr; }
   .sidebar { position: fixed; bottom: 0; top: auto; left: 0; right: 0; height: auto; flex-direction: row; z-index: 60; padding: 8px; gap: 2px; overflow-x: auto; }
   .sidebar .brand, .sidebar .side-foot, .sidebar .nav-sep, .sidebar .mgr-only { display: none; }
+  /* On phones the sidebar is a bottom bar: the system badge becomes one more
+     tappable icon in the row rather than a full-width header. */
+  .sysbadge { width: auto; margin: 0; flex-direction: column; gap: 3px; padding: 8px 10px; flex-shrink: 0; }
+  .sysbadge .nm { display: none; }
+  .sysbadge .sw { font-size: .6rem; }
+  .sysgrid { grid-template-columns: 1fr; }
   .sidebar .nav { flex-direction: row; }
   .nav button { flex-direction: column; gap: 3px; font-size: .66rem; padding: 8px 10px; }
   .nav button .ic { font-size: 1.2rem; }

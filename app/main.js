@@ -5,6 +5,7 @@ import { pageHead, confirmDialog, managerGate, openModal } from './components.js
 import * as gh from './github.js';
 import * as health from './sync-health.js';
 import { parseSheet, importSheet } from './csv-import.js';
+import { tv } from './travelista.js';
 import * as dashboard from './views/dashboard.js';
 import * as deposit from './views/deposit.js';
 import * as refund from './views/refund.js';
@@ -14,25 +15,63 @@ import * as ledger from './views/ledger.js';
 import * as towels from './views/towels.js';
 import * as passports from './views/passports.js';
 import * as activity from './views/activity.js';
+import * as tvDashboard from './views/tv-dashboard.js';
+import * as tvBooking from './views/tv-booking.js';
+import * as tvBookings from './views/tv-bookings.js';
+import * as tvPayouts from './views/tv-payouts.js';
+import * as tvReports from './views/tv-reports.js';
+import * as tvSettings from './views/tv-settings.js';
 
 const LOGO_LIGHT = 'brand_assets/logo-el-nido.png'; // black wordmark → invert for dark bg
 
+// Two systems share this shell: the front desk's towel/deposit tracker and the
+// travelista booking tracker. They share the login, the roster, the audit log,
+// the backup file and the sync — but NOT their money (see defaultTravelista()
+// in store.js). Each view therefore declares which system it belongs to, and
+// the sidebar only ever shows one system's tools at a time.
 const VIEWS = {
-  dashboard: { label: 'Dashboard', icon: '▦', render: dashboard.render },
-  deposit: { label: 'New Deposit', icon: '＋', render: deposit.render },
-  refund: { label: 'New Refund', icon: '↩', render: refund.render },
-  exchange: { label: 'Towel Exchange', icon: '⇄', render: exchange.render },
-  outstanding: { label: 'Outstanding', icon: '🧾', render: outstanding.render },
-  ledger: { label: 'Ledger', icon: '📜', render: ledger.render },
-  passports: { label: 'Passports', icon: '🛂', render: passports.render },
-  towels: { label: 'Towel Tracker', icon: '🧺', render: towels.render },
-  shifts: { label: 'Shifts', icon: '🕑', render: renderShifts },
-  activity: { label: 'Activity Log', icon: '🪵', mgr: true, render: activity.render },
-  settings: { label: 'Settings', icon: '⚙', mgr: true, render: renderSettings },
+  dashboard: { system: 'towels', label: 'Dashboard', icon: '▦', render: dashboard.render },
+  deposit: { system: 'towels', label: 'New Deposit', icon: '＋', render: deposit.render },
+  refund: { system: 'towels', label: 'New Refund', icon: '↩', render: refund.render },
+  exchange: { system: 'towels', label: 'Towel Exchange', icon: '⇄', render: exchange.render },
+  outstanding: { system: 'towels', label: 'Outstanding', icon: '🧾', render: outstanding.render },
+  ledger: { system: 'towels', label: 'Ledger', icon: '📜', render: ledger.render },
+  passports: { system: 'towels', label: 'Passports', icon: '🛂', render: passports.render },
+  towels: { system: 'towels', label: 'Towel Tracker', icon: '🧺', render: towels.render },
+  shifts: { system: 'towels', label: 'Shifts', icon: '🕑', render: renderShifts },
+  activity: { system: 'towels', label: 'Activity Log', icon: '🪵', mgr: true, render: activity.render },
+  settings: { system: 'towels', label: 'Settings', icon: '⚙', mgr: true, render: renderSettings },
+
+  'tv-dashboard': { system: 'travelista', label: 'Dashboard', icon: '▦', render: tvDashboard.render },
+  'tv-booking': { system: 'travelista', label: 'New Booking', icon: '＋', render: tvBooking.render },
+  'tv-bookings': { system: 'travelista', label: 'Booking Sheet', icon: '📋', render: tvBookings.render },
+  'tv-payouts': { system: 'travelista', label: 'Remit & Payouts', icon: '↗', render: tvPayouts.render },
+  'tv-reports': { system: 'travelista', label: 'Reports', icon: '📊', render: tvReports.render },
+  'tv-activity': { system: 'travelista', label: 'Activity Log', icon: '🪵', mgr: true, render: activity.render },
+  'tv-settings': { system: 'travelista', label: 'Settings', icon: '⚙', mgr: true, render: tvSettings.render },
 };
-const AUTO_REFRESH = new Set(['dashboard']);
+
+const SYSTEMS = {
+  towels: {
+    id: 'towels', label: 'Towel Management & Tracking', icon: '🧺',
+    blurb: 'Guest deposits, refunds, passports and the physical towel inventory.',
+    home: 'dashboard',
+    order: ['dashboard', 'deposit', 'refund', 'exchange', 'outstanding', 'ledger', 'passports', 'towels', 'shifts'],
+    admin: ['activity', 'settings'],
+  },
+  travelista: {
+    id: 'travelista', label: 'Travelista Management & Tracking', icon: '🚐',
+    blurb: 'Van & boat bookings, the travelista\'s share and the hostel\'s commission.',
+    home: 'tv-dashboard',
+    order: ['tv-dashboard', 'tv-booking', 'tv-bookings', 'tv-payouts', 'tv-reports'],
+    admin: ['tv-activity', 'tv-settings'],
+  },
+};
+const SYSTEM_KEY = 'fdtt_system'; // device-local: which system this device was last using
+const AUTO_REFRESH = new Set(['dashboard', 'tv-dashboard']);
 
 let current = 'dashboard';
+let currentSystem = null; // null → show the system picker
 let navArgs = null; // one-shot payload passed to the next view's render (e.g. { depositSeq })
 const app = document.getElementById('app');
 
@@ -95,7 +134,9 @@ async function syncFromRemote() {
   if (!remote || !remote.payload || !remote.payload.state) return;
   const meta = remote.payload.meta || {};
   const localFresh = !store.isSetup() || store.ledger.length === 0;
-  const adoptable = remoteAdoptable((remote.payload.state || {}).ledger, meta.auditEvents, store.ledger, (store.audit || []).length);
+  const rs = remote.payload.state || {};
+  const adoptable = remoteAdoptable(rs.ledger, meta.auditEvents, store.ledger, (store.audit || []).length,
+    (rs.travelista || {}).entries, ((store.state || {}).travelista || {}).entries);
   if (!(localFresh || adoptable)) return; // local is already current / would lose local records
   splashLoading('Syncing the latest records…');
   try {
@@ -106,9 +147,36 @@ async function syncFromRemote() {
 }
 
 // Route from the in-memory state (no storage read).
+//
+// Signing in leads to the SYSTEM PICKER — the two systems are separate jobs and
+// the desk should say which one it's doing. A plain page refresh does not: the
+// device remembers the system it was on, so reloading mid-shift never costs an
+// extra tap or loses the person's place.
 function route() {
   if (!store.session) return renderLogin();
+  if (!currentSystem) {
+    const saved = readSystem();
+    if (saved && SYSTEMS[saved]) enterSystem(saved, { render: false });
+    else return renderSystemPicker();
+  }
   renderShell();
+}
+
+function readSystem() {
+  try { return localStorage.getItem(SYSTEM_KEY); } catch (e) { return null; }
+}
+function enterSystem(id, { render = true } = {}) {
+  if (!SYSTEMS[id]) return;
+  currentSystem = id;
+  current = SYSTEMS[id].home;
+  try { localStorage.setItem(SYSTEM_KEY, id); } catch (e) { /* private mode */ }
+  if (id === 'travelista') tv.ensureSeed(); // rate table + bookers ready on first entry
+  if (render) renderShell();
+}
+function leaveSystem() {
+  currentSystem = null;
+  try { localStorage.removeItem(SYSTEM_KEY); } catch (e) { /* ignore */ }
+  renderSystemPicker();
 }
 
 // Brief full-screen splash while loading / auto-provisioning.
@@ -199,8 +267,9 @@ function renderLogin() {
   const doLogin = () => {
     const ok = store.login(role, pin.value, name.value.trim() || (role === 'manager' ? 'Admin' : 'Staff'));
     if (!ok) { toast('Incorrect PIN', 'err'); pin.value = ''; pin.focus(); return; }
-    current = 'dashboard';
-    renderShell();
+    currentSystem = null; // a fresh sign-in always chooses a system
+    try { localStorage.removeItem(SYSTEM_KEY); } catch (e) { /* ignore */ }
+    renderSystemPicker();
   };
   pin.addEventListener('keydown', (e) => { if (e.key === 'Enter') doLogin(); });
   name.addEventListener('keydown', (e) => { if (e.key === 'Enter') doLogin(); });
@@ -221,6 +290,44 @@ function renderLogin() {
   setTimeout(() => name.focus(), 60);
 }
 
+// ------------------------------------------------------------ System picker
+// Shown after every sign-in. Each card carries the system's own live headline
+// figure, so the choice is informative rather than just a menu — the person can
+// see the drawer and the cash box before they pick where to work.
+function renderSystemPicker() {
+  clear(app);
+  app.className = 'app locked';
+  const s = store.session;
+
+  const card = (sys, headline, sub) => el('button', {
+    class: 'syscard', type: 'button', onClick: () => enterSystem(sys.id),
+  }, [
+    el('span', { class: 'ic', text: sys.icon }),
+    el('span', { class: 'nm', text: sys.label }),
+    el('span', { class: 'bl', text: sys.blurb }),
+    el('span', { class: 'fig' }, [
+      el('b', { text: headline }),
+      el('small', { text: sub }),
+    ]),
+  ]);
+
+  const tvT = tv.entries.length ? tv.totals() : null;
+  const wrap = el('div', { class: 'lockwrap' }, el('div', { class: 'lockcard wide' }, [
+    el('div', { class: 'lk-brand' }, [
+      el('img', { src: LOGO_LIGHT, alt: 'Frendz Hostel El Nido' }),
+      el('h2', { text: `Welcome, ${s ? s.name : ''}` }),
+      el('p', { text: 'Which system are you working in?' }),
+    ]),
+    el('div', { class: 'sysgrid' }, [
+      card(SYSTEMS.towels, peso(store.coh()), 'cash on hand · deposits held'),
+      card(SYSTEMS.travelista, peso(tv.cash()),
+        tvT ? `cash box · ₱${pesoPlain(tvT.commission)} commission earned` : 'cash box · no bookings yet'),
+    ]),
+    el('button', { class: 'btn ghost block mt', text: 'Sign out', onClick: () => { store.logout(); currentSystem = null; renderLogin(); } }),
+  ]));
+  app.appendChild(wrap);
+}
+
 // ---------------------------------------------------------------- Shell
 function renderShell() {
   clear(app);
@@ -232,20 +339,31 @@ function renderShell() {
 }
 
 function renderSidebar() {
+  const sys = SYSTEMS[currentSystem] || SYSTEMS.towels;
   const side = el('aside', { class: 'sidebar' });
   side.appendChild(el('div', { class: 'brand' }, [
     el('img', { class: 'logo', src: LOGO_LIGHT, alt: 'Frendz', style: 'filter:brightness(0) invert(1)' }),
   ]));
+  // Which system you're in, and one tap back to the picker. Being explicit about
+  // this matters: the two systems have similar-looking money screens, and acting
+  // in the wrong one is the mistake worth designing against.
+  side.appendChild(el('button', {
+    class: 'sysbadge', type: 'button', title: 'Switch system',
+    onClick: () => leaveSystem(),
+  }, [
+    el('span', { class: 'ic', text: sys.icon }),
+    el('span', { class: 'nm', text: sys.id === 'towels' ? 'Towel Tracking' : 'Travelista' }),
+    el('span', { class: 'sw', text: 'Switch' }),
+  ]));
+
   const nav = el('nav', { class: 'nav' });
-  const order = ['dashboard', 'deposit', 'refund', 'exchange', 'outstanding', 'ledger', 'passports', 'towels', 'shifts'];
-  for (const id of order) addNav(nav, id);
+  for (const id of sys.order) addNav(nav, id);
   // Manager-only tools (Activity Log, Settings) are hidden entirely from staff —
   // staff have no access to admin features. (navigate() also gates, as a backstop.)
   if (store.isManager()) {
     nav.appendChild(el('div', { class: 'nav-sep' }));
     nav.appendChild(el('div', { class: 'mgr-only', text: 'Admin' }));
-    addNav(nav, 'activity');
-    addNav(nav, 'settings');
+    for (const id of sys.admin) addNav(nav, id);
   }
   side.appendChild(nav);
 
@@ -253,7 +371,7 @@ function renderSidebar() {
   side.appendChild(el('div', { class: 'side-foot' }, [
     el('div', { class: 'who', text: s ? s.name : '' }),
     el('div', { text: s && s.role === 'manager' ? 'Admin' : 'Staff' }),
-    el('button', { text: 'Sign out', onClick: () => { store.logout(); renderLogin(); } }),
+    el('button', { text: 'Sign out', onClick: () => { store.logout(); currentSystem = null; renderLogin(); } }),
   ]));
   return side;
 }
@@ -267,7 +385,15 @@ function addNav(nav, id) {
 }
 
 function navigate(id, args) {
-  if (VIEWS[id].mgr && !store.isManager()) {
+  const v = VIEWS[id];
+  if (!v) return;
+  // Navigating to a view of the other system switches system too — so a deep link
+  // or a cross-system button can never leave the sidebar and the page disagreeing.
+  if (v.system !== currentSystem) {
+    currentSystem = v.system;
+    try { localStorage.setItem(SYSTEM_KEY, v.system); } catch (e) { /* ignore */ }
+  }
+  if (v.mgr && !store.isManager()) {
     managerGate(() => { navArgs = args || null; current = id; renderShell(); }, { reason: 'This area is admin only.' });
     return;
   }
@@ -279,9 +405,12 @@ function navigate(id, args) {
 function renderCurrent() {
   const main = document.getElementById('main-view');
   if (!main) return;
+  const home = (SYSTEMS[currentSystem] || SYSTEMS.towels).home;
   // Backstop: a staff session can never render a manager-only view (e.g. if a
-  // manager left `current` on Settings before a staff signed in on this device).
-  if (VIEWS[current] && VIEWS[current].mgr && !store.isManager()) current = 'dashboard';
+  // manager left `current` on Settings before a staff signed in on this device),
+  // and `current` can never be a view belonging to the other system.
+  if (!VIEWS[current] || VIEWS[current].system !== currentSystem) current = home;
+  if (VIEWS[current].mgr && !store.isManager()) current = home;
   clear(main);
   const args = navArgs; navArgs = null; // consume once, so a re-render doesn't re-trigger it
   const ctx = { navigate, store, args };
@@ -345,7 +474,9 @@ async function pollRemote() {
     // Adopt only when the remote is loss-safe AND strictly ahead by LEDGER content
     // (not audit-count) — this is what stops a stale device from re-pushing over a
     // pushed <system error revision> correction. See store.remoteAdoptable.
-    if (!remoteAdoptable((remote.payload.state || {}).ledger, (remote.payload.meta || {}).auditEvents, store.ledger, (store.audit || []).length)) {
+    const rs = remote.payload.state || {};
+    if (!remoteAdoptable(rs.ledger, (remote.payload.meta || {}).auditEvents, store.ledger, (store.audit || []).length,
+      (rs.travelista || {}).entries, ((store.state || {}).travelista || {}).entries)) {
       if (remote.sha) { const g = store.config.github || {}; g.lastBackupSha = remote.sha; store.setConfig({ github: g }); } // record sha; nothing to adopt
       return;
     }
@@ -365,7 +496,7 @@ async function pollRemote() {
 function refreshIfSafe() {
   if (!store.session) { route(); return; }
   if (!document.getElementById('main-view')) return;
-  const FORM_VIEWS = new Set(['deposit', 'refund', 'exchange']);
+  const FORM_VIEWS = new Set(['deposit', 'refund', 'exchange', 'tv-booking', 'tv-payouts']);
   const ae = document.activeElement;
   const typing = ae && /^(INPUT|TEXTAREA|SELECT)$/.test(ae.tagName || '');
   if (FORM_VIEWS.has(current) || typing) return; // data is in memory; reflects on next navigation

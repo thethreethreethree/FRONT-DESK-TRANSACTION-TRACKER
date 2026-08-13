@@ -13,6 +13,7 @@
 // state.config (a remote pull would overwrite it), so we keep it in memory only.
 import { el } from './util.js';
 import { store } from './store.js';
+import { tv } from './travelista.js';
 import * as gh from './github.js';
 
 let bannerEl = null;
@@ -23,6 +24,8 @@ const H = {
   lastError: '',
   integrityOk: true,
   reconGap: 0, // |beginning + held − over + adj − coh|; >0 means the books don't tie out
+  tvIntegrityOk: true, // the travelista chain gets the same watch as the ledger
+  tvBalances: true,    // opening + owed + commission held == the travelista cash box
 };
 
 function syncConfigured() {
@@ -45,6 +48,13 @@ export function checkData() {
     const r = store.reconciliation();
     H.reconGap = Math.abs((r.beginning || 0) + r.held - r.over + (r.adjustments || 0) - r.coh);
   } catch (e) { /* keep last known values */ }
+  // Second system, same guards — a corrupted or non-reconciling travelista record
+  // must be as loud as a corrupted ledger, not silently wrong on a page nobody
+  // happens to open. Guarded separately so a fault in one can't mask the other.
+  try {
+    H.tvIntegrityOk = store.verifyTravelistaIntegrity().ok;
+    H.tvBalances = tv.entries.length ? tv.reconciliation().balances : true;
+  } catch (e) { /* keep last known values */ }
   render();
 }
 
@@ -55,6 +65,11 @@ function evaluate() {
     level: 'red', icon: '⛔',
     msg: 'System error: the ledger integrity check failed.',
     hint: 'A saved transaction may have been corrupted (e.g. a save cut off by an outage). Do not enter new transactions — contact the administrator.',
+  };
+  if (!H.tvIntegrityOk) return {
+    level: 'red', icon: '⛔',
+    msg: 'System error: the travelista record integrity check failed.',
+    hint: 'A saved booking or payout may have been corrupted (e.g. a save cut off by an outage). Do not enter new bookings — contact the administrator.',
   };
   if (syncConfigured() && !H.online) return {
     level: 'red', icon: '⚠',
@@ -70,6 +85,11 @@ function evaluate() {
     level: 'amber', icon: '⚠',
     msg: `Cash doesn’t reconcile — off by ₱${Math.round(H.reconGap).toLocaleString()}.`,
     hint: 'A deposit or refund may not have recorded correctly (a dropped connection can do this). Check Outstanding.',
+  };
+  if (!H.tvBalances) return {
+    level: 'amber', icon: '⚠',
+    msg: 'Travelista cash box doesn’t reconcile.',
+    hint: 'What is owed to the travelista plus the commission held should equal the box. Check the recent bookings and payouts.',
   };
   return null;
 }
