@@ -1,11 +1,11 @@
 {
   "meta": {
     "app": "Frendz Front Desk Transaction Tracker",
-    "exportedAt": "2026-08-13T12:33:54.259Z",
+    "exportedAt": "2026-08-13T12:34:31.573Z",
     "version": 1,
     "coh": 30200,
     "entries": 18036,
-    "auditEvents": 4287,
+    "auditEvents": 4289,
     "integrity": {
       "ok": true,
       "brokenAtSeq": null
@@ -14,7 +14,7 @@
       "ok": true,
       "brokenAtSeq": null
     },
-    "travelistaEntries": 18,
+    "travelistaEntries": 19,
     "travelistaIntegrity": {
       "ok": true,
       "brokenAtSeq": null
@@ -38,8 +38,8 @@
         "path": "data/ledger-backup.json",
         "autoSync": true,
         "enabled": true,
-        "lastBackupAt": "2026-08-13T12:10:12.828Z",
-        "lastBackupSha": "a5c7cd4c8c982d2b1f22bbd7ec99f7dec79458eb"
+        "lastBackupAt": "2026-08-13T12:34:07.773Z",
+        "lastBackupSha": "ee65c43146f9212622872935e3e2e2359ec0d248"
       },
       "towelTracker": {
         "enabled": true,
@@ -516460,6 +516460,43 @@
         },
         "prevHash": "8a15629b7b286d60a7a9cdeb9e07b34dd4de6360a6084942710fdf9137618dbf",
         "hash": "2b1113a2f7ed1d45c4afbc9677d2356a77a9fe5602c089de8586e25a15f9efb2"
+      },
+      {
+        "seq": 4288,
+        "id": "aud_msri2eqn_x_b047s8",
+        "ts": "2026-08-13T12:34:07.775Z",
+        "actor": "GINO",
+        "role": "staff",
+        "action": "backup.github",
+        "what": "Backup committed to thethreethreethree/FRONT-DESK-TRANSACTION-TRACKER@main (auto-sync)",
+        "details": {
+          "reason": "auto-sync",
+          "coh": 30200,
+          "entries": 18036
+        },
+        "prevHash": "2b1113a2f7ed1d45c4afbc9677d2356a77a9fe5602c089de8586e25a15f9efb2",
+        "hash": "8a865ca3d489bf1f793e88accb9fbea9f806e5ccf73c6df359eb4dd59b189c11"
+      },
+      {
+        "seq": 4289,
+        "id": "aud_msri2sh0_z_t82w8h",
+        "ts": "2026-08-13T12:34:25.572Z",
+        "actor": "GINO",
+        "role": "staff",
+        "action": "tv.booking.create",
+        "what": "Travelista booking #19 · OSCAR ONTIVEROS · PPS SHARING VAN ×2 pax · ₱1,500 (commission ₱200)",
+        "details": {
+          "ref": 19,
+          "id": "tv_msri2sgz_y_c6dp2g",
+          "guest": "OSCAR ONTIVEROS",
+          "destination": "PPS SHARING VAN",
+          "pax": 2,
+          "total": 1500,
+          "commission": 200,
+          "bookedBy": "GINO"
+        },
+        "prevHash": "8a865ca3d489bf1f793e88accb9fbea9f806e5ccf73c6df359eb4dd59b189c11",
+        "hash": "5975ca6010629dde659139e39549ef685c6e009fe3769515e36ae9e409a1242c"
       }
     ],
     "towels": [
@@ -521488,6 +521525,37 @@
           "reversesKind": null,
           "prevHash": "6e3746f7bbd7c231ff04b707a33ef715491401c39213642d7f9fac19576649ad",
           "hash": "45e64cfef96d171dc94d5802c6b8af9a6378aed98b3c11189800f9fdeb64b7d4"
+        },
+        {
+          "seq": 19,
+          "id": "tv_msri2sgz_y_c6dp2g",
+          "ts": "2026-08-13T12:34:25.571Z",
+          "kind": "booking",
+          "direction": 1,
+          "amount": 1500,
+          "departureDate": "2026-08-13",
+          "guest": "OSCAR ONTIVEROS",
+          "destination": "PPS SHARING VAN",
+          "destinationId": "dest_msrh2ktf_d_xyn4hg",
+          "pax": 2,
+          "fare": 750,
+          "fareBasis": "per_pax",
+          "total": 1500,
+          "travelistaShare": 1300,
+          "commission": 200,
+          "bookedBy": "GINO",
+          "remarks": "",
+          "payoutType": "",
+          "payee": "",
+          "method": "",
+          "periodKey": "2026-08-A",
+          "staff": "GINO",
+          "staffRole": "staff",
+          "businessDate": "2026-08-13",
+          "reversesId": null,
+          "reversesKind": null,
+          "prevHash": "45e64cfef96d171dc94d5802c6b8af9a6378aed98b3c11189800f9fdeb64b7d4",
+          "hash": "dad395d24014593af69b92c179425bd8b24f543cd339ca8a122046e31a2fdea4"
         }
       ]
     }
