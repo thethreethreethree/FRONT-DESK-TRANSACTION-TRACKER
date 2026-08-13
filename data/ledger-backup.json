@@ -1,16 +1,21 @@
 {
   "meta": {
     "app": "Frendz Front Desk Transaction Tracker",
-    "exportedAt": "2026-08-13T12:02:30.222Z",
+    "exportedAt": "2026-08-13T12:04:36.552Z",
     "version": 1,
     "coh": 30200,
     "entries": 18036,
-    "auditEvents": 4261,
+    "auditEvents": 4263,
     "integrity": {
       "ok": true,
       "brokenAtSeq": null
     },
     "auditIntegrity": {
+      "ok": true,
+      "brokenAtSeq": null
+    },
+    "travelistaEntries": 17,
+    "travelistaIntegrity": {
       "ok": true,
       "brokenAtSeq": null
     }
@@ -33,8 +38,8 @@
         "path": "data/ledger-backup.json",
         "autoSync": true,
         "enabled": true,
-        "lastBackupAt": "2026-08-13T11:08:59.666Z",
-        "lastBackupSha": "c30203570fdc4414f5a8b54016b1b90a7bcfe1bc"
+        "lastBackupAt": "2026-08-13T12:02:39.441Z",
+        "lastBackupSha": "c28881b1df3a5f8a0223f68e3b7a47e82f629cdd"
       },
       "towelTracker": {
         "enabled": true,
@@ -515974,6 +515979,37 @@
         },
         "prevHash": "9ce336e5757a26b88032aeb9e0b9e177b2bad7ccad6edb2ad924faa82fd9925e",
         "hash": "70365f27e20b47afd9c50b7741d527a1ab12b21959894237a52c73ba7364426e"
+      },
+      {
+        "seq": 4262,
+        "id": "aud_msrgxxsf_44_r5jqr9",
+        "ts": "2026-08-13T12:02:39.567Z",
+        "actor": "darren",
+        "role": "manager",
+        "action": "backup.github",
+        "what": "Backup committed to thethreethreethree/FRONT-DESK-TRANSACTION-TRACKER@main (auto-sync)",
+        "details": {
+          "reason": "auto-sync",
+          "coh": 30200,
+          "entries": 18036
+        },
+        "prevHash": "70365f27e20b47afd9c50b7741d527a1ab12b21959894237a52c73ba7364426e",
+        "hash": "f0c83cc5dfe8f7ce9afbc56a28d7b79b06fa94d5feadfedf79656c3261ae524f"
+      },
+      {
+        "seq": 4263,
+        "id": "aud_msrh0bf6_2_mills5",
+        "ts": "2026-08-13T12:04:30.546Z",
+        "actor": "darren",
+        "role": "manager",
+        "action": "tv.destination.create",
+        "what": "Travelista: added destination \"EL NIDO\" (₱750 per pax, commission ₱100)",
+        "details": {
+          "id": "dest_msrh0bf6_1_qfei3b",
+          "name": "EL NIDO"
+        },
+        "prevHash": "f0c83cc5dfe8f7ce9afbc56a28d7b79b06fa94d5feadfedf79656c3261ae524f",
+        "hash": "0bb79308070f607258313e9ca0b0ac4d175a7cf7258fc478ed0fd15991f66d8b"
       }
     ],
     "towels": [
@@ -520338,6 +520374,17 @@
           "fareBasis": "flat",
           "commission": 1000,
           "commissionBasis": "flat"
+        },
+        {
+          "id": "dest_msrh0bf6_1_qfei3b",
+          "name": "EL NIDO",
+          "fare": 750,
+          "fareBasis": "per_pax",
+          "commission": 100,
+          "commissionBasis": "per_pax",
+          "sortOrder": 2,
+          "active": true,
+          "createdAt": "2026-08-13T12:04:30.546Z"
         }
       ],
       "bookers": [
