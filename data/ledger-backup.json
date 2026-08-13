@@ -1,11 +1,11 @@
 {
   "meta": {
     "app": "Frendz Front Desk Transaction Tracker",
-    "exportedAt": "2026-08-13T12:07:27.940Z",
+    "exportedAt": "2026-08-13T12:08:09.051Z",
     "version": 1,
     "coh": 30200,
     "entries": 18036,
-    "auditEvents": 4279,
+    "auditEvents": 4281,
     "integrity": {
       "ok": true,
       "brokenAtSeq": null
@@ -38,8 +38,8 @@
         "path": "data/ledger-backup.json",
         "autoSync": true,
         "enabled": true,
-        "lastBackupAt": "2026-08-13T12:06:53.702Z",
-        "lastBackupSha": "4b6aaf89d827706a39dcf07a40c6b9d0ed6e0367"
+        "lastBackupAt": "2026-08-13T12:07:41.310Z",
+        "lastBackupSha": "b19ddd031914f0ff4246c88c57cc545903f370eb"
       },
       "towelTracker": {
         "enabled": true,
@@ -516321,6 +516321,50 @@
         },
         "prevHash": "b8f31768b70ba6b619fbd8d6c794c76e5101059831833aa02c57ecc9a52dfef4",
         "hash": "a849149ebad76e327526d0a7d136b416cfc477b42e1b389119880d531c8f096b"
+      },
+      {
+        "seq": 4280,
+        "id": "aud_msrh46kd_o_8o0mo8",
+        "ts": "2026-08-13T12:07:30.877Z",
+        "actor": "darren",
+        "role": "manager",
+        "action": "tv.destination.update",
+        "what": "Travelista: updated destination \"PPS\"",
+        "details": {
+          "id": "dest_msrh0otm_4_rphnbj",
+          "before": {
+            "fare": 8000,
+            "commission": 1000,
+            "fareBasis": "per_pax",
+            "commissionBasis": "per_pax",
+            "active": true
+          },
+          "after": {
+            "fare": 8000,
+            "commission": 1000,
+            "fareBasis": "per_pax",
+            "commissionBasis": "per_pax",
+            "active": false
+          }
+        },
+        "prevHash": "a849149ebad76e327526d0a7d136b416cfc477b42e1b389119880d531c8f096b",
+        "hash": "9326d31ab4b173e1fd48f53361c7b4233e58b947734ea0bc1684b8ac29b7e244"
+      },
+      {
+        "seq": 4281,
+        "id": "aud_msrh4em6_p_7nxbbo",
+        "ts": "2026-08-13T12:07:41.310Z",
+        "actor": "darren",
+        "role": "manager",
+        "action": "backup.github",
+        "what": "Backup committed to thethreethreethree/FRONT-DESK-TRANSACTION-TRACKER@main (auto-sync)",
+        "details": {
+          "reason": "auto-sync",
+          "coh": 30200,
+          "entries": 18036
+        },
+        "prevHash": "9326d31ab4b173e1fd48f53361c7b4233e58b947734ea0bc1684b8ac29b7e244",
+        "hash": "889311fcdca86e1f4c10aa17fb2240ee46e2a546db6772586b2b1d7803f4a0a2"
       }
     ],
     "towels": [
@@ -520705,7 +520749,7 @@
           "commission": 1000,
           "commissionBasis": "per_pax",
           "sortOrder": 3,
-          "active": true,
+          "active": false,
           "createdAt": "2026-08-13T12:04:47.914Z"
         },
         {
