@@ -14,6 +14,7 @@ import * as outstanding from './views/outstanding.js';
 import * as ledger from './views/ledger.js';
 import * as towels from './views/towels.js';
 import * as passports from './views/passports.js';
+import * as privateRooms from './views/private-rooms.js';
 import * as activity from './views/activity.js';
 import * as tvDashboard from './views/tv-dashboard.js';
 import * as tvBooking from './views/tv-booking.js';
@@ -37,6 +38,7 @@ const VIEWS = {
   outstanding: { system: 'towels', label: 'Outstanding', icon: '🧾', render: outstanding.render },
   ledger: { system: 'towels', label: 'Ledger', icon: '📜', render: ledger.render },
   passports: { system: 'towels', label: 'Passports', icon: '🛂', render: passports.render },
+  privaterooms: { system: 'towels', label: 'Private Rooms', icon: '🏠', render: privateRooms.render },
   towels: { system: 'towels', label: 'Towel Tracker', icon: '🧺', render: towels.render },
   shifts: { system: 'towels', label: 'Shifts', icon: '🕑', render: renderShifts },
   activity: { system: 'towels', label: 'Activity Log', icon: '🪵', mgr: true, render: activity.render },
@@ -56,7 +58,7 @@ const SYSTEMS = {
     id: 'towels', label: 'Towel Management & Tracking', icon: '🧺',
     blurb: 'Guest deposits, refunds, passports and the physical towel inventory.',
     home: 'dashboard',
-    order: ['dashboard', 'deposit', 'refund', 'exchange', 'outstanding', 'ledger', 'passports', 'towels', 'shifts'],
+    order: ['dashboard', 'deposit', 'refund', 'exchange', 'outstanding', 'ledger', 'passports', 'privaterooms', 'towels', 'shifts'],
     admin: ['activity', 'settings'],
   },
   travelista: {

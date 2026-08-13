@@ -53,13 +53,18 @@ export function render(ctx) {
   ]);
   function syncTowel() { towelField.style.display = (selected && isTowelItem(selected.name)) ? '' : 'none'; }
 
-  // Payment method: Cash (normal) or Passport. A passport SUBSTITUTES for the cash —
-  // the item still goes out at its deposit value, but ₱0 cash is taken (COH untouched)
-  // and the passport is held against a MEWS reservation #.
+  // How the deposit is secured. Three ways an item leaves the desk:
+  //   Cash         — the normal deposit; COH rises by the amount.
+  //   Passport     — the passport SUBSTITUTES for the cash. ₱0 taken (COH
+  //                  untouched), passport held against a MEWS reservation #.
+  //   Private room — secured by the room itself. No cash, no document held. ₱0,
+  //                  so it moves no money now and none at check-out either; it
+  //                  exists purely to record that the item is out and with whom.
   let method = 'cash';
   const methodToggle = el('div', { class: 'role-toggle' }, [
     el('button', { type: 'button', class: 'active', html: '💵&nbsp; Cash', onClick: (ev) => setMethod('cash', ev) }),
     el('button', { type: 'button', html: '🛂&nbsp; Passport', onClick: (ev) => setMethod('passport', ev) }),
+    el('button', { type: 'button', html: '🏠&nbsp; Private room', onClick: (ev) => setMethod('room', ev) }),
   ]);
   function setMethod(m, ev) {
     method = m;
@@ -68,19 +73,25 @@ export function render(ctx) {
     syncPassport();
   }
   function isPassport() { return method === 'passport'; }
+  function isPrivateRoom() { return method === 'room'; }
   const mewsInput = el('input', { class: 'input', placeholder: 'e.g. RES-48213', autocomplete: 'off' });
   const mewsField = el('div', { class: 'field' }, [
     el('label', { text: 'MEWS reservation #' }), mewsInput,
     el('div', { class: 'hint', text: 'required — the booking this passport is held against' }),
   ]);
+  const roomNote = el('div', { class: 'pill', style: 'display:none', html: 'No cash and no passport is taken. The item is signed out against the room — close it with <strong>Guest checked out</strong> on the Private Rooms page when they return it.' });
   function syncPassport() {
     mewsField.style.display = isPassport() ? '' : 'none';
+    roomNote.style.display = isPrivateRoom() ? '' : 'none';
+    // The room # IS the security on a private-room hold, so it stops being optional.
+    roomLabel.textContent = isPrivateRoom() ? 'Room # (required)' : 'Room #';
     updatePreview();
   }
 
   // guest / room / pax
   const guestInput = el('input', { class: 'input', placeholder: 'e.g. Charlie H.', autocomplete: 'off' });
   const roomInput = el('input', { class: 'input', placeholder: 'e.g. 309', autocomplete: 'off' });
+  const roomLabel = el('label', { text: 'Room #' });
   const paxInput = el('input', { class: 'input', type: 'number', min: '1', placeholder: 'e.g. 2', inputmode: 'numeric' });
   const noteInput = el('input', { class: 'input', placeholder: 'optional', autocomplete: 'off' });
 
@@ -90,11 +101,17 @@ export function render(ctx) {
   const previewSub = el('div', { class: 'muted', style: 'font-size:.78rem', text: 'unit × quantity' });
   function unit() { return unitOverride != null ? unitOverride : (selected ? selected.defaultAmount : 0); }
   function value() { return Math.round(unit() * qty * 100) / 100; } // nominal deposit value
-  function amount() { return isPassport() ? 0 : value(); }          // cash actually taken
+  // Cash actually taken. Both non-cash methods take ₱0 — the value above is kept
+  // for reference only, so COH is untouched either way.
+  function amount() { return (isPassport() || isPrivateRoom()) ? 0 : value(); }
   function updatePreview() {
     previewVal.textContent = peso(value());
-    previewLab.textContent = isPassport() ? `Deposit value · ${peso(value())} (passport)` : 'Deposit amount (auto)';
-    previewSub.textContent = isPassport() ? 'paid by passport — no cash, COH unchanged' : 'unit × quantity';
+    previewLab.textContent = isPassport() ? `Deposit value · ${peso(value())} (passport)`
+      : isPrivateRoom() ? `Item value · ${peso(value())} (private room)`
+        : 'Deposit amount (auto)';
+    previewSub.textContent = isPassport() ? 'paid by passport — no cash, COH unchanged'
+      : isPrivateRoom() ? 'secured by the room — no cash taken, COH unchanged'
+        : 'unit × quantity';
   }
 
   const preview = el('div', { class: 'amount-preview' }, [
@@ -111,10 +128,11 @@ export function render(ctx) {
   card.appendChild(el('div', { class: 'field' }, [el('label', { text: 'Deposit paid by' }), methodToggle]));
   card.appendChild(el('div', { class: 'row2' }, [
     el('div', { class: 'field' }, [el('label', { text: 'Guest name' }), guestInput]),
-    el('div', { class: 'field' }, [el('label', { text: 'Room #' }), roomInput]),
+    el('div', { class: 'field' }, [roomLabel, roomInput]),
   ]));
   card.appendChild(towelField);
   card.appendChild(mewsField);
+  card.appendChild(roomNote);
   card.appendChild(el('div', { class: 'field' }, [el('label', { text: 'Note (optional)' }), noteInput]));
   card.appendChild(preview);
 
@@ -127,17 +145,22 @@ export function render(ctx) {
     if (!guestInput.value.trim() && !roomInput.value.trim()) { toast('Enter a guest name or room #', 'warn'); return; }
     if (isPassport()) {
       if (!mewsInput.value.trim()) { toast('Enter the MEWS reservation number', 'warn'); return; }
+    } else if (isPrivateRoom()) {
+      if (!roomInput.value.trim()) { toast('Enter the room # — it secures a private-room hold', 'warn'); return; }
     } else if (amount() <= 0) { toast('Amount must be greater than 0', 'warn'); return; }
     const e = store.addDeposit({
       itemTypeId: selected.id, qty, unitAmount: unit(), amount: amount(),
       guest: guestInput.value, room: roomInput.value, pax: paxInput.value, note: noteInput.value,
       towelNo: isTowelItem(selected.name) ? towelInput.value : '',
       mewsRes: isPassport() ? mewsInput.value : '',
+      privateRoom: isPrivateRoom(),
     });
     toast(isPassport()
       ? `Passport held for ${selected.name} (${peso(value())}) · ${guestInput.value.trim() || roomInput.value.trim()} · MEWS ${mewsInput.value.trim()}`
-      : `Deposit recorded · ${peso(e.amount)} · COH now ${peso(store.coh())}`, 'ok');
-    ctx.navigate(isPassport() ? 'passports' : 'dashboard');
+      : isPrivateRoom()
+        ? `${selected.name} out on private room ${roomInput.value.trim()} · no cash taken · COH unchanged (${peso(store.coh())})`
+        : `Deposit recorded · ${peso(e.amount)} · COH now ${peso(store.coh())}`, 'ok');
+    ctx.navigate(isPassport() ? 'passports' : isPrivateRoom() ? 'privaterooms' : 'dashboard');
   });
 
   root.appendChild(card);

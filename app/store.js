@@ -432,6 +432,12 @@ class Store {
       exchangesSeq: entry.exchangesSeq != null && entry.exchangesSeq !== '' ? Number(entry.exchangesSeq) : null,
       // MEWS reservation # — required on Passport deposits (non-cash collateral).
       mewsRes: (entry.mewsRes || '').toString().trim(),
+      // PRIVATE ROOM: the guest takes the item on their room alone — no cash, no
+      // passport. Cash-neutral by construction (amount 0), so it moves no money
+      // at deposit OR at check-out; it only records that the item is out and who
+      // has it. Additive field — pre-existing entries have no `privateRoom` key,
+      // so their stored hashes still verify and the chain stays unbroken.
+      privateRoom: !!entry.privateRoom,
       reversesId: entry.reversesId || null,
       prevHash,
     };
@@ -441,7 +447,7 @@ class Store {
     return base;
   }
 
-  addDeposit({ itemTypeId, qty, unitAmount, amount, guest, room, pax, note, towelNo, mewsRes }) {
+  addDeposit({ itemTypeId, qty, unitAmount, amount, guest, room, pax, note, towelNo, mewsRes, privateRoom }) {
     const item = this.itemById(itemTypeId);
     const shift = this.ensureShift();
     const unit = unitAmount != null ? unitAmount : (item ? item.defaultAmount : 0);
@@ -450,7 +456,7 @@ class Store {
       kind: 'deposit', direction: +1,
       itemTypeId, itemName: item ? item.name : 'Item',
       qty: qty || 1, unitAmount: unit, amount: amt,
-      guest, room, pax, note, towelNo, mewsRes,
+      guest, room, pax, note, towelNo, mewsRes, privateRoom,
       shiftId: shift.id, shiftLabel: shift.label,
     });
     this._audit('deposit.create', `Deposit ₱${pesoPlain(e.amount)} · ${e.itemName} ×${e.qty} · ${e.guest || e.room || '—'}`,
@@ -756,6 +762,55 @@ class Store {
     return { close, cash, value };
   }
 
+  // ------------------------------------------------------ private-room holds
+  // The third way to take an item out. A passport substitutes collateral for the
+  // cash; a PRIVATE ROOM substitutes the room itself — the guest is staying in a
+  // private room, so the item is signed out against them with no cash and no
+  // document held. Both deposit and check-out are ₱0, so this NEVER moves money:
+  // COH is identical before and after, and it cannot appear in any cash total.
+  // What it does do is keep the towel correctly marked OUT until they check out.
+  heldPrivateRooms() {
+    const linked = new Set(); const reversed = new Set();
+    for (const e of this.state.ledger) {
+      if (e.kind === 'refund' && e.refundsSeq != null) linked.add(e.refundsSeq);
+      if (e.reversesId) reversed.add(e.reversesId);
+    }
+    const out = [];
+    for (const e of this.state.ledger) {
+      if (e.kind !== 'deposit' || !e.privateRoom) continue;
+      if (linked.has(e.seq) || reversed.has(e.id)) continue;
+      out.push({ seq: e.seq, ts: e.ts, guest: e.guest, room: e.room, staff: e.staff, pax: e.pax,
+        itemName: e.itemName, qty: e.qty, towelNo: entryTowelNo(e), value: e.unitAmount || 0, note: e.note });
+    }
+    out.sort((a, b) => (a.ts < b.ts ? 1 : a.ts > b.ts ? -1 : b.seq - a.seq)); // newest first
+    return out;
+  }
+
+  // Guest checked out: close the private-room hold and bring the item back. Books
+  // a ₱0 refund linked to the deposit and carrying the towel #, so the towel
+  // tracker marks the towel returned — the same mechanism as returning a passport.
+  // No cash moves in either direction. Returns null if it was already closed.
+  checkoutPrivateRoom(seq, { note = '' } = {}) {
+    const dep = this.entryBySeq(seq);
+    if (!dep || dep.kind !== 'deposit' || !dep.privateRoom) return null;
+    if (this.state.ledger.some((e) => e.kind === 'refund' && e.refundsSeq === dep.seq)) return null; // already closed
+    const shift = this.ensureShift();
+    const towelNo = entryTowelNo(dep);
+    const extra = String(note || '').trim();
+    const e = this._append({
+      kind: 'refund', direction: -1, // amount 0 → COH unaffected; -1 only marks it a return
+      itemTypeId: dep.itemTypeId, itemName: dep.itemName,
+      qty: dep.qty || 1, unitAmount: 0, amount: 0,
+      guest: dep.guest, room: dep.room, towelNo, privateRoom: true, refundsSeq: dep.seq,
+      note: `Guest checked out — private room hold closed, ${dep.itemName || 'item'} returned (deposit #${dep.seq})${extra ? ' · ' + extra : ''}`,
+      shiftId: shift.id, shiftLabel: shift.label,
+    });
+    this._audit('privateroom.checkout',
+      `Guest checked out · ${dep.guest || dep.room || '—'}${dep.room ? ' · Rm ' + dep.room : ''} · ${dep.itemName || 'item'}${towelNo ? ' #' + towelNo : ''} returned (deposit #${dep.seq})`,
+      { seq: dep.seq, guest: dep.guest, room: dep.room, itemName: dep.itemName, towelNo });
+    return e;
+  }
+
   // Set of deposit transaction #s that are still refundable (open deposit of a guest
   // who is currently outstanding). Drives the clickable transaction # in the ledger.
   refundableDepositSeqs() {
@@ -967,8 +1022,11 @@ class Store {
     const baseline = this.towelBaseline();
     const masterSet = new Set((this.state.towels || []).map((t) => t.no));
     // Guest+room keys that currently "hold" — i.e. their towel is genuinely still
-    // out. Cash deposits show via a positive net; PASSPORT deposits are ₱0 cash but
-    // the item is still out, so a guest with an OPEN passport deposit counts too.
+    // out. Cash deposits show via a positive net; PASSPORT and PRIVATE-ROOM deposits
+    // are ₱0 cash but the item is still out, so a guest with either kind of open
+    // non-cash deposit counts too. Without this a private-room towel would read as
+    // "available" the moment it was handed over — the cash truth says ₱0 held, but
+    // the physical truth is that the guest has it.
     const outstanding = new Set();
     const gk = (e) => `${(e.guest || '').toUpperCase().trim()}|${(e.room || '').toUpperCase().trim()}`;
     for (const g of this._guestNets()) {
@@ -980,7 +1038,7 @@ class Store {
       if (e.reversesId) reversedDep.add(e.reversesId);
     }
     for (const e of this.state.ledger) {
-      if (e.kind === 'deposit' && e.mewsRes && !linkedReturns.has(e.seq) && !reversedDep.has(e.id)) outstanding.add(gk(e));
+      if (e.kind === 'deposit' && (e.mewsRes || e.privateRoom) && !linkedReturns.has(e.seq) && !reversedDep.has(e.id)) outstanding.add(gk(e));
     }
     const events = new Map(); // no -> [{ type, ts, seq, guest, room, staff }]
     // Registered → full history; unregistered → baseline-onward only.
