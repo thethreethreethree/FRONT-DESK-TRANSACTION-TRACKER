@@ -1,11 +1,11 @@
 {
   "meta": {
     "app": "Frendz Front Desk Transaction Tracker",
-    "exportedAt": "2026-08-14T05:22:14.743Z",
+    "exportedAt": "2026-08-14T05:22:48.395Z",
     "version": 1,
     "coh": 22200,
     "entries": 18050,
-    "auditEvents": 4330,
+    "auditEvents": 4332,
     "integrity": {
       "ok": true,
       "brokenAtSeq": null
@@ -14,7 +14,7 @@
       "ok": true,
       "brokenAtSeq": null
     },
-    "travelistaEntries": 20,
+    "travelistaEntries": 21,
     "travelistaIntegrity": {
       "ok": true,
       "brokenAtSeq": null
@@ -38,8 +38,8 @@
         "path": "data/ledger-backup.json",
         "autoSync": true,
         "enabled": true,
-        "lastBackupAt": "2026-08-14T05:22:06.479Z",
-        "lastBackupSha": "3fd2eb0321b1ebe783725730be48ba9ebeb0228d"
+        "lastBackupAt": "2026-08-14T05:22:25.361Z",
+        "lastBackupSha": "43fb1c358754dd41313e22c7cc4415391f7118dc"
       },
       "towelTracker": {
         "enabled": true,
@@ -517604,6 +517604,43 @@
         },
         "prevHash": "24d1723cfbc2b71d3cc6e3918af27a5689a803e2b8d122431ea56ee7af63f119",
         "hash": "6df461cf7a894489b3138b7f1c0284708b09e9ed010a6a17771eed619acd2932"
+      },
+      {
+        "seq": 4331,
+        "id": "aud_mssi32z5_4_chi8sh",
+        "ts": "2026-08-14T05:22:25.361Z",
+        "actor": "Chalyn",
+        "role": "staff",
+        "action": "backup.github",
+        "what": "Backup committed to thethreethreethree/FRONT-DESK-TRANSACTION-TRACKER@main (auto-sync)",
+        "details": {
+          "reason": "auto-sync",
+          "coh": 22200,
+          "entries": 18050
+        },
+        "prevHash": "6df461cf7a894489b3138b7f1c0284708b09e9ed010a6a17771eed619acd2932",
+        "hash": "7ae53de406fc3b6b3ef327a30d2313f43c99c6cf70d33984ea0ec68b703b0561"
+      },
+      {
+        "seq": 4332,
+        "id": "aud_mssi3g3y_6_ij6tbt",
+        "ts": "2026-08-14T05:22:42.382Z",
+        "actor": "Chalyn",
+        "role": "staff",
+        "action": "tv.booking.create",
+        "what": "Travelista booking #21 · TILL JUNKER · PPS SHARING VAN ×2 pax · ₱1,500 (commission ₱200)",
+        "details": {
+          "ref": 21,
+          "id": "tv_mssi3g3y_5_3g7vwf",
+          "guest": "TILL JUNKER",
+          "destination": "PPS SHARING VAN",
+          "pax": 2,
+          "total": 1500,
+          "commission": 200,
+          "bookedBy": "CHALYN"
+        },
+        "prevHash": "7ae53de406fc3b6b3ef327a30d2313f43c99c6cf70d33984ea0ec68b703b0561",
+        "hash": "6ab651bd51eb1b20ba058ab356cfc07870761a22ecf545aa43f97891008f4eb1"
       }
     ],
     "towels": [
@@ -522694,6 +522731,37 @@
           "reversesKind": null,
           "prevHash": "dad395d24014593af69b92c179425bd8b24f543cd339ca8a122046e31a2fdea4",
           "hash": "539a735e21768c64654f2d926a456d19836c29b956083f3346a18bf2144eb84b"
+        },
+        {
+          "seq": 21,
+          "id": "tv_mssi3g3y_5_3g7vwf",
+          "ts": "2026-08-14T05:22:42.382Z",
+          "kind": "booking",
+          "direction": 1,
+          "amount": 1500,
+          "departureDate": "2026-08-14",
+          "guest": "TILL JUNKER",
+          "destination": "PPS SHARING VAN",
+          "destinationId": "dest_msrh2ktf_d_xyn4hg",
+          "pax": 2,
+          "fare": 750,
+          "fareBasis": "per_pax",
+          "total": 1500,
+          "travelistaShare": 1300,
+          "commission": 200,
+          "bookedBy": "CHALYN",
+          "remarks": "",
+          "payoutType": "",
+          "payee": "",
+          "method": "",
+          "periodKey": "2026-08-A",
+          "staff": "Chalyn",
+          "staffRole": "staff",
+          "businessDate": "2026-08-14",
+          "reversesId": null,
+          "reversesKind": null,
+          "prevHash": "539a735e21768c64654f2d926a456d19836c29b956083f3346a18bf2144eb84b",
+          "hash": "47021362dedd35876611c4c0c16038f6c2b1af8bcc2c188f52f3b093a40df767"
         }
       ]
     }
