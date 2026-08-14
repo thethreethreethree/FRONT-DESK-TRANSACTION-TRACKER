@@ -1,11 +1,11 @@
 {
   "meta": {
     "app": "Frendz Front Desk Transaction Tracker",
-    "exportedAt": "2026-08-14T12:38:49.053Z",
+    "exportedAt": "2026-08-14T13:53:40.550Z",
     "version": 1,
     "coh": 25200,
-    "entries": 18056,
-    "auditEvents": 4349,
+    "entries": 18057,
+    "auditEvents": 4351,
     "integrity": {
       "ok": true,
       "brokenAtSeq": null
@@ -38,8 +38,8 @@
         "path": "data/ledger-backup.json",
         "autoSync": true,
         "enabled": true,
-        "lastBackupAt": "2026-08-14T12:38:41.827Z",
-        "lastBackupSha": "1b85a47459c95d6f56b065a93092eb2762d0b809"
+        "lastBackupAt": "2026-08-14T12:39:18.292Z",
+        "lastBackupSha": "aea6c07ba41699d182e4e41d05bc09d547b98ca2"
       },
       "towelTracker": {
         "enabled": true,
@@ -443899,6 +443899,37 @@
         "reversesId": null,
         "prevHash": "d18feb906ba01f4c442baad65d77951d5e202a3dffd3ff757d13194162e11079",
         "hash": "fce4a138ac3d5627ff55f0d4be6861df129083522256906249640294b72473f2"
+      },
+      {
+        "seq": 18057,
+        "id": "txn_mst0cfh0_m_wrot3j",
+        "ts": "2026-08-14T13:53:34.548Z",
+        "kind": "exchange",
+        "itemTypeId": "item_mpxxdbc3_2_s3d7ag",
+        "itemName": "Towel",
+        "qty": 1,
+        "unitAmount": 0,
+        "amount": 0,
+        "direction": 0,
+        "guest": "AILBHE",
+        "room": "304",
+        "pax": null,
+        "shiftId": "shift_mpy3b19n_5_j6nxol",
+        "shiftLabel": "PM",
+        "businessDate": "2026-08-14",
+        "staff": "Marie",
+        "staffRole": "staff",
+        "note": "Towel exchange: #104 → #449 (deposit #18015)",
+        "towelNo": "449",
+        "oldTowelNo": "104",
+        "towelLost": false,
+        "refundsSeq": null,
+        "exchangesSeq": 18015,
+        "mewsRes": "",
+        "privateRoom": false,
+        "reversesId": null,
+        "prevHash": "fce4a138ac3d5627ff55f0d4be6861df129083522256906249640294b72473f2",
+        "hash": "b3bed2bd9d7b58ac8c9b21fba02ad539b922ed59e7b0071c8448a6f984d9618a"
       }
     ],
     "audit": [
@@ -518113,6 +518144,40 @@
         },
         "prevHash": "edcd66bcf97ff80b4774bd7beebbbf6d96c47f1c8c448ccc17a3b7b97c2dd6ce",
         "hash": "6ed77b813217556dadb3fa3ca870254dca8b3b40b0ec3b24416aa86aa5dc5754"
+      },
+      {
+        "seq": 4350,
+        "id": "aud_mssxox4t_l_4949px",
+        "ts": "2026-08-14T12:39:18.461Z",
+        "actor": "Marie",
+        "role": "staff",
+        "action": "backup.github",
+        "what": "Backup committed to thethreethreethree/FRONT-DESK-TRANSACTION-TRACKER@main (auto-sync)",
+        "details": {
+          "reason": "auto-sync",
+          "coh": 25200,
+          "entries": 18056
+        },
+        "prevHash": "6ed77b813217556dadb3fa3ca870254dca8b3b40b0ec3b24416aa86aa5dc5754",
+        "hash": "a7af93274e6278ec21c5af952e9c75aecf76c4b8043aa95a25bd01fbce4c7380"
+      },
+      {
+        "seq": 4351,
+        "id": "aud_mst0cfh0_n_az6iry",
+        "ts": "2026-08-14T13:53:34.548Z",
+        "actor": "Marie",
+        "role": "staff",
+        "action": "towel.exchange",
+        "what": "Towel exchange · AILBHE · #104 → #449 (deposit #18015)",
+        "details": {
+          "oldTowelNo": "104",
+          "newTowelNo": "449",
+          "exchangesSeq": 18015,
+          "guest": "AILBHE",
+          "room": "304"
+        },
+        "prevHash": "a7af93274e6278ec21c5af952e9c75aecf76c4b8043aa95a25bd01fbce4c7380",
+        "hash": "f3c497a82b2a0e62d0f70f0aad894ec884fd5ea1c2d2027cf9e848b4a7acdedb"
       }
     ],
     "towels": [
