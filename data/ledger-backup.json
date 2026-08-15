@@ -1,11 +1,11 @@
 {
   "meta": {
     "app": "Frendz Front Desk Transaction Tracker",
-    "exportedAt": "2026-08-15T12:25:28.829Z",
+    "exportedAt": "2026-08-15T12:26:11.641Z",
     "version": 1,
     "coh": 23800,
     "entries": 18064,
-    "auditEvents": 4395,
+    "auditEvents": 4398,
     "integrity": {
       "ok": true,
       "brokenAtSeq": null
@@ -14,7 +14,7 @@
       "ok": true,
       "brokenAtSeq": null
     },
-    "travelistaEntries": 22,
+    "travelistaEntries": 23,
     "travelistaIntegrity": {
       "ok": true,
       "brokenAtSeq": null
@@ -38,8 +38,8 @@
         "path": "data/ledger-backup.json",
         "autoSync": true,
         "enabled": true,
-        "lastBackupAt": "2026-08-15T10:09:25.415Z",
-        "lastBackupSha": "334b76c09545a5104e89223f8d0df21ee1641587"
+        "lastBackupAt": "2026-08-15T12:26:05.624Z",
+        "lastBackupSha": "c4e29fe624a585924cd05e91d57ce13cabe57e34"
       },
       "towelTracker": {
         "enabled": true,
@@ -519156,6 +519156,52 @@
         "details": {},
         "prevHash": "99d2827c9aecf2625f53e697662ba72c2e56e15ff58098339b95c8d10b6b55dd",
         "hash": "0dd427fd928f5531812bf6dc56d9f84dcbc42b5c99b0f23d47998c43b36a386d"
+      },
+      {
+        "seq": 4396,
+        "id": "aud_msucn290_2_f2mme5",
+        "ts": "2026-08-15T12:25:32.196Z",
+        "actor": "darren",
+        "role": "manager",
+        "action": "auth.login",
+        "what": "darren signed in as manager",
+        "details": {
+          "role": "manager"
+        },
+        "prevHash": "0dd427fd928f5531812bf6dc56d9f84dcbc42b5c99b0f23d47998c43b36a386d",
+        "hash": "168042cc67b96a538c54edc61e446b4a7cc3299d37bd2aefc307c4cb5b401260"
+      },
+      {
+        "seq": 4397,
+        "id": "aud_msucnlf2_4_peq95i",
+        "ts": "2026-08-15T12:25:57.038Z",
+        "actor": "darren",
+        "role": "manager",
+        "action": "tv.void",
+        "what": "Voided travelista #17 (booking · OSCAR HONTIVEROS · ₱1,500)",
+        "details": {
+          "ref": 17,
+          "reversalSeq": 23,
+          "reason": "double booking"
+        },
+        "prevHash": "168042cc67b96a538c54edc61e446b4a7cc3299d37bd2aefc307c4cb5b401260",
+        "hash": "2562d0124011599821c446049b927baf850faeadfdacd233b93972eed0144f20"
+      },
+      {
+        "seq": 4398,
+        "id": "aud_msucns1k_5_649b79",
+        "ts": "2026-08-15T12:26:05.624Z",
+        "actor": "darren",
+        "role": "manager",
+        "action": "backup.github",
+        "what": "Backup committed to thethreethreethree/FRONT-DESK-TRANSACTION-TRACKER@main (auto-sync)",
+        "details": {
+          "reason": "auto-sync",
+          "coh": 23800,
+          "entries": 18064
+        },
+        "prevHash": "2562d0124011599821c446049b927baf850faeadfdacd233b93972eed0144f20",
+        "hash": "89ae008af09c447469b85e122bc56bf0f894c370b20449f54b03132defbdf8c7"
       }
     ],
     "towels": [
@@ -525737,6 +525783,37 @@
           "reversesKind": null,
           "prevHash": "47021362dedd35876611c4c0c16038f6c2b1af8bcc2c188f52f3b093a40df767",
           "hash": "bfa27df2b1a5aa9eb10f68c8f7e25599d7ebf184e6f2b2a8f932a7bacd604e19"
+        },
+        {
+          "seq": 23,
+          "id": "tv_msucnlf1_3_80jaxa",
+          "ts": "2026-08-15T12:25:57.037Z",
+          "kind": "reversal",
+          "direction": -1,
+          "amount": 1500,
+          "departureDate": "2026-08-13",
+          "guest": "OSCAR HONTIVEROS",
+          "destination": "PPS",
+          "destinationId": "dest_pps",
+          "pax": 2,
+          "fare": 750,
+          "fareBasis": "per_pax",
+          "total": 1500,
+          "travelistaShare": 1300,
+          "commission": 200,
+          "bookedBy": "GINO",
+          "remarks": "VOID of #17 (booking · OSCAR HONTIVEROS). Reason: double booking",
+          "payoutType": "",
+          "payee": "",
+          "method": "",
+          "periodKey": "2026-08-A",
+          "staff": "darren",
+          "staffRole": "manager",
+          "businessDate": "2026-08-15",
+          "reversesId": "tv_msr34frf_6_ydk132",
+          "reversesKind": "booking",
+          "prevHash": "bfa27df2b1a5aa9eb10f68c8f7e25599d7ebf184e6f2b2a8f932a7bacd604e19",
+          "hash": "70b4be7c0a036ca672f919f52a2c32663d10b258cce40d225f8ba39bc458d3d1"
         }
       ]
     }
