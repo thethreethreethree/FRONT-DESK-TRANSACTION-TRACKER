@@ -1,11 +1,11 @@
 {
   "meta": {
     "app": "Frendz Front Desk Transaction Tracker",
-    "exportedAt": "2026-08-16T02:23:54.086Z",
+    "exportedAt": "2026-08-16T03:44:59.063Z",
     "version": 1,
     "coh": 17800,
     "entries": 18070,
-    "auditEvents": 4415,
+    "auditEvents": 4417,
     "integrity": {
       "ok": true,
       "brokenAtSeq": null
@@ -14,7 +14,7 @@
       "ok": true,
       "brokenAtSeq": null
     },
-    "travelistaEntries": 23,
+    "travelistaEntries": 24,
     "travelistaIntegrity": {
       "ok": true,
       "brokenAtSeq": null
@@ -38,8 +38,8 @@
         "path": "data/ledger-backup.json",
         "autoSync": true,
         "enabled": true,
-        "lastBackupAt": "2026-08-16T02:23:48.079Z",
-        "lastBackupSha": "077c659252ca891ac524c2186628db299b29633b"
+        "lastBackupAt": "2026-08-16T02:24:23.669Z",
+        "lastBackupSha": "721f75f4956f3cb0d1b807c6b9bebf2369c175ba"
       },
       "towelTracker": {
         "enabled": true,
@@ -519666,6 +519666,43 @@
         },
         "prevHash": "77c45901d23b4bbac573192d3e2b52b9fc43623a8f8430c6fa0e7d85f6aa8208",
         "hash": "ec5a49b4df1012a12e5af21318bda067a33dd6c076eecf0e25cc2dca22ecef3c"
+      },
+      {
+        "seq": 4416,
+        "id": "aud_msv6lu9i_k_p6kar8",
+        "ts": "2026-08-16T02:24:23.670Z",
+        "actor": "Rebecca",
+        "role": "staff",
+        "action": "backup.github",
+        "what": "Backup committed to thethreethreethree/FRONT-DESK-TRANSACTION-TRACKER@main (auto-sync)",
+        "details": {
+          "reason": "auto-sync",
+          "coh": 17800,
+          "entries": 18070
+        },
+        "prevHash": "ec5a49b4df1012a12e5af21318bda067a33dd6c076eecf0e25cc2dca22ecef3c",
+        "hash": "dfc03dc5b313b9517759a5f8eac74899b3b922b04fd465e4310b98818f67605f"
+      },
+      {
+        "seq": 4417,
+        "id": "aud_msv9hcna_m_yspp9m",
+        "ts": "2026-08-16T03:44:53.062Z",
+        "actor": "Rebecca",
+        "role": "staff",
+        "action": "tv.booking.create",
+        "what": "Travelista booking #24 · BORGE BASCH · PPS SHARING VAN ×1 pax · ₱750 (commission ₱100)",
+        "details": {
+          "ref": 24,
+          "id": "tv_msv9hcna_l_p03t4w",
+          "guest": "BORGE BASCH",
+          "destination": "PPS SHARING VAN",
+          "pax": 1,
+          "total": 750,
+          "commission": 100,
+          "bookedBy": "BECCA"
+        },
+        "prevHash": "dfc03dc5b313b9517759a5f8eac74899b3b922b04fd465e4310b98818f67605f",
+        "hash": "9b4276ce0a73ece80ccbf9cffafdcb6ede485244c83c421d89862cbb009b8de1"
       }
     ],
     "towels": [
@@ -526278,6 +526315,37 @@
           "reversesKind": "booking",
           "prevHash": "bfa27df2b1a5aa9eb10f68c8f7e25599d7ebf184e6f2b2a8f932a7bacd604e19",
           "hash": "70b4be7c0a036ca672f919f52a2c32663d10b258cce40d225f8ba39bc458d3d1"
+        },
+        {
+          "seq": 24,
+          "id": "tv_msv9hcna_l_p03t4w",
+          "ts": "2026-08-16T03:44:53.062Z",
+          "kind": "booking",
+          "direction": 1,
+          "amount": 750,
+          "departureDate": "2026-08-16",
+          "guest": "BORGE BASCH",
+          "destination": "PPS SHARING VAN",
+          "destinationId": "dest_msrh2ktf_d_xyn4hg",
+          "pax": 1,
+          "fare": 750,
+          "fareBasis": "per_pax",
+          "total": 750,
+          "travelistaShare": 650,
+          "commission": 100,
+          "bookedBy": "BECCA",
+          "remarks": "",
+          "payoutType": "",
+          "payee": "",
+          "method": "",
+          "periodKey": "2026-08-B",
+          "staff": "Rebecca",
+          "staffRole": "staff",
+          "businessDate": "2026-08-16",
+          "reversesId": null,
+          "reversesKind": null,
+          "prevHash": "70b4be7c0a036ca672f919f52a2c32663d10b258cce40d225f8ba39bc458d3d1",
+          "hash": "0b9190b4e689954493483ef7de2526677f65f0c929801f75ff7cfb3d01cefade"
         }
       ]
     }
