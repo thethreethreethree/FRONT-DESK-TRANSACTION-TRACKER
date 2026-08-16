@@ -1,11 +1,11 @@
 {
   "meta": {
     "app": "Frendz Front Desk Transaction Tracker",
-    "exportedAt": "2026-08-16T23:49:18.960Z",
+    "exportedAt": "2026-08-16T23:49:49.929Z",
     "version": 1,
     "coh": 18800,
     "entries": 18078,
-    "auditEvents": 4441,
+    "auditEvents": 4444,
     "integrity": {
       "ok": true,
       "brokenAtSeq": null
@@ -38,8 +38,8 @@
         "path": "data/ledger-backup.json",
         "autoSync": true,
         "enabled": true,
-        "lastBackupAt": "2026-08-16T21:27:01.683Z",
-        "lastBackupSha": "c4aea78bdef5717262ef6cf46848386888c1bf4e"
+        "lastBackupAt": "2026-08-16T23:49:43.709Z",
+        "lastBackupSha": "061e44e26357a2a4581c47624ed1cf7fb69412c3"
       },
       "towelTracker": {
         "enabled": true,
@@ -520317,9 +520317,65 @@
       },
       {
         "seq": 4440,
-        "id": "aud_mswbf9yr_1h_u57ggn",
-        "ts": "2026-08-16T21:27:01.683Z",
-        "actor": "Chalyn",
+        "id": "aud_mswg570e_1_84fmmo",
+        "ts": "2026-08-16T23:39:09.374Z",
+        "actor": "darren",
+        "role": "manager",
+        "action": "data.import",
+        "what": "Imported backup (18078 ledger entries)",
+        "details": {
+          "entries": 18078
+        },
+        "prevHash": "9b972d338d26682c2a107c21308b9a633697c66636eaeaec7b4d02ffae60e005",
+        "hash": "2cdd9f61fe637d33d112f4d09f0bb4eab01fd1f1197b085f6746af43c7712a06"
+      },
+      {
+        "seq": 4441,
+        "id": "aud_mswg5bmi_2_jg64vv",
+        "ts": "2026-08-16T23:39:15.354Z",
+        "actor": "darren",
+        "role": "manager",
+        "action": "auth.logout",
+        "what": "darren signed out",
+        "details": {},
+        "prevHash": "2cdd9f61fe637d33d112f4d09f0bb4eab01fd1f1197b085f6746af43c7712a06",
+        "hash": "34a15ab75d15f7ad81307a00ea461da211b58c086169b4260b1bc92a6b890573"
+      },
+      {
+        "seq": 4442,
+        "id": "aud_mswg5qwa_3_ey0hvs",
+        "ts": "2026-08-16T23:39:35.146Z",
+        "actor": "James",
+        "role": "manager",
+        "action": "auth.login",
+        "what": "James signed in as manager",
+        "details": {
+          "role": "manager"
+        },
+        "prevHash": "34a15ab75d15f7ad81307a00ea461da211b58c086169b4260b1bc92a6b890573",
+        "hash": "3eff1b10bbad9f9e31970adba673d1ecbf7ad2466d3d997662fe924765511281"
+      },
+      {
+        "seq": 4443,
+        "id": "aud_mswg61on_4_0b9obn",
+        "ts": "2026-08-16T23:39:49.127Z",
+        "actor": "James",
+        "role": "manager",
+        "action": "backup.github",
+        "what": "Backup committed to thethreethreethree/FRONT-DESK-TRANSACTION-TRACKER@main (auto-sync)",
+        "details": {
+          "reason": "auto-sync",
+          "coh": 18800,
+          "entries": 18078
+        },
+        "prevHash": "3eff1b10bbad9f9e31970adba673d1ecbf7ad2466d3d997662fe924765511281",
+        "hash": "76eb05bcf1a8e63294b03fef829663afed3d2d2eb28b1aff1f4e1e56b86f973f"
+      },
+      {
+        "seq": 4444,
+        "id": "aud_mswgisjv_1k_206y7q",
+        "ts": "2026-08-16T23:49:43.819Z",
+        "actor": "Rebecca",
         "role": "staff",
         "action": "backup.github",
         "what": "Backup committed to thethreethreethree/FRONT-DESK-TRANSACTION-TRACKER@main (auto-sync)",
@@ -520328,20 +520384,8 @@
           "coh": 18800,
           "entries": 18078
         },
-        "prevHash": "9b972d338d26682c2a107c21308b9a633697c66636eaeaec7b4d02ffae60e005",
-        "hash": "44417ca4186002bf7a5c323863350fb32a96326732b24f3ae294cbe7940ecc0d"
-      },
-      {
-        "seq": 4441,
-        "id": "aud_mswgi4mo_1i_0sgvqt",
-        "ts": "2026-08-16T23:49:12.816Z",
-        "actor": "Chalyn",
-        "role": "staff",
-        "action": "auth.logout",
-        "what": "Chalyn signed out",
-        "details": {},
-        "prevHash": "44417ca4186002bf7a5c323863350fb32a96326732b24f3ae294cbe7940ecc0d",
-        "hash": "2e6e6bb555a4ad5a4c1955164ae0deb1acabb015b5812c518563f17aa7eaf003"
+        "prevHash": "76eb05bcf1a8e63294b03fef829663afed3d2d2eb28b1aff1f4e1e56b86f973f",
+        "hash": "23931852b0b3afc127b8c5ed1d2561ec20a52de8a9f4594dff208cd438db72d8"
       }
     ],
     "towels": [
