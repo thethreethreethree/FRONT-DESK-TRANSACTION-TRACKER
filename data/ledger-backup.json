@@ -1,11 +1,11 @@
 {
   "meta": {
     "app": "Frendz Front Desk Transaction Tracker",
-    "exportedAt": "2026-08-17T00:10:18.588Z",
+    "exportedAt": "2026-08-17T00:39:28.954Z",
     "version": 1,
     "coh": 18800,
-    "entries": 18078,
-    "auditEvents": 4444,
+    "entries": 18079,
+    "auditEvents": 4446,
     "integrity": {
       "ok": true,
       "brokenAtSeq": null
@@ -38,8 +38,8 @@
         "path": "data/ledger-backup.json",
         "autoSync": true,
         "enabled": true,
-        "lastBackupAt": "2026-08-16T23:40:22.413Z",
-        "lastBackupSha": "a4a52535126526da3964cf7d99c404910c0835fd"
+        "lastBackupAt": "2026-08-16T23:50:40.100Z",
+        "lastBackupSha": "82e166f0f08b4e92ab140b3ca02bb9f7bc1411cc"
       },
       "towelTracker": {
         "enabled": true,
@@ -444581,6 +444581,37 @@
         "reversesId": null,
         "prevHash": "fae79f351d94cb55ec9e49028d90ed0fb3d9a3dba8544ae6965bc1ee82365c89",
         "hash": "07c88ff7ec8c1551394d3330c8aaaff9a9df80213a4cf5d3592d4ba355756fa2"
+      },
+      {
+        "seq": 18079,
+        "id": "txn_mswia0hc_1m_8v8j81",
+        "ts": "2026-08-17T00:38:53.424Z",
+        "kind": "deposit",
+        "itemTypeId": "item_mpxxdbc3_2_s3d7ag",
+        "itemName": "Towel",
+        "qty": 1,
+        "unitAmount": 0,
+        "amount": 0,
+        "direction": 1,
+        "guest": "Malu",
+        "room": "301",
+        "pax": null,
+        "shiftId": "shift_mpy3b19n_5_j6nxol",
+        "shiftLabel": "PM",
+        "businessDate": "2026-08-17",
+        "staff": "Rebecca",
+        "staffRole": "staff",
+        "note": "",
+        "towelNo": "409 287 424 9",
+        "oldTowelNo": "",
+        "towelLost": false,
+        "refundsSeq": null,
+        "exchangesSeq": null,
+        "mewsRes": "",
+        "privateRoom": true,
+        "reversesId": null,
+        "prevHash": "07c88ff7ec8c1551394d3330c8aaaff9a9df80213a4cf5d3592d4ba355756fa2",
+        "hash": "d768598451cfc1b5e169a414ac424b2c3cbd0bd531aa2622b61f026b0e80c9d5"
       }
     ],
     "audit": [
@@ -520373,10 +520404,10 @@
       },
       {
         "seq": 4444,
-        "id": "aud_mswg6rd9_5_bwr6ch",
-        "ts": "2026-08-16T23:40:22.413Z",
-        "actor": "James",
-        "role": "manager",
+        "id": "aud_mswgisjv_1k_206y7q",
+        "ts": "2026-08-16T23:49:43.819Z",
+        "actor": "Rebecca",
+        "role": "staff",
         "action": "backup.github",
         "what": "Backup committed to thethreethreethree/FRONT-DESK-TRANSACTION-TRACKER@main (auto-sync)",
         "details": {
@@ -520385,7 +520416,42 @@
           "entries": 18078
         },
         "prevHash": "76eb05bcf1a8e63294b03fef829663afed3d2d2eb28b1aff1f4e1e56b86f973f",
-        "hash": "418f415be1689baf5c7cd50ea6c716435ddad2b15a0cde36d6c960b94b3e9d1c"
+        "hash": "23931852b0b3afc127b8c5ed1d2561ec20a52de8a9f4594dff208cd438db72d8"
+      },
+      {
+        "seq": 4445,
+        "id": "aud_mswgk03o_1l_qqyab1",
+        "ts": "2026-08-16T23:50:40.260Z",
+        "actor": "Rebecca",
+        "role": "staff",
+        "action": "backup.github",
+        "what": "Backup committed to thethreethreethree/FRONT-DESK-TRANSACTION-TRACKER@main (auto-sync)",
+        "details": {
+          "reason": "auto-sync",
+          "coh": 18800,
+          "entries": 18078
+        },
+        "prevHash": "23931852b0b3afc127b8c5ed1d2561ec20a52de8a9f4594dff208cd438db72d8",
+        "hash": "221ff8a19e4feffbe648ded7a7f504e928d592d11c4d8d08ba7852e934084c1f"
+      },
+      {
+        "seq": 4446,
+        "id": "aud_mswia0hd_1n_cgvlj7",
+        "ts": "2026-08-17T00:38:53.425Z",
+        "actor": "Rebecca",
+        "role": "staff",
+        "action": "deposit.create",
+        "what": "Deposit ₱0.00 · Towel ×1 · Malu",
+        "details": {
+          "ref": 18079,
+          "id": "txn_mswia0hc_1m_8v8j81",
+          "amount": 0,
+          "item": "Towel",
+          "guest": "Malu",
+          "room": "301"
+        },
+        "prevHash": "221ff8a19e4feffbe648ded7a7f504e928d592d11c4d8d08ba7852e934084c1f",
+        "hash": "cf328f42e711948d5a5354172715201e6d37b745f4be6d1c4d00a4198de1456e"
       }
     ],
     "towels": [
