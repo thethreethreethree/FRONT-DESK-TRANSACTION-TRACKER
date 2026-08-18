@@ -453,13 +453,21 @@ store.subscribe(() => {
   clearTimeout(_autoSyncTimer);
   _autoSyncTimer = setTimeout(runAutoSync, 6000);
 });
+let _syncFailing = false, _lastRetryAt = 0;
 async function runAutoSync() {
   if (_syncing) { clearTimeout(_autoSyncTimer); _autoSyncTimer = setTimeout(runAutoSync, 6000); return; }
   const sigAtStart = _syncSig();
-  if (sigAtStart === _lastSyncedSig) return;        // nothing new since the last successful sync
+  // Nothing new AND the last push succeeded → nothing to do. The `_syncFailing`
+  // half matters: a push that failed (a blip, a dropped link) used to be retried
+  // ONLY when someone recorded another transaction, so on a quiet morning the
+  // "not backing up" banner stayed up long after the connection came back, and
+  // the entries sat unbacked-up on one device.
+  if (sigAtStart === _lastSyncedSig && !_syncFailing) return;
   _syncing = true;
+  _lastRetryAt = Date.now();
   let ok = false;
   try { ok = await gh.autoBackup('auto-sync'); } finally { _syncing = false; }
+  _syncFailing = !ok;
   health.recordSync(ok);                            // drives the outage/sync-fault banner
   if (ok) _lastSyncedSig = sigAtStart;              // recorded exactly what we sent
   if (_syncSig() !== _lastSyncedSig) { clearTimeout(_autoSyncTimer); _autoSyncTimer = setTimeout(runAutoSync, 6000); } // changes during the backup
@@ -472,6 +480,10 @@ async function runAutoSync() {
 // regains focus. To avoid re-downloading the multi-MB ledger every time, we first
 // do a CHEAP sha check (gh.remoteFileSha) and only fetch+adopt when it changed.
 let _polling = false;
+// Device-local memory of the remote version we last looked at. Kept in memory
+// (NOT in config) on purpose: config is part of the synced state, so writing it
+// there would push one device's bookkeeping to every other device.
+let _lastRemoteStamp = null;
 async function pollRemote() {
   if (_polling || _syncing || !store.session) return;
   _polling = true;
@@ -480,6 +492,14 @@ async function pollRemote() {
       const sha = await gh.remoteFileSha();
       const known = (store.config.github || {}).lastBackupSha;
       if (!sha || sha === known) return; // nothing new since our last sync — cheap exit
+    } else {
+      // No token: ask for the first 400 bytes instead of the whole ~17 MB file.
+      // Without this the poll downloaded the entire backup every 15 s on every
+      // token-less device — enough to saturate the connection and make the whole
+      // desk look like it had stopped syncing.
+      const stamp = await gh.remoteStamp();
+      if (stamp && stamp === _lastRemoteStamp) return; // unchanged since we last looked
+      if (stamp) _lastRemoteStamp = stamp;             // remember before the costly fetch
     }
     let remote = null;
     try { remote = await gh.fetchRemoteState(); } catch (e) { return; }
@@ -516,7 +536,13 @@ function refreshIfSafe() {
   renderCurrent();
 }
 
-setInterval(() => { if (document.visibilityState === 'visible') pollRemote(); }, 15000);
+setInterval(() => {
+  if (document.visibilityState !== 'visible') return;
+  pollRemote();
+  // Re-attempt a failed backup on the heartbeat (at most once a minute) so a
+  // transient outage heals itself instead of waiting for the next transaction.
+  if (_syncFailing && gh.hasToken() && Date.now() - _lastRetryAt > 60000) runAutoSync();
+}, 15000);
 document.addEventListener('visibilitychange', () => { if (document.visibilityState === 'visible') pollRemote(); });
 window.addEventListener('focus', pollRemote);
 

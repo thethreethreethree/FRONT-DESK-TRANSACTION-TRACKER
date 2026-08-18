@@ -143,6 +143,35 @@ export async function remoteFileSha() {
   return null;
 }
 
+// CHEAP freshness probe for devices with NO token — which is most of them.
+//
+// Without a token the poll had no way to ask "did anything change?", so it fell
+// straight through to a FULL download of the backup file. That file is ~17 MB and
+// takes ~10 s to fetch, and the poll runs every 15 s plus on every focus — so a
+// token-less device was pulling gigabytes an hour and saturating the connection
+// (which is also why the device that DOES hold the token saw its pushes fail).
+//
+// The backup is written with its `meta` block first, so the first few hundred
+// bytes identify the version of the whole file. A ranged GET therefore costs
+// ~400 bytes instead of ~17 MB. Returns a stamp string, or null if the range
+// request isn't honoured (caller then falls back to its previous behaviour).
+export async function remoteStamp() {
+  const path = cleanPath(cfg().path);
+  const bust = path + (path.includes('?') ? '&' : '?') + 't=' + Date.now();
+  const ctrl = new AbortController();
+  try {
+    const res = await fetch(bust, { cache: 'no-store', headers: { Range: 'bytes=0-400' }, signal: ctrl.signal });
+    // 206 = the server honoured the range. Anything else would stream the whole
+    // 17 MB into res.text(), so abort before touching the body.
+    if (res.status !== 206) { try { ctrl.abort(); } catch (e) { /* ignore */ } return null; }
+    const head = await res.text();
+    const at = head.match(/"exportedAt"\s*:\s*"([^"]+)"/);
+    if (!at) return null;
+    const n = head.match(/"entries"\s*:\s*(\d+)/);
+    return at[1] + '|' + (n ? n[1] : '?');
+  } catch (e) { try { ctrl.abort(); } catch (e2) { /* ignore */ } return null; }
+}
+
 // Pull the latest backup from the repo. Returns { payload, sha } or null.
 // With a token we use the Contents API (newest commit, no CDN cache); without a
 // token we fetch the file over the same relative path the site is served from
