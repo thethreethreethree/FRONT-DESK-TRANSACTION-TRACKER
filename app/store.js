@@ -237,6 +237,20 @@ class Store {
     salt = salt || Math.random().toString(36).slice(2, 12);
     return `${salt}$${sha256(salt + ':' + pin)}`;
   }
+  // Verify any hash-chained list on its OWN terms, from genesis. Used before a
+  // merge to decide whether a remote's records can be trusted at all.
+  static chainOk(arr) {
+    if (!Array.isArray(arr)) return false;
+    let prev = GENESIS;
+    for (const e of arr) {
+      if (!e || typeof e !== 'object') return false;
+      const { hash, ...rest } = e;
+      if (rest.prevHash !== prev) return false;
+      if (sha256(stableStringify(rest)) !== hash) return false;
+      prev = hash;
+    }
+    return true;
+  }
   static verifyPin(pin, stored) {
     if (!stored) return false;
     const [salt] = stored.split('$');
@@ -1411,6 +1425,152 @@ class Store {
     this._audit('admin.remove', `Removed admin "${a.name}"`, { id, name: a.name });
     this.save();
     return true;
+  }
+
+  // ------------------------------------------------------------------ merging
+  // Union a remote state INTO this device's, losing nothing from either side.
+  //
+  // WHY THIS EXISTS: the backup is ONE WHOLE FILE, so two devices that both write
+  // overwrite each other. And because the adoption gate (rightly) refuses to drop
+  // local records, neither can ever adopt the other — they ping-pong the repo
+  // forever while each holds transactions the other has never seen. That is not a
+  // hypothetical: it happened here, and 25 real transactions sat on a single
+  // browser until they were merged back by hand. Overwriting is the bug; merging
+  // is the fix, and it is what makes it safe for EVERY device to hold a token.
+  //
+  // Two devices always share an identical, identically-hashed PREFIX (they grew
+  // from the same backup) and differ only in their tails. So: keep the prefix
+  // byte-for-byte, order both tails by time, renumber ONLY the tail, remap any
+  // reference that pointed into the renumbered range, and re-chain from the
+  // prefix's last hash. Nothing is edited and nothing is dropped — the append-only
+  // guarantee holds; entries are only re-sequenced.
+  //
+  // Returns a summary of what came in, or null when there was nothing to do.
+  // Fails SAFE: if any rebuilt chain does not verify, local state is untouched.
+  mergeRemote(remote) {
+    if (!remote || !Array.isArray(remote.ledger)) return null;
+    const localIds = new Set(this.state.ledger.map((e) => e.id));
+    const newLedger = remote.ledger.filter((e) => e && !localIds.has(e.id));
+    const rtv = ((remote.travelista || {}).entries) || [];
+    const tvIds = new Set((this.travelista.entries || []).map((e) => e.id));
+    const newTv = rtv.filter((e) => e && !tvIds.has(e.id));
+    const rAudit = Array.isArray(remote.audit) ? remote.audit : [];
+    const audIds = new Set((this.state.audit || []).map((e) => e.id));
+    const newAudit = rAudit.filter((e) => e && !audIds.has(e.id));
+    if (!newLedger.length && !newTv.length && !newAudit.length) return null; // we already hold it all
+
+    // TRUST, THEN MERGE — in that order. Merging re-hashes every entry it moves,
+    // which means a corrupt or forged remote entry would come out the other side
+    // looking perfectly valid: the merge would LAUNDER it. So the remote's own
+    // chain must verify on its own terms first. The ledger is the money, so a
+    // broken ledger chain refuses the whole merge; a broken side-chain only skips
+    // itself rather than blocking real records from coming home.
+    if (!Store.chainOk(remote.ledger)) {
+      console.error('mergeRemote refused — the remote ledger fails its own integrity check');
+      return null;
+    }
+    const tvTrusted = Store.chainOk(rtv);
+    const auditTrusted = Store.chainOk(rAudit);
+    if (!tvTrusted) newTv.length = 0;
+    if (!auditTrusted) newAudit.length = 0;
+    if (!newLedger.length && !newTv.length && !newAudit.length) return null;
+
+    // Snapshot first: a merge that cannot be verified must change nothing.
+    const backup = JSON.stringify(this.state);
+    try {
+      const ledger = this._mergeChain(this.state.ledger, remote.ledger, newLedger, true);
+      if (ledger === null) throw new Error('ledger merge failed verification');
+      const tv = newTv.length ? this._mergeChain(this.travelista.entries || [], rtv, newTv, false) : (this.travelista.entries || []);
+      if (tv === null) throw new Error('travelista merge failed verification');
+      const audit = newAudit.length ? this._mergeChain(this.state.audit || [], rAudit, newAudit, false) : (this.state.audit || []);
+      if (audit === null) throw new Error('audit merge failed verification');
+
+      // Everything outside the chains is unioned by identity — never dropped.
+      const uni = (mine, theirs, key) => {
+        const out = (mine || []).slice();
+        const seen = new Set(out.map(key));
+        for (const it of (theirs || [])) if (!seen.has(key(it))) { seen.add(key(it)); out.push(it); }
+        return out;
+      };
+      const rt = remote.travelista || {};
+      this.state.ledger = ledger;
+      this.state.audit = audit;
+      this.state.itemTypes = uni(this.state.itemTypes, remote.itemTypes, (i) => i.id);
+      this.state.staff = uni(this.state.staff, remote.staff, (i) => i.id);
+      this.state.admins = uni(this.state.admins, remote.admins, (i) => i.id);
+      this.state.shifts = uni(this.state.shifts, remote.shifts, (i) => i.id);
+      this.state.towels = uni(this.state.towels, remote.towels, (i) => i.no);
+      this.state.towelLog = uni(this.state.towelLog, remote.towelLog, (i) => i.id);
+      this.state.laundryLog = uni(this.state.laundryLog, remote.laundryLog, (i) => i.id);
+      this.state.travelista.entries = tv;
+      this.state.travelista.destinations = uni(this.state.travelista.destinations, rt.destinations, (i) => i.id);
+      this.state.travelista.bookers = uni(this.state.travelista.bookers, rt.bookers, (i) => i.name);
+      this.verifyIntegrity();
+      this.verifyAuditIntegrity();
+      this.verifyTravelistaIntegrity();
+      if (!this.integrity.ok || !this.auditIntegrity.ok || !this.travelistaIntegrity.ok) throw new Error('post-merge verification failed');
+    } catch (err) {
+      this.state = JSON.parse(backup); // put everything back exactly as it was
+      this.verifyIntegrity(); this.verifyAuditIntegrity(); this.verifyTravelistaIntegrity();
+      console.error('mergeRemote aborted — local state restored', err);
+      return null;
+    }
+    const summary = { ledger: newLedger.length, travelista: newTv.length, audit: newAudit.length };
+    this._audit('sync.merge',
+      `Merged ${summary.ledger} record${summary.ledger === 1 ? '' : 's'} from another device` +
+      (summary.travelista ? ` + ${summary.travelista} travelista` : ''),
+      summary);
+    this.save();
+    return summary;
+  }
+
+  // Rebuild one hash-chained list as the union of ours and theirs.
+  // `remapSeq` fixes references that pointed at an entry whose number moved —
+  // resolved through entry IDS, because the same seq means different things on
+  // two devices. Returns the new array, or null if it fails to verify.
+  _mergeChain(mine, theirs, incoming, remapSeq) {
+    let n = 0; // the identical, identically-hashed prefix both devices share
+    while (n < Math.min(mine.length, theirs.length)
+      && mine[n].id === theirs[n].id && mine[n].hash === theirs[n].hash) n++;
+    const mineBySeq = new Map(mine.map((e) => [e.seq, e.id]));
+    const theirsBySeq = new Map(theirs.map((e) => [e.seq, e.id]));
+    const incomingIds = new Set(incoming.map((e) => e.id));
+    const tail = mine.slice(n).map((e) => ({ e, map: mineBySeq }))
+      .concat(theirs.slice(n).filter((e) => incomingIds.has(e.id)).map((e) => ({ e, map: theirsBySeq })))
+      .sort((a, b) => (a.e.ts < b.e.ts ? -1 : a.e.ts > b.e.ts ? 1 : a.e.seq - b.e.seq));
+    const newSeqById = new Map();
+    tail.forEach((t, i) => newSeqById.set(t.e.id, n + i + 1));
+    const out = mine.slice(0, n);
+    let prev = n ? mine[n - 1].hash : GENESIS;
+    for (const { e, map } of tail) {
+      const { hash, ...rest } = e;
+      rest.seq = newSeqById.get(e.id);
+      rest.prevHash = prev;
+      if (remapSeq) {
+        for (const k of ['refundsSeq', 'exchangesSeq']) {
+          const v = rest[k];
+          if (v == null || v <= n) continue; // points into the untouched prefix
+          const targetId = map.get(v);
+          const ns = targetId != null ? newSeqById.get(targetId) : null;
+          if (ns != null) rest[k] = ns;
+        }
+      }
+      // `rest` was destructured WITHOUT `hash`, so this hashes exactly the same
+      // shape _append() hashes — the entry minus its own hash.
+      const h = sha256(stableStringify(rest));
+      rest.hash = h;
+      out.push(rest);
+      prev = h;
+    }
+    // verify what we just built
+    let p = GENESIS;
+    for (const e of out) {
+      const { hash, ...rest } = e;
+      if (rest.prevHash !== p) return null;
+      if (sha256(stableStringify(rest)) !== hash) return null;
+      p = hash;
+    }
+    return out;
   }
 
   // ------------------------------------------------------------- export/import

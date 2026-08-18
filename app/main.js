@@ -510,7 +510,20 @@ async function pollRemote() {
     const rs = remote.payload.state || {};
     if (!remoteAdoptable(rs.ledger, (remote.payload.meta || {}).auditEvents, store.ledger, (store.audit || []).length,
       (rs.travelista || {}).entries, ((store.state || {}).travelista || {}).entries)) {
-      if (remote.sha) { const g = store.config.github || {}; g.lastBackupSha = remote.sha; store.setConfig({ github: g }); } // record sha; nothing to adopt
+      // Not adoptable means one of two very different things. Either we are simply
+      // ahead (nothing to do), or the two devices have DIVERGED — each holding
+      // records the other has never seen. Divergence used to be silently ignored,
+      // which is how two desks ping-ponged the backup for a day while real
+      // transactions sat on one browser. Merge instead: union both sides, keep
+      // everything, and the deadlock resolves itself.
+      const merged = store.mergeRemote(rs);
+      if (remote.sha) { const g = store.config.github || {}; g.lastBackupSha = remote.sha; store.setConfig({ github: g }); }
+      if (merged) {
+        _lastSyncedSig = -1;   // force a push so the union reaches the repo too
+        health.checkData();
+        toast(`Merged ${merged.ledger} record(s) from another device`, 'ok');
+        refreshIfSafe();
+      }
       return;
     }
     // Adopt the newer state SILENTLY (suppress the data.import audit so polling

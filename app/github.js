@@ -71,6 +71,14 @@ async function _commitBackup(reason) {
   const path = cleanPath(g.path);
   const branch = g.branch || 'main';
 
+  // NEVER overwrite another device's work. If the file moved since we last wrote
+  // it, someone else pushed: pull that state and MERGE it in before we write, so
+  // what we PUT is the union of both. Without this the whole-file write is a
+  // last-writer-wins race, which is exactly how 25 transactions ended up stranded
+  // on one browser. Cheap in the common case — the SHA check is metadata only,
+  // and the full file is fetched only when it has actually changed.
+  await mergeRemoteBeforeWrite();
+
   const json = JSON.stringify(store.exportData(), null, 2);
   const content = b64utf8(json);
   const coh = store.coh();
@@ -109,6 +117,27 @@ async function _commitBackup(reason) {
   store.setConfig({ github: g });
   store._audit('backup.github', `Backup committed to ${g.owner}/${g.repo}@${branch} (${reason})`, { reason, coh, entries: store.ledger.length });
   return j.commit && j.commit.html_url;
+}
+
+// Pull-and-merge guard used immediately before a write (see _commitBackup).
+// Returns quietly on any problem: a backup that cannot check the remote is still
+// better attempted than skipped, and the merge itself fails safe.
+export async function mergeRemoteBeforeWrite() {
+  try {
+    const g = cfg();
+    const sha = await remoteFileSha();
+    if (!sha || sha === g.lastBackupSha) return null; // nobody else has written since us
+    const remote = await fetchRemoteState();
+    if (!remote || !remote.payload || !remote.payload.state) return null;
+    const merged = store.mergeRemote(remote.payload.state);
+    if (merged) {
+      const g2 = store.config.github || {};
+      g2.lastBackupSha = remote.sha || g2.lastBackupSha;
+      store.setConfig({ github: g2 });
+      toast(`Merged ${merged.ledger} record(s) from another device`, 'ok');
+    }
+    return merged;
+  } catch (e) { console.error('pre-write merge skipped', e); return null; }
 }
 
 // Fire-and-forget background backup (debounced auto-sync after every change).
