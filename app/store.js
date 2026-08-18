@@ -696,6 +696,14 @@ class Store {
     return out;
   }
 
+  // True when this device holds records made AT THE DESK, as opposed to a ledger
+  // that is purely bootstrap/imported data loaded from a file. A bootstrap-only
+  // ledger is not authoritative — it should take the repo's record rather than
+  // defend its own. Imported rows are written with staffRole 'system'.
+  hasOwnRecords() {
+    return this.state.ledger.some((e) => e.staffRole && e.staffRole !== 'system');
+  }
+
   // Look up a ledger entry by its sequence number (the visible transaction #).
   entryBySeq(seq) { seq = Number(seq); return this.state.ledger.find((e) => e.seq === seq) || null; }
 
@@ -1532,6 +1540,17 @@ class Store {
     let n = 0; // the identical, identically-hashed prefix both devices share
     while (n < Math.min(mine.length, theirs.length)
       && mine[n].id === theirs[n].id && mine[n].hash === theirs[n].hash) n++;
+    // LINEAGE GUARD. Merging is only meaningful for two records that grew from a
+    // COMMON backup — then a shared prefix always exists. Two records with no
+    // shared entry at all are different lineages, not a divergence: the obvious
+    // case is a device that provisioned itself offline from the CSV, whose 16k
+    // bootstrap rows describe the SAME real transactions under different ids.
+    // Unioning those would silently double the hostel's money. Refuse instead;
+    // main.js gives such a device the repo's record wholesale.
+    if (n === 0 && mine.length > 0 && theirs.length > 0) {
+      console.error('merge refused — no shared history (different lineages, not a divergence)');
+      return null;
+    }
     const mineBySeq = new Map(mine.map((e) => [e.seq, e.id]));
     const theirsBySeq = new Map(theirs.map((e) => [e.seq, e.id]));
     const incomingIds = new Set(incoming.map((e) => e.id));

@@ -1,7 +1,7 @@
 // views/tv-reports.js — what the sheet can't easily answer: how each period
 // compares, who is booking the business, and which routes actually earn.
 import { el, peso, pesoPlain } from '../util.js';
-import { tv, periodFromKey, fmtYMD } from '../travelista.js';
+import { tv, fmtYMD } from '../travelista.js';
 import { pageHead } from '../components.js';
 
 export function render(ctx) {

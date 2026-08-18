@@ -146,7 +146,11 @@ async function syncFromRemote() {
   try { remote = await gh.fetchRemoteState(); } catch (e) { return; }
   if (!remote || !remote.payload || !remote.payload.state) return;
   const meta = remote.payload.meta || {};
-  const localFresh = !store.isSetup() || store.ledger.length === 0;
+  // A device holding ONLY bootstrap/imported rows has nothing of its own to lose,
+  // so it takes the repo's record. Without this it would defend a file-loaded
+  // ledger it never created, diverge permanently, and (before the lineage guard)
+  // risk being merged into the real one as duplicates.
+  const localFresh = !store.isSetup() || store.ledger.length === 0 || !store.hasOwnRecords();
   const rs = remote.payload.state || {};
   const adoptable = remoteAdoptable(rs.ledger, meta.auditEvents, store.ledger, (store.audit || []).length,
     (rs.travelista || {}).entries, ((store.state || {}).travelista || {}).entries);
@@ -487,6 +491,7 @@ let _lastRemoteStamp = null;
 async function pollRemote() {
   if (_polling || _syncing || !store.session) return;
   _polling = true;
+  let pendingStamp = null;
   try {
     if (gh.hasToken()) {
       const sha = await gh.remoteFileSha();
@@ -499,11 +504,14 @@ async function pollRemote() {
       // desk look like it had stopped syncing.
       const stamp = await gh.remoteStamp();
       if (stamp && stamp === _lastRemoteStamp) return; // unchanged since we last looked
-      if (stamp) _lastRemoteStamp = stamp;             // remember before the costly fetch
+      pendingStamp = stamp;
     }
     let remote = null;
     try { remote = await gh.fetchRemoteState(); } catch (e) { return; }
     if (!remote || !remote.payload || !remote.payload.state) return;
+    // Only now — a stamp recorded before the fetch succeeded would make a dropped
+    // connection look like "already seen", and we'd skip that version for good.
+    if (pendingStamp) _lastRemoteStamp = pendingStamp;
     // Adopt only when the remote is loss-safe AND strictly ahead by LEDGER content
     // (not audit-count) — this is what stops a stale device from re-pushing over a
     // pushed <system error revision> correction. See store.remoteAdoptable.
@@ -516,6 +524,17 @@ async function pollRemote() {
       // which is how two desks ping-ponged the backup for a day while real
       // transactions sat on one browser. Merge instead: union both sides, keep
       // everything, and the deadlock resolves itself.
+      if (!store.hasOwnRecords()) {
+        // Bootstrap-only ledger: adopt the repo's record outright instead of
+        // merging a file-loaded lineage into it.
+        store._suppressAudit = true;
+        try { store.importData(remote.payload); } finally { store._suppressAudit = false; }
+        if (remote.sha) { const g = store.config.github || {}; g.lastBackupSha = remote.sha; store.setConfig({ github: g }); }
+        _lastSyncedSig = _syncSig();
+        health.checkData();
+        refreshIfSafe();
+        return;
+      }
       const merged = store.mergeRemote(rs);
       if (remote.sha) { const g = store.config.github || {}; g.lastBackupSha = remote.sha; store.setConfig({ github: g }); }
       if (merged) {

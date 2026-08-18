@@ -45,6 +45,19 @@ const SEED_DESTINATIONS = [
 ];
 const SEED_BOOKERS = ['MARIE', 'BECCA', 'DARREN', 'GINO', 'CHALYN', 'MONIE'];
 
+// A whole-vehicle hire costs the SAME however many people ride in it — the source
+// sheet is explicit: EL NIDO, 5 pax, fare 8,000, total 8,000; and 8 pax, still
+// 8,000. So a destination named "... PRIVATE VAN" priced PER PAX is almost
+// certainly a setup mistake, and would multiply the fare by the number of
+// passengers. Used to warn at the point of booking and in the rate table.
+export function looksWholeVehicle(name) {
+  return /PRIVATE/i.test(String(name || ''));
+}
+export function misPricedWholeVehicle(dest) {
+  return !!dest && looksWholeVehicle(dest.name)
+    && (dest.fareBasis !== 'flat' || dest.commissionBasis !== 'flat');
+}
+
 // ---------------------------------------------------------------- date helpers
 const pad = (n) => String(n).padStart(2, '0');
 

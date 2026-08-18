@@ -2,7 +2,7 @@
 // The rate table fills the numbers in; every one of them stays editable, and the
 // split is shown live so the person at the desk sees exactly what they're sealing.
 import { el, peso, pesoPlain, toast, businessDate } from '../util.js';
-import { tv, periodOf, toYMD } from '../travelista.js';
+import { tv, periodOf, toYMD, misPricedWholeVehicle } from '../travelista.js';
 import { store } from '../store.js';
 import { pageHead } from '../components.js';
 
@@ -82,6 +82,10 @@ export function render(ctx) {
   const splitLine = el('div', { class: 'muted', style: 'font-size:.78rem' });
   const periodLine = el('div', { class: 'hint mt' });
   const basisHint = el('div', { class: 'hint' });
+  // A private van is one price for the vehicle. If the rate table has it priced
+  // per pax, the total below is multiplied by the passenger count — say so
+  // loudly, at the moment the money is about to be taken.
+  const rateWarn = el('div', { class: 'pill-warn', style: 'display:none' });
 
   function q() {
     return tv.quote({
@@ -99,6 +103,13 @@ export function render(ctx) {
     basisHint.textContent = selected && selected.fareBasis === 'flat'
       ? `flat rate — ₱${pesoPlain(r.fare)} for the whole vehicle, however many pax`
       : `priced per pax — ₱${pesoPlain(r.fare)} × ${pax}`;
+    const wrong = misPricedWholeVehicle(selected) && pax > 1;
+    rateWarn.style.display = wrong ? '' : 'none';
+    if (wrong) {
+      rateWarn.innerHTML = `<strong>Check this total.</strong> “${selected.name}” is priced <strong>per pax</strong>, `
+        + `so ${pax} passengers come to <strong>₱${pesoPlain(r.total)}</strong>. A private van is normally one price for the `
+        + `whole vehicle (₱${pesoPlain(r.fare)}). An admin can switch it to <strong>flat</strong> in Travelista → Settings.`;
+    }
   }
   dateInput.addEventListener('change', update);
 
@@ -124,6 +135,7 @@ export function render(ctx) {
     el('div', { class: 'field' }, [el('label', { text: 'Booked by' }), bookedBy]),
     el('div', { class: 'field' }, [el('label', { text: 'Remarks' }), remarksInput]),
   ]));
+  card.appendChild(rateWarn);
   card.appendChild(preview);
   card.appendChild(periodLine);
 

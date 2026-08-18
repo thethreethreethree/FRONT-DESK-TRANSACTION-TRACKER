@@ -1,7 +1,7 @@
 // views/tv-settings.js — Travelista setup (admin): the rate table, the booker
 // roster, the opening cash float, the reporting period, and sheet import/export.
 import { el, peso, pesoPlain, toast } from '../util.js';
-import { tv, STARTER_SHEET, importRows, parseTravelistaCSV, fmtYMD, seedStarterOnce, starterLoaded } from '../travelista.js';
+import { tv, STARTER_SHEET, importRows, parseTravelistaCSV, fmtYMD, seedStarterOnce, starterLoaded, misPricedWholeVehicle } from '../travelista.js';
 import { store } from '../store.js';
 import { pageHead, confirmDialog, managerGate, openModal } from '../components.js';
 
@@ -26,6 +26,30 @@ function ratesCard(ctx) {
     el('p', { class: 'muted', style: 'margin-top:0', html: '<strong>Per pax</strong> multiplies by the number of passengers; <strong>flat</strong> charges once for the whole vehicle (a private van costs the same for 5 or 8 people). The travelista\'s share is always <strong>total − commission</strong>.' }),
   ]);
 
+  // A whole-vehicle hire priced per pax multiplies the fare by the passenger
+  // count. Surface it here with a one-click correction rather than leaving it to
+  // be discovered when a guest is overcharged at the desk.
+  const wrong = tv.destinations().filter((d) => d.active && misPricedWholeVehicle(d));
+  if (wrong.length) {
+    card.appendChild(el('div', { class: 'pill-warn' }, [
+      el('div', { html: `<strong>${wrong.length} private-vehicle rate${wrong.length === 1 ? ' is' : 's are'} priced per pax.</strong> `
+        + `${wrong.map((d) => d.name).join(', ')} — a private van normally costs the same however many passengers ride in it, `
+        + `so a 2-pax booking would currently charge double. Fix them, or leave them if per-pax is really intended.` }),
+      el('button', { class: 'btn primary sm mt', text: `Set ${wrong.length === 1 ? 'it' : 'them'} to flat rate`, onClick: () => {
+        confirmDialog({
+          title: 'Charge private vehicles as a flat rate?',
+          sub: `${wrong.map((d) => d.name).join(', ')} will be charged once per booking instead of per passenger. Bookings already recorded are not changed.`,
+          confirmLabel: 'Set to flat', kind: 'primary',
+          onConfirm: () => managerGate(() => {
+            for (const d of wrong) tv.updateDestination(d.id, { fareBasis: 'flat', commissionBasis: 'flat' });
+            toast(`${wrong.length} rate${wrong.length === 1 ? '' : 's'} set to flat`, 'ok');
+            ctx.navigate('tv-settings');
+          }, { reason: 'Approve changing private-vehicle rates to a flat charge' }),
+        });
+      } }),
+    ]));
+  }
+
   const tbl = el('table', { class: 'tbl' });
   tbl.appendChild(el('thead', {}, el('tr', {}, [
     el('th', { text: 'Destination' }), el('th', { class: 'num', text: 'Fare ₱' }), el('th', { text: 'Fare basis' }),
@@ -41,7 +65,8 @@ function ratesCard(ctx) {
     const fb = basisSelect(d.fareBasis, (v) => { tv.updateDestination(d.id, { fareBasis: v }); toast(`${d.name} fare basis updated`, 'ok'); });
     const cb = basisSelect(d.commissionBasis, (v) => { tv.updateDestination(d.id, { commissionBasis: v }); toast(`${d.name} commission basis updated`, 'ok'); });
     tb.appendChild(el('tr', {}, [
-      el('td', {}, el('strong', { text: d.name })),
+      el('td', {}, [el('strong', { text: d.name }),
+        misPricedWholeVehicle(d) ? el('div', { class: 'hint', style: 'color:var(--out-700)', text: 'per pax — a private vehicle is normally flat' }) : null]),
       el('td', { class: 'num' }, fare),
       el('td', {}, fb),
       el('td', { class: 'num' }, comm),
@@ -57,12 +82,15 @@ function ratesCard(ctx) {
   const nName = el('input', { class: 'input', placeholder: 'e.g. CORON' });
   const nFare = el('input', { class: 'input', type: 'number', min: '0', step: '50', placeholder: 'Fare ₱', style: 'max-width:130px' });
   const nComm = el('input', { class: 'input', type: 'number', min: '0', step: '50', placeholder: 'Commission ₱', style: 'max-width:150px' });
+  // One control drove BOTH bases and defaulted to per-pax, which is how the
+  // private vans ended up priced per passenger. Name the choice in plain terms.
   let nBasis = 'per_pax';
   const nBasisSel = basisSelect('per_pax', (v) => { nBasis = v; });
+  const nBasisHint = el('div', { class: 'hint' , text: 'per pax = each passenger pays · flat = one price for the whole vehicle' });
   card.appendChild(el('div', { class: 'flex gap mt wrap', style: 'align-items:flex-end' }, [
     el('div', { class: 'field', style: 'flex:1;min-width:160px;margin:0' }, [el('label', { text: 'Add destination' }), nName]),
     el('div', { class: 'field', style: 'margin:0' }, [el('label', { text: 'Fare' }), nFare]),
-    el('div', { class: 'field', style: 'margin:0' }, [el('label', { text: 'Basis' }), nBasisSel]),
+    el('div', { class: 'field', style: 'margin:0' }, [el('label', { text: 'Basis' }), nBasisSel, nBasisHint]),
     el('div', { class: 'field', style: 'margin:0' }, [el('label', { text: 'Commission' }), nComm]),
     el('button', { class: 'btn primary', text: 'Add', onClick: () => {
       if (!nName.value.trim()) return toast('Enter a destination name', 'warn');
