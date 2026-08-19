@@ -3,11 +3,11 @@
     "app": "Frendz Front Desk Transaction Tracker",
     "build": "2026-08-19-merge-sync",
     "writtenBy": "darren",
-    "exportedAt": "2026-08-19T07:19:33.015Z",
+    "exportedAt": "2026-08-19T09:42:54.825Z",
     "version": 1,
     "coh": 26800,
-    "entries": 18125,
-    "auditEvents": 4598,
+    "entries": 18127,
+    "auditEvents": 4601,
     "integrity": {
       "ok": true,
       "brokenAtSeq": null
@@ -40,8 +40,8 @@
         "path": "data/ledger-backup.json",
         "autoSync": true,
         "enabled": true,
-        "lastBackupAt": "2026-08-19T07:19:26.321Z",
-        "lastBackupSha": "a96e805ff0c2942555ce42a469b21e8b699d317c"
+        "lastBackupAt": "2026-08-19T07:19:57.557Z",
+        "lastBackupSha": "71d1d1d36f9ec5f03067d55d20c3b51fcfe01ac1"
       },
       "towelTracker": {
         "enabled": true,
@@ -446040,6 +446040,68 @@
         "reversesId": null,
         "prevHash": "6360eb25e8e0becac2e37f230fb46d406c42ef1f3da1c7603791f3b00ebb1724",
         "hash": "ccc9c455fad4e458297d38305bfacbf5c4da6f2dcab7339c1799b3a3f6966156"
+      },
+      {
+        "seq": 18126,
+        "id": "txn_mszrhuur_5_dx4ua0",
+        "ts": "2026-08-19T07:20:14.451Z",
+        "kind": "reversal",
+        "itemTypeId": "item_mpxxdbc3_2_s3d7ag",
+        "itemName": "Towel",
+        "qty": 1,
+        "unitAmount": 1000,
+        "amount": 1000,
+        "direction": -1,
+        "guest": "idan chen",
+        "room": "401",
+        "pax": null,
+        "shiftId": "shift_mpy3b19n_5_j6nxol",
+        "shiftLabel": "PM",
+        "businessDate": "2026-08-19",
+        "staff": "darren",
+        "staffRole": "manager",
+        "note": "VOID of #18120 (deposit Towel idan chen). Reason: mistakenly put as deposit by monie.",
+        "towelNo": "45 412 161 41",
+        "oldTowelNo": "",
+        "towelLost": false,
+        "refundsSeq": null,
+        "exchangesSeq": null,
+        "mewsRes": "",
+        "privateRoom": false,
+        "reversesId": "txn_mszk7ioe_1_yp7xt1",
+        "prevHash": "ccc9c455fad4e458297d38305bfacbf5c4da6f2dcab7339c1799b3a3f6966156",
+        "hash": "09b289ac94780e403a5a4edd34afe04af4abdfbcab783d827d9ba0a863cb48ca"
+      },
+      {
+        "seq": 18127,
+        "id": "txn_mszwl6jr_1_q85bql",
+        "ts": "2026-08-19T09:42:47.655Z",
+        "kind": "deposit",
+        "itemTypeId": "item_mpxxdbc3_2_s3d7ag",
+        "itemName": "Towel",
+        "qty": 1,
+        "unitAmount": 1000,
+        "amount": 1000,
+        "direction": 1,
+        "guest": "Judith",
+        "room": "302",
+        "pax": null,
+        "shiftId": "shift_mpy3b19n_5_j6nxol",
+        "shiftLabel": "PM",
+        "businessDate": "2026-08-19",
+        "staff": "darren",
+        "staffRole": "manager",
+        "note": "",
+        "towelNo": "429",
+        "oldTowelNo": "",
+        "towelLost": false,
+        "refundsSeq": null,
+        "exchangesSeq": null,
+        "mewsRes": "",
+        "privateRoom": false,
+        "reversesId": null,
+        "prevHash": "09b289ac94780e403a5a4edd34afe04af4abdfbcab783d827d9ba0a863cb48ca",
+        "hash": "7de1fc66dfb820d896f85250b0a7ad1621d5dc5cfe341c1af2cb1b959429861f"
       }
     ],
     "audit": [
@@ -524416,6 +524478,57 @@
         },
         "prevHash": "3ae837cda530bc685aecc78be84675e65fbfbebbb4b8276f7d1af90b626280d5",
         "hash": "9e3d2eb81185b2f0b5d642f23438f1e40b0f4c53eb14b6d125cabec0f41f0bce"
+      },
+      {
+        "seq": 4599,
+        "id": "aud_mszrhhth_4_fo5hx6",
+        "ts": "2026-08-19T07:19:57.557Z",
+        "actor": "darren",
+        "role": "manager",
+        "action": "backup.github",
+        "what": "Backup committed to thethreethreethree/FRONT-DESK-TRANSACTION-TRACKER@main (auto-sync)",
+        "details": {
+          "reason": "auto-sync",
+          "coh": 26800,
+          "entries": 18125
+        },
+        "prevHash": "9e3d2eb81185b2f0b5d642f23438f1e40b0f4c53eb14b6d125cabec0f41f0bce",
+        "hash": "99145ffdd83ca80187a6e4dc0f892fed63eda8f57f47465337cf444e686eec3e"
+      },
+      {
+        "seq": 4600,
+        "id": "aud_mszrhuus_6_dbf8y2",
+        "ts": "2026-08-19T07:20:14.452Z",
+        "actor": "darren",
+        "role": "manager",
+        "action": "txn.void",
+        "what": "Voided #18120 (deposit Towel · idan chen · ₱1,000.00)",
+        "details": {
+          "ref": 18120,
+          "reversalSeq": 18126,
+          "reason": "mistakenly put as deposit by monie."
+        },
+        "prevHash": "99145ffdd83ca80187a6e4dc0f892fed63eda8f57f47465337cf444e686eec3e",
+        "hash": "b217cedee3c0803d5171005bdf8c6377a251f19b02b60a64d4c671a3d9f5daa7"
+      },
+      {
+        "seq": 4601,
+        "id": "aud_mszwl6js_2_cp3k83",
+        "ts": "2026-08-19T09:42:47.656Z",
+        "actor": "darren",
+        "role": "manager",
+        "action": "deposit.create",
+        "what": "Deposit ₱1,000.00 · Towel ×1 · Judith",
+        "details": {
+          "ref": 18127,
+          "id": "txn_mszwl6jr_1_q85bql",
+          "amount": 1000,
+          "item": "Towel",
+          "guest": "Judith",
+          "room": "302"
+        },
+        "prevHash": "b217cedee3c0803d5171005bdf8c6377a251f19b02b60a64d4c671a3d9f5daa7",
+        "hash": "04bf7c19c9feaecb4d630ac8c3606b6519217009b05f8051c8d61aff3b518d35"
       }
     ],
     "towels": [
