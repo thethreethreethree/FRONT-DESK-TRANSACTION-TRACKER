@@ -3,11 +3,11 @@
     "app": "Frendz Front Desk Transaction Tracker",
     "build": "2026-08-19-merge-sync",
     "writtenBy": "Marie",
-    "exportedAt": "2026-08-19T11:41:39.906Z",
+    "exportedAt": "2026-08-19T11:42:11.690Z",
     "version": 1,
-    "coh": 27800,
-    "entries": 18128,
-    "auditEvents": 4607,
+    "coh": 28800,
+    "entries": 18129,
+    "auditEvents": 4609,
     "integrity": {
       "ok": true,
       "brokenAtSeq": null
@@ -40,8 +40,8 @@
         "path": "data/ledger-backup.json",
         "autoSync": true,
         "enabled": true,
-        "lastBackupAt": "2026-08-19T11:41:33.011Z",
-        "lastBackupSha": "af59149ca096d60cf41c92aa5c0dc4fd06670bde"
+        "lastBackupAt": "2026-08-19T11:42:03.818Z",
+        "lastBackupSha": "74547d8f82d6a4c51044a534483202edd3797e31"
       },
       "towelTracker": {
         "enabled": true,
@@ -446133,6 +446133,37 @@
         "reversesId": null,
         "prevHash": "7de1fc66dfb820d896f85250b0a7ad1621d5dc5cfe341c1af2cb1b959429861f",
         "hash": "20ecca6ab79efc6abab41ba91827628458a4ffb5d2d325b22fbece47031b5554"
+      },
+      {
+        "seq": 18129,
+        "id": "txn_mt00uau2_a_386dbo",
+        "ts": "2026-08-19T11:41:51.578Z",
+        "kind": "deposit",
+        "itemTypeId": "item_mpxxdbc3_2_s3d7ag",
+        "itemName": "Towel",
+        "qty": 1,
+        "unitAmount": 1000,
+        "amount": 1000,
+        "direction": 1,
+        "guest": "MARVIEN",
+        "room": "204",
+        "pax": null,
+        "shiftId": "shift_mpy3b19n_5_j6nxol",
+        "shiftLabel": "PM",
+        "businessDate": "2026-08-19",
+        "staff": "Marie",
+        "staffRole": "staff",
+        "note": "",
+        "towelNo": "269",
+        "oldTowelNo": "",
+        "towelLost": false,
+        "refundsSeq": null,
+        "exchangesSeq": null,
+        "mewsRes": "",
+        "privateRoom": false,
+        "reversesId": null,
+        "prevHash": "20ecca6ab79efc6abab41ba91827628458a4ffb5d2d325b22fbece47031b5554",
+        "hash": "abcfaa8c36e370ff82aeeebd0d9d19cd9877f9405dfa9025064e1f0a668f1898"
       }
     ],
     "audit": [
@@ -524653,6 +524684,41 @@
         },
         "prevHash": "1098f9a8a594bccb662c735de1fbd904ad3f6886d4d878d75f8ecca31ba2d45b",
         "hash": "e89097404b89aff118731c05d8ab4704fbe8f760f72079fbcbf45cba897f1a0c"
+      },
+      {
+        "seq": 4608,
+        "id": "aud_mt00uau2_b_dqfayd",
+        "ts": "2026-08-19T11:41:51.578Z",
+        "actor": "Marie",
+        "role": "staff",
+        "action": "deposit.create",
+        "what": "Deposit ₱1,000.00 · Towel ×1 · MARVIEN",
+        "details": {
+          "ref": 18129,
+          "id": "txn_mt00uau2_a_386dbo",
+          "amount": 1000,
+          "item": "Towel",
+          "guest": "MARVIEN",
+          "room": "204"
+        },
+        "prevHash": "e89097404b89aff118731c05d8ab4704fbe8f760f72079fbcbf45cba897f1a0c",
+        "hash": "016ad85b36e136482e4c7aa40ab21c0ef42fb233e320f132c3d0fad40b1a7c06"
+      },
+      {
+        "seq": 4609,
+        "id": "aud_mt00ukee_c_ta6r3o",
+        "ts": "2026-08-19T11:42:03.974Z",
+        "actor": "Marie",
+        "role": "staff",
+        "action": "backup.github",
+        "what": "Backup committed to thethreethreethree/FRONT-DESK-TRANSACTION-TRACKER@main (auto-sync)",
+        "details": {
+          "reason": "auto-sync",
+          "coh": 27800,
+          "entries": 18129
+        },
+        "prevHash": "016ad85b36e136482e4c7aa40ab21c0ef42fb233e320f132c3d0fad40b1a7c06",
+        "hash": "429ff60bf95863572759da844da5c386f56c35cead445eca303a32fbc7823020"
       }
     ],
     "towels": [
