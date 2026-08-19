@@ -12,7 +12,7 @@
 // Everything here is per-device by design: sync health must NOT be written into
 // state.config (a remote pull would overwrite it), so we keep it in memory only.
 import { el } from './util.js';
-import { store } from './store.js';
+import { store, APP_BUILD } from './store.js';
 import { tv } from './travelista.js';
 import * as gh from './github.js';
 
@@ -26,7 +26,17 @@ const H = {
   reconGap: 0, // |beginning + held − over + adj − coh|; >0 means the books don't tie out
   tvIntegrityOk: true, // the travelista chain gets the same watch as the ledger
   tvBalances: true,    // opening + owed + commission held == the travelista cash box
+  staleBuild: '',      // a newer build wrote the backup — THIS device needs refreshing
 };
+
+// A device left on old code is the one thing that can still break multi-device
+// sync (it would write without merging). Backups carry the build that wrote them,
+// so a device can notice another has newer code and say so plainly, instead of
+// everyone assuming every computer updated itself.
+export function noteRemoteBuild(build) {
+  H.staleBuild = (build && String(build) > APP_BUILD) ? String(build) : '';
+  render();
+}
 
 function syncConfigured() {
   const g = (store.config && store.config.github) || {};
@@ -80,6 +90,11 @@ function evaluate() {
     level: 'amber', icon: '⚠',
     msg: 'Not backing up — the last sync to the cloud failed. Entries are saved here but are not reaching backup.',
     hint: 'Check the internet connection, or the GitHub token under Settings.' + (H.lastError ? ` (${H.lastError})` : ''),
+  };
+  if (H.staleBuild) return {
+    level: 'amber', icon: '⟳',
+    msg: 'This computer is running an OLD version of the app.',
+    hint: `Another device is on ${H.staleBuild}. Refresh this one (Ctrl+Shift+R, or Cmd+Shift+R on Mac) — until you do, entries made here may not merge correctly with the other computers.`,
   };
   if (H.reconGap > 0.01) return {
     level: 'amber', icon: '⚠',

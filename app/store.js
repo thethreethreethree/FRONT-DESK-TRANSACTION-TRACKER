@@ -15,6 +15,12 @@
 
 import { sha256, stableStringify, uid, nowISO, businessDate, guessShift, pesoPlain, isTowelItem, entryTowelNo, towelTokens, normTowelNo, isPassportItem } from './util.js';
 
+// The build this code came from. Stamped onto every backup so it is possible to
+// tell, from the repo alone, WHICH devices are running current code — a stale
+// device is the one thing that can still break multi-device sync, and until now
+// nothing recorded it. Bump when a change matters to how devices sync.
+export const APP_BUILD = '2026-08-19-merge-sync';
+
 const STORAGE_KEY = 'fdtt_state_v1';
 const SESSION_KEY = 'fdtt_session'; // device-local signed-in session (not exported)
 const GENESIS = '0'.repeat(64);
@@ -1597,6 +1603,8 @@ class Store {
     return {
       meta: {
         app: 'Frendz Front Desk Transaction Tracker',
+        build: APP_BUILD,
+        writtenBy: this.session ? this.session.name : 'system',
         exportedAt: nowISO(),
         version: this.state.version,
         coh: this.coh(),

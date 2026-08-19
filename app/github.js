@@ -6,7 +6,7 @@
 // backup JSON or the app state), and should be a FINE-GRAINED PAT scoped to a
 // single repo with only "Contents: Read and write".
 
-import { store } from './store.js';
+import { store, APP_BUILD } from './store.js';
 import { toast, nowISO } from './util.js';
 
 const TOKEN_KEY = 'fdtt_gh_token';
@@ -82,7 +82,9 @@ async function _commitBackup(reason) {
   const json = JSON.stringify(store.exportData(), null, 2);
   const content = b64utf8(json);
   const coh = store.coh();
-  const message = `Front desk backup (${reason}) · COH ₱${coh} · ${store.ledger.length} entries`;
+  // The build goes in the commit subject so `git log` alone shows whether every
+  // device is on current code — the quickest way to spot a stale one.
+  const message = `Front desk backup (${reason}) · COH ₱${coh} · ${store.ledger.length} entries · ${APP_BUILD}`;
 
   // Up to 3 attempts: re-read the CURRENT file SHA each time, then PUT. On a SHA
   // conflict (409/422 — another device wrote in between) loop with a fresh SHA;

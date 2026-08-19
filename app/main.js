@@ -146,6 +146,7 @@ async function syncFromRemote() {
   try { remote = await gh.fetchRemoteState(); } catch (e) { return; }
   if (!remote || !remote.payload || !remote.payload.state) return;
   const meta = remote.payload.meta || {};
+  health.noteRemoteBuild(meta.build); // is another device on newer code than us?
   // A device holding ONLY bootstrap/imported rows has nothing of its own to lose,
   // so it takes the repo's record. Without this it would defend a file-loaded
   // ledger it never created, diverge permanently, and (before the lineage guard)
@@ -509,6 +510,7 @@ async function pollRemote() {
     let remote = null;
     try { remote = await gh.fetchRemoteState(); } catch (e) { return; }
     if (!remote || !remote.payload || !remote.payload.state) return;
+    health.noteRemoteBuild((remote.payload.meta || {}).build);
     // Only now — a stamp recorded before the fetch succeeded would make a dropped
     // connection look like "already seen", and we'd skip that version for good.
     if (pendingStamp) _lastRemoteStamp = pendingStamp;
