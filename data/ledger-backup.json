@@ -3,11 +3,11 @@
     "app": "Frendz Front Desk Transaction Tracker",
     "build": "2026-08-19-merge-sync",
     "writtenBy": "Chalyn",
-    "exportedAt": "2026-08-20T20:11:29.456Z",
+    "exportedAt": "2026-08-20T21:40:10.323Z",
     "version": 1,
-    "coh": 32800,
-    "entries": 18149,
-    "auditEvents": 4680,
+    "coh": 31800,
+    "entries": 18150,
+    "auditEvents": 4682,
     "integrity": {
       "ok": true,
       "brokenAtSeq": null
@@ -40,8 +40,8 @@
         "path": "data/ledger-backup.json",
         "autoSync": true,
         "enabled": true,
-        "lastBackupAt": "2026-08-20T14:54:25.462Z",
-        "lastBackupSha": "d2ac88f0c46bf54ba6b9d9f2c93e3ed9d6176bd3"
+        "lastBackupAt": "2026-08-20T20:11:56.427Z",
+        "lastBackupSha": "2d45c70ea47fa929b1106841100aeeff7137637b"
       },
       "towelTracker": {
         "enabled": true,
@@ -446784,6 +446784,37 @@
         "reversesId": null,
         "prevHash": "8c4e49074650c6261e1a55e3372a93b475486964d51f24e00f179cc9bc682b3d",
         "hash": "03e132c4d6ed9f9352591d080a834ba2858f66f83be6e654e893677f1660f972"
+      },
+      {
+        "seq": 18150,
+        "id": "txn_mt21ngif_2c_gyglic",
+        "ts": "2026-08-20T21:40:04.311Z",
+        "kind": "refund",
+        "itemTypeId": "item_mpxxdbc3_2_s3d7ag",
+        "itemName": "Towel",
+        "qty": 1,
+        "unitAmount": 1000,
+        "amount": 1000,
+        "direction": -1,
+        "guest": "BENOIT",
+        "room": "307",
+        "pax": null,
+        "shiftId": "shift_mpy3b19n_5_j6nxol",
+        "shiftLabel": "PM",
+        "businessDate": "2026-08-21",
+        "staff": "Chalyn",
+        "staffRole": "staff",
+        "note": "",
+        "towelNo": "457",
+        "oldTowelNo": "",
+        "towelLost": false,
+        "refundsSeq": 18125,
+        "exchangesSeq": null,
+        "mewsRes": "",
+        "privateRoom": false,
+        "reversesId": null,
+        "prevHash": "03e132c4d6ed9f9352591d080a834ba2858f66f83be6e654e893677f1660f972",
+        "hash": "4edddbafe13cba44b16c52a050daf4568ae664a50c1b40e202fbbe9167f6f944"
       }
     ],
     "audit": [
@@ -526529,6 +526560,41 @@
         },
         "prevHash": "7a4147a6367588d829bd55658d24727644d6b939ede5ad9708536c091cac86b4",
         "hash": "350600e3b1c736270527e9549e9171a0c07edfb45cdeed927f0042f47a20da8b"
+      },
+      {
+        "seq": 4681,
+        "id": "aud_mt1yi4g4_2b_k5pcve",
+        "ts": "2026-08-20T20:11:56.548Z",
+        "actor": "Chalyn",
+        "role": "staff",
+        "action": "backup.github",
+        "what": "Backup committed to thethreethreethree/FRONT-DESK-TRANSACTION-TRACKER@main (auto-sync)",
+        "details": {
+          "reason": "auto-sync",
+          "coh": 32800,
+          "entries": 18149
+        },
+        "prevHash": "350600e3b1c736270527e9549e9171a0c07edfb45cdeed927f0042f47a20da8b",
+        "hash": "8f4c6b33f55dd5977d36abca0980fd2de63e909a5305582dcb4a0e8f24163746"
+      },
+      {
+        "seq": 4682,
+        "id": "aud_mt21ngif_2d_c3ncpq",
+        "ts": "2026-08-20T21:40:04.311Z",
+        "actor": "Chalyn",
+        "role": "staff",
+        "action": "refund.create",
+        "what": "Refund ₱1,000.00 · Towel ×1 · BENOIT",
+        "details": {
+          "ref": 18150,
+          "id": "txn_mt21ngif_2c_gyglic",
+          "amount": 1000,
+          "item": "Towel",
+          "guest": "BENOIT",
+          "room": "307"
+        },
+        "prevHash": "8f4c6b33f55dd5977d36abca0980fd2de63e909a5305582dcb4a0e8f24163746",
+        "hash": "08e94e660acc7b570a9ba55857bb73ae88584a5a0ccbd1cd0c646344eab398c7"
       }
     ],
     "towels": [
