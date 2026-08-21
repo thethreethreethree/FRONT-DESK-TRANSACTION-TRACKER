@@ -3,11 +3,11 @@
     "app": "Frendz Front Desk Transaction Tracker",
     "build": "2026-08-19-merge-sync",
     "writtenBy": "GINO",
-    "exportedAt": "2026-08-21T00:52:07.246Z",
+    "exportedAt": "2026-08-21T00:53:00.997Z",
     "version": 1,
     "coh": 30800,
-    "entries": 18154,
-    "auditEvents": 4693,
+    "entries": 18155,
+    "auditEvents": 4695,
     "integrity": {
       "ok": true,
       "brokenAtSeq": null
@@ -40,8 +40,8 @@
         "path": "data/ledger-backup.json",
         "autoSync": true,
         "enabled": true,
-        "lastBackupAt": "2026-08-20T23:43:46.912Z",
-        "lastBackupSha": "695eaee457d2645580b12f2bb924c78a40f1cafb"
+        "lastBackupAt": "2026-08-21T00:52:54.232Z",
+        "lastBackupSha": "b77d551f19b37f5f485bce68125b62b7a930534a"
       },
       "towelTracker": {
         "enabled": true,
@@ -446939,6 +446939,37 @@
         "reversesId": null,
         "prevHash": "e5d23faf9561a190bd2c5ea7bd73440c5eb116276baafce2b858bc3a2f5444f7",
         "hash": "a16a708ec1cb77081f2af2c2afde65dc44793d6c9a23c78a0a360c26107c9e82"
+      },
+      {
+        "seq": 18155,
+        "id": "txn_mt28ijs6_3_li0m1b",
+        "ts": "2026-08-21T00:52:12.582Z",
+        "kind": "refund",
+        "itemTypeId": "item_mpxxdbc3_2_s3d7ag",
+        "itemName": "Towel",
+        "qty": 1,
+        "unitAmount": 0,
+        "amount": 0,
+        "direction": -1,
+        "guest": "SARA",
+        "room": "201",
+        "pax": null,
+        "shiftId": "shift_mpy3b19n_5_j6nxol",
+        "shiftLabel": "PM",
+        "businessDate": "2026-08-21",
+        "staff": "GINO",
+        "staffRole": "staff",
+        "note": "Guest checked out — private room hold closed, Towel returned (deposit #18114)",
+        "towelNo": "453 403 240 478",
+        "oldTowelNo": "",
+        "towelLost": false,
+        "refundsSeq": 18114,
+        "exchangesSeq": null,
+        "mewsRes": "",
+        "privateRoom": true,
+        "reversesId": null,
+        "prevHash": "a16a708ec1cb77081f2af2c2afde65dc44793d6c9a23c78a0a360c26107c9e82",
+        "hash": "7ec02fd203d266c7777399ecc43a628c61f06a9cb6f17f466a64fabbbf9a8f6c"
       }
     ],
     "audit": [
@@ -526901,6 +526932,40 @@
         },
         "prevHash": "eb6a70ca06df643c86e243ebcad17e5c5fafa552bcb8e70ac061e7e05e0dc5ad",
         "hash": "dc9a6862cdc0f0e87a51a1a5ce7c962b60c527a86763ea6ba1fc08452cb8b290"
+      },
+      {
+        "seq": 4694,
+        "id": "aud_mt28ijs6_4_dqc6ij",
+        "ts": "2026-08-21T00:52:12.582Z",
+        "actor": "GINO",
+        "role": "staff",
+        "action": "privateroom.checkout",
+        "what": "Guest checked out · SARA · Rm 201 · Towel #453 403 240 478 returned (deposit #18114)",
+        "details": {
+          "seq": 18114,
+          "guest": "SARA",
+          "room": "201",
+          "itemName": "Towel",
+          "towelNo": "453 403 240 478"
+        },
+        "prevHash": "dc9a6862cdc0f0e87a51a1a5ce7c962b60c527a86763ea6ba1fc08452cb8b290",
+        "hash": "e963235f21a3c34eeaae90ccd85d2c22755a09569ea5e788833ea80769bca368"
+      },
+      {
+        "seq": 4695,
+        "id": "aud_mt28jfx5_5_ktdarf",
+        "ts": "2026-08-21T00:52:54.233Z",
+        "actor": "GINO",
+        "role": "staff",
+        "action": "backup.github",
+        "what": "Backup committed to thethreethreethree/FRONT-DESK-TRANSACTION-TRACKER@main (auto-sync)",
+        "details": {
+          "reason": "auto-sync",
+          "coh": 30800,
+          "entries": 18155
+        },
+        "prevHash": "e963235f21a3c34eeaae90ccd85d2c22755a09569ea5e788833ea80769bca368",
+        "hash": "00f6403c87999df76b67b5f191d2f8ff9b68d9c4b148c88630998ff04fc4fedb"
       }
     ],
     "towels": [
