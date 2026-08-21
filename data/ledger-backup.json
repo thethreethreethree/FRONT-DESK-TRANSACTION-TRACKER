@@ -3,11 +3,11 @@
     "app": "Frendz Front Desk Transaction Tracker",
     "build": "2026-08-19-merge-sync",
     "writtenBy": "Marie",
-    "exportedAt": "2026-08-21T01:51:44.958Z",
+    "exportedAt": "2026-08-21T02:46:02.885Z",
     "version": 1,
     "coh": 27800,
-    "entries": 18159,
-    "auditEvents": 4702,
+    "entries": 18161,
+    "auditEvents": 4705,
     "integrity": {
       "ok": true,
       "brokenAtSeq": null
@@ -40,8 +40,8 @@
         "path": "data/ledger-backup.json",
         "autoSync": true,
         "enabled": true,
-        "lastBackupAt": "2026-08-21T01:48:19.791Z",
-        "lastBackupSha": "119dab2c5390c8dc9db324cf1546cfdd4829000c"
+        "lastBackupAt": "2026-08-21T01:52:10.806Z",
+        "lastBackupSha": "bb7728851066e0d26830b2aa8acd82dc925dbabc"
       },
       "towelTracker": {
         "enabled": true,
@@ -447094,6 +447094,68 @@
         "reversesId": null,
         "prevHash": "074449b1f861339c6c95a4d1cb61b1e3d815d8e98f52dd40feadfd55396a2493",
         "hash": "1e604cfb4e129b2f522644bfa71ecfa038a7be722e30c2780759dff1a338c1cf"
+      },
+      {
+        "seq": 18160,
+        "id": "txn_mt2ckp61_1_pvulhy",
+        "ts": "2026-08-21T02:45:51.337Z",
+        "kind": "refund",
+        "itemTypeId": "item_mpxxdbc3_2_s3d7ag",
+        "itemName": "Towel",
+        "qty": 1,
+        "unitAmount": 0,
+        "amount": 0,
+        "direction": -1,
+        "guest": "PIA",
+        "room": "406",
+        "pax": null,
+        "shiftId": "shift_mpy3b19n_5_j6nxol",
+        "shiftLabel": "PM",
+        "businessDate": "2026-08-21",
+        "staff": "Marie",
+        "staffRole": "staff",
+        "note": "Guest checked out — private room hold closed, Towel returned (deposit #18104)",
+        "towelNo": "259",
+        "oldTowelNo": "",
+        "towelLost": false,
+        "refundsSeq": 18104,
+        "exchangesSeq": null,
+        "mewsRes": "",
+        "privateRoom": true,
+        "reversesId": null,
+        "prevHash": "1e604cfb4e129b2f522644bfa71ecfa038a7be722e30c2780759dff1a338c1cf",
+        "hash": "bd81c7c1a034415ad6c7066a8f28d4e3ab8486dfed4563ebb50199c188ced076"
+      },
+      {
+        "seq": 18161,
+        "id": "txn_mt2cksxs_3_54a1aq",
+        "ts": "2026-08-21T02:45:56.224Z",
+        "kind": "refund",
+        "itemTypeId": "item_mpxxdbc3_2_s3d7ag",
+        "itemName": "Towel",
+        "qty": 1,
+        "unitAmount": 0,
+        "amount": 0,
+        "direction": -1,
+        "guest": "PIA",
+        "room": "406",
+        "pax": null,
+        "shiftId": "shift_mpy3b19n_5_j6nxol",
+        "shiftLabel": "PM",
+        "businessDate": "2026-08-21",
+        "staff": "Marie",
+        "staffRole": "staff",
+        "note": "Guest checked out — private room hold closed, Towel returned (deposit #18092)",
+        "towelNo": "443 417",
+        "oldTowelNo": "",
+        "towelLost": false,
+        "refundsSeq": 18092,
+        "exchangesSeq": null,
+        "mewsRes": "",
+        "privateRoom": true,
+        "reversesId": null,
+        "prevHash": "bd81c7c1a034415ad6c7066a8f28d4e3ab8486dfed4563ebb50199c188ced076",
+        "hash": "109df79b26aae9d999d1788c170bf9c67e72b23ca631d327e9d75263d1781a1b"
       }
     ],
     "audit": [
@@ -527214,6 +527276,58 @@
         },
         "prevHash": "f1eea99f32edae225b9315de2fcaec6fcbd3d0d63f3d924e77ef57c58ef888f3",
         "hash": "b1f13676e5205d67505e7b16b7b6ada472f9991324f76db903e4c8ee3609e6eb"
+      },
+      {
+        "seq": 4703,
+        "id": "aud_mt2ano6u_6_rcvrad",
+        "ts": "2026-08-21T01:52:10.806Z",
+        "actor": "Marie",
+        "role": "staff",
+        "action": "backup.github",
+        "what": "Backup committed to thethreethreethree/FRONT-DESK-TRANSACTION-TRACKER@main (auto-sync)",
+        "details": {
+          "reason": "auto-sync",
+          "coh": 27800,
+          "entries": 18159
+        },
+        "prevHash": "b1f13676e5205d67505e7b16b7b6ada472f9991324f76db903e4c8ee3609e6eb",
+        "hash": "0804d6a5e13670a766aef61c75253c52c8b448303a5dc89c65ed0860bdd0c170"
+      },
+      {
+        "seq": 4704,
+        "id": "aud_mt2ckp62_2_xdkcnr",
+        "ts": "2026-08-21T02:45:51.338Z",
+        "actor": "Marie",
+        "role": "staff",
+        "action": "privateroom.checkout",
+        "what": "Guest checked out · PIA · Rm 406 · Towel #259 returned (deposit #18104)",
+        "details": {
+          "seq": 18104,
+          "guest": "PIA",
+          "room": "406",
+          "itemName": "Towel",
+          "towelNo": "259"
+        },
+        "prevHash": "0804d6a5e13670a766aef61c75253c52c8b448303a5dc89c65ed0860bdd0c170",
+        "hash": "2d561630bd1606624f0c32a4259116c7390debb0f2a3bb26a9d4cb17b60cc561"
+      },
+      {
+        "seq": 4705,
+        "id": "aud_mt2cksxs_4_pcrz44",
+        "ts": "2026-08-21T02:45:56.224Z",
+        "actor": "Marie",
+        "role": "staff",
+        "action": "privateroom.checkout",
+        "what": "Guest checked out · PIA · Rm 406 · Towel #443 417 returned (deposit #18092)",
+        "details": {
+          "seq": 18092,
+          "guest": "PIA",
+          "room": "406",
+          "itemName": "Towel",
+          "towelNo": "443 417"
+        },
+        "prevHash": "2d561630bd1606624f0c32a4259116c7390debb0f2a3bb26a9d4cb17b60cc561",
+        "hash": "13affab988557f853653942d1fe35e01db09f9275a8ba1caf23a5184c442a7b8"
       }
     ],
     "towels": [
