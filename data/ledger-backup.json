@@ -3,11 +3,11 @@
     "app": "Frendz Front Desk Transaction Tracker",
     "build": "2026-08-19-merge-sync",
     "writtenBy": "Marie",
-    "exportedAt": "2026-08-22T03:19:27.318Z",
+    "exportedAt": "2026-08-22T04:58:56.797Z",
     "version": 1,
     "coh": 20800,
     "entries": 18179,
-    "auditEvents": 4756,
+    "auditEvents": 4758,
     "integrity": {
       "ok": true,
       "brokenAtSeq": null
@@ -16,7 +16,7 @@
       "ok": true,
       "brokenAtSeq": null
     },
-    "travelistaEntries": 42,
+    "travelistaEntries": 43,
     "travelistaIntegrity": {
       "ok": true,
       "brokenAtSeq": null
@@ -40,8 +40,8 @@
         "path": "data/ledger-backup.json",
         "autoSync": true,
         "enabled": true,
-        "lastBackupAt": "2026-08-22T02:48:52.477Z",
-        "lastBackupSha": "bfd812794e38392f6b9266729d9b3d4681d59275"
+        "lastBackupAt": "2026-08-22T03:19:37.130Z",
+        "lastBackupSha": "1177c984830d115b1a97cb167d09d3926181c177"
       },
       "towelTracker": {
         "enabled": true,
@@ -528754,6 +528754,43 @@
         },
         "prevHash": "89d0519520b45eb5c67e10c5d61bbee72d985afea82e1e81a92f95dd98666e5e",
         "hash": "0edbe4bdb9489803cf17f407631e4871c1de567195bad3d009532581f0032796"
+      },
+      {
+        "seq": 4757,
+        "id": "aud_mt3t7yy5_y_ukm7r0",
+        "ts": "2026-08-22T03:19:37.133Z",
+        "actor": "Marie",
+        "role": "staff",
+        "action": "backup.github",
+        "what": "Backup committed to thethreethreethree/FRONT-DESK-TRANSACTION-TRACKER@main (auto-sync)",
+        "details": {
+          "reason": "auto-sync",
+          "coh": 20800,
+          "entries": 18179
+        },
+        "prevHash": "0edbe4bdb9489803cf17f407631e4871c1de567195bad3d009532581f0032796",
+        "hash": "cef588f47ed34bfb9dffc5b41df00ca2eb8bc6c0213e732c89a25c4768c836d6"
+      },
+      {
+        "seq": 4758,
+        "id": "aud_mt3wrka6_10_dah4aa",
+        "ts": "2026-08-22T04:58:50.094Z",
+        "actor": "Marie",
+        "role": "staff",
+        "action": "tv.booking.create",
+        "what": "Travelista booking #43 · MARVIEN · PPS PRIVATE VAN ×1 pax · ₱7,500 (commission ₱1,000)",
+        "details": {
+          "ref": 43,
+          "id": "tv_mt3wrka5_z_zfpfsv",
+          "guest": "MARVIEN",
+          "destination": "PPS PRIVATE VAN",
+          "pax": 1,
+          "total": 7500,
+          "commission": 1000,
+          "bookedBy": "MARIE"
+        },
+        "prevHash": "cef588f47ed34bfb9dffc5b41df00ca2eb8bc6c0213e732c89a25c4768c836d6",
+        "hash": "bbdb201d2cf5a0c4c03f28de335b8e03c009cccb343a4201003e3da0f6f252b9"
       }
     ],
     "towels": [
@@ -536102,6 +536139,37 @@
           "reversesKind": null,
           "prevHash": "a06c24f8b226898808ddd68a99258d53b848f62bfe40c8df99eacea44fbad81e",
           "hash": "4dae9d64729693415e68b3fc5ea444dedda390737dd07c764155f38ed0d8499b"
+        },
+        {
+          "seq": 43,
+          "id": "tv_mt3wrka5_z_zfpfsv",
+          "ts": "2026-08-22T04:58:50.093Z",
+          "kind": "booking",
+          "direction": 1,
+          "amount": 7500,
+          "departureDate": "2026-08-22",
+          "guest": "MARVIEN",
+          "destination": "PPS PRIVATE VAN",
+          "destinationId": "dest_msrh1gsj_7_rc9g31",
+          "pax": 1,
+          "fare": 7500,
+          "fareBasis": "per_pax",
+          "total": 7500,
+          "travelistaShare": 6500,
+          "commission": 1000,
+          "bookedBy": "MARIE",
+          "remarks": "DISCOUNTED BY TRAVELISTA (GINO)",
+          "payoutType": "",
+          "payee": "",
+          "method": "",
+          "periodKey": "2026-08-B",
+          "staff": "Marie",
+          "staffRole": "staff",
+          "businessDate": "2026-08-22",
+          "reversesId": null,
+          "reversesKind": null,
+          "prevHash": "4dae9d64729693415e68b3fc5ea444dedda390737dd07c764155f38ed0d8499b",
+          "hash": "62e97dd06297f925e9d09f4ce085ad475ab62f575691f2366e2bd284d4ab5258"
         }
       ]
     }
