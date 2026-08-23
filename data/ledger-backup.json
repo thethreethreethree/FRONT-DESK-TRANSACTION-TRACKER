@@ -3,11 +3,11 @@
     "app": "Frendz Front Desk Transaction Tracker",
     "build": "2026-08-19-merge-sync",
     "writtenBy": "GINO",
-    "exportedAt": "2026-08-23T00:02:13.681Z",
+    "exportedAt": "2026-08-23T02:04:07.299Z",
     "version": 1,
     "coh": 26800,
-    "entries": 18193,
-    "auditEvents": 4799,
+    "entries": 18195,
+    "auditEvents": 4802,
     "integrity": {
       "ok": true,
       "brokenAtSeq": null
@@ -40,8 +40,8 @@
         "path": "data/ledger-backup.json",
         "autoSync": true,
         "enabled": true,
-        "lastBackupAt": "2026-08-23T00:01:42.009Z",
-        "lastBackupSha": "b7bdfe41782eb0403f9b17ccf000d1fadad58e95"
+        "lastBackupAt": "2026-08-23T00:02:26.190Z",
+        "lastBackupSha": "45fadca00a0efcc54e6de338f5b0897c39e188fb"
       },
       "towelTracker": {
         "enabled": true,
@@ -448148,6 +448148,68 @@
         "reversesId": null,
         "prevHash": "92161125bb0557309ce732b2923cfae2f953fe5a07523fce66fc9365147c4ac1",
         "hash": "68af4760df2b59da45c553d984c27071962957a1cb31795c3c78a1d1932bf9f5"
+      },
+      {
+        "seq": 18194,
+        "id": "txn_mt55yh05_2m_xd5r9v",
+        "ts": "2026-08-23T02:03:55.157Z",
+        "kind": "deposit",
+        "itemTypeId": "item_mpxxdbc3_2_s3d7ag",
+        "itemName": "Towel",
+        "qty": 1,
+        "unitAmount": 0,
+        "amount": 0,
+        "direction": 1,
+        "guest": "Arjoie Ladesma",
+        "room": "201",
+        "pax": 4,
+        "shiftId": "shift_mpy3b19n_5_j6nxol",
+        "shiftLabel": "PM",
+        "businessDate": "2026-08-23",
+        "staff": "GINO",
+        "staffRole": "staff",
+        "note": "",
+        "towelNo": "34 54 327 293",
+        "oldTowelNo": "",
+        "towelLost": false,
+        "refundsSeq": null,
+        "exchangesSeq": null,
+        "mewsRes": "",
+        "privateRoom": true,
+        "reversesId": null,
+        "prevHash": "68af4760df2b59da45c553d984c27071962957a1cb31795c3c78a1d1932bf9f5",
+        "hash": "e8f942ff7eb017f22058014d0a147ad3b9e3cedd5898566b0d2b92f6145f0ec3"
+      },
+      {
+        "seq": 18195,
+        "id": "txn_mt55yl6x_2o_zxv5p4",
+        "ts": "2026-08-23T02:04:00.585Z",
+        "kind": "refund",
+        "itemTypeId": "item_mpxxdbc3_2_s3d7ag",
+        "itemName": "Towel",
+        "qty": 1,
+        "unitAmount": 0,
+        "amount": 0,
+        "direction": -1,
+        "guest": "Mary Caroline Blanca Endoso",
+        "room": "201",
+        "pax": null,
+        "shiftId": "shift_mpy3b19n_5_j6nxol",
+        "shiftLabel": "PM",
+        "businessDate": "2026-08-23",
+        "staff": "GINO",
+        "staffRole": "staff",
+        "note": "Guest checked out — private room hold closed, Towel returned (deposit #18154)",
+        "towelNo": "200 129 444 86",
+        "oldTowelNo": "",
+        "towelLost": false,
+        "refundsSeq": 18154,
+        "exchangesSeq": null,
+        "mewsRes": "",
+        "privateRoom": true,
+        "reversesId": null,
+        "prevHash": "e8f942ff7eb017f22058014d0a147ad3b9e3cedd5898566b0d2b92f6145f0ec3",
+        "hash": "8aaffd7516563f287da6aec295cab7e9874838d2d4f9b5a5f435e1d66556fe98"
       }
     ],
     "audit": [
@@ -529907,6 +529969,59 @@
         },
         "prevHash": "f46f6b9be13673983cac253fac3710b6e0f42d5db3affcebc7a537494de4680a",
         "hash": "ff4bc8403b3d23462aadb7b0ca550fa461b642be3ba52be49da7efc7d059f92e"
+      },
+      {
+        "seq": 4800,
+        "id": "aud_mt51m8su_2l_qfh5xm",
+        "ts": "2026-08-23T00:02:26.190Z",
+        "actor": "GINO",
+        "role": "staff",
+        "action": "backup.github",
+        "what": "Backup committed to thethreethreethree/FRONT-DESK-TRANSACTION-TRACKER@main (auto-sync)",
+        "details": {
+          "reason": "auto-sync",
+          "coh": 26800,
+          "entries": 18193
+        },
+        "prevHash": "ff4bc8403b3d23462aadb7b0ca550fa461b642be3ba52be49da7efc7d059f92e",
+        "hash": "5add19fa1f375d015255fb62d03e711aed86816980dd2acb423fd39edd7ac7d6"
+      },
+      {
+        "seq": 4801,
+        "id": "aud_mt55yh05_2n_f0mzuw",
+        "ts": "2026-08-23T02:03:55.157Z",
+        "actor": "GINO",
+        "role": "staff",
+        "action": "deposit.create",
+        "what": "Deposit ₱0.00 · Towel ×1 · Arjoie Ladesma",
+        "details": {
+          "ref": 18194,
+          "id": "txn_mt55yh05_2m_xd5r9v",
+          "amount": 0,
+          "item": "Towel",
+          "guest": "Arjoie Ladesma",
+          "room": "201"
+        },
+        "prevHash": "5add19fa1f375d015255fb62d03e711aed86816980dd2acb423fd39edd7ac7d6",
+        "hash": "f9170fb95b3b86efd3e639aa4c85dfecfc9aa8519d2d80ce2bbd146c7d086b47"
+      },
+      {
+        "seq": 4802,
+        "id": "aud_mt55yl6x_2p_mb356u",
+        "ts": "2026-08-23T02:04:00.585Z",
+        "actor": "GINO",
+        "role": "staff",
+        "action": "privateroom.checkout",
+        "what": "Guest checked out · Mary Caroline Blanca Endoso · Rm 201 · Towel #200 129 444 86 returned (deposit #18154)",
+        "details": {
+          "seq": 18154,
+          "guest": "Mary Caroline Blanca Endoso",
+          "room": "201",
+          "itemName": "Towel",
+          "towelNo": "200 129 444 86"
+        },
+        "prevHash": "f9170fb95b3b86efd3e639aa4c85dfecfc9aa8519d2d80ce2bbd146c7d086b47",
+        "hash": "4b9b84cc63e45f771e2ff4260a9705347c601cad45b765cceeb09c74154d4678"
       }
     ],
     "towels": [
