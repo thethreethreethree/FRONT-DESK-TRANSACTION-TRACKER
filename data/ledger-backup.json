@@ -2,12 +2,12 @@
   "meta": {
     "app": "Frendz Front Desk Transaction Tracker",
     "build": "2026-08-19-merge-sync",
-    "writtenBy": "GINO",
-    "exportedAt": "2026-08-23T05:03:01.693Z",
+    "writtenBy": "Monie",
+    "exportedAt": "2026-08-23T06:58:39.982Z",
     "version": 1,
     "coh": 18800,
     "entries": 18201,
-    "auditEvents": 4818,
+    "auditEvents": 4822,
     "integrity": {
       "ok": true,
       "brokenAtSeq": null
@@ -16,7 +16,7 @@
       "ok": true,
       "brokenAtSeq": null
     },
-    "travelistaEntries": 46,
+    "travelistaEntries": 47,
     "travelistaIntegrity": {
       "ok": true,
       "brokenAtSeq": null
@@ -40,8 +40,8 @@
         "path": "data/ledger-backup.json",
         "autoSync": true,
         "enabled": true,
-        "lastBackupAt": "2026-08-23T04:22:10.903Z",
-        "lastBackupSha": "04f005d5af4d0b7ee0f6fe2698385b96c3a3bdd2"
+        "lastBackupAt": "2026-08-23T05:03:11.634Z",
+        "lastBackupSha": "4144a7fa404e39c528212847f9ae0bf58ac9d2f3"
       },
       "towelTracker": {
         "enabled": true,
@@ -530492,6 +530492,69 @@
         },
         "prevHash": "3473a7e217fe78044ada12293b70fbe435e43e9a89cc5203d512a9c491cba66d",
         "hash": "743dfd06164c81b17f893f57141d5c3607c40d184ec80caaafe9875de72c6f91"
+      },
+      {
+        "seq": 4819,
+        "id": "aud_mt5cd0r7_3e_qs5cl5",
+        "ts": "2026-08-23T05:03:11.635Z",
+        "actor": "GINO",
+        "role": "staff",
+        "action": "backup.github",
+        "what": "Backup committed to thethreethreethree/FRONT-DESK-TRANSACTION-TRACKER@main (auto-sync)",
+        "details": {
+          "reason": "auto-sync",
+          "coh": 18800,
+          "entries": 18201
+        },
+        "prevHash": "743dfd06164c81b17f893f57141d5c3607c40d184ec80caaafe9875de72c6f91",
+        "hash": "f5eada832b4f9cd41d4a01851a6b36191ac9822e79e176ddace11f0a9b86a048"
+      },
+      {
+        "seq": 4820,
+        "id": "aud_mt5g9lp9_3f_ah081f",
+        "ts": "2026-08-23T06:52:30.621Z",
+        "actor": "GINO",
+        "role": "staff",
+        "action": "auth.logout",
+        "what": "GINO signed out",
+        "details": {},
+        "prevHash": "f5eada832b4f9cd41d4a01851a6b36191ac9822e79e176ddace11f0a9b86a048",
+        "hash": "af29ad904188a7da030e1ea34dbb538762af830958e4fab37683fd20182ddbb8"
+      },
+      {
+        "seq": 4821,
+        "id": "aud_mt5g9rgj_3g_d62vuh",
+        "ts": "2026-08-23T06:52:38.083Z",
+        "actor": "Monie",
+        "role": "staff",
+        "action": "auth.login",
+        "what": "Monie signed in as staff",
+        "details": {
+          "role": "staff"
+        },
+        "prevHash": "af29ad904188a7da030e1ea34dbb538762af830958e4fab37683fd20182ddbb8",
+        "hash": "3684cb1a053a9676a6d807cb2d1d8b42866806b8e1290d3fac9dac56920183f5"
+      },
+      {
+        "seq": 4822,
+        "id": "aud_mt5gac52_3i_02wase",
+        "ts": "2026-08-23T06:53:04.886Z",
+        "actor": "Monie",
+        "role": "staff",
+        "action": "tv.booking.create",
+        "what": "Travelista booking #47 · JACK CORR · PPS SHARING VAN ×1 pax · ₱750 (commission ₱100)",
+        "details": {
+          "ref": 47,
+          "id": "tv_mt5gac52_3h_a62r9q",
+          "guest": "JACK CORR",
+          "destination": "PPS SHARING VAN",
+          "pax": 1,
+          "total": 750,
+          "commission": 100,
+          "bookedBy": "MONIE"
+        },
+        "prevHash": "3684cb1a053a9676a6d807cb2d1d8b42866806b8e1290d3fac9dac56920183f5",
+        "hash": "7101be31365b68c451c6e20b60abb4e65647e4a6939183758aba2666a993e2d8"
       }
     ],
     "towels": [
@@ -537964,6 +538027,37 @@
           "reversesKind": null,
           "prevHash": "33693388938a615b0c0764db9c7a9e7897f8ed9325ef85633b1851f292f43a47",
           "hash": "783a76c81ed8d9e8431151f5d1e060a682f4e5c39588fbc5ff2b9de847175a42"
+        },
+        {
+          "seq": 47,
+          "id": "tv_mt5gac52_3h_a62r9q",
+          "ts": "2026-08-23T06:53:04.886Z",
+          "kind": "booking",
+          "direction": 1,
+          "amount": 750,
+          "departureDate": "2026-08-23",
+          "guest": "JACK CORR",
+          "destination": "PPS SHARING VAN",
+          "destinationId": "dest_msrh2ktf_d_xyn4hg",
+          "pax": 1,
+          "fare": 750,
+          "fareBasis": "per_pax",
+          "total": 750,
+          "travelistaShare": 650,
+          "commission": 100,
+          "bookedBy": "MONIE",
+          "remarks": "",
+          "payoutType": "",
+          "payee": "",
+          "method": "",
+          "periodKey": "2026-08-B",
+          "staff": "Monie",
+          "staffRole": "staff",
+          "businessDate": "2026-08-23",
+          "reversesId": null,
+          "reversesKind": null,
+          "prevHash": "783a76c81ed8d9e8431151f5d1e060a682f4e5c39588fbc5ff2b9de847175a42",
+          "hash": "d99c9dcab84e35ff01d604554b744025a7191ffa66153560d5bf7bcec81072dd"
         }
       ]
     }
