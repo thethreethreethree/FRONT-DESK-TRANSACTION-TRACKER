@@ -3,11 +3,11 @@
     "app": "Frendz Front Desk Transaction Tracker",
     "build": "2026-08-19-merge-sync",
     "writtenBy": "GINO",
-    "exportedAt": "2026-08-23T23:26:35.379Z",
+    "exportedAt": "2026-08-24T00:05:01.941Z",
     "version": 1,
     "coh": 25800,
     "entries": 18209,
-    "auditEvents": 4846,
+    "auditEvents": 4847,
     "integrity": {
       "ok": true,
       "brokenAtSeq": null
@@ -16,7 +16,7 @@
       "ok": true,
       "brokenAtSeq": null
     },
-    "travelistaEntries": 48,
+    "travelistaEntries": 49,
     "travelistaIntegrity": {
       "ok": true,
       "brokenAtSeq": null
@@ -40,8 +40,8 @@
         "path": "data/ledger-backup.json",
         "autoSync": true,
         "enabled": true,
-        "lastBackupAt": "2026-08-23T21:32:40.754Z",
-        "lastBackupSha": "91a84f5cd6df3ccb3388be10d7293e7ccd7646e7"
+        "lastBackupAt": "2026-08-23T22:14:28.618Z",
+        "lastBackupSha": "521dbdac4d57c4ec866dc2be7c6efcee3ea384d4"
       },
       "towelTracker": {
         "enabled": true,
@@ -531191,17 +531191,40 @@
       },
       {
         "seq": 4846,
-        "id": "aud_mt6f3lq3_1_b74y6z",
-        "ts": "2026-08-23T23:07:37.275Z",
+        "id": "aud_mt6d79hw_3_9jbkbx",
+        "ts": "2026-08-23T22:14:28.820Z",
         "actor": "GINO",
         "role": "staff",
-        "action": "data.import",
-        "what": "Imported backup (18209 ledger entries)",
+        "action": "backup.github",
+        "what": "Backup committed to thethreethreethree/FRONT-DESK-TRANSACTION-TRACKER@main (auto-sync)",
         "details": {
+          "reason": "auto-sync",
+          "coh": 25800,
           "entries": 18209
         },
         "prevHash": "358c81252ce92375b6d3113e38fb6e806bc44d3d7ab2c3c76d341aee4c9ddf16",
-        "hash": "80c194eba0acf8260a4c54e6948c57d08754f4c0c3469c0e8899abf67ad2603d"
+        "hash": "9cc39e68c2e461a400fda9695cd2d3277be9d65a38c406c302a6a87a0b4c192d"
+      },
+      {
+        "seq": 4847,
+        "id": "aud_mt6h5agr_5_jm1xrn",
+        "ts": "2026-08-24T00:04:55.227Z",
+        "actor": "GINO",
+        "role": "staff",
+        "action": "tv.booking.create",
+        "what": "Travelista booking #49 · IMOGEN ENFIELD · PPS SHARING VAN ×1 pax · ₱750 (commission ₱100)",
+        "details": {
+          "ref": 49,
+          "id": "tv_mt6h5agr_4_8mtris",
+          "guest": "IMOGEN ENFIELD",
+          "destination": "PPS SHARING VAN",
+          "pax": 1,
+          "total": 750,
+          "commission": 100,
+          "bookedBy": "GINO"
+        },
+        "prevHash": "9cc39e68c2e461a400fda9695cd2d3277be9d65a38c406c302a6a87a0b4c192d",
+        "hash": "f3e715ba542099cd338d07921243c05e300aa2a10c382473fd67441a324894b1"
       }
     ],
     "towels": [
@@ -538736,6 +538759,37 @@
           "reversesKind": null,
           "prevHash": "d99c9dcab84e35ff01d604554b744025a7191ffa66153560d5bf7bcec81072dd",
           "hash": "f251c829b067dab0e3f4b7146446b627eb39d2f4b96e743b9e385c3844fa988b"
+        },
+        {
+          "seq": 49,
+          "id": "tv_mt6h5agr_4_8mtris",
+          "ts": "2026-08-24T00:04:55.227Z",
+          "kind": "booking",
+          "direction": 1,
+          "amount": 750,
+          "departureDate": "2026-08-24",
+          "guest": "IMOGEN ENFIELD",
+          "destination": "PPS SHARING VAN",
+          "destinationId": "dest_msrh2ktf_d_xyn4hg",
+          "pax": 1,
+          "fare": 750,
+          "fareBasis": "per_pax",
+          "total": 750,
+          "travelistaShare": 650,
+          "commission": 100,
+          "bookedBy": "GINO",
+          "remarks": "",
+          "payoutType": "",
+          "payee": "",
+          "method": "",
+          "periodKey": "2026-08-B",
+          "staff": "GINO",
+          "staffRole": "staff",
+          "businessDate": "2026-08-24",
+          "reversesId": null,
+          "reversesKind": null,
+          "prevHash": "f251c829b067dab0e3f4b7146446b627eb39d2f4b96e743b9e385c3844fa988b",
+          "hash": "e3234d959884ed1aec9069c4e5798aebae0f91711e792e0ac57e517523aae661"
         }
       ]
     }
