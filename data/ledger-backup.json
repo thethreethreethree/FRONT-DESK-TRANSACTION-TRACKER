@@ -3,11 +3,11 @@
     "app": "Frendz Front Desk Transaction Tracker",
     "build": "2026-08-19-merge-sync",
     "writtenBy": "GINO",
-    "exportedAt": "2026-08-25T04:04:54.348Z",
+    "exportedAt": "2026-08-25T04:07:05.158Z",
     "version": 1,
     "coh": 22800,
     "entries": 18233,
-    "auditEvents": 4911,
+    "auditEvents": 4913,
     "integrity": {
       "ok": true,
       "brokenAtSeq": null
@@ -16,7 +16,7 @@
       "ok": true,
       "brokenAtSeq": null
     },
-    "travelistaEntries": 50,
+    "travelistaEntries": 51,
     "travelistaIntegrity": {
       "ok": true,
       "brokenAtSeq": null
@@ -40,8 +40,8 @@
         "path": "data/ledger-backup.json",
         "autoSync": true,
         "enabled": true,
-        "lastBackupAt": "2026-08-25T04:04:40.759Z",
-        "lastBackupSha": "92bfe8f8b15bd2e2ceffe4e3667004992b81a9b0"
+        "lastBackupAt": "2026-08-25T04:05:07.540Z",
+        "lastBackupSha": "b6e45c5c932069bef72d76ac2b20cc30cffc8315"
       },
       "towelTracker": {
         "enabled": true,
@@ -533039,6 +533039,43 @@
         },
         "prevHash": "23b40d830c9c268f86bf5f13099b64fda6c88976fed3a6db7976d2994b29c8d8",
         "hash": "ec3718a9a2e88ff3566584db5b16f4a563f483af4b2e8053dbbc5fdda5e34725"
+      },
+      {
+        "seq": 4912,
+        "id": "aud_mt8561u9_y_xwrcie",
+        "ts": "2026-08-25T04:05:07.665Z",
+        "actor": "GINO",
+        "role": "staff",
+        "action": "backup.github",
+        "what": "Backup committed to thethreethreethree/FRONT-DESK-TRANSACTION-TRACKER@main (auto-sync)",
+        "details": {
+          "reason": "auto-sync",
+          "coh": 22800,
+          "entries": 18233
+        },
+        "prevHash": "ec3718a9a2e88ff3566584db5b16f4a563f483af4b2e8053dbbc5fdda5e34725",
+        "hash": "222644ffbee27a5b055d6102be317fae5aad0c2770fe8121ed72c9ac943e56d1"
+      },
+      {
+        "seq": 4913,
+        "id": "aud_mt858ezd_10_0pf67k",
+        "ts": "2026-08-25T04:06:58.009Z",
+        "actor": "GINO",
+        "role": "staff",
+        "action": "tv.booking.create",
+        "what": "Travelista booking #51 · JANE NETRAL · PPS SHARING VAN ×2 pax · ₱1,500 (commission ₱200)",
+        "details": {
+          "ref": 51,
+          "id": "tv_mt858ezd_z_e17630",
+          "guest": "JANE NETRAL",
+          "destination": "PPS SHARING VAN",
+          "pax": 2,
+          "total": 1500,
+          "commission": 200,
+          "bookedBy": "GINO"
+        },
+        "prevHash": "222644ffbee27a5b055d6102be317fae5aad0c2770fe8121ed72c9ac943e56d1",
+        "hash": "07ae38442675b8d639bf1e2082528787405645bde00342abb14087093f0173f7"
       }
     ],
     "towels": [
@@ -540635,6 +540672,37 @@
           "reversesKind": null,
           "prevHash": "e3234d959884ed1aec9069c4e5798aebae0f91711e792e0ac57e517523aae661",
           "hash": "d7358212df2c1cb344e8e440e7e1652102b0fcffc599ebbe9ecf57b6f7bdebce"
+        },
+        {
+          "seq": 51,
+          "id": "tv_mt858ezd_z_e17630",
+          "ts": "2026-08-25T04:06:58.009Z",
+          "kind": "booking",
+          "direction": 1,
+          "amount": 1500,
+          "departureDate": "2026-08-25",
+          "guest": "JANE NETRAL",
+          "destination": "PPS SHARING VAN",
+          "destinationId": "dest_msrh2ktf_d_xyn4hg",
+          "pax": 2,
+          "fare": 750,
+          "fareBasis": "per_pax",
+          "total": 1500,
+          "travelistaShare": 1300,
+          "commission": 200,
+          "bookedBy": "GINO",
+          "remarks": "",
+          "payoutType": "",
+          "payee": "",
+          "method": "",
+          "periodKey": "2026-08-B",
+          "staff": "GINO",
+          "staffRole": "staff",
+          "businessDate": "2026-08-25",
+          "reversesId": null,
+          "reversesKind": null,
+          "prevHash": "d7358212df2c1cb344e8e440e7e1652102b0fcffc599ebbe9ecf57b6f7bdebce",
+          "hash": "85961b5a115262111f874c196a40e00240d37badd218238724a6c5a427fb8a86"
         }
       ]
     }
