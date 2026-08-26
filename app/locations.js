@@ -74,6 +74,12 @@ export const LOCATIONS = {
     seedFromOfficialCsv: false,
     seedTravelistaSheet: false,
     seedBookers: [],
+    // The building's first admin. Seeded as a SALTED HASH, never the plaintext —
+    // this repository is public, so a password committed here would be a
+    // published password. Louise can change it herself under Settings → Security.
+    seedAdmins: [
+      { id: 'admin_bf_louise', name: 'Louise', pinHash: 'bfl26$037e0c3f8d7ae21ead02443cc746d777226fdd8384ffab4e25d44ae1d1c7d519' },
+    ],
     seedItems: [
       { name: 'Beach Towel', defaultAmount: 0 },
       { name: 'Umbrella', defaultAmount: 0 },

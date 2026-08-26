@@ -1453,6 +1453,22 @@ class Store {
     this.save();
     return a;
   }
+  // Add an admin whose credential is ALREADY hashed. Used to seed a named admin
+  // from code without the plaintext ever entering the repository — the repo is
+  // public, so a password committed there is a published password. The stored
+  // value is the same salted form addAdmin() produces, so login is unchanged and
+  // the person can set their own credential afterwards.
+  addAdminHashed({ id, name, pinHash }) {
+    if (!Array.isArray(this.state.admins)) this.state.admins = [];
+    const nm = String(name || '').trim();
+    if (!nm || !pinHash) return null;
+    if (this.state.admins.some((a) => a.id === id || a.name.toLowerCase() === nm.toLowerCase())) return null;
+    const a = { id: id || uid('admin'), name: nm, pin: pinHash, active: true, createdAt: nowISO() };
+    this.state.admins.push(a);
+    this._audit('admin.add', `Added admin "${a.name}"`, { id: a.id, name: a.name, seeded: true });
+    this.save();
+    return a;
+  }
   setAdminPin(id, newPin) {
     const a = (this.state.admins || []).find((x) => x.id === id);
     if (!a) return false;

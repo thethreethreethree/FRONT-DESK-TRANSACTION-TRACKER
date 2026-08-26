@@ -112,6 +112,7 @@ async function enterLocation(id, { remember = true } = {}) {
   await syncFromRemote();    // pull the latest off-device records (repo = source of truth)
   await ensureProvisioned(); // only provisions a baseline if nothing was restored
   ensureAdminSeed();         // seed the initial Admin account once
+  ensureLocationAdmins();    // …plus any admin this building names as its own
   ensurePassportItem();      // retire the (mis-)seeded standalone Passport item
   ensureTravelistaSeed();    // Main only — the Aug 1-15 sheet is Main's record
   if (!_healthStarted) {
@@ -214,6 +215,16 @@ function ensureTravelistaSeed() {
 // One-time: seed the initial Admin account (James). He sets his own PIN after the
 // first login (Settings → Security). Idempotent via a config flag, so it never
 // resets a PIN he later changed, and it runs across devices via the synced flag.
+// A building can name its own first admin (see locations.js `seedAdmins`). Runs
+// once per building, guarded by a synced flag AND by the account's fixed id, so it
+// cannot re-create an admin that was deliberately removed.
+function ensureLocationAdmins() {
+  const seeds = store.location.seedAdmins || [];
+  if (!seeds.length || store.config.locationAdminSeedV1) return;
+  for (const a of seeds) store.addAdminHashed(a);
+  store.setConfig({ locationAdminSeedV1: true });
+}
+
 function ensureAdminSeed() {
   if (store.config.adminSeedV1) return;
   if (!store.adminList().some((a) => a.name.trim().toLowerCase() === 'james')) {
