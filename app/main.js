@@ -113,6 +113,7 @@ async function enterLocation(id, { remember = true } = {}) {
   await ensureProvisioned(); // only provisions a baseline if nothing was restored
   ensureAdminSeed();         // seed the initial Admin account once
   ensureLocationAdmins();    // …plus any admin this building names as its own
+  closeOpenDesk();           // a building with no staff yet must still need a PIN
   ensurePassportItem();      // retire the (mis-)seeded standalone Passport item
   ensureTravelistaSeed();    // Main only — the Aug 1-15 sheet is Main's record
   if (!_healthStarted) {
@@ -171,6 +172,16 @@ function ensurePassportItem() {
 // system. Runs AFTER syncFromRemote, so a device that already received the sheet
 // from another device recognises it and doesn't re-add it. Idempotent by a synced
 // config flag AND by the seed rows' own fixed ids — see seedStarterOnce().
+// A building that has no staff accounts and no staff PIN accepts ANY name with no
+// PIN at all — a hole that only shows up at a building nobody has staffed yet.
+// Close it wherever it is found, not just at first setup.
+function closeOpenDesk() {
+  const c = store.config;
+  if (c.requireStaffPin || c.staffPin || store.staffList().length) return;
+  store.setConfig({ requireStaffPin: true });
+  store._audit('auth.require_staff_pin', 'Staff sign-in now requires a PIN (no staff accounts existed)', { location: store.location.id });
+}
+
 // Stand a brand-new building up: its own deposit items, the shared admin
 // credential so an owner can sign in, and nothing else. No CSV, no opening float,
 // no starter sheet — the team's first entry is genuinely their first entry.
@@ -178,7 +189,11 @@ async function ensureFreshBuilding() {
   if (store.isSetup()) return;
   splashLoading('Setting up ' + store.location.name + '…');
   store.state.config.setupComplete = true;
-  store.state.config.requireStaffPin = false;
+  // A building with NO staff accounts yet would otherwise fall through to the
+  // legacy "open desk" path, where anyone could sign in as staff with any name and
+  // no PIN at all. Requiring a PIN closes that: an admin signs in and creates the
+  // staff accounts, and each person then signs in as themselves.
+  store.state.config.requireStaffPin = true;
   store.state.config.managerPin = store.constructor.hashPin(OFFICIAL_MANAGER_PIN);
   if (!store.state.itemTypes.length) store.state.itemTypes = seedItemTypes(store.location);
   // Inherit the device's already-working GitHub target so nobody has to retype
@@ -218,9 +233,17 @@ function ensureTravelistaSeed() {
 // cannot re-create an admin that was deliberately removed.
 function ensureLocationAdmins() {
   const seeds = store.location.seedAdmins || [];
-  if (!seeds.length || store.config.locationAdminSeedV1) return;
-  for (const a of seeds) store.addAdminHashed(a);
-  store.setConfig({ locationAdminSeedV1: true });
+  if (!seeds.length) return;
+  // Tracked per ACCOUNT, not by one blanket flag: a single flag meant that adding
+  // a second named admin later would never reach devices that had already seeded
+  // once. Recording the id either way also means an admin who was deliberately
+  // removed is not silently re-created on the next load.
+  let done = store.config.seededAdminIds;
+  if (!Array.isArray(done)) done = store.config.locationAdminSeedV1 ? seeds.map((a) => a.id) : [];
+  const todo = seeds.filter((a) => !done.includes(a.id));
+  if (!todo.length) { if (!Array.isArray(store.config.seededAdminIds)) store.setConfig({ seededAdminIds: done }); return; }
+  for (const a of todo) { store.addAdminHashed(a); done.push(a.id); }
+  store.setConfig({ seededAdminIds: done });
 }
 
 function ensureAdminSeed() {
@@ -398,7 +421,15 @@ function renderLogin() {
 
   const doLogin = () => {
     const ok = store.login(role, pin.value, name.value.trim() || (role === 'manager' ? 'Admin' : 'Staff'));
-    if (!ok) { toast('Incorrect PIN', 'err'); pin.value = ''; pin.focus(); return; }
+    if (!ok) {
+      // At a building nobody has staffed yet, "Incorrect PIN" is a dead end —
+      // there is no account to get right. Say what actually needs to happen.
+      const noStaffYet = role === 'staff' && store.staffList().length === 0;
+      toast(noStaffYet
+        ? `No staff accounts at ${store.location.short} yet — an admin adds them under Settings → Staff.`
+        : 'Incorrect PIN', 'err');
+      pin.value = ''; pin.focus(); return;
+    }
     currentSystem = null; // a fresh sign-in always chooses a system
     try { localStorage.removeItem(SYSTEM_KEY); } catch (e) { /* ignore */ }
     renderSystemPicker();

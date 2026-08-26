@@ -21,6 +21,11 @@ export const LOCATIONS = {
     backupPath: 'data/ledger-backup.json',
     // which deposit item carries a physical tag number
     tagItems: ['towel'],
+    // Managers who run BOTH buildings are seeded at both. Stored as a salted hash,
+    // never the plaintext — this repository is public.
+    seedAdmins: [
+      { id: 'admin_louise', name: 'Louise', pinHash: 'bfl26$037e0c3f8d7ae21ead02443cc746d777226fdd8384ffab4e25d44ae1d1c7d519' },
+    ],
     // non-cash collateral: what it is called here, and what must be recorded
     collateral: {
       key: 'passport',
@@ -78,6 +83,8 @@ export const LOCATIONS = {
     seedAdmins: [
       { id: 'admin_bf_louise', name: 'Louise', pinHash: 'bfl26$037e0c3f8d7ae21ead02443cc746d777226fdd8384ffab4e25d44ae1d1c7d519' },
     ],
+    // A building with no staff accounts yet must NOT be an open desk — see
+    // requireStaffPin in ensureFreshBuilding().
     seedItems: [
       { name: 'Beach Towel', defaultAmount: 0 },
       { name: 'Umbrella', defaultAmount: 0 },

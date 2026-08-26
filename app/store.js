@@ -319,15 +319,24 @@ class Store {
       else return false;
     } else {
       // Staff: the PIN identifies the person. Match the roster first (and adopt
-      // that account's name, for accountability), then a legacy shared staff PIN,
-      // then the manager PIN (manager covering the desk), then — only if NO staff
-      // and no PIN are configured at all — an open no-PIN desk.
+      // that account's name, for accountability), then a legacy shared staff PIN.
       const match = this.staffList().find((s) => Store.verifyPin(pin, s.pin));
       if (match) session = { role: 'staff', name: match.name, staffId: match.id, at: nowISO() };
       else if (c.staffPin && Store.verifyPin(pin, c.staffPin)) session = { role: 'staff', name: name || 'Staff', at: nowISO() };
-      else if (Store.verifyPin(pin, c.managerPin)) session = { role: 'staff', name: name || 'Manager', at: nowISO() };
-      else if (this.staffList().length === 0 && !c.requireStaffPin && !c.staffPin) session = { role: 'staff', name: name || 'Staff', at: nowISO() };
-      else return false;
+      else {
+        // AN ADMIN PIN MEANS ADMIN, whichever tab was tapped. "Staff" is the tab
+        // the screen opens on, so an admin typing their own PIN there used to be
+        // silently downgraded to a staff session — they kept working, but with
+        // their tools missing and their entries attributed to the wrong role.
+        // Nothing is lost by recognising them: an admin can do everything a staff
+        // member can. Their own name comes from the account, for accountability.
+        const admin = this.adminList().find((a) => Store.verifyPin(pin, a.pin));
+        if (admin) session = { role: 'manager', name: admin.name, adminId: admin.id, at: nowISO() };
+        else if (Store.verifyPin(pin, c.managerPin)) session = { role: 'manager', name: name || 'Admin', at: nowISO() };
+        // Only if NO staff and no PIN are configured at all — an open no-PIN desk.
+        else if (this.staffList().length === 0 && !c.requireStaffPin && !c.staffPin) session = { role: 'staff', name: name || 'Staff', at: nowISO() };
+        else return false;
+      }
     }
     this.session = session;
     // Persist the session (device-local, never exported) so a refresh / back
