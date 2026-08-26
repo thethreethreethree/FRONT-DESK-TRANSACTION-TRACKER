@@ -1,21 +1,26 @@
-// views/passports.js — passports held as deposits. A passport is non-cash (₱0)
-// collateral tied to a MEWS reservation #, so it never shows in the cash
-// "outstanding" list — it's tracked here. Return one at check-out.
+// views/passports.js — non-cash collateral held as a deposit: a PASSPORT at Main,
+// a VALID ID at the Beachfront. Either way it is ₱0 collateral tied to a reference
+// (a MEWS reservation # / the ID's type and number), so it never shows in the cash
+// "outstanding" list — it's tracked here. Return one at check-out. All the wording
+// on this page comes from the building's `collateral` block in locations.js.
 import { el, peso, fmtDateTime, clear, toast } from '../util.js';
 import { store } from '../store.js';
 import { pageHead, confirmDialog, openModal } from '../components.js';
 
 export function render(ctx) {
   const root = el('div');
+  // Passport at Main, valid ID at the Beachfront — one mechanism, wording set by
+  // the building so staff read their own vocabulary.
+  const COLL = store.location.collateral;
   const held = store.heldPassports();
   const totalValue = held.reduce((s, p) => s + (p.value || 0), 0);
-  root.appendChild(pageHead('Passports held',
-    `${held.length} passport${held.length === 1 ? '' : 's'} held in lieu of cash · ${peso(totalValue)} deposit value`,
+  root.appendChild(pageHead(COLL.pageTitle,
+    `${held.length} ${COLL.noun}${held.length === 1 ? '' : 's'} held in lieu of cash · ${peso(totalValue)} deposit value`,
     el('button', { class: 'btn in', html: '＋&nbsp; New deposit', onClick: () => ctx.navigate('deposit') })));
 
   const card = el('div', { class: 'card', style: 'padding:0;overflow:hidden' });
   const filters = el('div', { class: 'filters', style: 'padding:14px 16px 0;margin-bottom:0' });
-  const search = el('input', { class: 'input search', placeholder: 'Search guest, room, MEWS # or transaction #…', autocomplete: 'off' });
+  const search = el('input', { class: 'input search', placeholder: `Search guest, room, ${COLL.refLabel} or transaction #…`, autocomplete: 'off' });
   filters.append(search);
   card.appendChild(filters);
   const wrap = el('div', { class: 'table-wrap', style: 'border:0' });
@@ -27,13 +32,13 @@ export function render(ctx) {
     if (q) rows = rows.filter((p) => `${p.seq} ${p.guest || ''} ${p.room || ''} ${p.mewsRes || ''}`.toLowerCase().includes(q));
     clear(wrap);
     if (!rows.length) {
-      wrap.appendChild(el('div', { class: 'empty' }, [el('div', { class: 'ic', text: '🛂' }), el('p', { text: q ? 'No passports match.' : 'No passports currently held.' })]));
+      wrap.appendChild(el('div', { class: 'empty' }, [el('div', { class: 'ic', text: COLL.icon }), el('p', { text: q ? `No ${COLL.noun}s match.` : `No ${COLL.noun}s currently held.` })]));
       return;
     }
     const tbl = el('table', { class: 'tbl' });
     tbl.appendChild(el('thead', {}, el('tr', {}, [
       el('th', { text: '#' }), el('th', { text: 'Guest / Room' }), el('th', { text: 'For (item)' }),
-      el('th', { class: 'num', text: 'Value' }), el('th', { text: 'MEWS res #' }),
+      el('th', { class: 'num', text: 'Value' }), el('th', { text: COLL.refLabel }),
       el('th', { text: 'Held since' }), el('th', { text: 'Taken by' }), el('th', { class: 'num', text: '' }),
     ])));
     const tb = el('tbody');
@@ -48,11 +53,11 @@ export function render(ctx) {
         el('td', { text: p.staff || '—' }),
         el('td', { class: 'num' }, el('div', { class: 'flex gap', style: 'justify-content:flex-end' }, [
           el('button', {
-            class: 'btn sm', html: '💵&nbsp; To cash', title: 'Guest pays the deposit in cash; passport returned',
+            class: 'btn sm', html: '💵&nbsp; To cash', title: `Guest pays the deposit in cash; ${COLL.noun} returned`,
             onClick: () => {
               const amt = el('input', { class: 'input', type: 'number', min: '0', step: '50', value: p.value || 0, style: 'max-width:200px' });
               openModal({
-                title: 'Convert passport to cash',
+                title: `Convert ${COLL.noun} to cash`,
                 sub: `${p.guest || p.room || 'The guest'} pays the deposit in cash and gets their passport back`,
                 body: el('div', {}, [
                   el('p', { class: 'muted', style: 'margin-top:0', html: `The <strong>${p.itemName || 'item'}${p.towelNo ? ' #' + p.towelNo : ''}</strong> stays out — now backed by cash instead of the passport. The passport is returned and a new cash deposit is recorded (Cash On Hand rises).` }),
@@ -74,10 +79,10 @@ export function render(ctx) {
           el('button', {
             class: 'btn out sm', text: '↩ Return',
             onClick: () => confirmDialog({
-              title: 'Return passport & item?',
-              sub: `Hand back ${p.guest || p.room || 'the guest'}'s passport${p.mewsRes ? ` (MEWS ${p.mewsRes})` : ''} and close the ${p.itemName || 'item'}${p.towelNo ? ' #' + p.towelNo : ''} deposit. No cash is involved.`,
+              title: `Return ${COLL.noun} & item?`,
+              sub: `Hand back ${p.guest || p.room || 'the guest'}'s ${COLL.noun}${p.mewsRes ? ` (${p.mewsRes})` : ''} and close the ${p.itemName || 'item'}${p.towelNo ? ' #' + p.towelNo : ''} deposit. No cash is involved.`,
               confirmLabel: 'Return', kind: 'out',
-              onConfirm: () => { store.returnPassport(p.seq); toast('Passport & item returned', 'ok'); paint(); },
+              onConfirm: () => { store.returnPassport(p.seq); toast(`${COLL.label} & item returned`, 'ok'); paint(); },
             }),
           }),
         ])),

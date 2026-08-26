@@ -96,9 +96,16 @@ export const escapeHtml = (s) =>
 // We never rewrite those notes (it would break the ledger hash chain), so these
 // helpers READ the number from whichever place holds it and show it in one field.
 
-// Only the item literally named "Towel" tracks a tag number — "Beach Towel" does not.
+// WHICH item carries a physical tag number depends on the building: at Main it is
+// the item literally named "Towel" (so "Beach Towel" is deliberately excluded);
+// at the Beachfront it is the beach towels themselves. The store sets this from
+// the active location on every load — see locations.js `tagItems`.
+let TAG_ITEMS = new Set(['towel']);
+export function setTagItems(names) {
+  TAG_ITEMS = new Set((names || ['towel']).map((n) => String(n).trim().toLowerCase()));
+}
 export function isTowelItem(name) {
-  return String(name || '').trim().toLowerCase() === 'towel';
+  return TAG_ITEMS.has(String(name || '').trim().toLowerCase());
 }
 
 // The "Passport" item is a non-cash deposit: ₱0 value, a MEWS reservation # is

@@ -63,7 +63,7 @@ export function render(ctx) {
   let method = 'cash';
   const methodToggle = el('div', { class: 'role-toggle' }, [
     el('button', { type: 'button', class: 'active', html: '💵&nbsp; Cash', onClick: (ev) => setMethod('cash', ev) }),
-    el('button', { type: 'button', html: '🛂&nbsp; Passport', onClick: (ev) => setMethod('passport', ev) }),
+    el('button', { type: 'button', html: `${store.location.collateral.icon}&nbsp; ${store.location.collateral.label}`, onClick: (ev) => setMethod('passport', ev) }),
     el('button', { type: 'button', html: '🏠&nbsp; Private room', onClick: (ev) => setMethod('room', ev) }),
   ]);
   function setMethod(m, ev) {
@@ -74,12 +74,15 @@ export function render(ctx) {
   }
   function isPassport() { return method === 'passport'; }
   function isPrivateRoom() { return method === 'room'; }
-  const mewsInput = el('input', { class: 'input', placeholder: 'e.g. RES-48213', autocomplete: 'off' });
+  // The non-cash collateral is a passport at Main and a valid ID at the
+  // Beachfront. Same mechanism throughout — only the wording differs.
+  const COLL = store.location.collateral;
+  const mewsInput = el('input', { class: 'input', placeholder: COLL.refPlaceholder, autocomplete: 'off' });
   const mewsField = el('div', { class: 'field' }, [
-    el('label', { text: 'MEWS reservation #' }), mewsInput,
-    el('div', { class: 'hint', text: 'required — the booking this passport is held against' }),
+    el('label', { text: COLL.refLabel }), mewsInput,
+    el('div', { class: 'hint', text: COLL.refHint }),
   ]);
-  const roomNote = el('div', { class: 'pill', style: 'display:none', html: 'No cash and no passport is taken. The item is signed out against the room — close it with <strong>Guest checked out</strong> on the Private Rooms page when they return it.' });
+  const roomNote = el('div', { class: 'pill', style: 'display:none', html: `No cash and no ${COLL.noun} is taken. The item is signed out against the room — close it with <strong>Guest checked out</strong> on the Private Rooms page when they return it.` });
   function syncPassport() {
     mewsField.style.display = isPassport() ? '' : 'none';
     roomNote.style.display = isPrivateRoom() ? '' : 'none';
@@ -106,10 +109,10 @@ export function render(ctx) {
   function amount() { return (isPassport() || isPrivateRoom()) ? 0 : value(); }
   function updatePreview() {
     previewVal.textContent = peso(value());
-    previewLab.textContent = isPassport() ? `Deposit value · ${peso(value())} (passport)`
+    previewLab.textContent = isPassport() ? `Deposit value · ${peso(value())} (${COLL.label.toLowerCase()})`
       : isPrivateRoom() ? `Item value · ${peso(value())} (private room)`
         : 'Deposit amount (auto)';
-    previewSub.textContent = isPassport() ? 'paid by passport — no cash, COH unchanged'
+    previewSub.textContent = isPassport() ? `secured by ${COLL.noun} — no cash, COH unchanged`
       : isPrivateRoom() ? 'secured by the room — no cash taken, COH unchanged'
         : 'unit × quantity';
   }
@@ -144,7 +147,7 @@ export function render(ctx) {
     if (!selected) { toast('Pick an item first', 'warn'); return; }
     if (!guestInput.value.trim() && !roomInput.value.trim()) { toast('Enter a guest name or room #', 'warn'); return; }
     if (isPassport()) {
-      if (!mewsInput.value.trim()) { toast('Enter the MEWS reservation number', 'warn'); return; }
+      if (!mewsInput.value.trim()) { toast(`Enter the ${COLL.refLabel.toLowerCase()}`, 'warn'); return; }
     } else if (isPrivateRoom()) {
       if (!roomInput.value.trim()) { toast('Enter the room # — it secures a private-room hold', 'warn'); return; }
     } else if (amount() <= 0) { toast('Amount must be greater than 0', 'warn'); return; }
@@ -156,7 +159,7 @@ export function render(ctx) {
       privateRoom: isPrivateRoom(),
     });
     toast(isPassport()
-      ? `Passport held for ${selected.name} (${peso(value())}) · ${guestInput.value.trim() || roomInput.value.trim()} · MEWS ${mewsInput.value.trim()}`
+      ? `${COLL.label} held for ${selected.name} (${peso(value())}) · ${guestInput.value.trim() || roomInput.value.trim()} · ${mewsInput.value.trim()}`
       : isPrivateRoom()
         ? `${selected.name} out on private room ${roomInput.value.trim()} · no cash taken · COH unchanged (${peso(store.coh())})`
         : `Deposit recorded · ${peso(e.amount)} · COH now ${peso(store.coh())}`, 'ok');

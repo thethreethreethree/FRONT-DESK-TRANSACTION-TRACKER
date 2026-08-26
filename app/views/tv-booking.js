@@ -4,7 +4,7 @@
 import { el, peso, pesoPlain, toast, businessDate } from '../util.js';
 import { tv, periodOf, toYMD, misPricedWholeVehicle } from '../travelista.js';
 import { store } from '../store.js';
-import { pageHead } from '../components.js';
+import { pageHead, openModal } from '../components.js';
 
 export function render(ctx) {
   tv.ensureSeed();
@@ -68,12 +68,38 @@ export function render(ctx) {
     update();
   });
 
+  // Who booked it. A NEW building starts with an empty roster, so the list has to
+  // be able to grow from here — otherwise the very first booking is unrecordable
+  // until someone finds the Settings page.
   const bookedBy = el('select', { class: 'input' });
-  bookedBy.appendChild(el('option', { value: '', text: '— who booked it —' }));
-  for (const b of tv.bookers()) bookedBy.appendChild(el('option', { value: b.name, text: b.name }));
-  // The signed-in person is the likeliest booker — preselect when they're on the roster.
-  const me = (store.session ? store.session.name : '').trim().toUpperCase();
-  if (tv.bookers().some((b) => b.name === me)) bookedBy.value = me;
+  function paintBookers(select) {
+    while (bookedBy.firstChild) bookedBy.removeChild(bookedBy.firstChild);
+    bookedBy.appendChild(el('option', { value: '', text: '— who booked it —' }));
+    for (const b of tv.bookers()) bookedBy.appendChild(el('option', { value: b.name, text: b.name }));
+    bookedBy.appendChild(el('option', { value: '__add__', text: '＋ Add a booker…' }));
+    // The signed-in person is the likeliest booker — preselect when on the roster.
+    const me = (store.session ? store.session.name : '').trim().toUpperCase();
+    bookedBy.value = select || (tv.bookers().some((b) => b.name === me) ? me : '');
+  }
+  bookedBy.addEventListener('change', () => {
+    if (bookedBy.value !== '__add__') return;
+    const nm = el('input', { class: 'input', placeholder: 'Name', autocomplete: 'off' });
+    openModal({
+      title: 'Add a booker', sub: 'They will be available on every booking from now on.',
+      body: el('div', { class: 'field' }, [el('label', { text: 'Name' }), nm]),
+      actions: [
+        { label: 'Cancel', kind: 'ghost', onClick: (close) => { paintBookers(''); close(); } },
+        { label: 'Add', kind: 'primary', onClick: (close) => {
+          const added = tv.addBooker(nm.value);
+          if (!added && nm.value.trim()) { paintBookers(nm.value.trim().toUpperCase()); close(); return; }
+          if (!added) { toast('Enter a name', 'warn'); return; }
+          toast(`${added.name} added`, 'ok');
+          paintBookers(added.name); close();
+        } },
+      ],
+    });
+  });
+  paintBookers();
 
   const remarksInput = el('input', { class: 'input', placeholder: 'e.g. PRIVATE VAN', autocomplete: 'off' });
 

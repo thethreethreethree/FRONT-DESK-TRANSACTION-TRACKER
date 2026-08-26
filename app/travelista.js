@@ -43,7 +43,7 @@ const SEED_DESTINATIONS = [
   { id: 'dest_pps', name: 'PPS', fare: 750, fareBasis: 'per_pax', commission: 100, commissionBasis: 'per_pax' },
   { id: 'dest_elnido', name: 'EL NIDO', fare: 8000, fareBasis: 'flat', commission: 1000, commissionBasis: 'flat' },
 ];
-const SEED_BOOKERS = ['MARIE', 'BECCA', 'DARREN', 'GINO', 'CHALYN', 'MONIE'];
+
 
 // A whole-vehicle hire costs the SAME however many people ride in it — the source
 // sheet is explicit: EL NIDO, 5 pax, fare 8,000, total 8,000; and 8 pax, still
@@ -133,8 +133,11 @@ export const tv = {
       }, d));
       touched = true;
     }
-    if (!t.bookers.length) {
-      t.bookers = SEED_BOOKERS.map((n) => ({ id: 'bkr_' + n.toLowerCase(), name: n, active: true, createdAt: nowISO() }));
+    // Bookers come from the BUILDING — Main has its established list, a new
+    // building starts empty and registers its own people as they book.
+    const seedB = store.location.seedBookers || [];
+    if (!t.bookers.length && seedB.length) {
+      t.bookers = seedB.map((n) => ({ id: 'bkr_' + n.toLowerCase(), name: n, active: true, createdAt: nowISO() }));
       touched = true;
     }
     if (!t.config.startedAt) { t.config.startedAt = nowISO(); touched = true; }

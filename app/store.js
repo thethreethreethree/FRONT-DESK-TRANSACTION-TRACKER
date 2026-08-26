@@ -13,7 +13,8 @@
 // keep a localStorage fallback for private-mode / no-IDB and migrate old data.
 // GitHub repo holds versioned JSON backups (git history = durable audit trail).
 
-import { sha256, stableStringify, uid, nowISO, businessDate, guessShift, pesoPlain, isTowelItem, entryTowelNo, towelTokens, normTowelNo, isPassportItem } from './util.js';
+import { sha256, stableStringify, uid, nowISO, businessDate, guessShift, pesoPlain, isTowelItem, entryTowelNo, towelTokens, normTowelNo, isPassportItem, setTagItems } from './util.js';
+import { LOCATIONS, DEFAULT_LOCATION } from './locations.js';
 
 // The build this code came from. Stamped onto every backup so it is possible to
 // tell, from the repo alone, WHICH devices are running current code — a stale
@@ -21,14 +22,14 @@ import { sha256, stableStringify, uid, nowISO, businessDate, guessShift, pesoPla
 // nothing recorded it. Bump when a change matters to how devices sync.
 export const APP_BUILD = '2026-08-19-merge-sync';
 
-const STORAGE_KEY = 'fdtt_state_v1';
-const SESSION_KEY = 'fdtt_session'; // device-local signed-in session (not exported)
 const GENESIS = '0'.repeat(64);
 
 // ------------------------------------------------------------- IndexedDB layer
 const IDB_NAME = 'fdtt';
 const IDB_STORE = 'kv';
-const IDB_KEY = 'state';
+// NOTE: the per-building record key, localStorage fallback key and session key
+// all live on the location (see locations.js). Main's are unchanged from before
+// buildings existed, so existing devices keep their data exactly where it was.
 
 function idbOpen() {
   return new Promise((resolve, reject) => {
@@ -71,11 +72,13 @@ const round2 = (n) => Math.round((Number(n) + Number.EPSILON) * 100) / 100;
 // by transaction date, not by insert order (imported rows aren't seq-by-date).
 const byTsThenSeq = (a, b) => (a.ts < b.ts ? -1 : a.ts > b.ts ? 1 : a.seq - b.seq);
 
-function defaultState() {
+function defaultState(loc) {
+  const L = loc || LOCATIONS[DEFAULT_LOCATION];
   return {
     version: 1,
     config: {
-      brand: 'Frendz Hostel El Nido',
+      brand: L.name,
+      locationId: L.id,
       currency: 'PHP',
       // Opening cash float the drawer started with, before any tracked deposit/
       // refund. COH = beginningBalance + Σ(deposits − refunds). Manager-set.
@@ -85,7 +88,7 @@ function defaultState() {
       staffPin: null,
       requireStaffPin: false,
       createdAt: nowISO(),
-      github: { owner: '', repo: '', branch: 'main', path: 'data/ledger-backup.json', enabled: false },
+      github: { owner: '', repo: '', branch: 'main', path: L.backupPath, enabled: false },
       // Towel tracker: a clean, going-forward physical-towel inventory. `startedAt`
       // is the baseline — only towel deposits/refunds from this moment on move the
       // inventory, because historical refunds never recorded a towel number.
@@ -136,13 +139,9 @@ export function defaultTravelista() {
   };
 }
 
-// Seed item types matching the current sheet.
-function seedItemTypes() {
-  const base = [
-    { name: 'Towel', defaultAmount: 200 },
-    { name: 'Padlock', defaultAmount: 100 },
-    { name: 'Hair Dryer', defaultAmount: 500 },
-  ];
+// Seed the deposit items this building actually lends out.
+function seedItemTypes(loc) {
+  const base = (loc || LOCATIONS[DEFAULT_LOCATION]).seedItems;
   return base.map((b, i) => ({
     id: uid('item'), name: b.name, defaultAmount: b.defaultAmount,
     sortOrder: i, active: true, createdAt: nowISO(),
@@ -151,6 +150,10 @@ function seedItemTypes() {
 
 class Store {
   constructor() {
+    // Which building this instance is serving. Set BEFORE load() — every storage
+    // key, the session and the backup path all hang off it, so a device working
+    // at one building cannot read or write another's records.
+    this.loc = LOCATIONS[DEFAULT_LOCATION];
     this.state = null;
     this.session = null; // { name, role } set after login
     this._subs = new Set();
@@ -160,21 +163,48 @@ class Store {
     this._suppressAudit = false; // used while bulk-loading demo/CSV data
   }
 
+  // ------------------------------------------------------------------ location
+  // Point this store at a building. Main keeps the ORIGINAL keys and path, so
+  // existing devices are completely unaffected by the arrival of a second one.
+  useLocation(id) {
+    this.loc = LOCATIONS[id] || LOCATIONS[DEFAULT_LOCATION];
+    this.state = null;
+    this.session = null;
+    setTagItems(this.loc.tagItems); // which item carries a physical tag number here
+    return this.loc;
+  }
+  get location() { return this.loc; }
+  get _idbKey() { return this.loc.idbKey; }
+  get _lsKey() { return this.loc.lsKey; }
+  get _sessionKey() { return this.loc.sessionKey; }
+
+  // Read another building's stored config WITHOUT switching to it. Used once, when
+  // a new building is provisioned, so it can inherit the device's already-working
+  // GitHub target instead of making someone retype it.
+  async peekConfig(locId) {
+    const L = LOCATIONS[locId];
+    if (!L) return null;
+    try {
+      const s = await idbGet(L.idbKey);
+      return s && s.config ? s.config : null;
+    } catch (e) { return null; }
+  }
+
   // -------------------------------------------------------------- persistence
   // Async: reads IndexedDB; if empty, migrates any legacy localStorage state.
   async load() {
     let s = null;
-    try { s = await idbGet(IDB_KEY); } catch (e) { /* no idb / private mode */ }
+    try { s = await idbGet(this._idbKey); } catch (e) { /* no idb / private mode */ }
     if (!s) {
       let raw = null;
-      try { raw = localStorage.getItem(STORAGE_KEY); } catch (e) { /* ignore */ }
+      try { raw = localStorage.getItem(this._lsKey); } catch (e) { /* ignore */ }
       if (raw) { try { s = JSON.parse(raw); } catch (e) { s = null; } }
       if (s) this._migratedFromLS = true; // persist into IDB after shape-fix below
     }
-    this.state = s || defaultState();
+    this.state = s || defaultState(this.loc);
     // Migrate: ensure shape
-    this.state = Object.assign(defaultState(), this.state);
-    this.state.config = Object.assign(defaultState().config, this.state.config || {});
+    this.state = Object.assign(defaultState(this.loc), this.state);
+    this.state.config = Object.assign(defaultState(this.loc).config, this.state.config || {});
     if (!Array.isArray(this.state.audit)) this.state.audit = [];
     if (!Array.isArray(this.state.towels)) this.state.towels = [];
     if (!Array.isArray(this.state.towelLog)) this.state.towelLog = [];
@@ -201,10 +231,10 @@ class Store {
         while (this._dirty) {
           this._dirty = false;
           try {
-            await idbSet(IDB_KEY, this.state);
+            await idbSet(this._idbKey, this.state);
           } catch (e) {
             // Fallback: localStorage (works only for small states / private mode).
-            try { localStorage.setItem(STORAGE_KEY, JSON.stringify(this.state)); }
+            try { localStorage.setItem(this._lsKey, JSON.stringify(this.state)); }
             catch (e2) { console.error('persist failed (idb + localStorage)', e, e2); }
           }
         }
@@ -223,9 +253,9 @@ class Store {
 
   reset() {
     const actor = this.session ? this.session.name : 'system';
-    this.state = defaultState();
+    this.state = defaultState(this.loc);
     this.session = null;
-    try { localStorage.removeItem(SESSION_KEY); } catch (e) { /* ignore */ }
+    try { localStorage.removeItem(this._sessionKey); } catch (e) { /* ignore */ }
     this._audit('data.reset', `All data reset by ${actor}`, {});
     this.save();
   }
@@ -270,7 +300,7 @@ class Store {
     c.requireStaffPin = !!requireStaffPin;
     if (brand) c.brand = brand;
     c.setupComplete = true;
-    if (!this.state.itemTypes.length) this.state.itemTypes = seedItemTypes();
+    if (!this.state.itemTypes.length) this.state.itemTypes = seedItemTypes(this.loc);
     this._audit('setup.complete', 'Front desk initialised', { brand: c.brand });
     this.save();
   }
@@ -302,7 +332,7 @@ class Store {
     this.session = session;
     // Persist the session (device-local, never exported) so a refresh / back
     // navigation keeps the user signed in instead of bouncing them to the PIN.
-    try { localStorage.setItem(SESSION_KEY, JSON.stringify(this.session)); } catch (e) { /* private mode */ }
+    try { localStorage.setItem(this._sessionKey, JSON.stringify(this.session)); } catch (e) { /* private mode */ }
     this._audit('auth.login', `${this.session.name} signed in as ${this.session.role}`, { role: this.session.role });
     this.emit();
     return true;
@@ -310,7 +340,7 @@ class Store {
   logout() {
     if (this.session) this._audit('auth.logout', `${this.session.name} signed out`, {});
     this.session = null;
-    try { localStorage.removeItem(SESSION_KEY); } catch (e) { /* ignore */ }
+    try { localStorage.removeItem(this._sessionKey); } catch (e) { /* ignore */ }
     this.emit();
   }
   // Re-hydrate a persisted session on load so refresh doesn't force re-login.
@@ -318,7 +348,7 @@ class Store {
   _restoreSession() {
     if (this.session || !this.isSetup()) return;
     let raw = null;
-    try { raw = localStorage.getItem(SESSION_KEY); } catch (e) { return; }
+    try { raw = localStorage.getItem(this._sessionKey); } catch (e) { return; }
     if (!raw) return;
     try {
       const s = JSON.parse(raw);
@@ -1489,14 +1519,35 @@ class Store {
     if (!auditTrusted) newAudit.length = 0;
     if (!newLedger.length && !newTv.length && !newAudit.length) return null;
 
+    // LINEAGE GUARD — narrow, and deliberately so.
+    //
+    // Merging is normally between two records grown from a COMMON backup, so a
+    // shared prefix exists. No shared entry at all means one of two very different
+    // things, and treating them alike breaks one case or the other:
+    //
+    //   • DANGEROUS — the incoming records are BOOTSTRAP/imported rows (staffRole
+    //     'system'). A device that provisioned itself offline from the CSV holds
+    //     16k rows describing the SAME real transactions under different ids;
+    //     unioning those would silently double the hostel's money. Refuse — and
+    //     main.js hands such a device the repo's record wholesale instead.
+    //
+    //   • LEGITIMATE — two desks at a BRAND-NEW building both started empty and
+    //     each recorded genuinely different transactions. They share no prefix
+    //     only because there was nothing to share. Refusing here would strand them
+    //     permanently, each keeping just its own takings — the very fault this
+    //     whole merge exists to prevent.
+    const bootstrapOnly = newLedger.length > 0
+      && newLedger.every((e) => !e.staffRole || e.staffRole === 'system');
+    const allowUnrelated = !bootstrapOnly;
+
     // Snapshot first: a merge that cannot be verified must change nothing.
     const backup = JSON.stringify(this.state);
     try {
-      const ledger = this._mergeChain(this.state.ledger, remote.ledger, newLedger, true);
+      const ledger = this._mergeChain(this.state.ledger, remote.ledger, newLedger, true, allowUnrelated);
       if (ledger === null) throw new Error('ledger merge failed verification');
-      const tv = newTv.length ? this._mergeChain(this.travelista.entries || [], rtv, newTv, false) : (this.travelista.entries || []);
+      const tv = newTv.length ? this._mergeChain(this.travelista.entries || [], rtv, newTv, false, true) : (this.travelista.entries || []);
       if (tv === null) throw new Error('travelista merge failed verification');
-      const audit = newAudit.length ? this._mergeChain(this.state.audit || [], rAudit, newAudit, false) : (this.state.audit || []);
+      const audit = newAudit.length ? this._mergeChain(this.state.audit || [], rAudit, newAudit, false, true) : (this.state.audit || []);
       if (audit === null) throw new Error('audit merge failed verification');
 
       // Everything outside the chains is unioned by identity — never dropped.
@@ -1542,19 +1593,12 @@ class Store {
   // `remapSeq` fixes references that pointed at an entry whose number moved —
   // resolved through entry IDS, because the same seq means different things on
   // two devices. Returns the new array, or null if it fails to verify.
-  _mergeChain(mine, theirs, incoming, remapSeq) {
+  _mergeChain(mine, theirs, incoming, remapSeq, allowUnrelated) {
     let n = 0; // the identical, identically-hashed prefix both devices share
     while (n < Math.min(mine.length, theirs.length)
       && mine[n].id === theirs[n].id && mine[n].hash === theirs[n].hash) n++;
-    // LINEAGE GUARD. Merging is only meaningful for two records that grew from a
-    // COMMON backup — then a shared prefix always exists. Two records with no
-    // shared entry at all are different lineages, not a divergence: the obvious
-    // case is a device that provisioned itself offline from the CSV, whose 16k
-    // bootstrap rows describe the SAME real transactions under different ids.
-    // Unioning those would silently double the hostel's money. Refuse instead;
-    // main.js gives such a device the repo's record wholesale.
-    if (n === 0 && mine.length > 0 && theirs.length > 0) {
-      console.error('merge refused — no shared history (different lineages, not a divergence)');
+    if (n === 0 && mine.length > 0 && theirs.length > 0 && !allowUnrelated) {
+      console.error('merge refused — no shared history and the incoming records are bootstrap data');
       return null;
     }
     const mineBySeq = new Map(mine.map((e) => [e.seq, e.id]));
@@ -1622,8 +1666,8 @@ class Store {
   importData(payload) {
     const s = payload && payload.state ? payload.state : payload;
     if (!s || !Array.isArray(s.ledger)) throw new Error('Invalid backup file.');
-    this.state = Object.assign(defaultState(), s);
-    this.state.config = Object.assign(defaultState().config, s.config || {});
+    this.state = Object.assign(defaultState(this.loc), s);
+    this.state.config = Object.assign(defaultState(this.loc).config, s.config || {});
     if (!Array.isArray(this.state.audit)) this.state.audit = [];
     if (!Array.isArray(this.state.towels)) this.state.towels = [];
     if (!Array.isArray(this.state.towelLog)) this.state.towelLog = [];
@@ -1673,4 +1717,5 @@ export function remoteAdoptable(remoteLedger, remoteAudit, localLedger, localAud
 }
 
 export const store = new Store();
+export { seedItemTypes };
 export { round2, GENESIS };

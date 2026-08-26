@@ -1,11 +1,12 @@
 // main.js — bootstrap, lock screens (setup/login), shell, nav, router.
-import { el, $, clear, peso, pesoPlain, toast, fmtDateTime } from './util.js';
-import { store, remoteAdoptable } from './store.js';
+import { el, $, clear, peso, pesoPlain, toast, fmtDateTime, nowISO } from './util.js';
+import { store, remoteAdoptable, seedItemTypes } from './store.js';
 import { pageHead, confirmDialog, managerGate, openModal } from './components.js';
 import * as gh from './github.js';
 import * as health from './sync-health.js';
 import { parseSheet, importSheet } from './csv-import.js';
 import { tv, seedStarterOnce } from './travelista.js';
+import { LOCATIONS, LOCATION_KEY, locationList } from './locations.js';
 import * as dashboard from './views/dashboard.js';
 import * as deposit from './views/deposit.js';
 import * as refund from './views/refund.js';
@@ -37,7 +38,7 @@ const VIEWS = {
   exchange: { system: 'towels', label: 'Towel Exchange', icon: '⇄', render: exchange.render },
   outstanding: { system: 'towels', label: 'Outstanding', icon: '🧾', render: outstanding.render },
   ledger: { system: 'towels', label: 'Ledger', icon: '📜', render: ledger.render },
-  passports: { system: 'towels', label: 'Passports', icon: '🛂', render: passports.render },
+  passports: { system: 'towels', label: () => store.location.collateral.pageNav, icon: '🪪', render: passports.render },
   privaterooms: { system: 'towels', label: 'Private Rooms', icon: '🏠', render: privateRooms.render },
   towels: { system: 'towels', label: 'Towel Tracker', icon: '🧺', render: towels.render },
   shifts: { system: 'towels', label: 'Shifts', icon: '🕑', render: renderShifts },
@@ -77,18 +78,81 @@ let currentSystem = null; // null → show the system picker
 let navArgs = null; // one-shot payload passed to the next view's render (e.g. { depositSeq })
 const app = document.getElementById('app');
 
+// A BUILDING is chosen before anything else — before the records are even read,
+// because which building you are in decides WHICH records exist. A device
+// remembers its building, so the beachfront tablet opens straight into the
+// beachfront and only ever writes there.
+function readLocation() {
+  try { return localStorage.getItem(LOCATION_KEY); } catch (e) { return null; }
+}
+let _healthStarted = false;
 async function mount() {
-  if (!store.state) splashLoading('Loading…');
+  const saved = readLocation();
+  if (!saved || !LOCATIONS[saved]) { renderLocationPicker(); return; }
+  await enterLocation(saved, { remember: false });
+}
+
+// Load (or reload) the app for one building.
+async function enterLocation(id, { remember = true } = {}) {
+  const L = LOCATIONS[id];
+  if (!L) { renderLocationPicker(); return; }
+  if (remember) { try { localStorage.setItem(LOCATION_KEY, id); } catch (e) { /* private mode */ } }
+  // Everything device-local that describes "where we are" must be dropped, or one
+  // building's sync bookkeeping would leak into the other's.
+  currentSystem = null;
+  _lastRemoteStamp = null;
+  _lastSyncedSig = null;
+  _syncFailing = false;
+  try { localStorage.removeItem(SYSTEM_KEY); } catch (e) { /* ignore */ }
+
+  splashLoading('Opening ' + L.name + '…');
+  store.useLocation(id);
   await store.load();
   await syncFromRemote();    // pull the latest off-device records (repo = source of truth)
-  await ensureProvisioned(); // only provisions the static baseline if nothing was restored
+  await ensureProvisioned(); // only provisions a baseline if nothing was restored
   ensureAdminSeed();         // seed the initial Admin account once
   ensurePassportItem();      // retire the (mis-)seeded standalone Passport item
-  ensureTravelistaSeed();    // lay down the Aug 1-15 sheet once, across all devices
-  // Outage/sync watchdog: warn the moment entries stop reaching backup. On reconnect,
-  // pull anything we missed and flush our own pending changes straight away.
-  health.init({ onReconnect: () => { pollRemote(); clearTimeout(_autoSyncTimer); _autoSyncTimer = setTimeout(runAutoSync, 800); } });
+  ensureTravelistaSeed();    // Main only — the Aug 1-15 sheet is Main's record
+  if (!_healthStarted) {
+    _healthStarted = true;
+    // Outage/sync watchdog: warn the moment entries stop reaching backup. On reconnect,
+    // pull anything we missed and flush our own pending changes straight away.
+    health.init({ onReconnect: () => { pollRemote(); clearTimeout(_autoSyncTimer); _autoSyncTimer = setTimeout(runAutoSync, 800); } });
+  } else {
+    health.checkData();
+  }
   route();
+}
+
+// Leave the building (back to the picker). Signs out first: a session belongs to
+// one building's roster and must never carry across to another.
+function leaveLocation() {
+  if (store.session) store.logout();
+  try { localStorage.removeItem(LOCATION_KEY); } catch (e) { /* ignore */ }
+  currentSystem = null;
+  renderLocationPicker();
+}
+
+// ------------------------------------------------------------ Location picker
+function renderLocationPicker() {
+  clear(app);
+  app.className = 'app locked';
+  const card = (L) => el('button', {
+    class: 'syscard', type: 'button', onClick: () => enterLocation(L.id),
+  }, [
+    el('span', { class: 'ic', text: L.icon }),
+    el('span', { class: 'nm', text: L.name }),
+    el('span', { class: 'bl', text: L.blurb }),
+    el('span', { class: 'fig' }, [el('b', { text: 'Open' }), el('small', { text: 'separate records & staff' })]),
+  ]);
+  app.appendChild(el('div', { class: 'lockwrap' }, el('div', { class: 'lockcard wide' }, [
+    el('div', { class: 'lk-brand' }, [
+      el('img', { src: LOGO_LIGHT, alt: 'Frendz Hostel El Nido' }),
+      el('h2', { text: 'Which building?' }),
+      el('p', { text: 'Each building keeps its own records, cash and staff.' }),
+    ]),
+    el('div', { class: 'sysgrid' }, locationList().map(card)),
+  ])));
 }
 
 // Passport is a PAYMENT METHOD (Cash | Passport) on a normal item deposit, not its
@@ -107,7 +171,41 @@ function ensurePassportItem() {
 // system. Runs AFTER syncFromRemote, so a device that already received the sheet
 // from another device recognises it and doesn't re-add it. Idempotent by a synced
 // config flag AND by the seed rows' own fixed ids — see seedStarterOnce().
+// Stand a brand-new building up: its own deposit items, the shared admin
+// credential so an owner can sign in, and nothing else. No CSV, no opening float,
+// no starter sheet — the team's first entry is genuinely their first entry.
+async function ensureFreshBuilding() {
+  if (store.isSetup()) return;
+  splashLoading('Setting up ' + store.location.name + '…');
+  store.state.config.setupComplete = true;
+  store.state.config.requireStaffPin = false;
+  store.state.config.managerPin = store.constructor.hashPin(OFFICIAL_MANAGER_PIN);
+  if (!store.state.itemTypes.length) store.state.itemTypes = seedItemTypes(store.location);
+  // Inherit the device's already-working GitHub target so nobody has to retype
+  // owner/repo — but pointed at THIS building's own backup file.
+  const other = await store.peekConfig('main');
+  const og = (other && other.github) || {};
+  if (og.owner && og.repo) {
+    store.state.config.github = {
+      owner: og.owner, repo: og.repo, branch: og.branch || 'main',
+      path: store.location.backupPath, autoSync: true, enabled: false,
+    };
+  }
+  // Tag tracking on from the start: the beachfront towels are numbered, and the
+  // tracker's baseline is "now", so it begins clean with nothing historical to
+  // reconcile. The LAUNDRY cycle is deliberately NOT switched on here — it needs a
+  // cycle length chosen and it changes what "available" means, so it stays a
+  // one-click setup on the Towel Tracker page.
+  store.state.config.towelTracker = { enabled: true, startedAt: nowISO() };
+  store._audit('setup.complete', store.location.name + ' initialised', { location: store.location.id });
+  store.save();
+  // Lay down the travelista routes so the system is genuinely ready for the first
+  // booking, rather than only becoming ready once someone opens that page.
+  try { tv.ensureSeed(); } catch (e) { console.error('travelista seed', e); }
+}
+
 function ensureTravelistaSeed() {
+  if (!store.location.seedTravelistaSheet) return; // that sheet belongs to Main
   try { seedStarterOnce(); }
   catch (e) { console.error('travelista seed', e); } // never block boot on it
 }
@@ -213,6 +311,10 @@ function splashLoading(msg) {
 // Staff sign in without a PIN (requireStaffPin stays false); manager-only actions
 // stay locked on devices that have no manager PIN.
 async function ensureProvisioned() {
+  // A building with no historical spreadsheet (the Beachfront) provisions EMPTY:
+  // its own deposit items, no opening float, no imported ledger. It must never
+  // touch Main's official CSV — that is Main's money, not theirs.
+  if (!store.location.seedFromOfficialCsv) return ensureFreshBuilding();
   const fresh = !store.isSetup();
   const onCurrent = store.config.officialDataVersion === OFFICIAL_DATA_VERSION;
   // Already on the CURRENT official records → nothing to do.
@@ -295,13 +397,14 @@ function renderLogin() {
   const card = el('div', { class: 'lockcard' }, [
     el('div', { class: 'lk-brand' }, [
       el('img', { src: LOGO_LIGHT, alt: 'Frendz Hostel El Nido' }),
-      el('h2', { text: 'Front Desk Tracker' }),
+      el('h2', { text: store.location.name }),
       el('p', { text: 'Sign in to continue' }),
     ]),
     el('div', { class: 'field' }, [el('label', { text: 'Sign in as' }), toggle]),
     el('div', { class: 'field' }, [el('label', { text: 'Name / initials' }), name]),
     pinField,
     el('button', { class: 'btn primary lg block mt', text: 'Sign in →', onClick: doLogin }),
+    el('button', { class: 'btn ghost block mt', text: '← Different building', onClick: () => leaveLocation() }),
   ]);
   app.appendChild(el('div', { class: 'lockwrap' }, card));
   syncPin();
@@ -334,7 +437,7 @@ function renderSystemPicker() {
     el('div', { class: 'lk-brand' }, [
       el('img', { src: LOGO_LIGHT, alt: 'Frendz Hostel El Nido' }),
       el('h2', { text: `Welcome, ${s ? s.name : ''}` }),
-      el('p', { text: 'Which system are you working in?' }),
+      el('p', { text: `${store.location.name} · which system are you working in?` }),
     ]),
     el('div', { class: 'sysgrid' }, [
       card(SYSTEMS.towels, peso(store.coh()), 'cash on hand · deposits held'),
@@ -361,6 +464,20 @@ function renderSidebar() {
   const side = el('aside', { class: 'sidebar' });
   side.appendChild(el('div', { class: 'brand' }, [
     el('img', { class: 'logo', src: LOGO_LIGHT, alt: 'Frendz', style: 'filter:brightness(0) invert(1)' }),
+  ]));
+  // Which BUILDING you are recording against. The two look alike and the money is
+  // entirely separate, so this is stated plainly and permanently on screen.
+  side.appendChild(el('button', {
+    class: 'locbadge', type: 'button', title: 'Change building',
+    onClick: () => confirmDialog({
+      title: 'Leave ' + store.location.name + '?',
+      sub: 'You will be signed out and returned to the building list. Records here are saved and backed up.',
+      confirmLabel: 'Change building', kind: 'primary', onConfirm: () => leaveLocation(),
+    }),
+  }, [
+    el('span', { class: 'ic', text: store.location.icon }),
+    el('span', { class: 'nm', text: store.location.short }),
+    el('span', { class: 'sw', text: 'Change' }),
   ]));
   // Which system you're in, and one tap back to the picker. Being explicit about
   // this matters: the two systems have similar-looking money screens, and acting
@@ -399,7 +516,7 @@ function addNav(nav, id) {
     class: 'navbtn' + (current === id ? ' active' : ''),
     dataset: { view: id },
     onClick: () => navigate(id),
-  }, [el('span', { class: 'ic', text: v.icon }), el('span', { text: v.label })]));
+  }, [el('span', { class: 'ic', text: v.icon }), el('span', { text: typeof v.label === 'function' ? v.label() : v.label })]));
 }
 
 function navigate(id, args) {

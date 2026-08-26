@@ -367,6 +367,20 @@ tr.is-reversal { background: repeating-linear-gradient(45deg, transparent, trans
    lock-screen-style choice after sign-in; the sidebar badge always says which
    system you are in, because acting in the wrong one is the costly mistake. */
 .lockcard.wide { max-width: 700px; }
+/* Which BUILDING this device is recording against — permanent, above the nav,
+   because the two buildings look identical and their money is entirely separate. */
+.locbadge {
+  display: flex; align-items: center; gap: 8px; width: calc(100% - 28px);
+  margin: 0 14px 10px; padding: 9px 11px; cursor: pointer; text-align: left;
+  background: rgba(255,255,255,.07); border: 1px solid rgba(255,255,255,.16);
+  border-radius: 10px; color: #fff; font: inherit; font-size: .82rem;
+}
+.locbadge:hover { background: rgba(255,255,255,.13); border-color: var(--gold); }
+.locbadge .ic { font-size: 1rem; }
+.locbadge .nm { font-weight: 700; flex: 1; }
+.locbadge .sw { font-size: .68rem; letter-spacing: .08em; text-transform: uppercase; color: var(--gold); }
+@media (max-width: 860px) { .locbadge { width: auto; margin: 0 8px 8px; } }
+
 .sysgrid { display: grid; grid-template-columns: 1fr 1fr; gap: 14px; }
 .syscard {
   display: flex; flex-direction: column; align-items: flex-start; gap: 6px;
