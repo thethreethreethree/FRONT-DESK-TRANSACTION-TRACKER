@@ -110,12 +110,7 @@ async function enterLocation(id, { remember = true } = {}) {
   store.useLocation(id);
   await store.load();
   await syncFromRemote();    // pull the latest off-device records (repo = source of truth)
-  await ensureProvisioned(); // only provisions a baseline if nothing was restored
-  ensureAdminSeed();         // seed the initial Admin account once
-  ensureLocationAdmins();    // …plus any admin this building names as its own
-  closeOpenDesk();           // a building with no staff yet must still need a PIN
-  ensurePassportItem();      // retire the (mis-)seeded standalone Passport item
-  ensureTravelistaSeed();    // Main only — the Aug 1-15 sheet is Main's record
+  await provisionBuilding();
   if (!_healthStarted) {
     _healthStarted = true;
     // Outage/sync watchdog: warn the moment entries stop reaching backup. On reconnect,
@@ -228,6 +223,20 @@ function ensureTravelistaSeed() {
 // One-time: seed the initial Admin account (James). He sets his own PIN after the
 // first login (Settings → Security). Idempotent via a config flag, so it never
 // resets a PIN he later changed, and it runs across devices via the synced flag.
+// Everything a building needs standing up, in one place. This used to be six
+// separate calls at boot — and the Reset button only made the FIRST of them, so a
+// reset left the building with no admin accounts (until someone happened to
+// reload) and, at a building whose staff roster was empty, an open desk. One
+// function, two callers, no way for them to drift apart again.
+async function provisionBuilding() {
+  await ensureProvisioned(); // only provisions a baseline if nothing was restored
+  ensureAdminSeed();         // seed the initial Admin account once
+  ensureLocationAdmins();    // …plus any admin this building names as its own
+  closeOpenDesk();           // a building with no staff yet must still need a PIN
+  ensurePassportItem();      // retire the (mis-)seeded standalone Passport item
+  ensureTravelistaSeed();    // Main only — the Aug 1-15 sheet is Main's record
+}
+
 // A building can name its own first admin (see locations.js `seedAdmins`). Runs
 // once per building, guarded by a synced flag AND by the account's fixed id, so it
 // cannot re-create an admin that was deliberately removed.
@@ -900,7 +909,7 @@ function renderSettings(ctx) {
           ? 'Clears local data on this device and reloads the hostel\'s official records fresh. Export a backup first if unsure.'
           : `Clears ${store.location.name}'s data on this device and starts it empty again. ${LOCATIONS.main.name} is not affected. Export a backup first if unsure.`,
         confirmLabel: 'Reset', kind: 'out',
-        onConfirm: async () => { store.reset(); store.session = null; await ensureProvisioned(); route(); } }) }),
+        onConfirm: async () => { store.reset(); store.session = null; await provisionBuilding(); route(); } }) }),
     ]),
   ]));
   return root;
