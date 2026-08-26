@@ -140,18 +140,16 @@ function renderLocationPicker() {
   clear(app);
   app.className = 'app locked';
   const card = (L) => el('button', {
-    class: 'syscard', type: 'button', onClick: () => enterLocation(L.id),
+    class: 'syscard loc', type: 'button', onClick: () => enterLocation(L.id),
   }, [
     el('span', { class: 'ic', text: L.icon }),
     el('span', { class: 'nm', text: L.name }),
-    el('span', { class: 'bl', text: L.blurb }),
-    el('span', { class: 'fig' }, [el('b', { text: 'Open' }), el('small', { text: 'separate records & staff' })]),
+    el('span', { class: 'fig' }, el('b', { text: 'Open' })),
   ]);
   app.appendChild(el('div', { class: 'lockwrap' }, el('div', { class: 'lockcard wide' }, [
     el('div', { class: 'lk-brand' }, [
       el('img', { src: LOGO_LIGHT, alt: 'Frendz Hostel El Nido' }),
       el('h2', { text: 'Which building?' }),
-      el('p', { text: 'Each building keeps its own records, cash and staff.' }),
     ]),
     el('div', { class: 'sysgrid' }, locationList().map(card)),
   ])));

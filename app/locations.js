@@ -14,7 +14,6 @@ export const LOCATIONS = {
     name: 'Frendz Hostel Main',
     short: 'Main',
     icon: '🏠',
-    blurb: 'The original front desk — towel, padlock and appliance deposits.',
     // storage identity (UNCHANGED from before locations existed)
     idbKey: 'state',
     lsKey: 'fdtt_state_v1',
@@ -52,7 +51,6 @@ export const LOCATIONS = {
     name: 'Frendz Hostel Beachfront',
     short: 'Beachfront',
     icon: '🏖️',
-    blurb: 'The beachfront property — beach towel, umbrella and appliance deposits.',
     idbKey: 'state:beachfront',
     lsKey: 'fdtt_state_beachfront',
     sessionKey: 'fdtt_session_beachfront',
