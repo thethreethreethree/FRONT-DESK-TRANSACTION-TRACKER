@@ -70,6 +70,10 @@ async function _commitBackup(reason) {
   if (!g.owner || !g.repo) throw new Error('Set owner and repo first.');
   const path = cleanPath(g.path);
   const branch = g.branch || 'main';
+  // A backup belongs to the building it STARTED in. The path is read now but the
+  // records are serialised after an await, so someone switching buildings in
+  // between would write one building's ledger into the other building's file.
+  const locAtStart = store.location.id;
 
   // NEVER overwrite another device's work. If the file moved since we last wrote
   // it, someone else pushed: pull that state and MERGE it in before we write, so
@@ -78,6 +82,7 @@ async function _commitBackup(reason) {
   // on one browser. Cheap in the common case — the SHA check is metadata only,
   // and the full file is fetched only when it has actually changed.
   await mergeRemoteBeforeWrite();
+  if (store.location.id !== locAtStart) throw new Error('building changed mid-backup — not writing');
 
   const json = JSON.stringify(store.exportData(), null, 2);
   const content = b64utf8(json);
@@ -127,10 +132,12 @@ async function _commitBackup(reason) {
 export async function mergeRemoteBeforeWrite() {
   try {
     const g = cfg();
+    const locAtStart = store.location.id; // same rule: never merge across buildings
     const sha = await remoteFileSha();
     if (!sha || sha === g.lastBackupSha) return null; // nobody else has written since us
     const remote = await fetchRemoteState();
     if (!remote || !remote.payload || !remote.payload.state) return null;
+    if (store.location.id !== locAtStart) return null; // switched while we were fetching
     const merged = store.mergeRemote(remote.payload.state);
     if (merged) {
       const g2 = store.config.github || {};

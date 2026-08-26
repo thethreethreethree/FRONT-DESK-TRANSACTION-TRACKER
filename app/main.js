@@ -103,6 +103,7 @@ async function enterLocation(id, { remember = true } = {}) {
   _lastRemoteStamp = null;
   _lastSyncedSig = null;
   _syncFailing = false;
+  clearTimeout(_autoSyncTimer); // a push queued for the building we are leaving
   try { localStorage.removeItem(SYSTEM_KEY); } catch (e) { /* ignore */ }
 
   splashLoading('Opening ' + L.name + '…');
@@ -240,6 +241,7 @@ function _syncSig() {
 // records instead of the static baseline. Fails soft: if no remote backup exists
 // (or it can't be reached), we fall through to the normal CSV provisioning.
 async function syncFromRemote() {
+  const locAtStart = store.location.id;
   let remote = null;
   try { remote = await gh.fetchRemoteState(); } catch (e) { return; }
   if (!remote || !remote.payload || !remote.payload.state) return;
@@ -250,6 +252,7 @@ async function syncFromRemote() {
   // ledger it never created, diverge permanently, and (before the lineage guard)
   // risk being merged into the real one as duplicates.
   const localFresh = !store.isSetup() || store.ledger.length === 0 || !store.hasOwnRecords();
+  if (store.location.id !== locAtStart) return; // building switched while fetching
   const rs = remote.payload.state || {};
   const adoptable = remoteAdoptable(rs.ledger, meta.auditEvents, store.ledger, (store.audit || []).length,
     (rs.travelista || {}).entries, ((store.state || {}).travelista || {}).entries);
@@ -609,6 +612,7 @@ let _lastRemoteStamp = null;
 async function pollRemote() {
   if (_polling || _syncing || !store.session) return;
   _polling = true;
+  const locAtStart = store.location.id;
   let pendingStamp = null;
   try {
     if (gh.hasToken()) {
@@ -627,6 +631,7 @@ async function pollRemote() {
     let remote = null;
     try { remote = await gh.fetchRemoteState(); } catch (e) { return; }
     if (!remote || !remote.payload || !remote.payload.state) return;
+    if (store.location.id !== locAtStart) return; // building switched mid-fetch
     health.noteRemoteBuild((remote.payload.meta || {}).build);
     // Only now — a stamp recorded before the fetch succeeded would make a dropped
     // connection look like "already seen", and we'd skip that version for good.
@@ -818,15 +823,21 @@ function renderSettings(ctx) {
     ]),
   ]));
 
-  // import from the original spreadsheet
+  // Import from a spreadsheet. The bundled "official data file" is MAIN's
+  // historical record — offering it at another building would import 16,219 of
+  // Main's rows and reconcile that building's cash to Main's figure, so it is
+  // shown only where it belongs.
+  const ownsOfficial = store.location.seedFromOfficialCsv;
   root.appendChild(el('div', { class: 'card mt-lg', style: 'max-width:720px' }, [
-    el('div', { class: 'card-h' }, [el('h3', { text: 'Spreadsheet data' }), el('span', { class: 'sub', text: 'official record + manual CSV' })]),
-    el('p', { class: 'muted', style: 'margin-top:0', html: 'The hostel\'s full deposit history ships with the app as the <strong>official data file</strong>. Load it to populate this device, or import a fresh CSV export of the two-sided towel/padlock/hair-dryer sheet.' }),
+    el('div', { class: 'card-h' }, [el('h3', { text: 'Spreadsheet data' }), el('span', { class: 'sub', text: ownsOfficial ? 'official record + manual CSV' : 'manual CSV import' })]),
+    el('p', { class: 'muted', style: 'margin-top:0', html: ownsOfficial
+      ? 'The hostel\'s full deposit history ships with the app as the <strong>official data file</strong>. Load it to populate this device, or import a fresh CSV export of the two-sided towel/padlock/hair-dryer sheet.'
+      : `Import a CSV export of <strong>${store.location.name}</strong>'s own deposit sheet. The bundled historical file belongs to ${LOCATIONS.main.name} and is deliberately not offered here.` }),
     el('div', { class: 'flex gap wrap' }, [
-      el('button', { class: 'btn primary', html: '🗄 Load official data file', onClick: loadOfficialData }),
-      el('button', { class: 'btn', html: '📄 Import CSV spreadsheet', onClick: importCSV }),
+      ownsOfficial ? el('button', { class: 'btn primary', html: '🗄 Load official data file', onClick: loadOfficialData }) : null,
+      el('button', { class: ownsOfficial ? 'btn' : 'btn primary', html: '📄 Import CSV spreadsheet', onClick: importCSV }),
     ]),
-    el('div', { class: 'hint mt', text: 'Loading the official file replaces the transactions on this device. Your PIN, items and GitHub settings are kept.' }),
+    el('div', { class: 'hint mt', text: 'Importing replaces the transactions on this device. Your PIN, items and GitHub settings are kept.' }),
   ]));
 
   // security · PINs
@@ -843,7 +854,13 @@ function renderSettings(ctx) {
     el('div', { class: 'card-h' }, [el('h3', { text: 'Danger zone' })]),
     el('div', { class: 'danger-zone flex between aic wrap gap' }, [
       el('div', {}, [el('strong', { text: 'Reset all data' }), el('div', { class: 'muted', style: 'font-size:.82rem', text: 'Erases the ledger, shifts & settings on this device. Export a backup first.' })]),
-      el('button', { class: 'btn out', text: 'Reset…', onClick: () => confirmDialog({ title: 'Reset & reload records?', sub: 'Clears local data on this device and reloads the hostel\'s official records fresh. Export a backup first if unsure.', confirmLabel: 'Reset & reload', kind: 'out', onConfirm: async () => { store.reset(); store.session = null; await ensureProvisioned(); route(); } }) }),
+      el('button', { class: 'btn out', text: 'Reset…', onClick: () => confirmDialog({
+        title: `Reset ${store.location.name}?`,
+        sub: store.location.seedFromOfficialCsv
+          ? 'Clears local data on this device and reloads the hostel\'s official records fresh. Export a backup first if unsure.'
+          : `Clears ${store.location.name}'s data on this device and starts it empty again. ${LOCATIONS.main.name} is not affected. Export a backup first if unsure.`,
+        confirmLabel: 'Reset', kind: 'out',
+        onConfirm: async () => { store.reset(); store.session = null; await ensureProvisioned(); route(); } }) }),
     ]),
   ]));
   return root;
@@ -950,7 +967,7 @@ function renderGitHubCard() {
   const owner = el('input', { class: 'input', placeholder: 'github username / org', value: g.owner || '' });
   const repo = el('input', { class: 'input', placeholder: 'repository name', value: g.repo || '' });
   const branch = el('input', { class: 'input', placeholder: 'main', value: g.branch || 'main' });
-  const path = el('input', { class: 'input', placeholder: 'data/ledger-backup.json', value: g.path || 'data/ledger-backup.json' });
+  const path = el('input', { class: 'input', placeholder: store.location.backupPath, value: g.path || store.location.backupPath });
   const token = el('input', { class: 'input', type: 'password', placeholder: gh.hasToken() ? '•••••••• (saved — leave blank to keep)' : 'fine-grained PAT (Contents: read & write)', autocomplete: 'off' });
   const auto = el('input', { type: 'checkbox' });
   // Migrate the old shift-close flag → the new every-change auto-sync.
@@ -960,9 +977,17 @@ function renderGitHubCard() {
     g.lastBackupAt ? `Last sync: ${fmtDateTime(g.lastBackupAt)}` : 'Not synced yet.');
 
   const saveCfg = () => {
+    // Guard against pointing this building at ANOTHER building's backup file —
+    // that would have one building's records overwrite the other's wholesale.
+    const wanted = path.value.trim() || store.location.backupPath;
+    const clash = locationList().find((L) => L.id !== store.location.id && L.backupPath === wanted);
+    if (clash) {
+      toast(`That file belongs to ${clash.name} — keeping ${store.location.backupPath}`, 'err');
+      path.value = store.location.backupPath;
+    }
     store.setConfig({ github: {
       owner: owner.value.trim(), repo: repo.value.trim(),
-      branch: branch.value.trim() || 'main', path: path.value.trim() || 'data/ledger-backup.json',
+      branch: branch.value.trim() || 'main', path: path.value.trim() || store.location.backupPath,
       autoSync: auto.checked, enabled: g.enabled || false,
       lastBackupAt: g.lastBackupAt, lastBackupSha: g.lastBackupSha,
     } });
