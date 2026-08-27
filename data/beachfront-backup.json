@@ -1,0 +1,206 @@
+{
+  "meta": {
+    "app": "Frendz Front Desk Transaction Tracker",
+    "build": "2026-08-19-merge-sync",
+    "writtenBy": "system",
+    "exportedAt": "2026-08-27T03:14:06.879Z",
+    "version": 1,
+    "coh": 0,
+    "entries": 0,
+    "auditEvents": 3,
+    "integrity": {
+      "ok": true,
+      "brokenAtSeq": null
+    },
+    "auditIntegrity": {
+      "ok": true,
+      "brokenAtSeq": null
+    },
+    "travelistaEntries": 0,
+    "travelistaIntegrity": {
+      "ok": true,
+      "brokenAtSeq": null
+    }
+  },
+  "state": {
+    "version": 1,
+    "config": {
+      "brand": "Frendz Hostel Beachfront",
+      "locationId": "beachfront",
+      "currency": "PHP",
+      "beginningBalance": 0,
+      "setupComplete": true,
+      "managerPin": "6nc3laieif$86d7f0cc83dc53e01ed86f14c31d7e8ee57f8251bf8e8ed97af9d106b3ae6175",
+      "staffPin": null,
+      "requireStaffPin": true,
+      "createdAt": "2026-08-27T03:13:58.190Z",
+      "github": {
+        "owner": "thethreethreethree",
+        "repo": "FRONT-DESK-TRANSACTION-TRACKER",
+        "branch": "main",
+        "path": "data/beachfront-backup.json",
+        "autoSync": true,
+        "enabled": false
+      },
+      "towelTracker": {
+        "enabled": true,
+        "startedAt": "2026-08-27T03:13:59.577Z"
+      },
+      "towelRecording": {
+        "enabled": false,
+        "startedAt": null,
+        "hours": 24
+      },
+      "adminSeedV1": true,
+      "seededAdminIds": [
+        "admin_bf_louise"
+      ],
+      "passportItemRetired": true
+    },
+    "itemTypes": [
+      {
+        "id": "item_mtay7z9i_1_bd40lz",
+        "name": "Beach Towel",
+        "defaultAmount": 0,
+        "sortOrder": 0,
+        "active": true,
+        "createdAt": "2026-08-27T03:13:58.854Z"
+      },
+      {
+        "id": "item_mtay7z9i_2_itbwe5",
+        "name": "Umbrella",
+        "defaultAmount": 0,
+        "sortOrder": 1,
+        "active": true,
+        "createdAt": "2026-08-27T03:13:58.854Z"
+      },
+      {
+        "id": "item_mtay7z9i_3_7j1bqo",
+        "name": "Hairdryer",
+        "defaultAmount": 0,
+        "sortOrder": 2,
+        "active": true,
+        "createdAt": "2026-08-27T03:13:58.854Z"
+      },
+      {
+        "id": "item_mtay7z9i_4_kgj9xv",
+        "name": "Steamer",
+        "defaultAmount": 0,
+        "sortOrder": 3,
+        "active": true,
+        "createdAt": "2026-08-27T03:13:58.854Z"
+      },
+      {
+        "id": "item_mtay7z9i_5_nnapu3",
+        "name": "Electric Kettle",
+        "defaultAmount": 0,
+        "sortOrder": 4,
+        "active": true,
+        "createdAt": "2026-08-27T03:13:58.854Z"
+      }
+    ],
+    "staff": [],
+    "admins": [
+      {
+        "id": "admin_mtay7ztm_7_vwmk25",
+        "name": "James",
+        "pin": "3a8nptgf33$8c994fbb87f3aa24361b85a681d0b1004f70434de00a62d325e05f7eae64a95b",
+        "active": true,
+        "createdAt": "2026-08-27T03:13:59.578Z"
+      },
+      {
+        "id": "admin_bf_louise",
+        "name": "Louise",
+        "pin": "bfl26$037e0c3f8d7ae21ead02443cc746d777226fdd8384ffab4e25d44ae1d1c7d519",
+        "active": true,
+        "createdAt": "2026-08-27T03:13:59.579Z"
+      }
+    ],
+    "shifts": [],
+    "ledger": [],
+    "audit": [
+      {
+        "seq": 1,
+        "id": "aud_mtay7ztl_6_pfp9hn",
+        "ts": "2026-08-27T03:13:59.577Z",
+        "actor": "system",
+        "role": "system",
+        "action": "setup.complete",
+        "what": "Frendz Hostel Beachfront initialised",
+        "details": {
+          "location": "beachfront"
+        },
+        "prevHash": "0000000000000000000000000000000000000000000000000000000000000000",
+        "hash": "93dd4ec63225b508a0958d58a830742a8112d977f28ee5731915671cef1d85a3"
+      },
+      {
+        "seq": 2,
+        "id": "aud_mtay7ztm_8_21edlg",
+        "ts": "2026-08-27T03:13:59.578Z",
+        "actor": "system",
+        "role": "system",
+        "action": "admin.add",
+        "what": "Added admin \"James\"",
+        "details": {
+          "id": "admin_mtay7ztm_7_vwmk25",
+          "name": "James"
+        },
+        "prevHash": "93dd4ec63225b508a0958d58a830742a8112d977f28ee5731915671cef1d85a3",
+        "hash": "26174aa994e4693751131ad26c0d0ae9bf56005f40beb5776c13d65a94e52560"
+      },
+      {
+        "seq": 3,
+        "id": "aud_mtay7ztn_9_fp69tx",
+        "ts": "2026-08-27T03:13:59.579Z",
+        "actor": "system",
+        "role": "system",
+        "action": "admin.add",
+        "what": "Added admin \"Louise\"",
+        "details": {
+          "id": "admin_bf_louise",
+          "name": "Louise",
+          "seeded": true
+        },
+        "prevHash": "26174aa994e4693751131ad26c0d0ae9bf56005f40beb5776c13d65a94e52560",
+        "hash": "6270ba8598a08c271600d342494252838a0fc98eabeb9060e8315f9686f8bd8c"
+      }
+    ],
+    "towels": [],
+    "towelLog": [],
+    "laundryLog": [],
+    "travelista": {
+      "enabled": false,
+      "config": {
+        "beginningCash": 0,
+        "startedAt": "2026-08-27T03:13:59.578Z",
+        "periodMode": "half"
+      },
+      "destinations": [
+        {
+          "sortOrder": 0,
+          "active": true,
+          "createdAt": "2026-08-27T03:13:59.578Z",
+          "id": "dest_pps",
+          "name": "PPS",
+          "fare": 750,
+          "fareBasis": "per_pax",
+          "commission": 100,
+          "commissionBasis": "per_pax"
+        },
+        {
+          "sortOrder": 1,
+          "active": true,
+          "createdAt": "2026-08-27T03:13:59.578Z",
+          "id": "dest_elnido",
+          "name": "EL NIDO",
+          "fare": 8000,
+          "fareBasis": "flat",
+          "commission": 1000,
+          "commissionBasis": "flat"
+        }
+      ],
+      "bookers": [],
+      "entries": []
+    }
+  }
+}
