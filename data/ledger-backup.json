@@ -2,12 +2,12 @@
   "meta": {
     "app": "Frendz Front Desk Transaction Tracker",
     "build": "2026-08-19-merge-sync",
-    "writtenBy": "DARREN",
-    "exportedAt": "2026-08-28T07:21:06.944Z",
+    "writtenBy": "Marie",
+    "exportedAt": "2026-08-28T10:48:02.299Z",
     "version": 1,
     "coh": 39300,
-    "entries": 18275,
-    "auditEvents": 5041,
+    "entries": 18276,
+    "auditEvents": 5044,
     "integrity": {
       "ok": true,
       "brokenAtSeq": null
@@ -41,8 +41,8 @@
         "path": "data/ledger-backup.json",
         "autoSync": true,
         "enabled": true,
-        "lastBackupAt": "2026-08-28T05:06:26.147Z",
-        "lastBackupSha": "fc33f31f57aa3f4fe0a5b4ebfd490ba80fca2b4b"
+        "lastBackupAt": "2026-08-28T07:20:09.676Z",
+        "lastBackupSha": "9c4667f9d977aa96940552b54e80a5b6741790b0"
       },
       "towelTracker": {
         "enabled": true,
@@ -450701,6 +450701,37 @@
         "reversesId": null,
         "prevHash": "51a7d806f1ea785a94f96845f01d6a40e4de2fd0e3336b8574ba3e1dea7e4e47",
         "hash": "7695edb6fed09d9f9f971d83eb317df03747b20b682da36afa8ae9d3fbc0ba7c"
+      },
+      {
+        "seq": 18276,
+        "id": "txn_mtctvlkw_1o_3v66k9",
+        "ts": "2026-08-28T10:47:55.136Z",
+        "kind": "exchange",
+        "itemTypeId": "item_mpxxdbc3_2_s3d7ag",
+        "itemName": "Towel",
+        "qty": 1,
+        "unitAmount": 0,
+        "amount": 0,
+        "direction": 0,
+        "guest": "ELLIOT",
+        "room": "402",
+        "pax": null,
+        "shiftId": "shift_mpy3b19n_5_j6nxol",
+        "shiftLabel": "PM",
+        "businessDate": "2026-08-28",
+        "staff": "Marie",
+        "staffRole": "staff",
+        "note": "Towel exchange: #161 → #456 (deposit #18257)",
+        "towelNo": "456",
+        "oldTowelNo": "161",
+        "towelLost": false,
+        "refundsSeq": null,
+        "exchangesSeq": 18257,
+        "mewsRes": "",
+        "privateRoom": false,
+        "reversesId": null,
+        "prevHash": "7695edb6fed09d9f9f971d83eb317df03747b20b682da36afa8ae9d3fbc0ba7c",
+        "hash": "22d6876d1c17df9bba4c101b1649017a1d517b04b53a54e16f1baec3df07b14f"
       }
     ],
     "audit": [
@@ -536488,6 +536519,22 @@
       },
       {
         "seq": 5040,
+        "id": "aud_mtchotod_1l_i99vmr",
+        "ts": "2026-08-28T05:06:43.645Z",
+        "actor": "Marie",
+        "role": "staff",
+        "action": "backup.github",
+        "what": "Backup committed to thethreethreethree/FRONT-DESK-TRANSACTION-TRACKER@main (auto-sync)",
+        "details": {
+          "reason": "auto-sync",
+          "coh": 39300,
+          "entries": 18275
+        },
+        "prevHash": "beec4b8b8f43c93dc1e48fa2940b3994e3d8823941c2a3450d8ed9bbb2c99cfb",
+        "hash": "e00972291ee0f961acfd8763d7d8fe1b076ccc54a686e5f64ac01df061423d8d"
+      },
+      {
+        "seq": 5041,
         "id": "aud_mtcmfab0_1_lamjy0",
         "ts": "2026-08-28T07:19:16.716Z",
         "actor": "GINO",
@@ -536495,22 +536542,58 @@
         "action": "auth.logout",
         "what": "GINO signed out",
         "details": {},
-        "prevHash": "beec4b8b8f43c93dc1e48fa2940b3994e3d8823941c2a3450d8ed9bbb2c99cfb",
-        "hash": "3664772ebe5ab97e86a7940ca278ced77ea28ef1bebf72f81da2fb9e3c333ec0"
+        "prevHash": "e00972291ee0f961acfd8763d7d8fe1b076ccc54a686e5f64ac01df061423d8d",
+        "hash": "8924a2565fab3c65abf096cde532225dbf75e284c74f55e7f52f8a25cec22884"
       },
       {
-        "seq": 5041,
-        "id": "aud_mtcmgpn6_7_wh8849",
-        "ts": "2026-08-28T07:20:23.250Z",
-        "actor": "DARREN",
-        "role": "manager",
-        "action": "auth.login",
-        "what": "DARREN signed in as manager",
+        "seq": 5042,
+        "id": "aud_mtcmg1bu_1m_2yhyf3",
+        "ts": "2026-08-28T07:19:51.738Z",
+        "actor": "Marie",
+        "role": "staff",
+        "action": "sync.merge",
+        "what": "Merged 0 records from another device",
         "details": {
-          "role": "manager"
+          "ledger": 0,
+          "travelista": 0,
+          "audit": 1
         },
-        "prevHash": "3664772ebe5ab97e86a7940ca278ced77ea28ef1bebf72f81da2fb9e3c333ec0",
-        "hash": "7fe3b0508b26f67d4262c071860024e337143b10f8a0c73fa5f77e4b7e6f85af"
+        "prevHash": "8924a2565fab3c65abf096cde532225dbf75e284c74f55e7f52f8a25cec22884",
+        "hash": "7e88f7f8202a7e5b032cbf073aa90ba44bc768fd7e3b621c2deaf45eb13e3d28"
+      },
+      {
+        "seq": 5043,
+        "id": "aud_mtcmgf9b_1n_ycpidh",
+        "ts": "2026-08-28T07:20:09.791Z",
+        "actor": "Marie",
+        "role": "staff",
+        "action": "backup.github",
+        "what": "Backup committed to thethreethreethree/FRONT-DESK-TRANSACTION-TRACKER@main (auto-sync)",
+        "details": {
+          "reason": "auto-sync",
+          "coh": 39300,
+          "entries": 18275
+        },
+        "prevHash": "7e88f7f8202a7e5b032cbf073aa90ba44bc768fd7e3b621c2deaf45eb13e3d28",
+        "hash": "54d54ebbf4e6bb9201eb459dacc55e2864e92fae6830d5bb21b6424890cc5970"
+      },
+      {
+        "seq": 5044,
+        "id": "aud_mtctvlkw_1p_ns5ru7",
+        "ts": "2026-08-28T10:47:55.136Z",
+        "actor": "Marie",
+        "role": "staff",
+        "action": "towel.exchange",
+        "what": "Towel exchange · ELLIOT · #161 → #456 (deposit #18257)",
+        "details": {
+          "oldTowelNo": "161",
+          "newTowelNo": "456",
+          "exchangesSeq": 18257,
+          "guest": "ELLIOT",
+          "room": "402"
+        },
+        "prevHash": "54d54ebbf4e6bb9201eb459dacc55e2864e92fae6830d5bb21b6424890cc5970",
+        "hash": "45577371bbf04e7d9488144a9e91fd537522d99a91b6ee920f7e2464b30f585d"
       }
     ],
     "towels": [
