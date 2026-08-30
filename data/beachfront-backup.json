@@ -3,11 +3,11 @@
     "app": "Frendz Front Desk Transaction Tracker",
     "build": "2026-08-19-merge-sync",
     "writtenBy": "Louise",
-    "exportedAt": "2026-08-30T07:51:29.674Z",
+    "exportedAt": "2026-08-30T07:51:39.670Z",
     "version": 1,
     "coh": 0,
     "entries": 0,
-    "auditEvents": 15,
+    "auditEvents": 18,
     "integrity": {
       "ok": true,
       "brokenAtSeq": null
@@ -16,7 +16,7 @@
       "ok": true,
       "brokenAtSeq": null
     },
-    "travelistaEntries": 0,
+    "travelistaEntries": 1,
     "travelistaIntegrity": {
       "ok": true,
       "brokenAtSeq": null
@@ -41,8 +41,8 @@
         "path": "data/beachfront-backup.json",
         "autoSync": true,
         "enabled": true,
-        "lastBackupAt": "2026-08-30T07:50:07.645Z",
-        "lastBackupSha": "8af1b457d0f60b70fa36a7b7903f706d44f3efbd"
+        "lastBackupAt": "2026-08-30T07:51:32.791Z",
+        "lastBackupSha": "ffa074622c0907f6bcef046132da3a076b56e86a"
       },
       "towelTracker": {
         "enabled": true,
@@ -350,13 +350,64 @@
         },
         "prevHash": "97885e5d8c56523767cebad84832b1c88d7b224dfce72c8a7b109bf34d934ed9",
         "hash": "a35c53d806cc2bb6300492e4789dc8be9007f6b7e95f04d01c684559464943a7"
+      },
+      {
+        "seq": 16,
+        "id": "aud_mtfiggxh_v_003y6w",
+        "ts": "2026-08-30T07:51:32.021Z",
+        "actor": "Louise",
+        "role": "manager",
+        "action": "tv.enable",
+        "what": "Travelista tracking enabled",
+        "details": {
+          "startedAt": "2026-08-27T03:13:59.578Z"
+        },
+        "prevHash": "a35c53d806cc2bb6300492e4789dc8be9007f6b7e95f04d01c684559464943a7",
+        "hash": "85fb3badb6de4cd404633a313855b232266e9ee4e01db5ca876175f9bda72424"
+      },
+      {
+        "seq": 17,
+        "id": "aud_mtfiggxi_x_dup5r2",
+        "ts": "2026-08-30T07:51:32.022Z",
+        "actor": "Louise",
+        "role": "manager",
+        "action": "tv.booking.create",
+        "what": "Travelista booking #1 · Alejandro Ortiz · PPS ×1 pax · ₱750 (commission ₱100)",
+        "details": {
+          "ref": 1,
+          "id": "tv_mtfiggxh_w_88nesx",
+          "guest": "Alejandro Ortiz",
+          "destination": "PPS",
+          "pax": 1,
+          "total": 750,
+          "commission": 100,
+          "bookedBy": "LOUISE"
+        },
+        "prevHash": "85fb3badb6de4cd404633a313855b232266e9ee4e01db5ca876175f9bda72424",
+        "hash": "ce86ca6eea2804bf7fd407a0a33a5f3b5f2cb2124f06d0363ffbd36ff2bed831"
+      },
+      {
+        "seq": 18,
+        "id": "aud_mtfighiv_y_918lxt",
+        "ts": "2026-08-30T07:51:32.791Z",
+        "actor": "Louise",
+        "role": "manager",
+        "action": "backup.github",
+        "what": "Backup committed to thethreethreethree/FRONT-DESK-TRANSACTION-TRACKER@main (auto-sync)",
+        "details": {
+          "reason": "auto-sync",
+          "coh": 0,
+          "entries": 0
+        },
+        "prevHash": "ce86ca6eea2804bf7fd407a0a33a5f3b5f2cb2124f06d0363ffbd36ff2bed831",
+        "hash": "ad3a71f6bbfa96259ae476fb5661b60ada4b33bd64ce66ff32e2e1e96ea1ca64"
       }
     ],
     "towels": [],
     "towelLog": [],
     "laundryLog": [],
     "travelista": {
-      "enabled": false,
+      "enabled": true,
       "config": {
         "beginningCash": 0,
         "startedAt": "2026-08-27T03:13:59.578Z",
@@ -394,7 +445,39 @@
           "createdAt": "2026-08-30T07:51:22.375Z"
         }
       ],
-      "entries": []
+      "entries": [
+        {
+          "seq": 1,
+          "id": "tv_mtfiggxh_w_88nesx",
+          "ts": "2026-08-30T07:51:32.021Z",
+          "kind": "booking",
+          "direction": 1,
+          "amount": 750,
+          "departureDate": "2026-08-26",
+          "guest": "Alejandro Ortiz",
+          "destination": "PPS",
+          "destinationId": "dest_pps",
+          "pax": 1,
+          "fare": 750,
+          "fareBasis": "per_pax",
+          "total": 750,
+          "travelistaShare": 650,
+          "commission": 100,
+          "bookedBy": "LOUISE",
+          "remarks": "",
+          "payoutType": "",
+          "payee": "",
+          "method": "",
+          "periodKey": "2026-08-B",
+          "staff": "Louise",
+          "staffRole": "manager",
+          "businessDate": "2026-08-30",
+          "reversesId": null,
+          "reversesKind": null,
+          "prevHash": "0000000000000000000000000000000000000000000000000000000000000000",
+          "hash": "4e2465965449dc4bc60f410872023aa33683fe95553e22a9470f863393fbeae1"
+        }
+      ]
     }
   }
 }
