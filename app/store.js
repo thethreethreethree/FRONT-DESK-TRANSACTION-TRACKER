@@ -746,7 +746,13 @@ class Store {
   // ledger is not authoritative — it should take the repo's record rather than
   // defend its own. Imported rows are written with staffRole 'system'.
   hasOwnRecords() {
-    return this.state.ledger.some((e) => e.staffRole && e.staffRole !== 'system');
+    if (this.state.ledger.some((e) => e.staffRole && e.staffRole !== 'system')) return true;
+    // TRAVELISTA BOOKINGS ARE RECORDS TOO. This looked only at the deposit ledger,
+    // so a building whose only activity is bookings — exactly what a new building
+    // does first — read as a blank device and threw its own bookings away when it
+    // pulled. Seeded rows are staffRole 'system' and rightly do not count.
+    const tv = (this.state.travelista || {}).entries || [];
+    return tv.some((e) => e.staffRole && e.staffRole !== 'system');
   }
 
   // Look up a ledger entry by its sequence number (the visible transaction #).

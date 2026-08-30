@@ -292,7 +292,13 @@ async function syncFromRemote() {
   // so it takes the repo's record. Without this it would defend a file-loaded
   // ledger it never created, diverge permanently, and (before the lineage guard)
   // risk being merged into the real one as duplicates.
-  const localFresh = !store.isSetup() || store.ledger.length === 0 || !store.hasOwnRecords();
+  // "Is this device blank?" — if yes we take the repo's copy wholesale, which
+  // SKIPS the loss-safe adoption check. So this question has to consider EVERY
+  // record chain. Asking only about the deposit ledger meant a building whose
+  // work so far was all Travelista bookings answered "blank" and destroyed them.
+  const tvEntries = ((store.state || {}).travelista || {}).entries || [];
+  const nothingRecordedHere = store.ledger.length === 0 && tvEntries.length === 0;
+  const localFresh = !store.isSetup() || nothingRecordedHere || !store.hasOwnRecords();
   if (store.location.id !== locAtStart) return; // building switched while fetching
   const rs = remote.payload.state || {};
   const adoptable = remoteAdoptable(rs.ledger, meta.auditEvents, store.ledger, (store.audit || []).length,
