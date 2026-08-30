@@ -3,11 +3,11 @@
     "app": "Frendz Front Desk Transaction Tracker",
     "build": "2026-08-19-merge-sync",
     "writtenBy": "GINO",
-    "exportedAt": "2026-08-30T02:03:08.205Z",
+    "exportedAt": "2026-08-30T02:04:16.966Z",
     "version": 1,
     "coh": 34300,
-    "entries": 18293,
-    "auditEvents": 5098,
+    "entries": 18295,
+    "auditEvents": 5101,
     "integrity": {
       "ok": true,
       "brokenAtSeq": null
@@ -41,8 +41,8 @@
         "path": "data/ledger-backup.json",
         "autoSync": true,
         "enabled": true,
-        "lastBackupAt": "2026-08-30T02:02:35.504Z",
-        "lastBackupSha": "d4b695d870af71871983d0581edbfceb839d6df8"
+        "lastBackupAt": "2026-08-30T02:03:16.902Z",
+        "lastBackupSha": "80b297ddcdf4b6af274603605b41a131ca8c2fd4"
       },
       "towelTracker": {
         "enabled": true,
@@ -451259,6 +451259,68 @@
         "reversesId": null,
         "prevHash": "abbbfe1df69ab90f362450749db9216f9f92c301e32c7aa32ea59fd475b2353c",
         "hash": "b7beccae1b9c45b23b73d441ba13fc2adc367650c8fa2299c2c872789fbafda8"
+      },
+      {
+        "seq": 18294,
+        "id": "txn_mtf60zla_j_ddc9xa",
+        "ts": "2026-08-30T02:03:34.318Z",
+        "kind": "refund",
+        "itemTypeId": "item_mpxxdbc3_2_s3d7ag",
+        "itemName": "Towel",
+        "qty": 1,
+        "unitAmount": 0,
+        "amount": 0,
+        "direction": -1,
+        "guest": "Arjoie Ladesma",
+        "room": "201",
+        "pax": null,
+        "shiftId": "shift_mpy3b19n_5_j6nxol",
+        "shiftLabel": "PM",
+        "businessDate": "2026-08-30",
+        "staff": "GINO",
+        "staffRole": "staff",
+        "note": "Guest checked out — private room hold closed, Towel returned (deposit #18194)",
+        "towelNo": "34 54 327 293",
+        "oldTowelNo": "",
+        "towelLost": false,
+        "refundsSeq": 18194,
+        "exchangesSeq": null,
+        "mewsRes": "",
+        "privateRoom": true,
+        "reversesId": null,
+        "prevHash": "b7beccae1b9c45b23b73d441ba13fc2adc367650c8fa2299c2c872789fbafda8",
+        "hash": "10d4e88f898f86a6bf7446a11def267c420f646146b7ec6cb410f994d928cd96"
+      },
+      {
+        "seq": 18295,
+        "id": "txn_mtf61qvq_l_sdc0p0",
+        "ts": "2026-08-30T02:04:09.686Z",
+        "kind": "refund",
+        "itemTypeId": "item_mpxxdbc3_2_s3d7ag",
+        "itemName": "Towel",
+        "qty": 1,
+        "unitAmount": 0,
+        "amount": 0,
+        "direction": -1,
+        "guest": "Santos Rochelle",
+        "room": "405",
+        "pax": null,
+        "shiftId": "shift_mpy3b19n_5_j6nxol",
+        "shiftLabel": "PM",
+        "businessDate": "2026-08-30",
+        "staff": "GINO",
+        "staffRole": "staff",
+        "note": "Guest checked out — private room hold closed, Towel returned (deposit #18193)",
+        "towelNo": "168 401",
+        "oldTowelNo": "",
+        "towelLost": false,
+        "refundsSeq": 18193,
+        "exchangesSeq": null,
+        "mewsRes": "",
+        "privateRoom": true,
+        "reversesId": null,
+        "prevHash": "10d4e88f898f86a6bf7446a11def267c420f646146b7ec6cb410f994d928cd96",
+        "hash": "883d839443382b647417df667976c31bd06ad9684a5b752903a3c1e80d054f7d"
       }
     ],
     "audit": [
@@ -538007,6 +538069,58 @@
         },
         "prevHash": "07eb22ae51853ba27d65927d598c3fa13eb6e7b429aaa03f78cac21886f142cd",
         "hash": "804ad7fc0b1ecf7ad029056e68a1f0569406afb0436ca5f93360fe7a006c6868"
+      },
+      {
+        "seq": 5099,
+        "id": "aud_mtf60m5i_i_j9z9sx",
+        "ts": "2026-08-30T02:03:16.902Z",
+        "actor": "GINO",
+        "role": "staff",
+        "action": "backup.github",
+        "what": "Backup committed to thethreethreethree/FRONT-DESK-TRANSACTION-TRACKER@main (auto-sync)",
+        "details": {
+          "reason": "auto-sync",
+          "coh": 34300,
+          "entries": 18293
+        },
+        "prevHash": "804ad7fc0b1ecf7ad029056e68a1f0569406afb0436ca5f93360fe7a006c6868",
+        "hash": "59074643f414bd4d49670cb3e119e63b11eab57d401f55fc6c456614f8e9489c"
+      },
+      {
+        "seq": 5100,
+        "id": "aud_mtf60zla_k_m6j336",
+        "ts": "2026-08-30T02:03:34.318Z",
+        "actor": "GINO",
+        "role": "staff",
+        "action": "privateroom.checkout",
+        "what": "Guest checked out · Arjoie Ladesma · Rm 201 · Towel #34 54 327 293 returned (deposit #18194)",
+        "details": {
+          "seq": 18194,
+          "guest": "Arjoie Ladesma",
+          "room": "201",
+          "itemName": "Towel",
+          "towelNo": "34 54 327 293"
+        },
+        "prevHash": "59074643f414bd4d49670cb3e119e63b11eab57d401f55fc6c456614f8e9489c",
+        "hash": "c8529badca730c60a8643377e40a45923b1f209087b8fab55201cab628716f8f"
+      },
+      {
+        "seq": 5101,
+        "id": "aud_mtf61qvr_m_h8ebzy",
+        "ts": "2026-08-30T02:04:09.687Z",
+        "actor": "GINO",
+        "role": "staff",
+        "action": "privateroom.checkout",
+        "what": "Guest checked out · Santos Rochelle · Rm 405 · Towel #168 401 returned (deposit #18193)",
+        "details": {
+          "seq": 18193,
+          "guest": "Santos Rochelle",
+          "room": "405",
+          "itemName": "Towel",
+          "towelNo": "168 401"
+        },
+        "prevHash": "c8529badca730c60a8643377e40a45923b1f209087b8fab55201cab628716f8f",
+        "hash": "3ebf9b45f663e8f426232ecdf146ab8b484af299f835b580007f4663f02fb5d3"
       }
     ],
     "towels": [
