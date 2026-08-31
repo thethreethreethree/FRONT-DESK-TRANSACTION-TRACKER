@@ -2,12 +2,12 @@
   "meta": {
     "app": "Frendz Front Desk Transaction Tracker",
     "build": "2026-08-19-merge-sync",
-    "writtenBy": "Marie",
-    "exportedAt": "2026-08-31T11:15:22.043Z",
+    "writtenBy": "Monie",
+    "exportedAt": "2026-08-31T15:57:01.942Z",
     "version": 1,
-    "coh": 14000,
-    "entries": 18325,
-    "auditEvents": 5155,
+    "coh": 15000,
+    "entries": 18326,
+    "auditEvents": 5160,
     "integrity": {
       "ok": true,
       "brokenAtSeq": null
@@ -16,7 +16,7 @@
       "ok": true,
       "brokenAtSeq": null
     },
-    "travelistaEntries": 57,
+    "travelistaEntries": 58,
     "travelistaIntegrity": {
       "ok": true,
       "brokenAtSeq": null
@@ -41,8 +41,8 @@
         "path": "data/ledger-backup.json",
         "autoSync": true,
         "enabled": true,
-        "lastBackupAt": "2026-08-31T03:09:31.567Z",
-        "lastBackupSha": "b715e944730eeb1fe65976301af0904c23481132"
+        "lastBackupAt": "2026-08-31T11:16:17.102Z",
+        "lastBackupSha": "28bd88d1e86024156d639e370e9d7551a11b42fa"
       },
       "towelTracker": {
         "enabled": true,
@@ -452251,6 +452251,37 @@
         "reversesId": null,
         "prevHash": "1798acc0a7a1c8a1f9ee509328a5654e1fa30adf11397bb685488d4b6c119dd7",
         "hash": "3996872c97d778d4021a6841e255e5da78c44e2646b9e30bfbc53144b502acbc"
+      },
+      {
+        "seq": 18326,
+        "id": "txn_mth693jd_c_blfa0v",
+        "ts": "2026-08-31T11:45:25.033Z",
+        "kind": "deposit",
+        "itemTypeId": "item_mpxxdbc3_2_s3d7ag",
+        "itemName": "Towel",
+        "qty": 1,
+        "unitAmount": 1000,
+        "amount": 1000,
+        "direction": 1,
+        "guest": "Angie",
+        "room": "302",
+        "pax": null,
+        "shiftId": "shift_mpy3b19n_5_j6nxol",
+        "shiftLabel": "PM",
+        "businessDate": "2026-08-31",
+        "staff": "Marie",
+        "staffRole": "staff",
+        "note": "",
+        "towelNo": "288",
+        "oldTowelNo": "",
+        "towelLost": false,
+        "refundsSeq": null,
+        "exchangesSeq": null,
+        "mewsRes": "",
+        "privateRoom": false,
+        "reversesId": null,
+        "prevHash": "3996872c97d778d4021a6841e255e5da78c44e2646b9e30bfbc53144b502acbc",
+        "hash": "ccbc6fb9bc06e1a64fb742313d3b57275cc1347a3044fd015e8c204c37f6d10f"
       }
     ],
     "audit": [
@@ -539984,6 +540015,88 @@
         },
         "prevHash": "df0a40fd8ad9919d3b8d38616e7cb8965562f2a5d9ef9eecb88cd2e5bac1c1f2",
         "hash": "44eb3c5ef9d0a3c4c386474f21eda8366f6eb60f52225034b4fbdbfbc83861b7"
+      },
+      {
+        "seq": 5156,
+        "id": "aud_mth57mzb_9_d1urzq",
+        "ts": "2026-08-31T11:16:17.303Z",
+        "actor": "Marie",
+        "role": "staff",
+        "action": "backup.github",
+        "what": "Backup committed to thethreethreethree/FRONT-DESK-TRANSACTION-TRACKER@main (auto-sync)",
+        "details": {
+          "reason": "auto-sync",
+          "coh": 14000,
+          "entries": 18325
+        },
+        "prevHash": "44eb3c5ef9d0a3c4c386474f21eda8366f6eb60f52225034b4fbdbfbc83861b7",
+        "hash": "2b5de7a7533c5e740fb4274235ba6fe880444f43c3820e1df0d11337349cf800"
+      },
+      {
+        "seq": 5157,
+        "id": "aud_mth6831r_b_nj3v9f",
+        "ts": "2026-08-31T11:44:37.743Z",
+        "actor": "Marie",
+        "role": "staff",
+        "action": "tv.booking.create",
+        "what": "Travelista booking #58 · Cristina · PPS SHARING VAN ×2 pax · ₱1,500 (commission ₱200)",
+        "details": {
+          "ref": 58,
+          "id": "tv_mth6831q_a_0h623v",
+          "guest": "Cristina",
+          "destination": "PPS SHARING VAN",
+          "pax": 2,
+          "total": 1500,
+          "commission": 200,
+          "bookedBy": "MARIE"
+        },
+        "prevHash": "2b5de7a7533c5e740fb4274235ba6fe880444f43c3820e1df0d11337349cf800",
+        "hash": "36f0d32984d1c0c9f46b62adf3bb06dfd1db58f2fed139ccac5684dd56cb0298"
+      },
+      {
+        "seq": 5158,
+        "id": "aud_mth693je_d_1ef0dt",
+        "ts": "2026-08-31T11:45:25.034Z",
+        "actor": "Marie",
+        "role": "staff",
+        "action": "deposit.create",
+        "what": "Deposit ₱1,000.00 · Towel ×1 · Angie",
+        "details": {
+          "ref": 18326,
+          "id": "txn_mth693jd_c_blfa0v",
+          "amount": 1000,
+          "item": "Towel",
+          "guest": "Angie",
+          "room": "302"
+        },
+        "prevHash": "36f0d32984d1c0c9f46b62adf3bb06dfd1db58f2fed139ccac5684dd56cb0298",
+        "hash": "098cccefbfb81f7e7bc65e3c85abf29c2b6272c211938811f2d8db3873553d47"
+      },
+      {
+        "seq": 5159,
+        "id": "aud_mth8y6cv_e_eczyrl",
+        "ts": "2026-08-31T13:00:54.319Z",
+        "actor": "Marie",
+        "role": "staff",
+        "action": "auth.logout",
+        "what": "Marie signed out",
+        "details": {},
+        "prevHash": "098cccefbfb81f7e7bc65e3c85abf29c2b6272c211938811f2d8db3873553d47",
+        "hash": "6de03efc598dcc3815112dd424c4850206c4443a72dba4470d3a5018040fefdb"
+      },
+      {
+        "seq": 5160,
+        "id": "aud_mth8yddo_f_x57rv5",
+        "ts": "2026-08-31T13:01:03.420Z",
+        "actor": "Monie",
+        "role": "staff",
+        "action": "auth.login",
+        "what": "Monie signed in as staff",
+        "details": {
+          "role": "staff"
+        },
+        "prevHash": "6de03efc598dcc3815112dd424c4850206c4443a72dba4470d3a5018040fefdb",
+        "hash": "b6bc5d7c51cd04812555e16fd9310bc8b0d2450e2917d3840f68700798759d6b"
       }
     ],
     "towels": [
@@ -547797,6 +547910,37 @@
           "reversesKind": null,
           "prevHash": "55f56b1c02a9dddfc3404f6756a6cf06f0a9b15b9b749ccadcc72627a85e637b",
           "hash": "e58bf135bbf93ee7698473b2f2850026be6b5e47ef16133fe83474ce212da93c"
+        },
+        {
+          "seq": 58,
+          "id": "tv_mth6831q_a_0h623v",
+          "ts": "2026-08-31T11:44:37.742Z",
+          "kind": "booking",
+          "direction": 1,
+          "amount": 1500,
+          "departureDate": "2026-08-31",
+          "guest": "Cristina",
+          "destination": "PPS SHARING VAN",
+          "destinationId": "dest_msrh2ktf_d_xyn4hg",
+          "pax": 2,
+          "fare": 750,
+          "fareBasis": "per_pax",
+          "total": 1500,
+          "travelistaShare": 1300,
+          "commission": 200,
+          "bookedBy": "MARIE",
+          "remarks": "",
+          "payoutType": "",
+          "payee": "",
+          "method": "",
+          "periodKey": "2026-08-B",
+          "staff": "Marie",
+          "staffRole": "staff",
+          "businessDate": "2026-08-31",
+          "reversesId": null,
+          "reversesKind": null,
+          "prevHash": "e58bf135bbf93ee7698473b2f2850026be6b5e47ef16133fe83474ce212da93c",
+          "hash": "4a8dba977e39595ec80665259b97c14ac471268b2602b8d56e23a56f83e20323"
         }
       ]
     }
