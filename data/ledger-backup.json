@@ -3,11 +3,11 @@
     "app": "Frendz Front Desk Transaction Tracker",
     "build": "2026-08-19-merge-sync",
     "writtenBy": "DARREN",
-    "exportedAt": "2026-09-01T13:03:53.349Z",
+    "exportedAt": "2026-09-01T13:04:11.477Z",
     "version": 1,
-    "coh": 17500,
-    "entries": 18336,
-    "auditEvents": 5198,
+    "coh": 18500,
+    "entries": 18337,
+    "auditEvents": 5200,
     "integrity": {
       "ok": true,
       "brokenAtSeq": null
@@ -41,8 +41,8 @@
         "path": "data/ledger-backup.json",
         "autoSync": true,
         "enabled": true,
-        "lastBackupAt": "2026-09-01T13:03:46.660Z",
-        "lastBackupSha": "9115a77d261b35cf32293cefbf031bd0b8cd66dd"
+        "lastBackupAt": "2026-09-01T13:04:03.761Z",
+        "lastBackupSha": "93b3f9ca79ca888e4fabe0b8d566b7ed3ea87670"
       },
       "towelTracker": {
         "enabled": true,
@@ -452592,6 +452592,37 @@
         "reversesId": null,
         "prevHash": "5231a157d2579b9b23afcd6254f5966b325ad67f7c97f10f0ea33bc3b33552c7",
         "hash": "ed7972e8a5db678bcabd86f3c542d6191c5adfb316e35451a3eaa68b96fac26d"
+      },
+      {
+        "seq": 18337,
+        "id": "txn_mtioi3ly_k_yc9fg5",
+        "ts": "2026-09-01T13:04:04.294Z",
+        "kind": "reversal",
+        "itemTypeId": "item_mpxxdbc3_2_s3d7ag",
+        "itemName": "Towel",
+        "qty": 1,
+        "unitAmount": 1000,
+        "amount": 1000,
+        "direction": 1,
+        "guest": "Agathe",
+        "room": "204",
+        "pax": null,
+        "shiftId": "shift_mpy3b19n_5_j6nxol",
+        "shiftLabel": "PM",
+        "businessDate": "2026-09-01",
+        "staff": "DARREN",
+        "staffRole": "manager",
+        "note": "VOID of #18329 (refund Towel Agathe). Reason: DOUBLE INPUT OF HER REFUND.",
+        "towelNo": "170",
+        "oldTowelNo": "",
+        "towelLost": false,
+        "refundsSeq": null,
+        "exchangesSeq": null,
+        "mewsRes": "",
+        "privateRoom": false,
+        "reversesId": "txn_mti0xw59_1_llmev1",
+        "prevHash": "ed7972e8a5db678bcabd86f3c542d6191c5adfb316e35451a3eaa68b96fac26d",
+        "hash": "dfb99f2da477d9d51244ac4bb91105afce4d5e39a143b255a448febf09c69ce4"
       }
     ],
     "audit": [
@@ -541023,6 +541054,38 @@
         },
         "prevHash": "873ded54e222ca4fcbcfb73c2a0f46c27bb7921fa38194c054c0ba4329089092",
         "hash": "1ce2bdc3c3dbb69ade703d601ef0d876cfb657202582ebdc3ab21aa42259a897"
+      },
+      {
+        "seq": 5199,
+        "id": "aud_mtioi375_j_651ssf",
+        "ts": "2026-09-01T13:04:03.761Z",
+        "actor": "DARREN",
+        "role": "manager",
+        "action": "backup.github",
+        "what": "Backup committed to thethreethreethree/FRONT-DESK-TRANSACTION-TRACKER@main (auto-sync)",
+        "details": {
+          "reason": "auto-sync",
+          "coh": 17500,
+          "entries": 18336
+        },
+        "prevHash": "1ce2bdc3c3dbb69ade703d601ef0d876cfb657202582ebdc3ab21aa42259a897",
+        "hash": "46736157cfb25d3eea0ed1434dec0753d15d33a4430f0ba0eb92bde05f7e2833"
+      },
+      {
+        "seq": 5200,
+        "id": "aud_mtioi3lz_l_er8jp6",
+        "ts": "2026-09-01T13:04:04.295Z",
+        "actor": "DARREN",
+        "role": "manager",
+        "action": "txn.void",
+        "what": "Voided #18329 (refund Towel · Agathe · ₱1,000.00)",
+        "details": {
+          "ref": 18329,
+          "reversalSeq": 18337,
+          "reason": "DOUBLE INPUT OF HER REFUND."
+        },
+        "prevHash": "46736157cfb25d3eea0ed1434dec0753d15d33a4430f0ba0eb92bde05f7e2833",
+        "hash": "7487e33e72badd2b5898cf7cda477d6c40385f55792040c13cce01813abe73a1"
       }
     ],
     "towels": [
