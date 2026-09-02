@@ -2,12 +2,12 @@
   "meta": {
     "app": "Frendz Front Desk Transaction Tracker",
     "build": "2026-08-19-merge-sync",
-    "writtenBy": "GINO",
-    "exportedAt": "2026-09-02T22:06:04.199Z",
+    "writtenBy": "DARREN",
+    "exportedAt": "2026-09-02T22:12:09.899Z",
     "version": 1,
     "coh": 19500,
     "entries": 18348,
-    "auditEvents": 5241,
+    "auditEvents": 5245,
     "integrity": {
       "ok": true,
       "brokenAtSeq": null
@@ -16,7 +16,7 @@
       "ok": true,
       "brokenAtSeq": null
     },
-    "travelistaEntries": 60,
+    "travelistaEntries": 61,
     "travelistaIntegrity": {
       "ok": true,
       "brokenAtSeq": null
@@ -41,8 +41,8 @@
         "path": "data/ledger-backup.json",
         "autoSync": true,
         "enabled": true,
-        "lastBackupAt": "2026-09-02T11:09:41.186Z",
-        "lastBackupSha": "bb4374e436a7a9fa0cfb5d639d9c7d1ab548bd79"
+        "lastBackupAt": "2026-09-02T11:45:20.812Z",
+        "lastBackupSha": "9b38669aeb643629305e1d3d3972c050047d98ac"
       },
       "towelTracker": {
         "enabled": true,
@@ -542055,6 +542055,56 @@
       },
       {
         "seq": 5240,
+        "id": "aud_mtk11pu9_4_wue8nd",
+        "ts": "2026-09-02T11:43:01.137Z",
+        "actor": "DARREN",
+        "role": "manager",
+        "action": "backup.github",
+        "what": "Backup committed to thethreethreethree/FRONT-DESK-TRANSACTION-TRACKER@main (auto-sync)",
+        "details": {
+          "reason": "auto-sync",
+          "coh": 19500,
+          "entries": 18348
+        },
+        "prevHash": "785eb9cab91590044e40b9a4504adcfd3cf774a305d1fbf00db860bff303e40f",
+        "hash": "c5068d433cabc4f95ad834b8e0adc0d3c3abce43e08df10940304225cae24407"
+      },
+      {
+        "seq": 5241,
+        "id": "aud_mtk13w3e_6_i8eovr",
+        "ts": "2026-09-02T11:44:42.554Z",
+        "actor": "DARREN",
+        "role": "manager",
+        "action": "tv.payout.create",
+        "what": "Travelista payout #61 · ₱4,000 · travelista → OFFICE (CASH)",
+        "details": {
+          "ref": 61,
+          "id": "tv_mtk13w3e_5_yl6czv",
+          "amount": 4000,
+          "payoutType": "travelista",
+          "payee": "OFFICE"
+        },
+        "prevHash": "c5068d433cabc4f95ad834b8e0adc0d3c3abce43e08df10940304225cae24407",
+        "hash": "9c3c693649fa45d37125fe454357722c622dbdff192a8763336535ec26453a9a"
+      },
+      {
+        "seq": 5242,
+        "id": "aud_mtk14pm4_7_40nlhi",
+        "ts": "2026-09-02T11:45:20.812Z",
+        "actor": "DARREN",
+        "role": "manager",
+        "action": "backup.github",
+        "what": "Backup committed to thethreethreethree/FRONT-DESK-TRANSACTION-TRACKER@main (auto-sync)",
+        "details": {
+          "reason": "auto-sync",
+          "coh": 19500,
+          "entries": 18348
+        },
+        "prevHash": "9c3c693649fa45d37125fe454357722c622dbdff192a8763336535ec26453a9a",
+        "hash": "fe9efb961d19c11cc3e4b9b919961a2d124fac1d37286d2714902ec6084493ad"
+      },
+      {
+        "seq": 5243,
         "id": "aud_mtknapnr_7_8gkt10",
         "ts": "2026-09-02T22:05:52.359Z",
         "actor": "Rebecca",
@@ -542062,11 +542112,11 @@
         "action": "auth.logout",
         "what": "Rebecca signed out",
         "details": {},
-        "prevHash": "785eb9cab91590044e40b9a4504adcfd3cf774a305d1fbf00db860bff303e40f",
-        "hash": "331ba20f82478c8d5bd0121ee66546578b7f00aa52f42019f28712765c359d77"
+        "prevHash": "fe9efb961d19c11cc3e4b9b919961a2d124fac1d37286d2714902ec6084493ad",
+        "hash": "62f09757a4a366cb0cb305dd1538abb6faf83706b99b92effd763b507e6c2bea"
       },
       {
-        "seq": 5241,
+        "seq": 5244,
         "id": "aud_mtknatkm_8_si8zot",
         "ts": "2026-09-02T22:05:57.430Z",
         "actor": "GINO",
@@ -542076,8 +542126,24 @@
         "details": {
           "role": "staff"
         },
-        "prevHash": "331ba20f82478c8d5bd0121ee66546578b7f00aa52f42019f28712765c359d77",
-        "hash": "5954d2a25363a1e599e4c35df6787ad13c2acd533c1a4d1eb70bd6139bae1d04"
+        "prevHash": "62f09757a4a366cb0cb305dd1538abb6faf83706b99b92effd763b507e6c2bea",
+        "hash": "dc4a06099f99dabe23475ae2c73693c6cd172991829b96e425fcd7bfba8c546c"
+      },
+      {
+        "seq": 5245,
+        "id": "aud_mtkninpo_1_q268uf",
+        "ts": "2026-09-02T22:12:03.085Z",
+        "actor": "DARREN",
+        "role": "manager",
+        "action": "sync.merge",
+        "what": "Merged 0 records from another device",
+        "details": {
+          "ledger": 0,
+          "travelista": 0,
+          "audit": 2
+        },
+        "prevHash": "dc4a06099f99dabe23475ae2c73693c6cd172991829b96e425fcd7bfba8c546c",
+        "hash": "a2498c5c7c209fbf021a62f897c908a6e08ffd9acef30eba20a8fa1f11ee9b9c"
       }
     ],
     "towels": [
@@ -549984,6 +550050,37 @@
           "reversesKind": null,
           "prevHash": "d5b98471fea10f9d62725cb5556937ffd038dc3bcb1aede1f1db5d26dfd05a4a",
           "hash": "885bf14ddbdb9d0686cc6b585ab7158ef2bc8bd3bfa251ec650bd34358bb85f8"
+        },
+        {
+          "seq": 61,
+          "id": "tv_mtk13w3e_5_yl6czv",
+          "ts": "2026-09-02T11:44:42.554Z",
+          "kind": "payout",
+          "direction": -1,
+          "amount": 4000,
+          "departureDate": "",
+          "guest": "",
+          "destination": "",
+          "destinationId": null,
+          "pax": null,
+          "fare": null,
+          "fareBasis": "",
+          "total": 0,
+          "travelistaShare": 0,
+          "commission": 0,
+          "bookedBy": "",
+          "remarks": "Commission only P4000 not 7500. There is problem in the amount from previous booking",
+          "payoutType": "travelista",
+          "payee": "OFFICE",
+          "method": "CASH",
+          "periodKey": "2026-08-B",
+          "staff": "DARREN",
+          "staffRole": "manager",
+          "businessDate": "2026-09-02",
+          "reversesId": null,
+          "reversesKind": null,
+          "prevHash": "885bf14ddbdb9d0686cc6b585ab7158ef2bc8bd3bfa251ec650bd34358bb85f8",
+          "hash": "7a11e9b52f571be916ce683c79f15a4440adce3077646c1d6f96dad1dea55d2e"
         }
       ]
     }
