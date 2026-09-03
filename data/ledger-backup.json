@@ -3,11 +3,11 @@
     "app": "Frendz Front Desk Transaction Tracker",
     "build": "2026-08-19-merge-sync",
     "writtenBy": "Rebecca",
-    "exportedAt": "2026-09-03T11:02:56.288Z",
+    "exportedAt": "2026-09-03T12:16:14.237Z",
     "version": 1,
-    "coh": 18300,
-    "entries": 18360,
-    "auditEvents": 5279,
+    "coh": 17800,
+    "entries": 18361,
+    "auditEvents": 5281,
     "integrity": {
       "ok": true,
       "brokenAtSeq": null
@@ -41,8 +41,8 @@
         "path": "data/ledger-backup.json",
         "autoSync": true,
         "enabled": true,
-        "lastBackupAt": "2026-09-03T11:02:49.626Z",
-        "lastBackupSha": "f9d46148736581260e52bbf095f4de975e7db1b7"
+        "lastBackupAt": "2026-09-03T11:03:05.233Z",
+        "lastBackupSha": "6c7eb59703e6de0277541b33278ceb7dcff2d9f6"
       },
       "towelTracker": {
         "enabled": true,
@@ -453336,6 +453336,37 @@
         "reversesId": null,
         "prevHash": "3c513cd4757e94aab6ddede09136f189b44fce09d321f2857326272872e3cb18",
         "hash": "c958188d84acf800de2718827bf1cd66c7a762f65dce97a9ed8da59e972b03e8"
+      },
+      {
+        "seq": 18361,
+        "id": "txn_mtlho57j_1j_zs1e9n",
+        "ts": "2026-09-03T12:16:07.519Z",
+        "kind": "refund",
+        "itemTypeId": "item_mpxxdbc8_4_mb0zqa",
+        "itemName": "Hair Dryer",
+        "qty": 1,
+        "unitAmount": 500,
+        "amount": 500,
+        "direction": -1,
+        "guest": "Karen",
+        "room": "405",
+        "pax": null,
+        "shiftId": "shift_mpy3b19n_5_j6nxol",
+        "shiftLabel": "PM",
+        "businessDate": "2026-09-03",
+        "staff": "Rebecca",
+        "staffRole": "staff",
+        "note": "",
+        "towelNo": "",
+        "oldTowelNo": "",
+        "towelLost": false,
+        "refundsSeq": 18336,
+        "exchangesSeq": null,
+        "mewsRes": "",
+        "privateRoom": false,
+        "reversesId": null,
+        "prevHash": "c958188d84acf800de2718827bf1cd66c7a762f65dce97a9ed8da59e972b03e8",
+        "hash": "445dfffdc20d9431361f66dca8fc7bf557fdd0fc3a7fbc79908ca25846394ca4"
       }
     ],
     "audit": [
@@ -543094,6 +543125,41 @@
         },
         "prevHash": "2bc07c440efe7a95f71cc0f3d976724996ab8ab972f45c0d93175c8f02905c64",
         "hash": "77127f015a3de63e1afd181f404a18425247dc5c19dd06b9b0a36bf7581da2a5"
+      },
+      {
+        "seq": 5280,
+        "id": "aud_mtlf27td_1i_sp2ryn",
+        "ts": "2026-09-03T11:03:05.233Z",
+        "actor": "Rebecca",
+        "role": "staff",
+        "action": "backup.github",
+        "what": "Backup committed to thethreethreethree/FRONT-DESK-TRANSACTION-TRACKER@main (auto-sync)",
+        "details": {
+          "reason": "auto-sync",
+          "coh": 18300,
+          "entries": 18360
+        },
+        "prevHash": "77127f015a3de63e1afd181f404a18425247dc5c19dd06b9b0a36bf7581da2a5",
+        "hash": "e1128d2e67bf64fe0f90ace2a94a20da90e9d3c0d666f2a7e1d4934917f549c6"
+      },
+      {
+        "seq": 5281,
+        "id": "aud_mtlho57j_1k_qqpyen",
+        "ts": "2026-09-03T12:16:07.519Z",
+        "actor": "Rebecca",
+        "role": "staff",
+        "action": "refund.create",
+        "what": "Refund ₱500.00 · Hair Dryer ×1 · Karen",
+        "details": {
+          "ref": 18361,
+          "id": "txn_mtlho57j_1j_zs1e9n",
+          "amount": 500,
+          "item": "Hair Dryer",
+          "guest": "Karen",
+          "room": "405"
+        },
+        "prevHash": "e1128d2e67bf64fe0f90ace2a94a20da90e9d3c0d666f2a7e1d4934917f549c6",
+        "hash": "cecb182d718ffe32afdc9a9c2c504b4366710f2a9401cdbe4be395a80ee2d549"
       }
     ],
     "towels": [
