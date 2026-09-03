@@ -3,11 +3,11 @@
     "app": "Frendz Front Desk Transaction Tracker",
     "build": "2026-08-19-merge-sync",
     "writtenBy": "GINO",
-    "exportedAt": "2026-09-03T04:07:27.529Z",
+    "exportedAt": "2026-09-03T04:10:55.004Z",
     "version": 1,
     "coh": 14300,
     "entries": 18355,
-    "auditEvents": 5262,
+    "auditEvents": 5264,
     "integrity": {
       "ok": true,
       "brokenAtSeq": null
@@ -16,7 +16,7 @@
       "ok": true,
       "brokenAtSeq": null
     },
-    "travelistaEntries": 61,
+    "travelistaEntries": 62,
     "travelistaIntegrity": {
       "ok": true,
       "brokenAtSeq": null
@@ -41,8 +41,8 @@
         "path": "data/ledger-backup.json",
         "autoSync": true,
         "enabled": true,
-        "lastBackupAt": "2026-09-03T04:06:56.444Z",
-        "lastBackupSha": "ae6481ca78b54d87bd3f091f56613eb26d0454fb"
+        "lastBackupAt": "2026-09-03T04:07:38.059Z",
+        "lastBackupSha": "a1b5d1d4a135854461cb735693e3bc3386fb306b"
       },
       "towelTracker": {
         "enabled": true,
@@ -542648,6 +542648,43 @@
         },
         "prevHash": "b972dd76d6aebb2623c955e8ba79621724506c765f3ebd9af53715482d70ebc8",
         "hash": "7f8f81ef2043dd25a0552b4c5de0af29c28c598d8f2b5724a2540619f1677e14"
+      },
+      {
+        "seq": 5263,
+        "id": "aud_mtl07xzn_u_pwzje6",
+        "ts": "2026-09-03T04:07:38.195Z",
+        "actor": "GINO",
+        "role": "staff",
+        "action": "backup.github",
+        "what": "Backup committed to thethreethreethree/FRONT-DESK-TRANSACTION-TRACKER@main (auto-sync)",
+        "details": {
+          "reason": "auto-sync",
+          "coh": 14300,
+          "entries": 18355
+        },
+        "prevHash": "7f8f81ef2043dd25a0552b4c5de0af29c28c598d8f2b5724a2540619f1677e14",
+        "hash": "21685bdc60d3c8b4a26cfc1d0d14431f840f97db68c45b1683e30b4c86a1eb9d"
+      },
+      {
+        "seq": 5264,
+        "id": "aud_mtl0byss_w_46b5gk",
+        "ts": "2026-09-03T04:10:45.868Z",
+        "actor": "GINO",
+        "role": "staff",
+        "action": "tv.booking.create",
+        "what": "Travelista booking #62 · ELOI AYATS · PPS SHARING VAN ×1 pax · ₱750 (commission ₱100)",
+        "details": {
+          "ref": 62,
+          "id": "tv_mtl0byss_v_t6zgug",
+          "guest": "ELOI AYATS",
+          "destination": "PPS SHARING VAN",
+          "pax": 1,
+          "total": 750,
+          "commission": 100,
+          "bookedBy": "GINO"
+        },
+        "prevHash": "21685bdc60d3c8b4a26cfc1d0d14431f840f97db68c45b1683e30b4c86a1eb9d",
+        "hash": "9dac46d7e4347d4f8c3da2245ecf68cf651c545e910ab101d6000efd7506c3a8"
       }
     ],
     "towels": [
@@ -550585,6 +550622,37 @@
           "reversesKind": null,
           "prevHash": "885bf14ddbdb9d0686cc6b585ab7158ef2bc8bd3bfa251ec650bd34358bb85f8",
           "hash": "7a11e9b52f571be916ce683c79f15a4440adce3077646c1d6f96dad1dea55d2e"
+        },
+        {
+          "seq": 62,
+          "id": "tv_mtl0byss_v_t6zgug",
+          "ts": "2026-09-03T04:10:45.868Z",
+          "kind": "booking",
+          "direction": 1,
+          "amount": 750,
+          "departureDate": "2026-09-04",
+          "guest": "ELOI AYATS",
+          "destination": "PPS SHARING VAN",
+          "destinationId": "dest_msrh2ktf_d_xyn4hg",
+          "pax": 1,
+          "fare": 750,
+          "fareBasis": "per_pax",
+          "total": 750,
+          "travelistaShare": 650,
+          "commission": 100,
+          "bookedBy": "GINO",
+          "remarks": "",
+          "payoutType": "",
+          "payee": "",
+          "method": "",
+          "periodKey": "2026-09-A",
+          "staff": "GINO",
+          "staffRole": "staff",
+          "businessDate": "2026-09-03",
+          "reversesId": null,
+          "reversesKind": null,
+          "prevHash": "7a11e9b52f571be916ce683c79f15a4440adce3077646c1d6f96dad1dea55d2e",
+          "hash": "67ea8662456e153500440475c3e0b717aca0c24e12124abcd5dee1c93706a8d3"
         }
       ]
     }
