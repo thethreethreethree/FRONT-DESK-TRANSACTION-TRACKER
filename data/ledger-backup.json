@@ -3,11 +3,11 @@
     "app": "Frendz Front Desk Transaction Tracker",
     "build": "2026-08-19-merge-sync",
     "writtenBy": "Chalyn",
-    "exportedAt": "2026-09-06T10:21:36.946Z",
+    "exportedAt": "2026-09-06T10:27:27.017Z",
     "version": 1,
     "coh": 26800,
-    "entries": 18405,
-    "auditEvents": 5398,
+    "entries": 18406,
+    "auditEvents": 5400,
     "integrity": {
       "ok": true,
       "brokenAtSeq": null
@@ -41,8 +41,8 @@
         "path": "data/ledger-backup.json",
         "autoSync": true,
         "enabled": true,
-        "lastBackupAt": "2026-09-06T09:14:55.215Z",
-        "lastBackupSha": "bd159937855aa6af3afd4f4682fab85cc0812bd3"
+        "lastBackupAt": "2026-09-06T10:21:47.442Z",
+        "lastBackupSha": "956a77181927258af91a6b6e8e93cace348ee46c"
       },
       "towelTracker": {
         "enabled": true,
@@ -454731,6 +454731,37 @@
         "reversesId": null,
         "prevHash": "6bacd93687688633fd9d565e9e5210189660ed395578237bbf2125d157ca13be",
         "hash": "8ccf6d339c5a14b577a7d4c38886e276704318701f0c1b87c2026eff2d601b82"
+      },
+      {
+        "seq": 18406,
+        "id": "txn_mtpo3ss2_p_ilj6kc",
+        "ts": "2026-09-06T10:27:20.306Z",
+        "kind": "refund",
+        "itemTypeId": "item_mpxxdbc3_2_s3d7ag",
+        "itemName": "Towel",
+        "qty": 1,
+        "unitAmount": 0,
+        "amount": 0,
+        "direction": -1,
+        "guest": "DEMIAN",
+        "room": "208",
+        "pax": null,
+        "shiftId": "shift_mpy3b19n_5_j6nxol",
+        "shiftLabel": "PM",
+        "businessDate": "2026-09-06",
+        "staff": "Chalyn",
+        "staffRole": "staff",
+        "note": "Passport + Towel returned · MEWS 126898 (deposit #18144)",
+        "towelNo": "267 29",
+        "oldTowelNo": "",
+        "towelLost": false,
+        "refundsSeq": 18144,
+        "exchangesSeq": null,
+        "mewsRes": "126898",
+        "privateRoom": false,
+        "reversesId": null,
+        "prevHash": "8ccf6d339c5a14b577a7d4c38886e276704318701f0c1b87c2026eff2d601b82",
+        "hash": "dd0d1cb2a577d5feffc8630a00e59b9c39e3e0c90ed78b9fb66014f8d5187f46"
       }
     ],
     "audit": [
@@ -546473,6 +546504,40 @@
         },
         "prevHash": "1fc16cb1b89dfe64b16dfc108902205593c78bac914a9eb2913e44bbd2aff3f3",
         "hash": "1e6416f9ca7781e824b4b3d19b1613af7a29fcb1faeb68a7757a54414c070047"
+      },
+      {
+        "seq": 5399,
+        "id": "aud_mtpnwo1j_o_lbc2k2",
+        "ts": "2026-09-06T10:21:47.575Z",
+        "actor": "Chalyn",
+        "role": "staff",
+        "action": "backup.github",
+        "what": "Backup committed to thethreethreethree/FRONT-DESK-TRANSACTION-TRACKER@main (auto-sync)",
+        "details": {
+          "reason": "auto-sync",
+          "coh": 26800,
+          "entries": 18405
+        },
+        "prevHash": "1e6416f9ca7781e824b4b3d19b1613af7a29fcb1faeb68a7757a54414c070047",
+        "hash": "afeb050a35994d7b5a3cc7a19972d3b59ac190c3c3ba27935d2d175385cbfe67"
+      },
+      {
+        "seq": 5400,
+        "id": "aud_mtpo3ss2_q_j7gk5q",
+        "ts": "2026-09-06T10:27:20.306Z",
+        "actor": "Chalyn",
+        "role": "staff",
+        "action": "passport.return",
+        "what": "Passport returned · DEMIAN · MEWS 126898 (deposit #18144)",
+        "details": {
+          "seq": 18144,
+          "guest": "DEMIAN",
+          "room": "208",
+          "mewsRes": "126898",
+          "itemName": "Towel"
+        },
+        "prevHash": "afeb050a35994d7b5a3cc7a19972d3b59ac190c3c3ba27935d2d175385cbfe67",
+        "hash": "0ba1ac263b08031531939f5331c8baada39f2d6f9262bd791331847284f83d64"
       }
     ],
     "towels": [
