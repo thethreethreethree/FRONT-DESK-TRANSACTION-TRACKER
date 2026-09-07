@@ -3,11 +3,11 @@
     "app": "Frendz Front Desk Transaction Tracker",
     "build": "2026-08-19-merge-sync",
     "writtenBy": "James",
-    "exportedAt": "2026-09-07T01:49:39.507Z",
+    "exportedAt": "2026-09-07T01:50:35.289Z",
     "version": 1,
     "coh": 23800,
-    "entries": 18410,
-    "auditEvents": 5414,
+    "entries": 18411,
+    "auditEvents": 5416,
     "integrity": {
       "ok": true,
       "brokenAtSeq": null
@@ -41,8 +41,8 @@
         "path": "data/ledger-backup.json",
         "autoSync": true,
         "enabled": true,
-        "lastBackupAt": "2026-09-06T23:54:40.694Z",
-        "lastBackupSha": "66e1b945826ee24c32677512652e3da045fb85bf"
+        "lastBackupAt": "2026-09-07T01:49:48.384Z",
+        "lastBackupSha": "ada3885ef4319ef6c41861e1a06b0c157350dbeb"
       },
       "towelTracker": {
         "enabled": true,
@@ -454886,6 +454886,37 @@
         "reversesId": null,
         "prevHash": "1bc645e100f3a306ee9ab09d7f032cc5f2c07e28af32113cdcb68ac65448eab2",
         "hash": "0b93978be43bad798f53f43919a7b407c25bc65d251c3aa4520cd0cf2e326b30"
+      },
+      {
+        "seq": 18411,
+        "id": "txn_mtql1ylp_6_mlncz5",
+        "ts": "2026-09-07T01:49:41.869Z",
+        "kind": "refund",
+        "itemTypeId": "item_mpxxdbc3_2_s3d7ag",
+        "itemName": "Towel",
+        "qty": 1,
+        "unitAmount": 0,
+        "amount": 0,
+        "direction": -1,
+        "guest": "Raphael Forait",
+        "room": "401",
+        "pax": null,
+        "shiftId": "shift_mpy3b19n_5_j6nxol",
+        "shiftLabel": "PM",
+        "businessDate": "2026-09-07",
+        "staff": "James",
+        "staffRole": "manager",
+        "note": "Guest checked out — private room hold closed, Towel returned (deposit #18333)",
+        "towelNo": "41 404 93 408",
+        "oldTowelNo": "",
+        "towelLost": false,
+        "refundsSeq": 18333,
+        "exchangesSeq": null,
+        "mewsRes": "",
+        "privateRoom": true,
+        "reversesId": null,
+        "prevHash": "0b93978be43bad798f53f43919a7b407c25bc65d251c3aa4520cd0cf2e326b30",
+        "hash": "b7460918f7ad59e3c5ca6f717a1890bee6356206f5880e93f2f33acd22963ea6"
       }
     ],
     "audit": [
@@ -546885,6 +546916,40 @@
         },
         "prevHash": "b456dd02a00f8e4694d9c5536a2d087b9796e4744d1a5f36ae5a09f17ba334b9",
         "hash": "f92d7b2d8f27563ed416af7c4f353e0ca5a29c7fe96e064007489fa988994b6d"
+      },
+      {
+        "seq": 5415,
+        "id": "aud_mtql1ylq_7_y62ar7",
+        "ts": "2026-09-07T01:49:41.870Z",
+        "actor": "James",
+        "role": "manager",
+        "action": "privateroom.checkout",
+        "what": "Guest checked out · Raphael Forait · Rm 401 · Towel #41 404 93 408 returned (deposit #18333)",
+        "details": {
+          "seq": 18333,
+          "guest": "Raphael Forait",
+          "room": "401",
+          "itemName": "Towel",
+          "towelNo": "41 404 93 408"
+        },
+        "prevHash": "f92d7b2d8f27563ed416af7c4f353e0ca5a29c7fe96e064007489fa988994b6d",
+        "hash": "0dfc040a76f3cbe32ca53f708f31ae4d4674b35c423cc6ce33f6a9d639e0c81b"
+      },
+      {
+        "seq": 5416,
+        "id": "aud_mtql23mo_8_3al5za",
+        "ts": "2026-09-07T01:49:48.384Z",
+        "actor": "James",
+        "role": "manager",
+        "action": "backup.github",
+        "what": "Backup committed to thethreethreethree/FRONT-DESK-TRANSACTION-TRACKER@main (auto-sync)",
+        "details": {
+          "reason": "auto-sync",
+          "coh": 23800,
+          "entries": 18411
+        },
+        "prevHash": "0dfc040a76f3cbe32ca53f708f31ae4d4674b35c423cc6ce33f6a9d639e0c81b",
+        "hash": "921aefb774ba1580d7eb305e5e798eea3be97507a5915ccc9ca97a569e057bf9"
       }
     ],
     "towels": [
