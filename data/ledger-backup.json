@@ -2,12 +2,12 @@
   "meta": {
     "app": "Frendz Front Desk Transaction Tracker",
     "build": "2026-08-19-merge-sync",
-    "writtenBy": "Rebecca",
-    "exportedAt": "2026-09-06T23:55:24.051Z",
+    "writtenBy": "James",
+    "exportedAt": "2026-09-07T01:49:39.507Z",
     "version": 1,
     "coh": 23800,
-    "entries": 18408,
-    "auditEvents": 5412,
+    "entries": 18410,
+    "auditEvents": 5414,
     "integrity": {
       "ok": true,
       "brokenAtSeq": null
@@ -42,7 +42,7 @@
         "autoSync": true,
         "enabled": true,
         "lastBackupAt": "2026-09-06T23:54:40.694Z",
-        "lastBackupSha": "5cbf4d00f78f3f801d11be12774b81406fcc4a65"
+        "lastBackupSha": "66e1b945826ee24c32677512652e3da045fb85bf"
       },
       "towelTracker": {
         "enabled": true,
@@ -454824,6 +454824,68 @@
         "reversesId": null,
         "prevHash": "3034360ab5b06f4882c67ddfd12742250a5addc532ba4930b033cb73cc199b8a",
         "hash": "e159fdc679c68572423ee61d6251f8a558c8ffc6fbf55490f791ccc5a2f6f312"
+      },
+      {
+        "seq": 18409,
+        "id": "txn_mtql1omy_2_m9ragy",
+        "ts": "2026-09-07T01:49:28.954Z",
+        "kind": "deposit",
+        "itemTypeId": "item_mpxxdbc3_2_s3d7ag",
+        "itemName": "Towel",
+        "qty": 1,
+        "unitAmount": 0,
+        "amount": 0,
+        "direction": 1,
+        "guest": "Peri Salman",
+        "room": "401",
+        "pax": 4,
+        "shiftId": "shift_mpy3b19n_5_j6nxol",
+        "shiftLabel": "PM",
+        "businessDate": "2026-09-07",
+        "staff": "James",
+        "staffRole": "manager",
+        "note": "",
+        "towelNo": "231/7/245/445/90",
+        "oldTowelNo": "",
+        "towelLost": false,
+        "refundsSeq": null,
+        "exchangesSeq": null,
+        "mewsRes": "",
+        "privateRoom": true,
+        "reversesId": null,
+        "prevHash": "e159fdc679c68572423ee61d6251f8a558c8ffc6fbf55490f791ccc5a2f6f312",
+        "hash": "1bc645e100f3a306ee9ab09d7f032cc5f2c07e28af32113cdcb68ac65448eab2"
+      },
+      {
+        "seq": 18410,
+        "id": "txn_mtql1rs6_4_scaxh4",
+        "ts": "2026-09-07T01:49:33.031Z",
+        "kind": "refund",
+        "itemTypeId": "item_mpxxdbc3_2_s3d7ag",
+        "itemName": "Towel",
+        "qty": 1,
+        "unitAmount": 0,
+        "amount": 0,
+        "direction": -1,
+        "guest": "",
+        "room": "401",
+        "pax": null,
+        "shiftId": "shift_mpy3b19n_5_j6nxol",
+        "shiftLabel": "PM",
+        "businessDate": "2026-09-07",
+        "staff": "James",
+        "staffRole": "manager",
+        "note": "Guest checked out — private room hold closed, Towel returned (deposit #18392)",
+        "towelNo": "63 285 23 14",
+        "oldTowelNo": "",
+        "towelLost": false,
+        "refundsSeq": 18392,
+        "exchangesSeq": null,
+        "mewsRes": "",
+        "privateRoom": true,
+        "reversesId": null,
+        "prevHash": "1bc645e100f3a306ee9ab09d7f032cc5f2c07e28af32113cdcb68ac65448eab2",
+        "hash": "0b93978be43bad798f53f43919a7b407c25bc65d251c3aa4520cd0cf2e326b30"
       }
     ],
     "audit": [
@@ -546786,6 +546848,43 @@
         },
         "prevHash": "e28f0783bd4e449b4fa8a047e641f8fc8a12da5305b5399d1763ff35970f5ffa",
         "hash": "e6596be25eb15942fe91d96396e9a4351f069af056d6be34f62c86f0c2b6cc0a"
+      },
+      {
+        "seq": 5413,
+        "id": "aud_mtql1omy_3_ygwmcx",
+        "ts": "2026-09-07T01:49:28.954Z",
+        "actor": "James",
+        "role": "manager",
+        "action": "deposit.create",
+        "what": "Deposit ₱0.00 · Towel ×1 · Peri Salman",
+        "details": {
+          "ref": 18409,
+          "id": "txn_mtql1omy_2_m9ragy",
+          "amount": 0,
+          "item": "Towel",
+          "guest": "Peri Salman",
+          "room": "401"
+        },
+        "prevHash": "e6596be25eb15942fe91d96396e9a4351f069af056d6be34f62c86f0c2b6cc0a",
+        "hash": "b456dd02a00f8e4694d9c5536a2d087b9796e4744d1a5f36ae5a09f17ba334b9"
+      },
+      {
+        "seq": 5414,
+        "id": "aud_mtql1rs7_5_93npa8",
+        "ts": "2026-09-07T01:49:33.031Z",
+        "actor": "James",
+        "role": "manager",
+        "action": "privateroom.checkout",
+        "what": "Guest checked out · 401 · Rm 401 · Towel #63 285 23 14 returned (deposit #18392)",
+        "details": {
+          "seq": 18392,
+          "guest": "",
+          "room": "401",
+          "itemName": "Towel",
+          "towelNo": "63 285 23 14"
+        },
+        "prevHash": "b456dd02a00f8e4694d9c5536a2d087b9796e4744d1a5f36ae5a09f17ba334b9",
+        "hash": "f92d7b2d8f27563ed416af7c4f353e0ca5a29c7fe96e064007489fa988994b6d"
       }
     ],
     "towels": [
