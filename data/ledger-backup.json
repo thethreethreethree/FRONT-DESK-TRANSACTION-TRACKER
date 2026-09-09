@@ -3,11 +3,11 @@
     "app": "Frendz Front Desk Transaction Tracker",
     "build": "2026-08-19-merge-sync",
     "writtenBy": "Marie",
-    "exportedAt": "2026-09-09T06:12:52.611Z",
+    "exportedAt": "2026-09-09T06:26:22.163Z",
     "version": 1,
     "coh": 21200,
     "entries": 18435,
-    "auditEvents": 5503,
+    "auditEvents": 5505,
     "integrity": {
       "ok": true,
       "brokenAtSeq": null
@@ -16,7 +16,7 @@
       "ok": true,
       "brokenAtSeq": null
     },
-    "travelistaEntries": 68,
+    "travelistaEntries": 69,
     "travelistaIntegrity": {
       "ok": true,
       "brokenAtSeq": null
@@ -41,8 +41,8 @@
         "path": "data/ledger-backup.json",
         "autoSync": true,
         "enabled": true,
-        "lastBackupAt": "2026-09-09T06:12:45.941Z",
-        "lastBackupSha": "54c87fd6782ac951cfaa59a4798e5a265679e38b"
+        "lastBackupAt": "2026-09-09T06:13:07.327Z",
+        "lastBackupSha": "f934df4c95d8826a222a98012e57f0c002373409"
       },
       "towelTracker": {
         "enabled": true,
@@ -549111,6 +549111,43 @@
         },
         "prevHash": "9104e9ffee13f7339ae1e56b93e9d53223db5b80400316411b77aaaca884c8c7",
         "hash": "41d104a3210d7b968334e6049a9980071f1243bc82e90104dcf5b329e439cf27"
+      },
+      {
+        "seq": 5504,
+        "id": "aud_mttpcfi8_6_miuq6o",
+        "ts": "2026-09-09T06:13:07.328Z",
+        "actor": "Marie",
+        "role": "staff",
+        "action": "backup.github",
+        "what": "Backup committed to thethreethreethree/FRONT-DESK-TRANSACTION-TRACKER@main (auto-sync)",
+        "details": {
+          "reason": "auto-sync",
+          "coh": 21200,
+          "entries": 18435
+        },
+        "prevHash": "41d104a3210d7b968334e6049a9980071f1243bc82e90104dcf5b329e439cf27",
+        "hash": "2129ad9f354e2fc0d1c9af9d9b83a606eebcd7f4416d2a1795debc5caf8c07a5"
+      },
+      {
+        "seq": 5505,
+        "id": "aud_mttptblg_8_em2ue4",
+        "ts": "2026-09-09T06:26:15.412Z",
+        "actor": "Marie",
+        "role": "staff",
+        "action": "tv.booking.create",
+        "what": "Travelista booking #69 · Omer · LIO AIRPORT ×1 pax · ₱1,500 (commission ₱500)",
+        "details": {
+          "ref": 69,
+          "id": "tv_mttptble_7_cgzdgb",
+          "guest": "Omer",
+          "destination": "LIO AIRPORT",
+          "pax": 1,
+          "total": 1500,
+          "commission": 500,
+          "bookedBy": "MARIE"
+        },
+        "prevHash": "2129ad9f354e2fc0d1c9af9d9b83a606eebcd7f4416d2a1795debc5caf8c07a5",
+        "hash": "6817f0656a1e5172d51cb630708a08c5c8891c7b8500087d71cfa0511e5b7cd4"
       }
     ],
     "towels": [
@@ -557281,6 +557318,37 @@
           "reversesKind": null,
           "prevHash": "17bcaa8710c315f0b18b21dafe123d5eee2e07366612deca5c3c853c951357e1",
           "hash": "63cfdedaed9e67a767e273956aea53c32f625a0caa27ef20a79a1c80dbc91025"
+        },
+        {
+          "seq": 69,
+          "id": "tv_mttptble_7_cgzdgb",
+          "ts": "2026-09-09T06:26:15.410Z",
+          "kind": "booking",
+          "direction": 1,
+          "amount": 1500,
+          "departureDate": "2026-09-09",
+          "guest": "Omer",
+          "destination": "LIO AIRPORT",
+          "destinationId": "dest_mttpa67e_2_el10b1",
+          "pax": 1,
+          "fare": 1500,
+          "fareBasis": "per_pax",
+          "total": 1500,
+          "travelistaShare": 1000,
+          "commission": 500,
+          "bookedBy": "MARIE",
+          "remarks": "",
+          "payoutType": "",
+          "payee": "",
+          "method": "",
+          "periodKey": "2026-09-A",
+          "staff": "Marie",
+          "staffRole": "staff",
+          "businessDate": "2026-09-09",
+          "reversesId": null,
+          "reversesKind": null,
+          "prevHash": "63cfdedaed9e67a767e273956aea53c32f625a0caa27ef20a79a1c80dbc91025",
+          "hash": "454d688d3820803fc3244e1a6c903c46cd640d800f7283fe65cc0e88110d8be0"
         }
       ]
     }
