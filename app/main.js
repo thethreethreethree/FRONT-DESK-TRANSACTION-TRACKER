@@ -232,6 +232,7 @@ async function provisionBuilding() {
   await ensureProvisioned(); // only provisions a baseline if nothing was restored
   ensureAdminSeed();         // seed the initial Admin account once
   ensureLocationAdmins();    // …plus any admin this building names as its own
+  retirePromotedStaff();     // …and retire the STAFF account of anyone promoted
   closeOpenDesk();           // a building with no staff yet must still need a PIN
   ensurePassportItem();      // retire the (mis-)seeded standalone Passport item
   ensureTravelistaSeed();    // Main only — the Aug 1-15 sheet is Main's record
@@ -240,6 +241,29 @@ async function provisionBuilding() {
 // A building can name its own first admin (see locations.js `seedAdmins`). Runs
 // once per building, guarded by a synced flag AND by the account's fixed id, so it
 // cannot re-create an admin that was deliberately removed.
+// Someone promoted from staff to Admin keeps ONE way in. Sign-in checks the staff
+// roster before anything else, so an old staff account would quietly win whenever
+// they typed the PIN they were used to — handing them a staff session and none of
+// their tools. Runs once per building (tracked by name), and runs on EVERY device,
+// which is what makes it stick: a removal done by hand on one device is undone by
+// the next merge, because merges union the rosters.
+function retirePromotedStaff() {
+  const names = store.location.retireStaff || [];
+  if (!names.length) return;
+  const done = Array.isArray(store.config.retiredStaffNames) ? store.config.retiredStaffNames : [];
+  const todo = names.filter((n) => !done.includes(String(n).toUpperCase()));
+  if (!todo.length) return;
+  for (const n of todo) {
+    const want = String(n).toUpperCase();
+    for (const s of store.staffList().filter((x) => String(x.name).trim().toUpperCase() === want)) {
+      store.removeStaff(s.id);
+      store._audit('staff.promoted', `Retired the staff account for "${s.name}" — promoted to Admin`, { name: s.name, id: s.id });
+    }
+    done.push(want);
+  }
+  store.setConfig({ retiredStaffNames: done });
+}
+
 function ensureLocationAdmins() {
   const seeds = store.location.seedAdmins || [];
   if (!seeds.length) return;
@@ -248,7 +272,15 @@ function ensureLocationAdmins() {
   // once. Recording the id either way also means an admin who was deliberately
   // removed is not silently re-created on the next load.
   let done = store.config.seededAdminIds;
-  if (!Array.isArray(done)) done = store.config.locationAdminSeedV1 ? seeds.map((a) => a.id) : [];
+  if (!Array.isArray(done)) {
+    // Migrating off the old blanket flag. It only ever meant "the seeds that
+    // existed back THEN were applied" — and those are, by definition, the ones
+    // now on the roster. Marking every CURRENTLY declared seed as done instead
+    // would silently swallow every admin named after the flag was first set,
+    // which is exactly how a newly added admin went missing at one building.
+    const present = new Set(store.adminList().map((a) => a.id));
+    done = store.config.locationAdminSeedV1 ? seeds.filter((a) => present.has(a.id)).map((a) => a.id) : [];
+  }
   const todo = seeds.filter((a) => !done.includes(a.id));
   if (!todo.length) { if (!Array.isArray(store.config.seededAdminIds)) store.setConfig({ seededAdminIds: done }); return; }
   for (const a of todo) { store.addAdminHashed(a); done.push(a.id); }
@@ -447,7 +479,7 @@ function renderLogin() {
     }
     currentSystem = null; // a fresh sign-in always chooses a system
     try { localStorage.removeItem(SYSTEM_KEY); } catch (e) { /* ignore */ }
-    renderSystemPicker();
+    offerOwnPassword(renderSystemPicker);
   };
   pin.addEventListener('keydown', (e) => { if (e.key === 'Enter') doLogin(); });
   name.addEventListener('keydown', (e) => { if (e.key === 'Enter') doLogin(); });
@@ -467,6 +499,40 @@ function renderLogin() {
   app.appendChild(el('div', { class: 'lockwrap' }, card));
   syncPin();
   setTimeout(() => name.focus(), 60);
+}
+
+// An admin who was HANDED a password is invited to replace it the first time they
+// sign in — the credential was chosen by whoever set the account up, and it has
+// usually travelled through a message or a note to get to them. Declining is
+// allowed: this is a front desk mid-shift, not a security console, and locking
+// someone out of their own tools to enforce a policy would be the worse failure.
+function offerOwnPassword(next) {
+  const admin = store.currentAdmin();
+  if (!admin || !admin.mustSetOwnPin) { next(); return; }
+  const pin = el('input', { class: 'input', type: 'password', inputmode: 'text', placeholder: 'New password (at least 4 characters)', autocomplete: 'new-password' });
+  const again = el('input', { class: 'input', type: 'password', inputmode: 'text', placeholder: 'Type it again', autocomplete: 'new-password' });
+  const err = el('div', { class: 'hint', style: 'color:var(--danger);min-height:16px' });
+  const { close } = openModal({
+    title: `Welcome, ${admin.name}`,
+    sub: 'You are signed in with the password you were given. Would you like to set your own?',
+    body: el('div', {}, [
+      el('div', { class: 'field' }, [el('label', { text: 'New password' }), pin]),
+      el('div', { class: 'field' }, [el('label', { text: 'Confirm' }), again, err]),
+      el('div', { class: 'pill', html: 'Only you will know it. You can change it again later under <strong>Settings → Security</strong>.' }),
+    ]),
+    actions: [
+      { label: 'Keep the one I was given', kind: 'ghost', onClick: (c) => { c(); next(); } },
+      { label: 'Set my password', kind: 'primary', onClick: (c) => {
+        const v = pin.value || '';
+        if (v.length < 4) { err.textContent = 'Use at least 4 characters.'; pin.focus(); return; }
+        if (v !== again.value) { err.textContent = 'The two entries do not match.'; again.value = ''; again.focus(); return; }
+        store.setAdminPin(admin.id, v);
+        toast('Your password is set — use it from now on', 'ok');
+        c(); next();
+      } },
+    ],
+  });
+  setTimeout(() => pin.focus(), 60);
 }
 
 // ------------------------------------------------------------ System picker
@@ -703,9 +769,14 @@ async function pollRemote() {
       // which is how two desks ping-ponged the backup for a day while real
       // transactions sat on one browser. Merge instead: union both sides, keep
       // everything, and the deadlock resolves itself.
-      if (!store.hasOwnRecords()) {
-        // Bootstrap-only ledger: adopt the repo's record outright instead of
-        // merging a file-loaded lineage into it.
+      // Bootstrap-only ledger: take the repo's record outright rather than merge a
+      // file-loaded lineage into it — but ONLY when the repo actually has records
+      // we lack. A brand-new building has no transactions yet, so this fired on
+      // every poll and replaced the whole state, quietly undoing the setup done
+      // on the device seconds earlier: its admins, staff, items and rates.
+      const remoteRecords = (rs.ledger || []).length + (((rs.travelista || {}).entries) || []).length;
+      const localRecords = store.ledger.length + ((store.travelista.entries) || []).length;
+      if (!store.hasOwnRecords() && remoteRecords > localRecords) {
         store._suppressAudit = true;
         try { store.importData(remote.payload); } finally { store._suppressAudit = false; }
         if (remote.sha) { const g = store.config.github || {}; g.lastBackupSha = remote.sha; store.setConfig({ github: g }); }

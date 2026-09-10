@@ -364,6 +364,13 @@ class Store {
       if (s && (s.role === 'manager' || s.role === 'staff')) this.session = s;
     } catch (e) { /* corrupt — ignore */ }
   }
+  // The signed-in admin's own record, when they signed in against a roster
+  // account (rather than the shared credential). Used to invite them to replace
+  // a password that was issued to them.
+  currentAdmin() {
+    if (!this.session || !this.session.adminId) return null;
+    return (this.state.admins || []).find((a) => a.id === this.session.adminId) || null;
+  }
   isManager() { return this.session && this.session.role === 'manager'; }
 
   // ------------------------------------------------------------- item types
@@ -1478,7 +1485,9 @@ class Store {
     const nm = String(name || '').trim();
     if (!nm || !pinHash) return null;
     if (this.state.admins.some((a) => a.id === id || a.name.toLowerCase() === nm.toLowerCase())) return null;
-    const a = { id: id || uid('admin'), name: nm, pin: pinHash, active: true, createdAt: nowISO() };
+    // Flagged as issued-not-chosen: the person was handed this credential rather
+    // than choosing it, so they are invited to replace it on first sign-in.
+    const a = { id: id || uid('admin'), name: nm, pin: pinHash, active: true, createdAt: nowISO(), mustSetOwnPin: true };
     this.state.admins.push(a);
     this._audit('admin.add', `Added admin "${a.name}"`, { id: a.id, name: a.name, seeded: true });
     this.save();
@@ -1488,6 +1497,7 @@ class Store {
     const a = (this.state.admins || []).find((x) => x.id === id);
     if (!a) return false;
     a.pin = Store.hashPin(newPin);
+    a.mustSetOwnPin = false; // they have now chosen it themselves
     this._audit('admin.pin_change', `Changed PIN for admin "${a.name}"`, { id, name: a.name });
     this.save();
     return true;
