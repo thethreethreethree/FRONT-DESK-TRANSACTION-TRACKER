@@ -151,6 +151,7 @@ function bookersCard(ctx) {
 function cashCard(ctx) {
   const rec = tv.reconciliation();
   const openI = el('input', { class: 'input', type: 'number', step: '0.01', value: rec.beginning, style: 'max-width:200px' });
+  const countI = el('input', { class: 'input', type: 'number', step: '0.01', value: rec.cash, style: 'max-width:200px' });
   const modeSel = el('select', { class: 'input', style: 'max-width:260px' }, [
     el('option', { value: 'half', text: 'Half-month (1–15 / 16–end) — as the sheet' }),
     el('option', { value: 'month', text: 'Calendar month' }),
@@ -193,9 +194,64 @@ function cashCard(ctx) {
       } }),
     ]),
     el('hr', { class: 'hr' }),
+    // ADMIN: square the recorded box with the cash actually in it. The difference
+    // becomes ONE labelled, hash-chained entry that says why and who approved it —
+    // never a hidden edit. The same treatment the front-desk drawer gets.
+    el('p', { class: 'muted', style: 'margin:0', html: 'If the cash physically in the box does not match the figure above, an admin can <strong>reconcile</strong> it. That books one visible, fully audited adjustment — the bookings and payouts themselves are untouched.' }),
+    el('div', { class: 'flex gap mt', style: 'align-items:flex-end' }, [
+      el('div', { class: 'field', style: 'margin:0' }, [el('label', { text: 'Reconcile cash box to (₱)' }), countI]),
+      el('button', { class: 'btn', text: 'Reconcile…', onClick: () => openReconcileCash(ctx, countI.value) }),
+    ]),
+    el('hr', { class: 'hr' }),
     el('div', { class: 'field', style: 'margin:0' }, [el('label', { text: 'Reporting period' }), modeSel,
       el('div', { class: 'hint', text: 'Bookings file by DEPARTURE date. Changing this re-files the whole record — no data is rewritten.' })]),
   ]);
+}
+
+// A cash-box reconciliation is accountability-critical: it must say WHY, who was
+// involved, and which entry it relates to — the same fields the front desk demands
+// for a COH adjustment, for the same reason.
+function openReconcileCash(ctx, prefill) {
+  const cur = tv.cash();
+  const targetI = el('input', { class: 'input', type: 'number', step: '0.01', value: prefill || cur, style: 'max-width:220px' });
+  const reasonI = el('textarea', { class: 'input', rows: '2', placeholder: 'Why must the cash box be adjusted? (required)' });
+  const staffI = el('input', { class: 'input', placeholder: 'Staff involved', autocomplete: 'off' });
+  const refI = el('input', { class: 'input', placeholder: 'e.g. 24', autocomplete: 'off' });
+  const diff = el('div', { class: 'muted', style: 'font-size:.85rem;margin-top:6px' });
+  const upd = () => {
+    const t = parseFloat(targetI.value || '');
+    diff.innerHTML = isFinite(t)
+      ? `Cash box <b>${peso(cur)}</b> → <b>${peso(t)}</b> · books a <b>${(t - cur) >= 0 ? '+' : '−'}${peso(Math.abs(Math.round((t - cur) * 100) / 100))}</b> adjustment`
+      : 'Enter the counted amount';
+  };
+  targetI.addEventListener('input', upd); upd();
+  openModal({
+    title: 'Reconcile the travelista cash box', sub: 'Admin approval required · fully audited', wide: true,
+    body: el('div', {}, [
+      el('div', { class: 'field' }, [el('label', { text: 'Cash actually counted (₱)' }), targetI, diff]),
+      el('div', { class: 'field' }, [el('label', { text: 'Reason (required)' }), reasonI]),
+      el('div', { class: 'row2' }, [
+        el('div', { class: 'field' }, [el('label', { text: 'Staff involved (required)' }), staffI]),
+        el('div', { class: 'field' }, [el('label', { text: 'Related booking # (required)' }), refI]),
+      ]),
+      el('div', { class: 'pill-warn', html: 'This is a <strong>visible, permanent, audited</strong> entry in the travelista record. Every field is required for accountability.' }),
+    ]),
+    actions: [
+      { label: 'Cancel', kind: 'ghost' },
+      { label: 'Reconcile (admin)', kind: 'primary', onClick: (close) => {
+        const t = parseFloat(targetI.value || '');
+        if (!isFinite(t)) return toast('Enter the counted amount', 'warn');
+        if (!reasonI.value.trim()) return toast('A reason is required', 'warn');
+        if (!staffI.value.trim()) return toast('Enter the staff involved', 'warn');
+        if (!refI.value.trim()) return toast('Enter the related booking #', 'warn');
+        managerGate(() => {
+          const e = tv.reconcileCash(t, { reason: reasonI.value.trim(), staffInvolved: staffI.value.trim(), refSeq: refI.value.trim() });
+          toast(e ? `Reconciled · cash box now ${peso(tv.cash())}` : 'The box already matches', 'ok');
+          close(); ctx.navigate('tv-settings');
+        }, { reason: `Approve reconciling the travelista cash box to ${peso(t)}` });
+      } },
+    ],
+  });
 }
 
 // ------------------------------------------------------------- sheet data I/O

@@ -249,6 +249,15 @@ export const tv = {
       payoutType: entry.payoutType || '',     // travelista | commission | other
       payee: (entry.payee || '').trim(),
       method: (entry.method || '').trim(),
+      // AMENDMENT fields. A booking is never edited in place — a correction is
+      // appended that supersedes it. The entry carries the NEW absolute figures
+      // (so the sheet can show them) and the DELTAS against what it replaced (so
+      // the totals stay a simple sum and never depend on replay order).
+      amendsSeq: entry.amendsSeq != null && entry.amendsSeq !== '' ? Number(entry.amendsSeq) : null,
+      dTotal: entry.dTotal != null ? round2(entry.dTotal) : 0,
+      dShare: entry.dShare != null ? round2(entry.dShare) : 0,
+      dCommission: entry.dCommission != null ? round2(entry.dCommission) : 0,
+      dPax: entry.dPax != null ? Number(entry.dPax) : 0,
       periodKey: entry.periodKey || '',
       staff: entry.staff || (store.session ? store.session.name : 'system'),
       staffRole: entry.staffRole || (store.session ? store.session.role : 'system'),
@@ -305,6 +314,107 @@ export const tv = {
     return e;
   },
 
+  // The figures a booking CURRENTLY stands at — the original, with the latest
+  // amendment applied. Everything that displays a booking goes through this, so
+  // an amended row reads as corrected everywhere at once.
+  effective(e) {
+    if (!e || e.kind !== 'booking') return e;
+    let latest = null;
+    for (const a of this.entries) {
+      if (a.kind !== 'amendment' || a.amendsSeq !== e.seq) continue;
+      if (this.isReversed(a.id)) continue;
+      if (!latest || a.seq > latest.seq) latest = a;
+    }
+    if (!latest) return e;
+    return Object.assign({}, e, {
+      guest: latest.guest, destination: latest.destination, destinationId: latest.destinationId,
+      pax: latest.pax, fare: latest.fare, fareBasis: latest.fareBasis,
+      total: latest.total, travelistaShare: latest.travelistaShare, commission: latest.commission,
+      bookedBy: latest.bookedBy, remarks: latest.remarks,
+      amended: true, amendedAt: latest.ts, amendedBy: latest.staff, amendedSeq: latest.seq,
+    });
+  },
+  isAmended(seq) { return this.entries.some((a) => a.kind === 'amendment' && a.amendsSeq === seq && !this.isReversed(a.id)); },
+
+  // ADMIN: correct a booking that was recorded wrongly — the wrong guest, the
+  // wrong route, the wrong number of passengers, the wrong fare. The original row
+  // is NOT edited; a correction is appended that supersedes it, so the record
+  // still shows what was first entered and that it was put right. Any money
+  // difference moves the cash box by exactly the delta, so the box stays true.
+  amendBooking(seq, patch = {}, reason = '') {
+    const original = this.entryBySeq(seq);
+    if (!original || original.kind !== 'booking') return null;
+    if (this.isReversed(original.id)) return null; // a voided booking is corrected by re-entering
+    const cur = this.effective(original);
+    const d = patch.destinationId ? this.destinationById(patch.destinationId) : null;
+    const pax = patch.pax != null && patch.pax !== '' ? Math.max(1, Number(patch.pax)) : cur.pax;
+    const fare = patch.fare != null && patch.fare !== '' ? round2(patch.fare) : cur.fare;
+    const total = patch.total != null && patch.total !== '' ? round2(patch.total) : cur.total;
+    const commission = patch.commission != null && patch.commission !== '' ? round2(patch.commission) : cur.commission;
+    if (commission > total) return null;
+    const next = {
+      guest: patch.guest != null ? String(patch.guest).trim() : cur.guest,
+      destinationId: patch.destinationId || cur.destinationId,
+      destination: d ? d.name : cur.destination,
+      pax, fare, fareBasis: d ? d.fareBasis : cur.fareBasis,
+      total, commission, share: round2(total - commission),
+      bookedBy: patch.bookedBy != null ? String(patch.bookedBy).trim() : cur.bookedBy,
+      remarks: patch.remarks != null ? String(patch.remarks).trim() : cur.remarks,
+    };
+    const dTotal = round2(next.total - cur.total);
+    const dShare = round2(next.share - cur.travelistaShare);
+    const dCommission = round2(next.commission - cur.commission);
+    const dPax = (next.pax || 0) - (cur.pax || 0);
+    const changed = [];
+    if (next.guest !== cur.guest) changed.push(`guest ${cur.guest || '—'} → ${next.guest || '—'}`);
+    if (next.destination !== cur.destination) changed.push(`route ${cur.destination || '—'} → ${next.destination || '—'}`);
+    if (next.pax !== cur.pax) changed.push(`pax ${cur.pax} → ${next.pax}`);
+    if (next.total !== cur.total) changed.push(`total ₱${cur.total.toLocaleString()} → ₱${next.total.toLocaleString()}`);
+    if (next.commission !== cur.commission) changed.push(`commission ₱${cur.commission.toLocaleString()} → ₱${next.commission.toLocaleString()}`);
+    if (next.bookedBy !== cur.bookedBy) changed.push(`booked by ${cur.bookedBy || '—'} → ${next.bookedBy || '—'}`);
+    if (!changed.length && next.remarks === cur.remarks) return null; // nothing actually changed
+
+    const e = this._append({
+      kind: 'amendment', direction: dTotal >= 0 ? 1 : -1, amount: Math.abs(dTotal),
+      departureDate: original.departureDate,
+      guest: next.guest, destination: next.destination, destinationId: next.destinationId,
+      pax: next.pax, fare: next.fare, fareBasis: next.fareBasis,
+      total: next.total, travelistaShare: next.share, commission: next.commission,
+      bookedBy: next.bookedBy,
+      remarks: `Corrected #${seq}: ${changed.join(' · ') || 'remarks'}${reason ? ' · ' + reason : ''}`,
+      amendsSeq: seq, dTotal, dShare, dCommission, dPax,
+      periodKey: original.periodKey,
+    });
+    store._audit('tv.booking.amend',
+      `Corrected travelista booking #${seq} · ${changed.join(' · ') || 'remarks'}${reason ? ' · ' + reason : ''}`,
+      { ref: seq, amendmentSeq: e.seq, dTotal, dCommission, reason });
+    return e;
+  },
+
+  // ADMIN: book a labelled adjustment so the recorded cash box equals what is
+  // physically there. The equivalent of reconciling the front-desk drawer: the
+  // difference becomes ONE visible, hash-chained entry — never a hidden edit —
+  // and it says why, and who authorised it.
+  reconcileCash(target, { reason = '', staffInvolved = '', refSeq = '' } = {}) {
+    const cur = this.cash();
+    const diff = round2(Number(target) - cur);
+    if (!isFinite(diff) || Math.abs(diff) < 0.005) return null;
+    const ref = String(refSeq || '').replace(/^#/, '').trim();
+    const parts = [];
+    if (reason) parts.push(reason);
+    if (staffInvolved) parts.push('staff ' + staffInvolved);
+    if (ref) parts.push('ref #' + ref);
+    const e = this._append({
+      kind: 'adjustment', direction: diff >= 0 ? 1 : -1, amount: Math.abs(diff),
+      remarks: `Cash box reconciled to ₱${round2(Number(target)).toLocaleString()}${parts.length ? ' · ' + parts.join(' · ') : ''}`,
+      periodKey: this.currentPeriodKey(),
+    });
+    store._audit('tv.cash.reconcile',
+      `Travelista cash box ₱${cur.toLocaleString()} → ₱${round2(Number(target)).toLocaleString()} (${diff >= 0 ? '+' : '−'}₱${Math.abs(diff).toLocaleString()})${reason ? ' · ' + reason : ''}`,
+      { from: cur, to: round2(Number(target)), adjustment: diff, reason, staffInvolved, refSeq: ref });
+    return e;
+  },
+
   // Correct a mistake the only way an append-only record allows: append its
   // inverse. The original row stays visible (struck through) with the reversal
   // pointing at it, so the record shows what happened AND that it was undone.
@@ -321,6 +431,10 @@ export const tv = {
       total: t.total, travelistaShare: t.travelistaShare, commission: t.commission,
       bookedBy: t.bookedBy, payoutType: t.payoutType, payee: t.payee, method: t.method,
       periodKey: t.periodKey,
+      // Carry a correction's DELTAS onto its reversal. Without them the reversal
+      // moved the cash back but backed nothing out of the takings, leaving the
+      // books apart by exactly the corrected amount.
+      amendsSeq: t.amendsSeq, dTotal: t.dTotal, dShare: t.dShare, dCommission: t.dCommission, dPax: t.dPax,
       remarks: `VOID of #${t.seq} (${t.kind}${t.guest ? ' · ' + t.guest : ''}). Reason: ${reason || 'n/a'}`,
       reversesId: targetId, reversesKind: t.kind,
     });
@@ -362,7 +476,7 @@ export const tv = {
   // row — total, share and commission together — with no special-casing.
   totals(filterFn = () => true) {
     let collected = 0, share = 0, commission = 0, pax = 0, bookings = 0;
-    let paidTravelista = 0, paidCommission = 0, paidOther = 0;
+    let paidTravelista = 0, paidCommission = 0, paidOther = 0, adjustments = 0;
     for (const e of this.entries) {
       if (!filterFn(e)) continue;
       const sales = e.kind === 'booking' || (e.kind === 'reversal' && e.reversesKind === 'booking');
@@ -375,6 +489,22 @@ export const tv = {
         bookings += sign;
         continue;
       }
+      // A correction moves the figures by its DELTA — the booking it supersedes is
+      // still counted in full above, so only the difference is applied here.
+      const amend = e.kind === 'amendment' || (e.kind === 'reversal' && e.reversesKind === 'amendment');
+      if (amend) {
+        const sign = e.kind === 'amendment' ? 1 : -1;
+        collected += (e.dTotal || 0) * sign;
+        share += (e.dShare || 0) * sign;
+        commission += (e.dCommission || 0) * sign;
+        pax += (e.dPax || 0) * sign;
+        continue;
+      }
+      // A cash-box reconciliation moves the box but belongs to neither the
+      // operator's share nor the hostel's commission — it is tracked on its own,
+      // exactly as the front desk treats a COH adjustment.
+      const adj = e.kind === 'adjustment' || (e.kind === 'reversal' && e.reversesKind === 'adjustment');
+      if (adj) { adjustments += e.amount * e.direction * (e.kind === 'adjustment' ? 1 : 1); continue; }
       const payout = e.kind === 'payout' || (e.kind === 'reversal' && e.reversesKind === 'payout');
       if (payout) {
         const sign = e.kind === 'payout' ? 1 : -1;
@@ -387,7 +517,7 @@ export const tv = {
     const paidOut = round2(paidTravelista + paidCommission + paidOther);
     return {
       collected: round2(collected), share: round2(share), commission: round2(commission),
-      pax, bookings,
+      pax, bookings, adjustments: round2(adjustments),
       paidTravelista: round2(paidTravelista), paidCommission: round2(paidCommission),
       paidOther: round2(paidOther), paidOut,
       net: round2(collected - paidOut),
@@ -405,8 +535,10 @@ export const tv = {
     return {
       beginning: this.beginningCash(),
       collected: t.collected, paidOut: t.paidOut, cash,
-      payable, commissionHeld, other: t.paidOther,
-      balances: Math.abs(round2(this.beginningCash() + payable + commissionHeld - t.paidOther - cash)) < 0.005,
+      payable, commissionHeld, other: t.paidOther, adjustments: t.adjustments,
+      // Adjustments sit outside the operator/hostel split, so they carry their own
+      // term — the same shape the front desk uses for a COH adjustment.
+      balances: Math.abs(round2(this.beginningCash() + payable + commissionHeld - t.paidOther + t.adjustments - cash)) < 0.005,
     };
   },
 
@@ -491,9 +623,10 @@ export const tv = {
     const rows = [head.join(',')];
     let n = 0;
     let total = 0, share = 0, commission = 0;
-    for (const e of this.entries) {
-      if (e.kind !== 'booking' || !filterFn(e)) continue;
-      if (this.isReversed(e.id)) continue;
+    for (const raw of this.entries) {
+      if (raw.kind !== 'booking' || !filterFn(raw)) continue;
+      if (this.isReversed(raw.id)) continue;
+      const e = this.effective(raw); // export what the booking now stands at
       n += 1;
       total = round2(total + e.total); share = round2(share + e.travelistaShare); commission = round2(commission + e.commission);
       rows.push([n, fmtYMD(e.departureDate), e.guest, e.destination, e.pax, e.fare, e.total, e.bookedBy, e.travelistaShare, e.commission, e.remarks].map(q).join(','));

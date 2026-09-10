@@ -81,14 +81,21 @@ export function render(ctx) {
     // Sheet order: by departure date, then by the order they were recorded.
     const sorted = rows.slice().sort((a, b) => (a.departureDate < b.departureDate ? -1 : a.departureDate > b.departureDate ? 1 : a.seq - b.seq));
     let n = 0;
-    for (const e of sorted) {
-      const voided = tv.isReversed(e.id);
+    for (const raw of sorted) {
+      const voided = tv.isReversed(raw.id);
+      // Show what the booking CURRENTLY stands at: the original with any admin
+      // correction applied. The original row is never edited — the correction is
+      // a separate, visible entry — but the sheet must read as corrected.
+      const e = tv.effective(raw);
       n += voided ? 0 : 1;
       const strike = voided ? 'text-decoration:line-through;opacity:.5' : '';
       tb.appendChild(el('tr', {}, [
         el('td', {}, el('span', { class: 'seq', text: voided ? '—' : String(n) })),
         el('td', { style: strike, text: fmtYMD(e.departureDate) }),
-        el('td', { style: strike }, el('strong', { text: e.guest || '—' })),
+        el('td', { style: strike }, [
+          el('strong', { text: e.guest || '—' }),
+          e.amended ? el('span', { class: 'tag exg', style: 'margin-left:6px', text: 'corrected' }) : null,
+        ]),
         el('td', { style: strike, text: e.destination || '—' }),
         el('td', { class: 'num', style: strike, text: String(e.pax ?? '') }),
         el('td', { class: 'num', style: strike, text: pesoPlain(e.fare) }),
@@ -99,7 +106,10 @@ export function render(ctx) {
         el('td', { style: strike, text: e.remarks || '' }),
         el('td', { class: 'right' }, voided
           ? el('span', { class: 'tag rev', text: 'void' })
-          : el('button', { class: 'btn ghost sm', text: 'Void', onClick: () => voidBooking(e, paint) })),
+          : el('div', { class: 'flex gap', style: 'justify-content:flex-end' }, [
+            el('button', { class: 'btn ghost sm', text: 'Amend', title: 'Correct this booking (admin)', onClick: () => amendBooking(raw, paint) }),
+            el('button', { class: 'btn ghost sm', text: 'Void', onClick: () => voidBooking(raw, paint) }),
+          ])),
       ]));
     }
     // the sheet's totals row
@@ -153,6 +163,79 @@ function statCard(k, v, meta) {
     el('span', { class: 'v', text: v }),
     el('span', { class: 'meta', text: meta }),
   ]));
+}
+
+// ADMIN: correct a booking that was entered wrongly. The original is not edited
+// — a correction is appended that supersedes it — so the record keeps both what
+// was first entered and the fact it was put right. Any money difference moves the
+// cash box by exactly that difference.
+function amendBooking(raw, done) {
+  const cur = tv.effective(raw);
+  const guest = el('input', { class: 'input', value: cur.guest || '', autocomplete: 'off' });
+  const dest = el('select', { class: 'input' });
+  for (const d of tv.activeDestinations()) dest.appendChild(el('option', { value: d.id, text: d.name }));
+  if (cur.destinationId) dest.value = cur.destinationId;
+  const pax = el('input', { class: 'input', type: 'number', min: '1', value: String(cur.pax ?? 1) });
+  const total = el('input', { class: 'input', type: 'number', min: '0', step: '50', value: String(cur.total) });
+  const comm = el('input', { class: 'input', type: 'number', min: '0', step: '50', value: String(cur.commission) });
+  const by = el('select', { class: 'input' });
+  by.appendChild(el('option', { value: '', text: '— unchanged —' }));
+  for (const b of tv.bookers()) by.appendChild(el('option', { value: b.name, text: b.name }));
+  if (tv.bookers().some((b) => b.name === cur.bookedBy)) by.value = cur.bookedBy;
+  const remarks = el('input', { class: 'input', value: cur.remarks || '', autocomplete: 'off' });
+  const reason = el('input', { class: 'input', placeholder: 'Why is this being corrected? (required)', autocomplete: 'off' });
+  const delta = el('div', { class: 'hint' });
+  const paintDelta = () => {
+    const t = parseFloat(total.value || '0') || 0;
+    const d = Math.round((t - cur.total) * 100) / 100;
+    delta.innerHTML = d === 0 ? 'Total unchanged — the cash box does not move.'
+      : `Cash box moves <b>${d > 0 ? '+' : '−'}₱${pesoPlain(Math.abs(d))}</b> to match.`;
+  };
+  total.addEventListener('input', paintDelta); paintDelta();
+
+  openModal({
+    title: `Correct booking #${raw.seq}`,
+    sub: `${cur.guest || '—'} · ${cur.destination} · ₱${pesoPlain(cur.total)}`,
+    wide: true,
+    body: el('div', {}, [
+      el('div', { class: 'row2' }, [
+        el('div', { class: 'field' }, [el('label', { text: 'Guest name' }), guest]),
+        el('div', { class: 'field' }, [el('label', { text: 'Destination' }), dest]),
+      ]),
+      el('div', { class: 'row3' }, [
+        el('div', { class: 'field' }, [el('label', { text: 'No. of pax' }), pax]),
+        el('div', { class: 'field' }, [el('label', { text: 'Total (₱)' }), total]),
+        el('div', { class: 'field' }, [el('label', { text: 'Commission (₱)' }), comm]),
+      ]),
+      el('div', { class: 'row2' }, [
+        el('div', { class: 'field' }, [el('label', { text: 'Booked by' }), by]),
+        el('div', { class: 'field' }, [el('label', { text: 'Remarks' }), remarks]),
+      ]),
+      el('div', { class: 'field' }, [el('label', { text: 'Reason' }), reason]),
+      delta,
+      el('div', { class: 'pill-warn mt', html: 'The original booking is <strong>not erased</strong>. A correction is added that supersedes it, so the record shows both — and the sheet reads as corrected.' }),
+    ]),
+    actions: [
+      { label: 'Cancel', kind: 'ghost' },
+      { label: 'Save correction (admin)', kind: 'primary', onClick: (close) => {
+        if (!reason.value.trim()) return toast('A reason is required', 'warn');
+        if (!guest.value.trim()) return toast('Enter the guest name', 'warn');
+        const t = parseFloat(total.value || '0');
+        const c = parseFloat(comm.value || '0');
+        if (!(t > 0)) return toast('Total must be greater than 0', 'warn');
+        if (c > t) return toast('Commission cannot be more than the total', 'warn');
+        managerGate(() => {
+          const r = tv.amendBooking(raw.seq, {
+            guest: guest.value, destinationId: dest.value, pax: pax.value,
+            total: t, commission: c,
+            bookedBy: by.value || cur.bookedBy, remarks: remarks.value,
+          }, reason.value.trim());
+          toast(r ? `Booking #${raw.seq} corrected` : 'Nothing was changed', r ? 'ok' : 'warn');
+          close(); done();
+        }, { reason: `Approve correcting travelista booking #${raw.seq}` });
+      } },
+    ],
+  });
 }
 
 // A booking is never edited or deleted — an admin appends its inverse, with a
