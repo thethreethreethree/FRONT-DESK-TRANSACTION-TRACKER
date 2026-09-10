@@ -423,6 +423,21 @@ export const tv = {
     if (!t) return null;
     if (t.kind === 'reversal') return null;
     if (this.isReversed(targetId)) return null;
+    // A BOOKING'S CORRECTIONS GO WITH IT. Voiding only the original left every
+    // correction standing — its money stayed in the cash box and in the takings,
+    // attached to a booking that no longer existed. Nothing flagged it, because
+    // the books were still internally consistent: the phantom amount sat on both
+    // sides of the reconciliation. Collect the list before appending, since each
+    // reversal extends the array being read.
+    if (t.kind === 'booking') {
+      const live = this.entries.filter((e) => e.kind === 'amendment' && e.amendsSeq === t.seq && !this.isReversed(e.id));
+      for (const a of live) this._reverseEntry(a, `booking #${t.seq} voided${reason ? ' · ' + reason : ''}`);
+    }
+    return this._reverseEntry(t, reason);
+  },
+  // The append half of a reversal, shared so a cascade cannot drift from the
+  // single-entry path.
+  _reverseEntry(t, reason) {
     const r = this._append({
       kind: 'reversal', direction: -t.direction, amount: t.amount,
       departureDate: t.departureDate, guest: t.guest,
@@ -436,7 +451,7 @@ export const tv = {
       // books apart by exactly the corrected amount.
       amendsSeq: t.amendsSeq, dTotal: t.dTotal, dShare: t.dShare, dCommission: t.dCommission, dPax: t.dPax,
       remarks: `VOID of #${t.seq} (${t.kind}${t.guest ? ' · ' + t.guest : ''}). Reason: ${reason || 'n/a'}`,
-      reversesId: targetId, reversesKind: t.kind,
+      reversesId: t.id, reversesKind: t.kind,
     });
     store._audit('tv.void', `Voided travelista #${t.seq} (${t.kind}${t.guest ? ' · ' + t.guest : ''} · ₱${t.amount.toLocaleString()})`,
       { ref: t.seq, reversalSeq: r.seq, reason: reason || '' });
@@ -504,7 +519,9 @@ export const tv = {
       // operator's share nor the hostel's commission — it is tracked on its own,
       // exactly as the front desk treats a COH adjustment.
       const adj = e.kind === 'adjustment' || (e.kind === 'reversal' && e.reversesKind === 'adjustment');
-      if (adj) { adjustments += e.amount * e.direction * (e.kind === 'adjustment' ? 1 : 1); continue; }
+      // A reversal already carries the flipped direction, so the sign takes care
+      // of itself — no per-kind multiplier is needed here.
+      if (adj) { adjustments += e.amount * e.direction; continue; }
       const payout = e.kind === 'payout' || (e.kind === 'reversal' && e.reversesKind === 'payout');
       if (payout) {
         const sign = e.kind === 'payout' ? 1 : -1;
