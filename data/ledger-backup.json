@@ -3,11 +3,11 @@
     "app": "Frendz Front Desk Transaction Tracker",
     "build": "2026-08-19-merge-sync",
     "writtenBy": "Rebecca",
-    "exportedAt": "2026-09-11T12:35:23.430Z",
+    "exportedAt": "2026-09-11T13:01:22.408Z",
     "version": 1,
     "coh": 24000,
     "entries": 18471,
-    "auditEvents": 5603,
+    "auditEvents": 5607,
     "integrity": {
       "ok": true,
       "brokenAtSeq": null
@@ -41,8 +41,8 @@
         "path": "data/ledger-backup.json",
         "autoSync": true,
         "enabled": true,
-        "lastBackupAt": "2026-09-11T12:33:57.349Z",
-        "lastBackupSha": "e8cba49ceeabc3b8b46d600a6251457a8e8fb3ea"
+        "lastBackupAt": "2026-09-11T12:35:34.712Z",
+        "lastBackupSha": "e628da819cb77f52eb6c9f84ffb4f992329b60c7"
       },
       "towelTracker": {
         "enabled": true,
@@ -59,7 +59,11 @@
       "passportItemRetired": true,
       "travelistaSeedV1": "aug-1-15-2026",
       "seededAdminIds": [
-        "admin_louise"
+        "admin_louise",
+        "admin_gino"
+      ],
+      "retiredStaffNames": [
+        "GINO"
       ]
     },
     "itemTypes": [
@@ -175,13 +179,6 @@
         "createdAt": "2026-06-10T13:03:32.463Z"
       },
       {
-        "id": "staff_mq90xdex_8_57rd58",
-        "name": "GINO",
-        "pin": "gig5agm5cn$8d37707ca19b6ee95c69c3872a98ce8414fa81d777b018901077d90f61be6550",
-        "active": true,
-        "createdAt": "2026-06-11T04:55:03.465Z"
-      },
-      {
         "id": "staff_mqcdq84b_2_sayzra",
         "name": "veronica",
         "pin": "nu64nd67i8$c30492cc4b79b4d90a2cc3189ad8958400d0c8ca0701d25c4d1d12a59bd5013f",
@@ -224,6 +221,14 @@
         "pin": "bfl26$037e0c3f8d7ae21ead02443cc746d777226fdd8384ffab4e25d44ae1d1c7d519",
         "active": true,
         "createdAt": "2026-08-27T03:15:22.106Z"
+      },
+      {
+        "id": "admin_gino",
+        "name": "GINO",
+        "pin": "gno26$daab1662cd4473839af22d144a8dc3be3aab417d39c6d14741321a44f29ca6d1",
+        "active": true,
+        "createdAt": "2026-09-11T13:01:15.743Z",
+        "mustSetOwnPin": true
       }
     ],
     "shifts": [
@@ -551890,6 +551895,68 @@
         },
         "prevHash": "52ac73c800c310e7d24cbb6aa4d2f66497f1c383528e23c3049a9b5edc5fc74d",
         "hash": "c445e4ab2d564608cea1401971f0de5de4e21591c9f7b63df798ea5fc5ad08c0"
+      },
+      {
+        "seq": 5604,
+        "id": "aud_mtwxvz5k_1o_5cua9o",
+        "ts": "2026-09-11T12:35:34.712Z",
+        "actor": "Rebecca",
+        "role": "staff",
+        "action": "backup.github",
+        "what": "Backup committed to thethreethreethree/FRONT-DESK-TRANSACTION-TRACKER@main (auto-sync)",
+        "details": {
+          "reason": "auto-sync",
+          "coh": 24000,
+          "entries": 18471
+        },
+        "prevHash": "c445e4ab2d564608cea1401971f0de5de4e21591c9f7b63df798ea5fc5ad08c0",
+        "hash": "616e3446716fb09b418862d75fb60b00150ce21907635397085f0858ee71ee74"
+      },
+      {
+        "seq": 5605,
+        "id": "aud_mtwyt07z_1_8h60d0",
+        "ts": "2026-09-11T13:01:15.743Z",
+        "actor": "Rebecca",
+        "role": "staff",
+        "action": "admin.add",
+        "what": "Added admin \"GINO\"",
+        "details": {
+          "id": "admin_gino",
+          "name": "GINO",
+          "seeded": true
+        },
+        "prevHash": "616e3446716fb09b418862d75fb60b00150ce21907635397085f0858ee71ee74",
+        "hash": "96c9de0a0825392cf54983eb467233847f9e36ff85dfa0cf5f9e6c97c9fdf38c"
+      },
+      {
+        "seq": 5606,
+        "id": "aud_mtwyt080_2_cvdtjl",
+        "ts": "2026-09-11T13:01:15.744Z",
+        "actor": "Rebecca",
+        "role": "staff",
+        "action": "staff.remove",
+        "what": "Removed staff \"GINO\"",
+        "details": {
+          "id": "staff_mq90xdex_8_57rd58",
+          "name": "GINO"
+        },
+        "prevHash": "96c9de0a0825392cf54983eb467233847f9e36ff85dfa0cf5f9e6c97c9fdf38c",
+        "hash": "97c38dcbf74e9bb376dcd317e516e35d08badd1440b433fa3776e510f9699ade"
+      },
+      {
+        "seq": 5607,
+        "id": "aud_mtwyt080_3_glifaj",
+        "ts": "2026-09-11T13:01:15.744Z",
+        "actor": "Rebecca",
+        "role": "staff",
+        "action": "staff.promoted",
+        "what": "Retired the staff account for \"GINO\" — promoted to Admin",
+        "details": {
+          "name": "GINO",
+          "id": "staff_mq90xdex_8_57rd58"
+        },
+        "prevHash": "97c38dcbf74e9bb376dcd317e516e35d08badd1440b433fa3776e510f9699ade",
+        "hash": "3def418d4f1cfb5ef6a4ee98dfef63a4d47b979983e533e7172eb6d1506361ac"
       }
     ],
     "towels": [
