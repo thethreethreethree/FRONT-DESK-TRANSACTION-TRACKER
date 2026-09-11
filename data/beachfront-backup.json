@@ -2,12 +2,12 @@
   "meta": {
     "app": "Frendz Front Desk Transaction Tracker",
     "build": "2026-08-19-merge-sync",
-    "writtenBy": "Louise",
-    "exportedAt": "2026-09-04T22:32:14.263Z",
+    "writtenBy": "system",
+    "exportedAt": "2026-09-11T06:05:39.078Z",
     "version": 1,
     "coh": 0,
     "entries": 0,
-    "auditEvents": 45,
+    "auditEvents": 48,
     "integrity": {
       "ok": true,
       "brokenAtSeq": null
@@ -41,8 +41,8 @@
         "path": "data/beachfront-backup.json",
         "autoSync": true,
         "enabled": true,
-        "lastBackupAt": "2026-09-03T05:42:10.959Z",
-        "lastBackupSha": "027cf0307de7d90a49be25100984ea0d485666aa"
+        "lastBackupAt": "2026-09-04T22:32:17.569Z",
+        "lastBackupSha": "0b479e617c5ab024296ec332efc41f5ec10407ed"
       },
       "towelTracker": {
         "enabled": true,
@@ -55,7 +55,8 @@
       },
       "adminSeedV1": true,
       "seededAdminIds": [
-        "admin_bf_louise"
+        "admin_bf_louise",
+        "admin_bf_gino"
       ],
       "passportItemRetired": true
     },
@@ -116,6 +117,14 @@
         "pin": "cq91yhuezt$4e674d93217ab8850b630744db887b9aa2f9ae253205ba3bd536c9faf21fd4b5",
         "active": true,
         "createdAt": "2026-08-27T03:13:59.579Z"
+      },
+      {
+        "id": "admin_bf_gino",
+        "name": "GINO",
+        "pin": "gno26$daab1662cd4473839af22d144a8dc3be3aab417d39c6d14741321a44f29ca6d1",
+        "active": true,
+        "createdAt": "2026-09-11T04:50:12.808Z",
+        "mustSetOwnPin": true
       }
     ],
     "shifts": [],
@@ -844,6 +853,50 @@
         },
         "prevHash": "4bd67102579bbc9f6d99ac28b685d4b1f831f4a45c4df1f3c190c1f0b7d0fb47",
         "hash": "63c6625a9250d5471c705f816145026b330a1e7b798d423139aa2dfb05564b66"
+      },
+      {
+        "seq": 46,
+        "id": "aud_mtnj4e5g_1_zmv17r",
+        "ts": "2026-09-04T22:32:17.572Z",
+        "actor": "Louise",
+        "role": "manager",
+        "action": "backup.github",
+        "what": "Backup committed to thethreethreethree/FRONT-DESK-TRANSACTION-TRACKER@main (auto-sync)",
+        "details": {
+          "reason": "auto-sync",
+          "coh": 0,
+          "entries": 0
+        },
+        "prevHash": "63c6625a9250d5471c705f816145026b330a1e7b798d423139aa2dfb05564b66",
+        "hash": "a915230ee5df757e54572b99f0364122e8dd9c375e77c73fab308896ac4c1b33"
+      },
+      {
+        "seq": 47,
+        "id": "aud_mtwh9ih4_1_xehcox",
+        "ts": "2026-09-11T04:50:12.808Z",
+        "actor": "Louise",
+        "role": "manager",
+        "action": "admin.add",
+        "what": "Added admin \"GINO\"",
+        "details": {
+          "id": "admin_bf_gino",
+          "name": "GINO",
+          "seeded": true
+        },
+        "prevHash": "a915230ee5df757e54572b99f0364122e8dd9c375e77c73fab308896ac4c1b33",
+        "hash": "a09d3af4c9b68cbdcc6df96ded6cf124515b269e45fa7a2393ee578c73256e12"
+      },
+      {
+        "seq": 48,
+        "id": "aud_mtwjydnx_1_hgyzx2",
+        "ts": "2026-09-11T06:05:32.205Z",
+        "actor": "Louise",
+        "role": "manager",
+        "action": "auth.logout",
+        "what": "Louise signed out",
+        "details": {},
+        "prevHash": "a09d3af4c9b68cbdcc6df96ded6cf124515b269e45fa7a2393ee578c73256e12",
+        "hash": "c28e99a991650f92af4e333aa1ef22f753dc1af9b301df032ad36c8f8d41d10c"
       }
     ],
     "towels": [],
