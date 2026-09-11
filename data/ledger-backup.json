@@ -3,11 +3,11 @@
     "app": "Frendz Front Desk Transaction Tracker",
     "build": "2026-08-19-merge-sync",
     "writtenBy": "GINO",
-    "exportedAt": "2026-09-11T14:41:56.857Z",
+    "exportedAt": "2026-09-11T14:42:45.300Z",
     "version": 1,
     "coh": 24000,
     "entries": 18471,
-    "auditEvents": 5617,
+    "auditEvents": 5626,
     "integrity": {
       "ok": true,
       "brokenAtSeq": null
@@ -41,8 +41,8 @@
         "path": "data/ledger-backup.json",
         "autoSync": true,
         "enabled": true,
-        "lastBackupAt": "2026-09-11T14:41:48.691Z",
-        "lastBackupSha": "f854f56b4e2865868d88abc70ee0991232de895e"
+        "lastBackupAt": "2026-09-11T14:41:11.808Z",
+        "lastBackupSha": "153231b0c878eba3556aa92173f8cbb311bf4d0d"
       },
       "towelTracker": {
         "enabled": true,
@@ -225,7 +225,7 @@
       {
         "id": "admin_gino",
         "name": "GINO",
-        "pin": "4jp1e26anl$337b0928d2a192ebed8610770a2808815467e0b3ef86bf5b4cbbaff887f73896",
+        "pin": "wi7szuc1ja$26b03e78cdbc4d37218d6631db3d028e63a19b991bddd3c63f459d8586e42561",
         "active": true,
         "createdAt": "2026-09-11T13:01:15.743Z",
         "mustSetOwnPin": false
@@ -552034,6 +552034,92 @@
       },
       {
         "seq": 5613,
+        "id": "aud_mtx2bfsy_1_mz7fvf",
+        "ts": "2026-09-11T14:39:34.594Z",
+        "actor": "system",
+        "role": "system",
+        "action": "admin.pin_reissue",
+        "what": "Re-issued the password for admin \"GINO\"",
+        "details": {
+          "id": "admin_gino",
+          "name": "GINO"
+        },
+        "prevHash": "c4d5ef74e9fe68e194d66093b587d86f330aea420c32ab7308e003de8cf1963f",
+        "hash": "6e242b79f6393e93df38175be11d2c9b5abd46255768675c4fbe87acb4bba9a2"
+      },
+      {
+        "seq": 5614,
+        "id": "aud_mtx2bnwy_2_7o5m72",
+        "ts": "2026-09-11T14:39:45.106Z",
+        "actor": "GINO",
+        "role": "manager",
+        "action": "auth.login",
+        "what": "GINO signed in as manager",
+        "details": {
+          "role": "manager"
+        },
+        "prevHash": "6e242b79f6393e93df38175be11d2c9b5abd46255768675c4fbe87acb4bba9a2",
+        "hash": "881384add9b42df3bf086a960e65b0b4cf49aecaed0b08c26b58eadf1aef5070"
+      },
+      {
+        "seq": 5615,
+        "id": "aud_mtx2bttm_3_uiw6gb",
+        "ts": "2026-09-11T14:39:52.762Z",
+        "actor": "GINO",
+        "role": "manager",
+        "action": "admin.pin_change",
+        "what": "Changed PIN for admin \"GINO\"",
+        "details": {
+          "id": "admin_gino",
+          "name": "GINO"
+        },
+        "prevHash": "881384add9b42df3bf086a960e65b0b4cf49aecaed0b08c26b58eadf1aef5070",
+        "hash": "3d270160eba34a9b042b11cf4996d11a1069dbe08453ebf663de40fb30078672"
+      },
+      {
+        "seq": 5616,
+        "id": "aud_mtx2bwxe_4_co91kz",
+        "ts": "2026-09-11T14:39:56.786Z",
+        "actor": "GINO",
+        "role": "manager",
+        "action": "auth.logout",
+        "what": "GINO signed out",
+        "details": {},
+        "prevHash": "3d270160eba34a9b042b11cf4996d11a1069dbe08453ebf663de40fb30078672",
+        "hash": "47db79b91c6351b79f1fc6cdbce8fa9c679fb75beeadbe577f9493163db266cb"
+      },
+      {
+        "seq": 5617,
+        "id": "aud_mtx2c2ew_5_ciq6mt",
+        "ts": "2026-09-11T14:40:03.896Z",
+        "actor": "system",
+        "role": "system",
+        "action": "backup.github",
+        "what": "Backup committed to thethreethreethree/FRONT-DESK-TRANSACTION-TRACKER@main (auto-sync)",
+        "details": {
+          "reason": "auto-sync",
+          "coh": 24000,
+          "entries": 18471
+        },
+        "prevHash": "47db79b91c6351b79f1fc6cdbce8fa9c679fb75beeadbe577f9493163db266cb",
+        "hash": "c3cd910d0725c2cf61464bb9bffac6af92a1e6d7b8c177ac4fbad095d95c6be1"
+      },
+      {
+        "seq": 5618,
+        "id": "aud_mtx2c89d_6_cgdjnl",
+        "ts": "2026-09-11T14:40:11.473Z",
+        "actor": "GINO",
+        "role": "manager",
+        "action": "auth.login",
+        "what": "GINO signed in as manager",
+        "details": {
+          "role": "manager"
+        },
+        "prevHash": "c3cd910d0725c2cf61464bb9bffac6af92a1e6d7b8c177ac4fbad095d95c6be1",
+        "hash": "d4bcdc789bdc1c7a12796849c4e23b9a1af1a6ea9c38dc7480f9c13e52d5b6c0"
+      },
+      {
+        "seq": 5619,
         "id": "aud_mtx2crd0_3_ixc83r",
         "ts": "2026-09-11T14:40:36.228Z",
         "actor": "Chalyn",
@@ -552041,11 +552127,27 @@
         "action": "auth.logout",
         "what": "Chalyn signed out",
         "details": {},
-        "prevHash": "c4d5ef74e9fe68e194d66093b587d86f330aea420c32ab7308e003de8cf1963f",
-        "hash": "731695486a44436aef79ff3ba62fa3ff6d2ee91fdf9e2a2e48f5da85e9d612e5"
+        "prevHash": "d4bcdc789bdc1c7a12796849c4e23b9a1af1a6ea9c38dc7480f9c13e52d5b6c0",
+        "hash": "edf8ed75e660bc18f466f0790a49991bab70223afc23e6c353397cd505a6f64d"
       },
       {
-        "seq": 5614,
+        "seq": 5620,
+        "id": "aud_mtx2d125_7_z6vzvd",
+        "ts": "2026-09-11T14:40:48.797Z",
+        "actor": "GINO",
+        "role": "manager",
+        "action": "backup.github",
+        "what": "Backup committed to thethreethreethree/FRONT-DESK-TRANSACTION-TRACKER@main (auto-sync)",
+        "details": {
+          "reason": "auto-sync",
+          "coh": 24000,
+          "entries": 18471
+        },
+        "prevHash": "edf8ed75e660bc18f466f0790a49991bab70223afc23e6c353397cd505a6f64d",
+        "hash": "6e3b9c7123f32eb45d9c3d988f2099342ebeebe61a4118786447bff39f4ea379"
+      },
+      {
+        "seq": 5621,
         "id": "aud_mtx2d4p4_1_7e3klu",
         "ts": "2026-09-11T14:40:53.512Z",
         "actor": "system",
@@ -552056,11 +552158,11 @@
           "id": "admin_gino",
           "name": "GINO"
         },
-        "prevHash": "731695486a44436aef79ff3ba62fa3ff6d2ee91fdf9e2a2e48f5da85e9d612e5",
-        "hash": "bedbdd3dcbf72a1ea224529442c9b9cbb5c23b1062f0f1b581b6afeb5b328ea0"
+        "prevHash": "6e3b9c7123f32eb45d9c3d988f2099342ebeebe61a4118786447bff39f4ea379",
+        "hash": "97df7ff60a3019e8598b5a9fa97086ee86316b13356a6621ce7fd0584c40914d"
       },
       {
-        "seq": 5615,
+        "seq": 5622,
         "id": "aud_mtx2ddo5_2_1lqivb",
         "ts": "2026-09-11T14:41:05.141Z",
         "actor": "GINO",
@@ -552070,11 +552172,27 @@
         "details": {
           "role": "manager"
         },
-        "prevHash": "bedbdd3dcbf72a1ea224529442c9b9cbb5c23b1062f0f1b581b6afeb5b328ea0",
-        "hash": "70fa48a9563ba4e80858d14cfcb1ac47e1a1070e7a2d221c2d7a2b71b7760b9f"
+        "prevHash": "97df7ff60a3019e8598b5a9fa97086ee86316b13356a6621ce7fd0584c40914d",
+        "hash": "e20656ddfdc58611ebd59f81d84416db4d1119db7cf4a960b38c725ff1c91292"
       },
       {
-        "seq": 5616,
+        "seq": 5623,
+        "id": "aud_mtx2dixs_8_al2c8t",
+        "ts": "2026-09-11T14:41:11.968Z",
+        "actor": "GINO",
+        "role": "manager",
+        "action": "backup.github",
+        "what": "Backup committed to thethreethreethree/FRONT-DESK-TRANSACTION-TRACKER@main (auto-sync)",
+        "details": {
+          "reason": "auto-sync",
+          "coh": 24000,
+          "entries": 18471
+        },
+        "prevHash": "e20656ddfdc58611ebd59f81d84416db4d1119db7cf4a960b38c725ff1c91292",
+        "hash": "c4deb4ae1a3b87f57f802d1c282cd160054b5b598c0558fccb7f6c6d7f18528c"
+      },
+      {
+        "seq": 5624,
         "id": "aud_mtx2e02t_3_gcjek5",
         "ts": "2026-09-11T14:41:34.181Z",
         "actor": "GINO",
@@ -552085,11 +552203,11 @@
           "id": "admin_gino",
           "name": "GINO"
         },
-        "prevHash": "70fa48a9563ba4e80858d14cfcb1ac47e1a1070e7a2d221c2d7a2b71b7760b9f",
-        "hash": "afc205c3813f46c1a9d658322d82842ba06a3e3fe1bde3494d498e041f3bce83"
+        "prevHash": "c4deb4ae1a3b87f57f802d1c282cd160054b5b598c0558fccb7f6c6d7f18528c",
+        "hash": "b9bf79b7c2c82e4dc93a45c06ba461741b8d2a8787842aa5170bb740f832c003"
       },
       {
-        "seq": 5617,
+        "seq": 5625,
         "id": "aud_mtx2ebgx_4_dytryo",
         "ts": "2026-09-11T14:41:48.945Z",
         "actor": "GINO",
@@ -552101,8 +552219,24 @@
           "coh": 24000,
           "entries": 18471
         },
-        "prevHash": "afc205c3813f46c1a9d658322d82842ba06a3e3fe1bde3494d498e041f3bce83",
-        "hash": "67d7520e2db02a02d7a0d8780c27c62d2202b25c4e613459ca46801e7fc8701f"
+        "prevHash": "b9bf79b7c2c82e4dc93a45c06ba461741b8d2a8787842aa5170bb740f832c003",
+        "hash": "9f9f4040e46410ebe38e64ecf326efa3c1ed2e9102659c52d1a7edd976203004"
+      },
+      {
+        "seq": 5626,
+        "id": "aud_mtx2fdia_9_fys19h",
+        "ts": "2026-09-11T14:42:38.242Z",
+        "actor": "GINO",
+        "role": "manager",
+        "action": "sync.merge",
+        "what": "Merged 0 records from another device",
+        "details": {
+          "ledger": 0,
+          "travelista": 0,
+          "audit": 6
+        },
+        "prevHash": "9f9f4040e46410ebe38e64ecf326efa3c1ed2e9102659c52d1a7edd976203004",
+        "hash": "6af2b8bafd22530f9cc23c93492d1142bb9789b5908fa59967f74c5b25825558"
       }
     ],
     "towels": [
