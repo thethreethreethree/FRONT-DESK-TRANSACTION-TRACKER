@@ -3,11 +3,11 @@
     "app": "Frendz Front Desk Transaction Tracker",
     "build": "2026-08-19-merge-sync",
     "writtenBy": "Marie",
-    "exportedAt": "2026-09-11T04:08:57.607Z",
+    "exportedAt": "2026-09-11T04:09:26.960Z",
     "version": 1,
-    "coh": 25600,
-    "entries": 18462,
-    "auditEvents": 5584,
+    "coh": 24600,
+    "entries": 18463,
+    "auditEvents": 5586,
     "integrity": {
       "ok": true,
       "brokenAtSeq": null
@@ -41,8 +41,8 @@
         "path": "data/ledger-backup.json",
         "autoSync": true,
         "enabled": true,
-        "lastBackupAt": "2026-09-11T04:08:32.187Z",
-        "lastBackupSha": "a8c2204f59e0f12d16941689172485142adfc237"
+        "lastBackupAt": "2026-09-11T04:09:10.502Z",
+        "lastBackupSha": "9a540b0fc65fec01072fda2ce6f3b8f1e85c2677"
       },
       "towelTracker": {
         "enabled": true,
@@ -456498,6 +456498,37 @@
         "reversesId": null,
         "prevHash": "d90d0ab99118db63b1935b2ee5a7e2fbafda42424014425bc64fe782b73ceb8d",
         "hash": "1f032a73f5a57279d01958e6ed1d67cc7eeb85e9975bbab94f23fc30818b89a4"
+      },
+      {
+        "seq": 18463,
+        "id": "txn_mtwfsy42_y_p54l3j",
+        "ts": "2026-09-11T04:09:20.306Z",
+        "kind": "refund",
+        "itemTypeId": "item_mpxxdbc3_2_s3d7ag",
+        "itemName": "Towel",
+        "qty": 1,
+        "unitAmount": 1000,
+        "amount": 1000,
+        "direction": -1,
+        "guest": "Stephanie Joy Oracion",
+        "room": "302",
+        "pax": null,
+        "shiftId": "shift_mpy3b19n_5_j6nxol",
+        "shiftLabel": "PM",
+        "businessDate": "2026-09-11",
+        "staff": "Marie",
+        "staffRole": "staff",
+        "note": "",
+        "towelNo": "458",
+        "oldTowelNo": "",
+        "towelLost": false,
+        "refundsSeq": 18439,
+        "exchangesSeq": null,
+        "mewsRes": "",
+        "privateRoom": false,
+        "reversesId": null,
+        "prevHash": "1f032a73f5a57279d01958e6ed1d67cc7eeb85e9975bbab94f23fc30818b89a4",
+        "hash": "9e4aa8cf4df9f43a91688a628e6301990ea3ffd9ca0a9639d2ab02ad3a5cb256"
       }
     ],
     "audit": [
@@ -551286,6 +551317,41 @@
         },
         "prevHash": "049b14b372f0e764f1133e029b4fe3a19827c41ad33f26c7dc6cff260035f54c",
         "hash": "684aab0cbaaadfdac8cf0e29a29570d87de4c73cde31a94f7a5d150a9c92e0a9"
+      },
+      {
+        "seq": 5585,
+        "id": "aud_mtwfsqjq_x_n3ghf5",
+        "ts": "2026-09-11T04:09:10.502Z",
+        "actor": "Marie",
+        "role": "staff",
+        "action": "backup.github",
+        "what": "Backup committed to thethreethreethree/FRONT-DESK-TRANSACTION-TRACKER@main (auto-sync)",
+        "details": {
+          "reason": "auto-sync",
+          "coh": 25600,
+          "entries": 18462
+        },
+        "prevHash": "684aab0cbaaadfdac8cf0e29a29570d87de4c73cde31a94f7a5d150a9c92e0a9",
+        "hash": "dec7fdc46de6e83e2af5bac0475d82d178380a8daece91f6235cf63ed9a1f1fc"
+      },
+      {
+        "seq": 5586,
+        "id": "aud_mtwfsy42_z_wg50me",
+        "ts": "2026-09-11T04:09:20.306Z",
+        "actor": "Marie",
+        "role": "staff",
+        "action": "refund.create",
+        "what": "Refund ₱1,000.00 · Towel ×1 · Stephanie Joy Oracion",
+        "details": {
+          "ref": 18463,
+          "id": "txn_mtwfsy42_y_p54l3j",
+          "amount": 1000,
+          "item": "Towel",
+          "guest": "Stephanie Joy Oracion",
+          "room": "302"
+        },
+        "prevHash": "dec7fdc46de6e83e2af5bac0475d82d178380a8daece91f6235cf63ed9a1f1fc",
+        "hash": "f11f16c541f5e6bc1e2ee0aa1bc678d89b7ef756926aaabc297299f864d4450f"
       }
     ],
     "towels": [
