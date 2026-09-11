@@ -281,6 +281,18 @@ function ensureLocationAdmins() {
     const present = new Set(store.adminList().map((a) => a.id));
     done = store.config.locationAdminSeedV1 ? seeds.filter((a) => present.has(a.id)).map((a) => a.id) : [];
   }
+  // RE-ISSUING a credential. Seeding only ever CREATED accounts, so changing a
+  // declared password could never reach an account that already existed — the id
+  // was already marked done. When the owner issues a new password for a seeded
+  // admin (someone locked out, or a credential that proved unusable at the desk),
+  // the declared hash differs from the stored one, and that difference IS the
+  // instruction: update it, and invite them to choose their own on next sign-in.
+  for (const a of seeds) {
+    const existing = store.adminList().find((x) => x.id === a.id);
+    if (existing && existing.pin !== a.pinHash) {
+      store.reissueAdminCredential(a.id, a.pinHash);
+    }
+  }
   const todo = seeds.filter((a) => !done.includes(a.id));
   if (!todo.length) { if (!Array.isArray(store.config.seededAdminIds)) store.setConfig({ seededAdminIds: done }); return; }
   for (const a of todo) { store.addAdminHashed(a); done.push(a.id); }

@@ -1493,6 +1493,19 @@ class Store {
     this.save();
     return a;
   }
+  // Replace a seeded admin's credential with a newly issued one. Distinct from
+  // setAdminPin: that is the person choosing their own, this is the owner handing
+  // them a replacement — so the "set your own" invitation comes back.
+  reissueAdminCredential(id, pinHash) {
+    const a = (this.state.admins || []).find((x) => x.id === id);
+    if (!a || !pinHash || a.pin === pinHash) return false;
+    a.pin = pinHash;
+    a.mustSetOwnPin = true;
+    this._audit('admin.pin_reissue', `Re-issued the password for admin "${a.name}"`, { id, name: a.name });
+    this.save();
+    return true;
+  }
+
   setAdminPin(id, newPin) {
     const a = (this.state.admins || []).find((x) => x.id === id);
     if (!a) return false;

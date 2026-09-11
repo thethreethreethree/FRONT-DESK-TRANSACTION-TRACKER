@@ -158,10 +158,10 @@ const A = await page.evaluate(async () => {
   const o = {};
   o.adminTab = t('manager', '1012');
   o.staffTabWithAdminPin = t('staff', '1012');      // must NOT downgrade to staff
-  o.gino = t('manager', 'Tinomoliona24.');
-  o.ginoStaffTab = t('staff', 'Tinomoliona24.');
+  o.gino = t('manager', '1234');
+  o.ginoStaffTab = t('staff', '1234');
   o.wrong = t('manager', '0000');
-  o.gate = { shared: store.verifyAdminPin('1012'), gino: store.verifyAdminPin('Tinomoliona24.'), junk: store.verifyAdminPin('0000') };
+  o.gate = { shared: store.verifyAdminPin('1012'), gino: store.verifyAdminPin('1234'), junk: store.verifyAdminPin('0000') };
   o.rosters = { admins: store.adminList().map((a) => a.name), staff: store.staffList().map((s) => s.name) };
   const first = store.staffList()[0];
   if (first) { store.setStaffPin(first.id, '4321'); o.staff = t('staff', '4321'); o.staffName = first.name; }

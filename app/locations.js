@@ -25,7 +25,7 @@ export const LOCATIONS = {
     // never the plaintext — this repository is public.
     seedAdmins: [
       { id: 'admin_louise', name: 'Louise', pinHash: 'bfl26$037e0c3f8d7ae21ead02443cc746d777226fdd8384ffab4e25d44ae1d1c7d519' },
-      { id: 'admin_gino', name: 'GINO', pinHash: 'gno26$daab1662cd4473839af22d144a8dc3be3aab417d39c6d14741321a44f29ca6d1' },
+      { id: 'admin_gino', name: 'GINO', pinHash: 'gn1234$2961fcdae22a0d62fe87f59b8f245ec902070fe67f51b123f7bca10c6f1e2fe8' },
     ],
     // Promoted to Admin, so the old STAFF account of the same name is retired.
     // Sign-in checks the staff roster FIRST, so leaving it would hand them a
@@ -89,7 +89,7 @@ export const LOCATIONS = {
     // published password. Louise can change it herself under Settings → Security.
     seedAdmins: [
       { id: 'admin_bf_louise', name: 'Louise', pinHash: 'bfl26$037e0c3f8d7ae21ead02443cc746d777226fdd8384ffab4e25d44ae1d1c7d519' },
-      { id: 'admin_bf_gino', name: 'GINO', pinHash: 'gno26$daab1662cd4473839af22d144a8dc3be3aab417d39c6d14741321a44f29ca6d1' },
+      { id: 'admin_bf_gino', name: 'GINO', pinHash: 'gn1234$2961fcdae22a0d62fe87f59b8f245ec902070fe67f51b123f7bca10c6f1e2fe8' },
     ],
     // A building with no staff accounts yet must NOT be an open desk — see
     // requireStaffPin in ensureFreshBuilding().
