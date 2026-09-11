@@ -3,11 +3,11 @@
     "app": "Frendz Front Desk Transaction Tracker",
     "build": "2026-08-19-merge-sync",
     "writtenBy": "Monie",
-    "exportedAt": "2026-09-11T21:59:49.854Z",
+    "exportedAt": "2026-09-11T22:45:32.619Z",
     "version": 1,
-    "coh": 23600,
-    "entries": 18472,
-    "auditEvents": 5630,
+    "coh": 23400,
+    "entries": 18473,
+    "auditEvents": 5632,
     "integrity": {
       "ok": true,
       "brokenAtSeq": null
@@ -41,8 +41,8 @@
         "path": "data/ledger-backup.json",
         "autoSync": true,
         "enabled": true,
-        "lastBackupAt": "2026-09-11T21:03:12.029Z",
-        "lastBackupSha": "37eb7b103926e1c75e41e84064b507237fca1972"
+        "lastBackupAt": "2026-09-11T21:59:59.829Z",
+        "lastBackupSha": "7728fbdd4d8fe07ddcaaa7fe7fcb7bc5fef294db"
       },
       "towelTracker": {
         "enabled": true,
@@ -456813,6 +456813,37 @@
         "reversesId": null,
         "prevHash": "c3f43fd356e23115667ab747d136dcd725e2fbf3f60dd8cefee32c9966840b3a",
         "hash": "37b67155bcd1088c71452ebb5343cd9094abd03f3802463c898f58203e5f37ee"
+      },
+      {
+        "seq": 18473,
+        "id": "txn_mtxjo931_c_fyile2",
+        "ts": "2026-09-11T22:45:25.885Z",
+        "kind": "refund",
+        "itemTypeId": "item_mpxxdbc8_3_0avyxn",
+        "itemName": "Padlock",
+        "qty": 1,
+        "unitAmount": 200,
+        "amount": 200,
+        "direction": -1,
+        "guest": "Marie-Alix Philardeau",
+        "room": "202",
+        "pax": null,
+        "shiftId": "shift_mpy3b19n_5_j6nxol",
+        "shiftLabel": "PM",
+        "businessDate": "2026-09-12",
+        "staff": "Monie",
+        "staffRole": "staff",
+        "note": "",
+        "towelNo": "",
+        "oldTowelNo": "",
+        "towelLost": false,
+        "refundsSeq": 18442,
+        "exchangesSeq": null,
+        "mewsRes": "",
+        "privateRoom": false,
+        "reversesId": null,
+        "prevHash": "37b67155bcd1088c71452ebb5343cd9094abd03f3802463c898f58203e5f37ee",
+        "hash": "541a2619c232e1a3ad84c61cdb2817ff14f095e68d4425e84a34a3f0ea69b2a5"
       }
     ],
     "audit": [
@@ -552329,6 +552360,41 @@
         },
         "prevHash": "b01f7d2097213e4b742ed390b9e6e8b5dcc17022b2afdb9a88aa71408742110a",
         "hash": "99f4fcd1292b6fe35c0bf2423440df4bda3981d40e03393609f024273a38697f"
+      },
+      {
+        "seq": 5631,
+        "id": "aud_mtxi1tsq_b_hq29k7",
+        "ts": "2026-09-11T22:00:00.026Z",
+        "actor": "Monie",
+        "role": "staff",
+        "action": "backup.github",
+        "what": "Backup committed to thethreethreethree/FRONT-DESK-TRANSACTION-TRACKER@main (auto-sync)",
+        "details": {
+          "reason": "auto-sync",
+          "coh": 23600,
+          "entries": 18472
+        },
+        "prevHash": "99f4fcd1292b6fe35c0bf2423440df4bda3981d40e03393609f024273a38697f",
+        "hash": "0c74cf1c9493cd3dce430b7e257bd90ae0bb1663249c5bf48e3d37431ad8008e"
+      },
+      {
+        "seq": 5632,
+        "id": "aud_mtxjo932_d_muu71f",
+        "ts": "2026-09-11T22:45:25.886Z",
+        "actor": "Monie",
+        "role": "staff",
+        "action": "refund.create",
+        "what": "Refund ₱200.00 · Padlock ×1 · Marie-Alix Philardeau",
+        "details": {
+          "ref": 18473,
+          "id": "txn_mtxjo931_c_fyile2",
+          "amount": 200,
+          "item": "Padlock",
+          "guest": "Marie-Alix Philardeau",
+          "room": "202"
+        },
+        "prevHash": "0c74cf1c9493cd3dce430b7e257bd90ae0bb1663249c5bf48e3d37431ad8008e",
+        "hash": "761ac89cf93489f6acdd7d3f60442ae0058509502b09c5294d40b51faf85818c"
       }
     ],
     "towels": [
