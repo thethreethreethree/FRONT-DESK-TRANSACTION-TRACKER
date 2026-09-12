@@ -3,11 +3,11 @@
     "app": "Frendz Front Desk Transaction Tracker",
     "build": "2026-08-19-merge-sync",
     "writtenBy": "Chalyn",
-    "exportedAt": "2026-09-12T08:54:45.048Z",
+    "exportedAt": "2026-09-12T08:55:14.724Z",
     "version": 1,
-    "coh": 21400,
-    "entries": 18482,
-    "auditEvents": 5660,
+    "coh": 20400,
+    "entries": 18483,
+    "auditEvents": 5662,
     "integrity": {
       "ok": true,
       "brokenAtSeq": null
@@ -41,8 +41,8 @@
         "path": "data/ledger-backup.json",
         "autoSync": true,
         "enabled": true,
-        "lastBackupAt": "2026-09-12T08:54:37.508Z",
-        "lastBackupSha": "00362140098bea03e2ca09cec9f5a1864152c26d"
+        "lastBackupAt": "2026-09-12T08:54:57.936Z",
+        "lastBackupSha": "9c39b4f734eb9ee1f651aae9e2657574922eb094"
       },
       "towelTracker": {
         "enabled": true,
@@ -457123,6 +457123,37 @@
         "reversesId": null,
         "prevHash": "d4c3fa811f54130a44fea62b949552aaf717338d09a0b3c90eb06f2af48eab46",
         "hash": "c383cc9e80f74b97ec30bd382e84eb3d78c583cd68c3593f89ba2c5bc2366480"
+      },
+      {
+        "seq": 18483,
+        "id": "txn_mty5gc0h_18_pucl9h",
+        "ts": "2026-09-12T08:55:07.985Z",
+        "kind": "refund",
+        "itemTypeId": "item_mpxxdbc3_2_s3d7ag",
+        "itemName": "Towel",
+        "qty": 1,
+        "unitAmount": 1000,
+        "amount": 1000,
+        "direction": -1,
+        "guest": "Amer Ali Abdullah Al Kurbi",
+        "room": "202",
+        "pax": null,
+        "shiftId": "shift_mpy3b19n_5_j6nxol",
+        "shiftLabel": "PM",
+        "businessDate": "2026-09-12",
+        "staff": "Chalyn",
+        "staffRole": "staff",
+        "note": "",
+        "towelNo": "273",
+        "oldTowelNo": "",
+        "towelLost": false,
+        "refundsSeq": 18451,
+        "exchangesSeq": null,
+        "mewsRes": "",
+        "privateRoom": false,
+        "reversesId": null,
+        "prevHash": "c383cc9e80f74b97ec30bd382e84eb3d78c583cd68c3593f89ba2c5bc2366480",
+        "hash": "1464bca69b57a03e0875bb726e2a24ef896aae631ec728af9335a5183080749c"
       }
     ],
     "audit": [
@@ -553181,6 +553212,41 @@
         },
         "prevHash": "3a623e2061a6ebfb307e14f1f5d7f797b4d33b9c8bd4c8a91db6254bd5db3b8e",
         "hash": "5c2d26e65ef24eac14bea182c2bb5690fd090b45f93cc60fc0063b3d79d90dd1"
+      },
+      {
+        "seq": 5661,
+        "id": "aud_mty5g49c_17_ufuj1u",
+        "ts": "2026-09-12T08:54:57.936Z",
+        "actor": "Chalyn",
+        "role": "staff",
+        "action": "backup.github",
+        "what": "Backup committed to thethreethreethree/FRONT-DESK-TRANSACTION-TRACKER@main (auto-sync)",
+        "details": {
+          "reason": "auto-sync",
+          "coh": 21400,
+          "entries": 18482
+        },
+        "prevHash": "5c2d26e65ef24eac14bea182c2bb5690fd090b45f93cc60fc0063b3d79d90dd1",
+        "hash": "1d6003f264550301a09320b63aca680616378cbe7be606531434a0f042234b7f"
+      },
+      {
+        "seq": 5662,
+        "id": "aud_mty5gc0h_19_7qct9l",
+        "ts": "2026-09-12T08:55:07.985Z",
+        "actor": "Chalyn",
+        "role": "staff",
+        "action": "refund.create",
+        "what": "Refund ₱1,000.00 · Towel ×1 · Amer Ali Abdullah Al Kurbi",
+        "details": {
+          "ref": 18483,
+          "id": "txn_mty5gc0h_18_pucl9h",
+          "amount": 1000,
+          "item": "Towel",
+          "guest": "Amer Ali Abdullah Al Kurbi",
+          "room": "202"
+        },
+        "prevHash": "1d6003f264550301a09320b63aca680616378cbe7be606531434a0f042234b7f",
+        "hash": "9dcb0f4296661ecffad8554fd84b45684ba5d0715e22e78759a7969d004cd5d9"
       }
     ],
     "towels": [
