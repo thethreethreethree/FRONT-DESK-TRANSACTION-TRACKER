@@ -3,11 +3,11 @@
     "app": "Frendz Front Desk Transaction Tracker",
     "build": "2026-08-19-merge-sync",
     "writtenBy": "Chalyn",
-    "exportedAt": "2026-09-13T01:47:24.267Z",
+    "exportedAt": "2026-09-13T01:47:48.526Z",
     "version": 1,
     "coh": 22400,
-    "entries": 18486,
-    "auditEvents": 5676,
+    "entries": 18487,
+    "auditEvents": 5678,
     "integrity": {
       "ok": true,
       "brokenAtSeq": null
@@ -41,8 +41,8 @@
         "path": "data/ledger-backup.json",
         "autoSync": true,
         "enabled": true,
-        "lastBackupAt": "2026-09-12T22:19:46.494Z",
-        "lastBackupSha": "28074a36f7fd7cb32f50539c92ddbd1cb719ecf1"
+        "lastBackupAt": "2026-09-13T01:47:33.790Z",
+        "lastBackupSha": "1e8cac8d5bcd5b4f1732c16c87f087f2a672f5f0"
       },
       "towelTracker": {
         "enabled": true,
@@ -457247,6 +457247,37 @@
         "reversesId": null,
         "prevHash": "ad060408c55a83715d1fc8aa9606620029f0dbea8c66a2db8b8ea7f0042087a0",
         "hash": "5b41a3c0315d5a42ee821cf106255a874cccc8778de92d37d0a4ecf7a6d56572"
+      },
+      {
+        "seq": 18487,
+        "id": "txn_mtz5mhqj_1s_i432zq",
+        "ts": "2026-09-13T01:47:41.515Z",
+        "kind": "refund",
+        "itemTypeId": "item_mq7tw2pb_5_cjjwyi",
+        "itemName": "Private Room Towel",
+        "qty": 1,
+        "unitAmount": 0,
+        "amount": 0,
+        "direction": -1,
+        "guest": "",
+        "room": "201",
+        "pax": null,
+        "shiftId": "shift_mpy3b19n_5_j6nxol",
+        "shiftLabel": "PM",
+        "businessDate": "2026-09-13",
+        "staff": "Chalyn",
+        "staffRole": "staff",
+        "note": "Guest checked out — private room hold closed, Private Room Towel returned (deposit #18486)",
+        "towelNo": "",
+        "oldTowelNo": "",
+        "towelLost": false,
+        "refundsSeq": 18486,
+        "exchangesSeq": null,
+        "mewsRes": "",
+        "privateRoom": true,
+        "reversesId": null,
+        "prevHash": "5b41a3c0315d5a42ee821cf106255a874cccc8778de92d37d0a4ecf7a6d56572",
+        "hash": "a59c2d708306a1363c3fb33f9e4a0246dcabf2dc8d0d5efa456f7602cff662c9"
       }
     ],
     "audit": [
@@ -553561,6 +553592,40 @@
         },
         "prevHash": "6e1157d1b876c2a608dc6ad35ffa04f70fda310d77b5293cc611dfbeb031da9f",
         "hash": "0b7276cac98678449799da3e5fb563003352571cdafa83ae6299494a8442d7d0"
+      },
+      {
+        "seq": 5677,
+        "id": "aud_mtz5mbrz_1r_6vtpu5",
+        "ts": "2026-09-13T01:47:33.791Z",
+        "actor": "Chalyn",
+        "role": "staff",
+        "action": "backup.github",
+        "what": "Backup committed to thethreethreethree/FRONT-DESK-TRANSACTION-TRACKER@main (auto-sync)",
+        "details": {
+          "reason": "auto-sync",
+          "coh": 22400,
+          "entries": 18486
+        },
+        "prevHash": "0b7276cac98678449799da3e5fb563003352571cdafa83ae6299494a8442d7d0",
+        "hash": "b17dd57cdcf5ac6f8142a5a452ae9b9807aea0b7c6aaa71a1dcbc4f652b99ba3"
+      },
+      {
+        "seq": 5678,
+        "id": "aud_mtz5mhqj_1t_ef2lvg",
+        "ts": "2026-09-13T01:47:41.515Z",
+        "actor": "Chalyn",
+        "role": "staff",
+        "action": "privateroom.checkout",
+        "what": "Guest checked out · 201 · Rm 201 · Private Room Towel returned (deposit #18486)",
+        "details": {
+          "seq": 18486,
+          "guest": "",
+          "room": "201",
+          "itemName": "Private Room Towel",
+          "towelNo": ""
+        },
+        "prevHash": "b17dd57cdcf5ac6f8142a5a452ae9b9807aea0b7c6aaa71a1dcbc4f652b99ba3",
+        "hash": "6b2fdae57e19599c25950653af3ede7e662fe4f6979f0bc5a72dd19d1172e7ca"
       }
     ],
     "towels": [
