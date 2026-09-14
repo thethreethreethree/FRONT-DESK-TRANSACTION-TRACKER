@@ -3,11 +3,11 @@
     "app": "Frendz Front Desk Transaction Tracker",
     "build": "2026-08-19-merge-sync",
     "writtenBy": "Rebecca",
-    "exportedAt": "2026-09-14T03:53:06.065Z",
+    "exportedAt": "2026-09-14T03:53:27.861Z",
     "version": 1,
-    "coh": 16200,
-    "entries": 18501,
-    "auditEvents": 5723,
+    "coh": 15000,
+    "entries": 18503,
+    "auditEvents": 5726,
     "integrity": {
       "ok": true,
       "brokenAtSeq": null
@@ -41,8 +41,8 @@
         "path": "data/ledger-backup.json",
         "autoSync": true,
         "enabled": true,
-        "lastBackupAt": "2026-09-14T03:52:25.747Z",
-        "lastBackupSha": "2e03da3ac8e64b96ea8c4d65950c2b5eb0ec1e89"
+        "lastBackupAt": "2026-09-14T03:53:15.470Z",
+        "lastBackupSha": "597ec35aa921dc3293a30eb983b5c6b29f4a8a7e"
       },
       "towelTracker": {
         "enabled": true,
@@ -457712,6 +457712,68 @@
         "reversesId": null,
         "prevHash": "56baaacb70cdb27f5688485494c77748efafbe9fb1cb0cf5eca0d564aad43f79",
         "hash": "0edb8206375496a58ef2cf7e3559c70f18c256306ac9abc42449c291cb045e86"
+      },
+      {
+        "seq": 18502,
+        "id": "txn_mu0pjrvl_3i_px1bvf",
+        "ts": "2026-09-14T03:53:13.185Z",
+        "kind": "refund",
+        "itemTypeId": "item_mpxxdbc8_3_0avyxn",
+        "itemName": "Padlock",
+        "qty": 1,
+        "unitAmount": 200,
+        "amount": 200,
+        "direction": -1,
+        "guest": "Mark Alfred Yumul",
+        "room": "303",
+        "pax": null,
+        "shiftId": "shift_mpy3b19n_5_j6nxol",
+        "shiftLabel": "PM",
+        "businessDate": "2026-09-14",
+        "staff": "Rebecca",
+        "staffRole": "staff",
+        "note": "",
+        "towelNo": "",
+        "oldTowelNo": "",
+        "towelLost": false,
+        "refundsSeq": 18461,
+        "exchangesSeq": null,
+        "mewsRes": "",
+        "privateRoom": false,
+        "reversesId": null,
+        "prevHash": "0edb8206375496a58ef2cf7e3559c70f18c256306ac9abc42449c291cb045e86",
+        "hash": "148576b4b7d70224e17c33451da021db19cebabe02ae065c3536899797c82051"
+      },
+      {
+        "seq": 18503,
+        "id": "txn_mu0pjxg9_3l_0l7tkf",
+        "ts": "2026-09-14T03:53:20.409Z",
+        "kind": "refund",
+        "itemTypeId": "item_mpxxdbc3_2_s3d7ag",
+        "itemName": "Towel",
+        "qty": 1,
+        "unitAmount": 1000,
+        "amount": 1000,
+        "direction": -1,
+        "guest": "Mark Alfred Yumul",
+        "room": "303",
+        "pax": null,
+        "shiftId": "shift_mpy3b19n_5_j6nxol",
+        "shiftLabel": "PM",
+        "businessDate": "2026-09-14",
+        "staff": "Rebecca",
+        "staffRole": "staff",
+        "note": "",
+        "towelNo": "269",
+        "oldTowelNo": "",
+        "towelLost": false,
+        "refundsSeq": 18457,
+        "exchangesSeq": null,
+        "mewsRes": "",
+        "privateRoom": false,
+        "reversesId": null,
+        "prevHash": "148576b4b7d70224e17c33451da021db19cebabe02ae065c3536899797c82051",
+        "hash": "147851a0373dba56dd3f36112041196a360246c0fcd6046bcbb5a754bd2d5edc"
       }
     ],
     "audit": [
@@ -554801,6 +554863,60 @@
         },
         "prevHash": "942bad7450563d46f2f0e59b61954da39890d51494f2d8cef9d45d2b327f69b1",
         "hash": "913a47dfbdd229878b93e355877fe9d7337e119fb48f793cb901f7c427028d11"
+      },
+      {
+        "seq": 5724,
+        "id": "aud_mu0pjrvl_3j_9jyfn7",
+        "ts": "2026-09-14T03:53:13.185Z",
+        "actor": "Rebecca",
+        "role": "staff",
+        "action": "refund.create",
+        "what": "Refund ₱200.00 · Padlock ×1 · Mark Alfred Yumul",
+        "details": {
+          "ref": 18502,
+          "id": "txn_mu0pjrvl_3i_px1bvf",
+          "amount": 200,
+          "item": "Padlock",
+          "guest": "Mark Alfred Yumul",
+          "room": "303"
+        },
+        "prevHash": "913a47dfbdd229878b93e355877fe9d7337e119fb48f793cb901f7c427028d11",
+        "hash": "36657d329eefbd8ec7ae2731034449b6a324487ceab4e88947a3d153eb6770d9"
+      },
+      {
+        "seq": 5725,
+        "id": "aud_mu0pjtn2_3k_wvmh8m",
+        "ts": "2026-09-14T03:53:15.470Z",
+        "actor": "Rebecca",
+        "role": "staff",
+        "action": "backup.github",
+        "what": "Backup committed to thethreethreethree/FRONT-DESK-TRANSACTION-TRACKER@main (auto-sync)",
+        "details": {
+          "reason": "auto-sync",
+          "coh": 16200,
+          "entries": 18502
+        },
+        "prevHash": "36657d329eefbd8ec7ae2731034449b6a324487ceab4e88947a3d153eb6770d9",
+        "hash": "0479be72f14c5d6bebeddb3c14372302968d85089975d5f0bad0db5b24f4eaa5"
+      },
+      {
+        "seq": 5726,
+        "id": "aud_mu0pjxg9_3m_mb69vm",
+        "ts": "2026-09-14T03:53:20.409Z",
+        "actor": "Rebecca",
+        "role": "staff",
+        "action": "refund.create",
+        "what": "Refund ₱1,000.00 · Towel ×1 · Mark Alfred Yumul",
+        "details": {
+          "ref": 18503,
+          "id": "txn_mu0pjxg9_3l_0l7tkf",
+          "amount": 1000,
+          "item": "Towel",
+          "guest": "Mark Alfred Yumul",
+          "room": "303"
+        },
+        "prevHash": "0479be72f14c5d6bebeddb3c14372302968d85089975d5f0bad0db5b24f4eaa5",
+        "hash": "b4a2d8529b533f44cac434f65c8e8cf244a6aadd6fb804e4390f93ac3ea72664"
       }
     ],
     "towels": [
