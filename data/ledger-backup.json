@@ -3,11 +3,11 @@
     "app": "Frendz Front Desk Transaction Tracker",
     "build": "2026-08-19-merge-sync",
     "writtenBy": "Rebecca",
-    "exportedAt": "2026-09-14T03:53:27.861Z",
+    "exportedAt": "2026-09-14T03:53:45.164Z",
     "version": 1,
-    "coh": 15000,
-    "entries": 18503,
-    "auditEvents": 5726,
+    "coh": 14000,
+    "entries": 18504,
+    "auditEvents": 5728,
     "integrity": {
       "ok": true,
       "brokenAtSeq": null
@@ -41,8 +41,8 @@
         "path": "data/ledger-backup.json",
         "autoSync": true,
         "enabled": true,
-        "lastBackupAt": "2026-09-14T03:53:15.470Z",
-        "lastBackupSha": "597ec35aa921dc3293a30eb983b5c6b29f4a8a7e"
+        "lastBackupAt": "2026-09-14T03:53:38.503Z",
+        "lastBackupSha": "2e505aa0b0d7e48bda3c6319cb0bfc62daec083d"
       },
       "towelTracker": {
         "enabled": true,
@@ -457774,6 +457774,37 @@
         "reversesId": null,
         "prevHash": "148576b4b7d70224e17c33451da021db19cebabe02ae065c3536899797c82051",
         "hash": "147851a0373dba56dd3f36112041196a360246c0fcd6046bcbb5a754bd2d5edc"
+      },
+      {
+        "seq": 18504,
+        "id": "txn_mu0pk9l5_3n_d4offz",
+        "ts": "2026-09-14T03:53:36.137Z",
+        "kind": "refund",
+        "itemTypeId": "item_mpxxdbc3_2_s3d7ag",
+        "itemName": "Towel",
+        "qty": 1,
+        "unitAmount": 1000,
+        "amount": 1000,
+        "direction": -1,
+        "guest": "Liam James Dove",
+        "room": "209",
+        "pax": null,
+        "shiftId": "shift_mpy3b19n_5_j6nxol",
+        "shiftLabel": "PM",
+        "businessDate": "2026-09-14",
+        "staff": "Rebecca",
+        "staffRole": "staff",
+        "note": "",
+        "towelNo": "407",
+        "oldTowelNo": "",
+        "towelLost": false,
+        "refundsSeq": 18455,
+        "exchangesSeq": null,
+        "mewsRes": "",
+        "privateRoom": false,
+        "reversesId": null,
+        "prevHash": "147851a0373dba56dd3f36112041196a360246c0fcd6046bcbb5a754bd2d5edc",
+        "hash": "6743a4b57fd45f27e8ca59195a4969f414fde6bef85b027f80275907ea0d4e29"
       }
     ],
     "audit": [
@@ -554917,6 +554948,41 @@
         },
         "prevHash": "0479be72f14c5d6bebeddb3c14372302968d85089975d5f0bad0db5b24f4eaa5",
         "hash": "b4a2d8529b533f44cac434f65c8e8cf244a6aadd6fb804e4390f93ac3ea72664"
+      },
+      {
+        "seq": 5727,
+        "id": "aud_mu0pk9l6_3o_iuqrvz",
+        "ts": "2026-09-14T03:53:36.138Z",
+        "actor": "Rebecca",
+        "role": "staff",
+        "action": "refund.create",
+        "what": "Refund ₱1,000.00 · Towel ×1 · Liam James Dove",
+        "details": {
+          "ref": 18504,
+          "id": "txn_mu0pk9l5_3n_d4offz",
+          "amount": 1000,
+          "item": "Towel",
+          "guest": "Liam James Dove",
+          "room": "209"
+        },
+        "prevHash": "b4a2d8529b533f44cac434f65c8e8cf244a6aadd6fb804e4390f93ac3ea72664",
+        "hash": "3e85b29dd899a2230744dd3989b69e7765feb46166018c3490e7fae7c92fd706"
+      },
+      {
+        "seq": 5728,
+        "id": "aud_mu0pkbev_3p_lzuhpg",
+        "ts": "2026-09-14T03:53:38.503Z",
+        "actor": "Rebecca",
+        "role": "staff",
+        "action": "backup.github",
+        "what": "Backup committed to thethreethreethree/FRONT-DESK-TRANSACTION-TRACKER@main (auto-sync)",
+        "details": {
+          "reason": "auto-sync",
+          "coh": 15000,
+          "entries": 18504
+        },
+        "prevHash": "3e85b29dd899a2230744dd3989b69e7765feb46166018c3490e7fae7c92fd706",
+        "hash": "5dfdca8094d061a7a4f791a32083dbabffad77728fd97b09fdee0316d2052e01"
       }
     ],
     "towels": [
