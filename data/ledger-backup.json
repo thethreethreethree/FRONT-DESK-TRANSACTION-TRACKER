@@ -3,11 +3,11 @@
     "app": "Frendz Front Desk Transaction Tracker",
     "build": "2026-08-19-merge-sync",
     "writtenBy": "GINO",
-    "exportedAt": "2026-09-15T10:26:24.981Z",
+    "exportedAt": "2026-09-15T12:02:38.245Z",
     "version": 1,
     "coh": 22000,
     "entries": 18518,
-    "auditEvents": 5789,
+    "auditEvents": 5791,
     "integrity": {
       "ok": true,
       "brokenAtSeq": null
@@ -16,7 +16,7 @@
       "ok": true,
       "brokenAtSeq": null
     },
-    "travelistaEntries": 71,
+    "travelistaEntries": 72,
     "travelistaIntegrity": {
       "ok": true,
       "brokenAtSeq": null
@@ -41,8 +41,8 @@
         "path": "data/ledger-backup.json",
         "autoSync": true,
         "enabled": true,
-        "lastBackupAt": "2026-09-15T10:24:50.204Z",
-        "lastBackupSha": "fe6fd8034dbc647cc755e6507ff549073ec91592"
+        "lastBackupAt": "2026-09-15T10:26:40.762Z",
+        "lastBackupSha": "f26f7ff71ff2463b54f0d69871620cae87d9761c"
       },
       "towelTracker": {
         "enabled": true,
@@ -556386,6 +556386,43 @@
         },
         "prevHash": "0dcb0533a3ed8ff9c3724306d6d9ca5f7441e2e3e097ed8815c084a3d5461929",
         "hash": "a11de95548c11160883486fbfa92baeb93b86b91f531431ca53e82bdc800cc1b"
+      },
+      {
+        "seq": 5790,
+        "id": "aud_mu2j1m9m_1g_72z0ie",
+        "ts": "2026-09-15T10:26:40.762Z",
+        "actor": "GINO",
+        "role": "manager",
+        "action": "backup.github",
+        "what": "Backup committed to thethreethreethree/FRONT-DESK-TRANSACTION-TRACKER@main (auto-sync)",
+        "details": {
+          "reason": "auto-sync",
+          "coh": 22000,
+          "entries": 18518
+        },
+        "prevHash": "a11de95548c11160883486fbfa92baeb93b86b91f531431ca53e82bdc800cc1b",
+        "hash": "d0ef598b2d2e9b32bdcce4cd9961b2d84b335d10077ca53e2fa2233f57259c28"
+      },
+      {
+        "seq": 5791,
+        "id": "aud_mu2mgv9q_1i_w8ywp7",
+        "ts": "2026-09-15T12:02:31.118Z",
+        "actor": "GINO",
+        "role": "manager",
+        "action": "tv.booking.create",
+        "what": "Travelista booking #72 · MS. JHEN · PPS SHARING VAN ×1 pax · ₱750 (commission ₱100)",
+        "details": {
+          "ref": 72,
+          "id": "tv_mu2mgv9q_1h_eievnn",
+          "guest": "MS. JHEN",
+          "destination": "PPS SHARING VAN",
+          "pax": 1,
+          "total": 750,
+          "commission": 100,
+          "bookedBy": "GINO"
+        },
+        "prevHash": "d0ef598b2d2e9b32bdcce4cd9961b2d84b335d10077ca53e2fa2233f57259c28",
+        "hash": "f8df033d7126cd637bc4e8f9dafd14d26fca8a9483026f81726a6b1a49279043"
       }
     ],
     "towels": [
@@ -565408,6 +565445,42 @@
           "reversesKind": null,
           "prevHash": "a36e44fc8dcbeaa67b91b6cda8f4ef0696bd59eaaadce5307eb5ab75900aac44",
           "hash": "1bab2e7277c0a77f373a71f9337b210c020d28a133713bde14469fdac0091062"
+        },
+        {
+          "seq": 72,
+          "id": "tv_mu2mgv9q_1h_eievnn",
+          "ts": "2026-09-15T12:02:31.118Z",
+          "kind": "booking",
+          "direction": 1,
+          "amount": 750,
+          "departureDate": "2026-09-16",
+          "guest": "MS. JHEN",
+          "destination": "PPS SHARING VAN",
+          "destinationId": "dest_msrh2ktf_d_xyn4hg",
+          "pax": 1,
+          "fare": 750,
+          "fareBasis": "per_pax",
+          "total": 750,
+          "travelistaShare": 650,
+          "commission": 100,
+          "bookedBy": "GINO",
+          "remarks": "",
+          "payoutType": "",
+          "payee": "",
+          "method": "",
+          "amendsSeq": null,
+          "dTotal": 0,
+          "dShare": 0,
+          "dCommission": 0,
+          "dPax": 0,
+          "periodKey": "2026-09-B",
+          "staff": "GINO",
+          "staffRole": "manager",
+          "businessDate": "2026-09-15",
+          "reversesId": null,
+          "reversesKind": null,
+          "prevHash": "1bab2e7277c0a77f373a71f9337b210c020d28a133713bde14469fdac0091062",
+          "hash": "80a5e5e770a53ea64c4e6811c6dc1abf295f1b274682e85633ec051ecd80b40d"
         }
       ]
     }
