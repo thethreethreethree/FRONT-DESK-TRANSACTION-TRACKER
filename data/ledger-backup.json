@@ -3,11 +3,11 @@
     "app": "Frendz Front Desk Transaction Tracker",
     "build": "2026-08-19-merge-sync",
     "writtenBy": "darren",
-    "exportedAt": "2026-09-16T07:15:36.623Z",
+    "exportedAt": "2026-09-16T07:17:09.152Z",
     "version": 1,
     "coh": 20000,
     "entries": 18524,
-    "auditEvents": 5826,
+    "auditEvents": 5830,
     "integrity": {
       "ok": true,
       "brokenAtSeq": null
@@ -16,7 +16,7 @@
       "ok": true,
       "brokenAtSeq": null
     },
-    "travelistaEntries": 77,
+    "travelistaEntries": 79,
     "travelistaIntegrity": {
       "ok": true,
       "brokenAtSeq": null
@@ -41,8 +41,8 @@
         "path": "data/ledger-backup.json",
         "autoSync": true,
         "enabled": true,
-        "lastBackupAt": "2026-09-16T06:02:27.465Z",
-        "lastBackupSha": "3076f111facb06f9f7c787e3ae7a7d88165058c8"
+        "lastBackupAt": "2026-09-16T07:15:59.363Z",
+        "lastBackupSha": "820c998d244064b4d71846f8e0f2a36eeeed2744"
       },
       "towelTracker": {
         "enabled": true,
@@ -557168,6 +557168,27 @@
       },
       {
         "seq": 5826,
+        "id": "aud_mu3p2mjj_u_5vc87e",
+        "ts": "2026-09-16T06:03:11.647Z",
+        "actor": "Chalyn",
+        "role": "staff",
+        "action": "tv.booking.create",
+        "what": "Travelista booking #74 · DIANA VELASQUEZ · PPS SHARING VAN ×1 pax · ₱750 (commission ₱100)",
+        "details": {
+          "ref": 74,
+          "id": "tv_mu3p2mjj_t_ibvtne",
+          "guest": "DIANA VELASQUEZ",
+          "destination": "PPS SHARING VAN",
+          "pax": 1,
+          "total": 750,
+          "commission": 100,
+          "bookedBy": "CHALYN"
+        },
+        "prevHash": "878f27ec637e810965635d7bbf97e2497926831436f79ef62e5656980e5dcc33",
+        "hash": "e1fba218d643a237cd0cfdfb1839534707729c8c14b177805be0af40c9b8fb6e"
+      },
+      {
+        "seq": 5827,
         "id": "aud_mu3rnm5m_2_zvy2bl",
         "ts": "2026-09-16T07:15:30.154Z",
         "actor": "darren",
@@ -557181,8 +557202,58 @@
           "payoutType": "travelista",
           "payee": "TRAVELISTA"
         },
-        "prevHash": "878f27ec637e810965635d7bbf97e2497926831436f79ef62e5656980e5dcc33",
-        "hash": "b822893766adc2611be2013a891079c01c1975871054a34ff82aed4d10d3878f"
+        "prevHash": "e1fba218d643a237cd0cfdfb1839534707729c8c14b177805be0af40c9b8fb6e",
+        "hash": "9107ab0bbae81775d0453fd03a04fee36950cb92247613a63d92f7db5ede42fb"
+      },
+      {
+        "seq": 5828,
+        "id": "aud_mu3ro8oz_3_vrrty8",
+        "ts": "2026-09-16T07:15:59.363Z",
+        "actor": "darren",
+        "role": "manager",
+        "action": "backup.github",
+        "what": "Backup committed to thethreethreethree/FRONT-DESK-TRANSACTION-TRACKER@main (auto-sync)",
+        "details": {
+          "reason": "auto-sync",
+          "coh": 20000,
+          "entries": 18524
+        },
+        "prevHash": "9107ab0bbae81775d0453fd03a04fee36950cb92247613a63d92f7db5ede42fb",
+        "hash": "b754e412c70f6594c9f3b01cdaca339ad520c860eda371910d8283d4eece9a97"
+      },
+      {
+        "seq": 5829,
+        "id": "aud_mu3rojgl_4_v96u10",
+        "ts": "2026-09-16T07:16:13.317Z",
+        "actor": "darren",
+        "role": "manager",
+        "action": "sync.merge",
+        "what": "Merged 0 records from another device + 1 travelista",
+        "details": {
+          "ledger": 0,
+          "travelista": 1,
+          "audit": 1
+        },
+        "prevHash": "b754e412c70f6594c9f3b01cdaca339ad520c860eda371910d8283d4eece9a97",
+        "hash": "cc997c57dc44da505af72f65d9503e7407f07f794089d57060a24b961465dfd7"
+      },
+      {
+        "seq": 5830,
+        "id": "aud_mu3rp534_6_pii4qv",
+        "ts": "2026-09-16T07:16:41.344Z",
+        "actor": "darren",
+        "role": "manager",
+        "action": "tv.payout.create",
+        "what": "Travelista payout #79 · ₱2,900 · commission → OFFICE (CASH)",
+        "details": {
+          "ref": 79,
+          "id": "tv_mu3rp534_5_65nciy",
+          "amount": 2900,
+          "payoutType": "commission",
+          "payee": "OFFICE"
+        },
+        "prevHash": "cc997c57dc44da505af72f65d9503e7407f07f794089d57060a24b961465dfd7",
+        "hash": "c833fee3b8942cce1857dc4c104577cecb7197668645ea46515e86219290ff22"
       }
     ],
     "towels": [
@@ -566388,6 +566459,42 @@
         },
         {
           "seq": 77,
+          "id": "tv_mu3p2mjj_t_ibvtne",
+          "ts": "2026-09-16T06:03:11.647Z",
+          "kind": "booking",
+          "direction": 1,
+          "amount": 750,
+          "departureDate": "2026-09-18",
+          "guest": "DIANA VELASQUEZ",
+          "destination": "PPS SHARING VAN",
+          "destinationId": "dest_msrh2ktf_d_xyn4hg",
+          "pax": 1,
+          "fare": 750,
+          "fareBasis": "per_pax",
+          "total": 750,
+          "travelistaShare": 650,
+          "commission": 100,
+          "bookedBy": "CHALYN",
+          "remarks": "",
+          "payoutType": "",
+          "payee": "",
+          "method": "",
+          "amendsSeq": null,
+          "dTotal": 0,
+          "dShare": 0,
+          "dCommission": 0,
+          "dPax": 0,
+          "periodKey": "2026-09-B",
+          "staff": "Chalyn",
+          "staffRole": "staff",
+          "businessDate": "2026-09-16",
+          "reversesId": null,
+          "reversesKind": null,
+          "prevHash": "85981e3aa8ba3b8084b2f9688bce748973f8f1813a556fac11d16e79ee7abc35",
+          "hash": "793a50e21f2eb247aacd6d115265ccaca90aeb86fb3f936471a642eeb20602fe"
+        },
+        {
+          "seq": 78,
           "id": "tv_mu3rnm5l_1_bin11m",
           "ts": "2026-09-16T07:15:30.153Z",
           "kind": "payout",
@@ -566419,8 +566526,44 @@
           "businessDate": "2026-09-16",
           "reversesId": null,
           "reversesKind": null,
-          "prevHash": "85981e3aa8ba3b8084b2f9688bce748973f8f1813a556fac11d16e79ee7abc35",
-          "hash": "133c1e9cce60c0d373dbff5c62ea8ebf75aadaaee98a87f56d0e933b272998a7"
+          "prevHash": "793a50e21f2eb247aacd6d115265ccaca90aeb86fb3f936471a642eeb20602fe",
+          "hash": "f0f2d81843ddbe6b7d27a796caf7cb4bdd86c2ac8380fed7dd4c6adf0574bc5a"
+        },
+        {
+          "seq": 79,
+          "id": "tv_mu3rp534_5_65nciy",
+          "ts": "2026-09-16T07:16:41.344Z",
+          "kind": "payout",
+          "direction": -1,
+          "amount": 2900,
+          "departureDate": "",
+          "guest": "",
+          "destination": "",
+          "destinationId": null,
+          "pax": null,
+          "fare": null,
+          "fareBasis": "",
+          "total": 0,
+          "travelistaShare": 0,
+          "commission": 0,
+          "bookedBy": "",
+          "remarks": "",
+          "payoutType": "commission",
+          "payee": "OFFICE",
+          "method": "CASH",
+          "amendsSeq": null,
+          "dTotal": 0,
+          "dShare": 0,
+          "dCommission": 0,
+          "dPax": 0,
+          "periodKey": "2026-09-A",
+          "staff": "darren",
+          "staffRole": "manager",
+          "businessDate": "2026-09-16",
+          "reversesId": null,
+          "reversesKind": null,
+          "prevHash": "f0f2d81843ddbe6b7d27a796caf7cb4bdd86c2ac8380fed7dd4c6adf0574bc5a",
+          "hash": "56765e1a9bff09c93c052680c76fb8fd1857078c29a35be19d1cbc2818f2f511"
         }
       ]
     }
