@@ -3,11 +3,11 @@
     "app": "Frendz Front Desk Transaction Tracker",
     "build": "2026-08-19-merge-sync",
     "writtenBy": "darren",
-    "exportedAt": "2026-09-16T07:17:09.152Z",
+    "exportedAt": "2026-09-16T07:18:46.006Z",
     "version": 1,
     "coh": 20000,
     "entries": 18524,
-    "auditEvents": 5830,
+    "auditEvents": 5832,
     "integrity": {
       "ok": true,
       "brokenAtSeq": null
@@ -16,7 +16,7 @@
       "ok": true,
       "brokenAtSeq": null
     },
-    "travelistaEntries": 79,
+    "travelistaEntries": 80,
     "travelistaIntegrity": {
       "ok": true,
       "brokenAtSeq": null
@@ -41,8 +41,8 @@
         "path": "data/ledger-backup.json",
         "autoSync": true,
         "enabled": true,
-        "lastBackupAt": "2026-09-16T07:15:59.363Z",
-        "lastBackupSha": "820c998d244064b4d71846f8e0f2a36eeeed2744"
+        "lastBackupAt": "2026-09-16T07:17:37.356Z",
+        "lastBackupSha": "9b605650d27f5cdfc77e6c7b21c0249e61f09fa1"
       },
       "towelTracker": {
         "enabled": true,
@@ -557254,6 +557254,38 @@
         },
         "prevHash": "cc997c57dc44da505af72f65d9503e7407f07f794089d57060a24b961465dfd7",
         "hash": "c833fee3b8942cce1857dc4c104577cecb7197668645ea46515e86219290ff22"
+      },
+      {
+        "seq": 5831,
+        "id": "aud_mu3rqcb1_1_zhbg98",
+        "ts": "2026-09-16T07:17:37.357Z",
+        "actor": "darren",
+        "role": "manager",
+        "action": "backup.github",
+        "what": "Backup committed to thethreethreethree/FRONT-DESK-TRANSACTION-TRACKER@main (auto-sync)",
+        "details": {
+          "reason": "auto-sync",
+          "coh": 20000,
+          "entries": 18524
+        },
+        "prevHash": "c833fee3b8942cce1857dc4c104577cecb7197668645ea46515e86219290ff22",
+        "hash": "9afbfc9b13d49e0713004091aefe313dc007a2178872f9d490edce58090bce97"
+      },
+      {
+        "seq": 5832,
+        "id": "aud_mu3rro51_3_tw7ixo",
+        "ts": "2026-09-16T07:18:39.349Z",
+        "actor": "darren",
+        "role": "manager",
+        "action": "tv.void",
+        "what": "Voided travelista #78 (payout · ₱4,900)",
+        "details": {
+          "ref": 78,
+          "reversalSeq": 80,
+          "reason": "MISTAKE ON THE AMOUNT TO TRAVELISTA. SHOULD BE P14900, NOT P4900"
+        },
+        "prevHash": "9afbfc9b13d49e0713004091aefe313dc007a2178872f9d490edce58090bce97",
+        "hash": "7ddc5b82fd9aa590986610bcfd8fb362098bc7b0a24c4f1771d2b5fc11857abb"
       }
     ],
     "towels": [
@@ -566564,6 +566596,42 @@
           "reversesKind": null,
           "prevHash": "f0f2d81843ddbe6b7d27a796caf7cb4bdd86c2ac8380fed7dd4c6adf0574bc5a",
           "hash": "56765e1a9bff09c93c052680c76fb8fd1857078c29a35be19d1cbc2818f2f511"
+        },
+        {
+          "seq": 80,
+          "id": "tv_mu3rro51_2_4a1g8b",
+          "ts": "2026-09-16T07:18:39.349Z",
+          "kind": "reversal",
+          "direction": 1,
+          "amount": 4900,
+          "departureDate": "",
+          "guest": "",
+          "destination": "",
+          "destinationId": null,
+          "pax": null,
+          "fare": null,
+          "fareBasis": "",
+          "total": 0,
+          "travelistaShare": 0,
+          "commission": 0,
+          "bookedBy": "",
+          "remarks": "VOID of #78 (payout). Reason: MISTAKE ON THE AMOUNT TO TRAVELISTA. SHOULD BE P14900, NOT P4900",
+          "payoutType": "travelista",
+          "payee": "TRAVELISTA",
+          "method": "CASH",
+          "amendsSeq": null,
+          "dTotal": 0,
+          "dShare": 0,
+          "dCommission": 0,
+          "dPax": 0,
+          "periodKey": "2026-09-A",
+          "staff": "darren",
+          "staffRole": "manager",
+          "businessDate": "2026-09-16",
+          "reversesId": "tv_mu3rnm5l_1_bin11m",
+          "reversesKind": "payout",
+          "prevHash": "56765e1a9bff09c93c052680c76fb8fd1857078c29a35be19d1cbc2818f2f511",
+          "hash": "cc77018ce7bd281d8ed87c706818730074662a165dbf052220e8284a2771eb6c"
         }
       ]
     }
