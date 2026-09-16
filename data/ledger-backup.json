@@ -3,11 +3,11 @@
     "app": "Frendz Front Desk Transaction Tracker",
     "build": "2026-08-19-merge-sync",
     "writtenBy": "darren",
-    "exportedAt": "2026-09-16T06:00:38.881Z",
+    "exportedAt": "2026-09-16T06:01:29.570Z",
     "version": 1,
     "coh": 20000,
     "entries": 18524,
-    "auditEvents": 5822,
+    "auditEvents": 5824,
     "integrity": {
       "ok": true,
       "brokenAtSeq": null
@@ -16,7 +16,7 @@
       "ok": true,
       "brokenAtSeq": null
     },
-    "travelistaEntries": 75,
+    "travelistaEntries": 76,
     "travelistaIntegrity": {
       "ok": true,
       "brokenAtSeq": null
@@ -41,8 +41,8 @@
         "path": "data/ledger-backup.json",
         "autoSync": true,
         "enabled": true,
-        "lastBackupAt": "2026-09-16T06:00:04.388Z",
-        "lastBackupSha": "99141dadbadcabfde2f0423c0e2f1b12974e5540"
+        "lastBackupAt": "2026-09-16T06:01:19.402Z",
+        "lastBackupSha": "83a18d8414b98822f61b1546faf1a68dcaaec214"
       },
       "towelTracker": {
         "enabled": true,
@@ -557112,6 +557112,43 @@
         },
         "prevHash": "96cd3c38ff68d20d5469c9e083f14474e5c308e6167596ee9cb73f1ef4f3988d",
         "hash": "09eae1e987660f3b769c3a495ea38a8a3998b8f7a8ef00d969836701bbfa3bad"
+      },
+      {
+        "seq": 5823,
+        "id": "aud_mu3ozpv7_b_tujduc",
+        "ts": "2026-09-16T06:00:55.987Z",
+        "actor": "darren",
+        "role": "manager",
+        "action": "tv.booking.create",
+        "what": "Travelista booking #76 · SAMUEL GAGNON · PPS SHARING VAN ×1 pax · ₱750 (commission ₱100)",
+        "details": {
+          "ref": 76,
+          "id": "tv_mu3ozpv6_a_holhf0",
+          "guest": "SAMUEL GAGNON",
+          "destination": "PPS SHARING VAN",
+          "pax": 1,
+          "total": 750,
+          "commission": 100,
+          "bookedBy": "DARREN"
+        },
+        "prevHash": "09eae1e987660f3b769c3a495ea38a8a3998b8f7a8ef00d969836701bbfa3bad",
+        "hash": "c69fb1df1c12782462824bfa4c788a952eb7274c857cb797ae6ba90c2277fffe"
+      },
+      {
+        "seq": 5824,
+        "id": "aud_mu3p07xm_c_owhtiq",
+        "ts": "2026-09-16T06:01:19.402Z",
+        "actor": "darren",
+        "role": "manager",
+        "action": "backup.github",
+        "what": "Backup committed to thethreethreethree/FRONT-DESK-TRANSACTION-TRACKER@main (auto-sync)",
+        "details": {
+          "reason": "auto-sync",
+          "coh": 20000,
+          "entries": 18524
+        },
+        "prevHash": "c69fb1df1c12782462824bfa4c788a952eb7274c857cb797ae6ba90c2277fffe",
+        "hash": "b3abc033130c376cf2993b0fb71950e8e56647db28313d503f40f71dea4dc713"
       }
     ],
     "towels": [
@@ -566278,6 +566315,42 @@
           "reversesKind": null,
           "prevHash": "e086e15bf599fe29d67804842d0f73ab806ca6396987baa0c50324322688d9e7",
           "hash": "db2be0cf78e4b58f8aa02a007f75af70c078419bd21fcb1162111da9c5ccefff"
+        },
+        {
+          "seq": 76,
+          "id": "tv_mu3ozpv6_a_holhf0",
+          "ts": "2026-09-16T06:00:55.986Z",
+          "kind": "booking",
+          "direction": 1,
+          "amount": 750,
+          "departureDate": "2026-09-11",
+          "guest": "SAMUEL GAGNON",
+          "destination": "PPS SHARING VAN",
+          "destinationId": "dest_msrh2ktf_d_xyn4hg",
+          "pax": 1,
+          "fare": 750,
+          "fareBasis": "per_pax",
+          "total": 750,
+          "travelistaShare": 650,
+          "commission": 100,
+          "bookedBy": "DARREN",
+          "remarks": "",
+          "payoutType": "",
+          "payee": "",
+          "method": "",
+          "amendsSeq": null,
+          "dTotal": 0,
+          "dShare": 0,
+          "dCommission": 0,
+          "dPax": 0,
+          "periodKey": "2026-09-A",
+          "staff": "darren",
+          "staffRole": "manager",
+          "businessDate": "2026-09-16",
+          "reversesId": null,
+          "reversesKind": null,
+          "prevHash": "db2be0cf78e4b58f8aa02a007f75af70c078419bd21fcb1162111da9c5ccefff",
+          "hash": "85981e3aa8ba3b8084b2f9688bce748973f8f1813a556fac11d16e79ee7abc35"
         }
       ]
     }
