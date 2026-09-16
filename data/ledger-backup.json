@@ -3,11 +3,11 @@
     "app": "Frendz Front Desk Transaction Tracker",
     "build": "2026-08-19-merge-sync",
     "writtenBy": "darren",
-    "exportedAt": "2026-09-16T05:59:30.415Z",
+    "exportedAt": "2026-09-16T05:59:53.603Z",
     "version": 1,
     "coh": 20000,
     "entries": 18524,
-    "auditEvents": 5818,
+    "auditEvents": 5820,
     "integrity": {
       "ok": true,
       "brokenAtSeq": null
@@ -16,7 +16,7 @@
       "ok": true,
       "brokenAtSeq": null
     },
-    "travelistaEntries": 73,
+    "travelistaEntries": 74,
     "travelistaIntegrity": {
       "ok": true,
       "brokenAtSeq": null
@@ -41,8 +41,8 @@
         "path": "data/ledger-backup.json",
         "autoSync": true,
         "enabled": true,
-        "lastBackupAt": "2026-09-16T05:20:54.304Z",
-        "lastBackupSha": "63e1974257e8bbfa30c3865f0fbe382c4da5e35f"
+        "lastBackupAt": "2026-09-16T05:59:47.204Z",
+        "lastBackupSha": "99141dadbadcabfde2f0423c0e2f1b12974e5540"
       },
       "towelTracker": {
         "enabled": true,
@@ -557043,6 +557043,38 @@
         },
         "prevHash": "323dabd1f57a6210e2b7fcfb612bb3d0e6dc5fa8959a4e4d6dbcddb972ace26c",
         "hash": "870dabf5663548a3d0c8e2d5e103db29063ce5d97c52a1e7726653c8287f7c3e"
+      },
+      {
+        "seq": 5819,
+        "id": "aud_mu3oy8do_5_xddsg3",
+        "ts": "2026-09-16T05:59:46.668Z",
+        "actor": "darren",
+        "role": "manager",
+        "action": "tv.void",
+        "what": "Voided travelista #73 (booking · BYRONY ELSTON · ₱1,500)",
+        "details": {
+          "ref": 73,
+          "reversalSeq": 74,
+          "reason": "WRONG DATES"
+        },
+        "prevHash": "870dabf5663548a3d0c8e2d5e103db29063ce5d97c52a1e7726653c8287f7c3e",
+        "hash": "568744e8e90e1ef0bf9e509f2a6005066adc526fe85fcab19f8eb45eecd78568"
+      },
+      {
+        "seq": 5820,
+        "id": "aud_mu3oy8sk_6_kcjkjz",
+        "ts": "2026-09-16T05:59:47.204Z",
+        "actor": "darren",
+        "role": "manager",
+        "action": "backup.github",
+        "what": "Backup committed to thethreethreethree/FRONT-DESK-TRANSACTION-TRACKER@main (auto-sync)",
+        "details": {
+          "reason": "auto-sync",
+          "coh": 20000,
+          "entries": 18524
+        },
+        "prevHash": "568744e8e90e1ef0bf9e509f2a6005066adc526fe85fcab19f8eb45eecd78568",
+        "hash": "01d83b5cf7ef915be4fdefea9c8a814998c2cc8d01d364357a53dc9409fc13e9"
       }
     ],
     "towels": [
@@ -566137,6 +566169,42 @@
           "reversesKind": null,
           "prevHash": "80a5e5e770a53ea64c4e6811c6dc1abf295f1b274682e85633ec051ecd80b40d",
           "hash": "5cbcfcaffeda0c673359533cc778eca080d1750526cd571257b030c2d95130f8"
+        },
+        {
+          "seq": 74,
+          "id": "tv_mu3oy8do_4_0al6bh",
+          "ts": "2026-09-16T05:59:46.668Z",
+          "kind": "reversal",
+          "direction": -1,
+          "amount": 1500,
+          "departureDate": "2026-09-16",
+          "guest": "BYRONY ELSTON",
+          "destination": "LIO AIRPORT",
+          "destinationId": "dest_mttpa67e_2_el10b1",
+          "pax": 1,
+          "fare": 1500,
+          "fareBasis": "per_pax",
+          "total": 1500,
+          "travelistaShare": 1000,
+          "commission": 500,
+          "bookedBy": "DARREN",
+          "remarks": "VOID of #73 (booking · BYRONY ELSTON). Reason: WRONG DATES",
+          "payoutType": "",
+          "payee": "",
+          "method": "",
+          "amendsSeq": null,
+          "dTotal": 0,
+          "dShare": 0,
+          "dCommission": 0,
+          "dPax": 0,
+          "periodKey": "2026-09-B",
+          "staff": "darren",
+          "staffRole": "manager",
+          "businessDate": "2026-09-16",
+          "reversesId": "tv_mu3oxr76_2_prqz9k",
+          "reversesKind": "booking",
+          "prevHash": "5cbcfcaffeda0c673359533cc778eca080d1750526cd571257b030c2d95130f8",
+          "hash": "e086e15bf599fe29d67804842d0f73ab806ca6396987baa0c50324322688d9e7"
         }
       ]
     }
