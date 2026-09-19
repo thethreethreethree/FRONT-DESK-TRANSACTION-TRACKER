@@ -3,11 +3,11 @@
     "app": "Frendz Front Desk Transaction Tracker",
     "build": "2026-08-19-merge-sync",
     "writtenBy": "GINO",
-    "exportedAt": "2026-09-19T05:08:29.677Z",
+    "exportedAt": "2026-09-19T05:53:28.990Z",
     "version": 1,
     "coh": 19000,
     "entries": 18578,
-    "auditEvents": 5968,
+    "auditEvents": 5970,
     "integrity": {
       "ok": true,
       "brokenAtSeq": null
@@ -16,7 +16,7 @@
       "ok": true,
       "brokenAtSeq": null
     },
-    "travelistaEntries": 83,
+    "travelistaEntries": 84,
     "travelistaIntegrity": {
       "ok": true,
       "brokenAtSeq": null
@@ -41,8 +41,8 @@
         "path": "data/ledger-backup.json",
         "autoSync": true,
         "enabled": true,
-        "lastBackupAt": "2026-09-19T04:48:33.871Z",
-        "lastBackupSha": "132dfea05ee12b3878759ccdea64ee109329ff85"
+        "lastBackupAt": "2026-09-19T05:08:41.586Z",
+        "lastBackupSha": "475f06c77109fa0c70826fb4e6893cb9d1aafc29"
       },
       "towelTracker": {
         "enabled": true,
@@ -561228,6 +561228,43 @@
         },
         "prevHash": "b4af31c447b00ba45fef1b8034c70f25739348a29ccdb203ba911068e10ed928",
         "hash": "9978e310b9633d24190a334652dcac0bc58b51686319d9271aa1bbc399139846"
+      },
+      {
+        "seq": 5969,
+        "id": "aud_mu7xg3im_61_glvg12",
+        "ts": "2026-09-19T05:08:41.806Z",
+        "actor": "GINO",
+        "role": "manager",
+        "action": "backup.github",
+        "what": "Backup committed to thethreethreethree/FRONT-DESK-TRANSACTION-TRACKER@main (auto-sync)",
+        "details": {
+          "reason": "auto-sync",
+          "coh": 19000,
+          "entries": 18578
+        },
+        "prevHash": "9978e310b9633d24190a334652dcac0bc58b51686319d9271aa1bbc399139846",
+        "hash": "7fb904466b2e8802c249a5c06669b6b797e3fa397e9deededd073f7a36bdbfa7"
+      },
+      {
+        "seq": 5970,
+        "id": "aud_mu7z1jt7_63_pok4f0",
+        "ts": "2026-09-19T05:53:22.315Z",
+        "actor": "GINO",
+        "role": "manager",
+        "action": "tv.booking.create",
+        "what": "Travelista booking #84 · ABBY DAHLITZ · PPS SHARING VAN ×1 pax · ₱750 (commission ₱100)",
+        "details": {
+          "ref": 84,
+          "id": "tv_mu7z1jt6_62_o2t3cy",
+          "guest": "ABBY DAHLITZ",
+          "destination": "PPS SHARING VAN",
+          "pax": 1,
+          "total": 750,
+          "commission": 100,
+          "bookedBy": "GINO"
+        },
+        "prevHash": "7fb904466b2e8802c249a5c06669b6b797e3fa397e9deededd073f7a36bdbfa7",
+        "hash": "347185afba14865fd51df0b85553c5cdb5128e92c30272f135f212f882a9c646"
       }
     ],
     "towels": [
@@ -570682,6 +570719,42 @@
           "reversesKind": null,
           "prevHash": "d615704a87508540093319e128ad50a1f4b37a1c4965b53521ead350ebf6039f",
           "hash": "b0883c6484ed1e686d360a6cc3d7edea7e95fd0bc84ac4eed01462194f5bc4f3"
+        },
+        {
+          "seq": 84,
+          "id": "tv_mu7z1jt6_62_o2t3cy",
+          "ts": "2026-09-19T05:53:22.314Z",
+          "kind": "booking",
+          "direction": 1,
+          "amount": 750,
+          "departureDate": "2026-09-21",
+          "guest": "ABBY DAHLITZ",
+          "destination": "PPS SHARING VAN",
+          "destinationId": "dest_msrh2ktf_d_xyn4hg",
+          "pax": 1,
+          "fare": 750,
+          "fareBasis": "per_pax",
+          "total": 750,
+          "travelistaShare": 650,
+          "commission": 100,
+          "bookedBy": "GINO",
+          "remarks": "",
+          "payoutType": "",
+          "payee": "",
+          "method": "",
+          "amendsSeq": null,
+          "dTotal": 0,
+          "dShare": 0,
+          "dCommission": 0,
+          "dPax": 0,
+          "periodKey": "2026-09-B",
+          "staff": "GINO",
+          "staffRole": "manager",
+          "businessDate": "2026-09-19",
+          "reversesId": null,
+          "reversesKind": null,
+          "prevHash": "b0883c6484ed1e686d360a6cc3d7edea7e95fd0bc84ac4eed01462194f5bc4f3",
+          "hash": "3307749c59ffa63b78be0b6d7f559976517aec2b7b2957874c2f970046929582"
         }
       ]
     }
