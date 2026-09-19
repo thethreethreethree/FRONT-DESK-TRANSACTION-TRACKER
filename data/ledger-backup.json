@@ -2,12 +2,12 @@
   "meta": {
     "app": "Frendz Front Desk Transaction Tracker",
     "build": "2026-08-19-merge-sync",
-    "writtenBy": "system",
-    "exportedAt": "2026-09-19T06:05:27.589Z",
+    "writtenBy": "DARREN",
+    "exportedAt": "2026-09-19T06:05:46.460Z",
     "version": 1,
     "coh": 19000,
     "entries": 18578,
-    "auditEvents": 5972,
+    "auditEvents": 5975,
     "integrity": {
       "ok": true,
       "brokenAtSeq": null
@@ -41,8 +41,8 @@
         "path": "data/ledger-backup.json",
         "autoSync": true,
         "enabled": true,
-        "lastBackupAt": "2026-09-19T05:53:39.077Z",
-        "lastBackupSha": "03ba33c606ebd7af43249538098df7b6edf73c9f"
+        "lastBackupAt": "2026-09-19T06:05:37.929Z",
+        "lastBackupSha": "8f866b4fabd8a6fb008e5f26750d3027a73c7d9d"
       },
       "towelTracker": {
         "enabled": true,
@@ -221,14 +221,6 @@
         "pin": "bfl26$037e0c3f8d7ae21ead02443cc746d777226fdd8384ffab4e25d44ae1d1c7d519",
         "active": true,
         "createdAt": "2026-08-27T03:15:22.106Z"
-      },
-      {
-        "id": "admin_gino",
-        "name": "GINO",
-        "pin": "gn1234$2961fcdae22a0d62fe87f59b8f245ec902070fe67f51b123f7bca10c6f1e2fe8",
-        "active": true,
-        "createdAt": "2026-09-11T13:01:15.743Z",
-        "mustSetOwnPin": true
       }
     ],
     "shifts": [
@@ -561293,6 +561285,51 @@
         "details": {},
         "prevHash": "eedcb2515af31f3a122a63df8b5eaa0f0465e8e3abb3dfa447934bdb41965d7b",
         "hash": "214ae64c18ff97d7ea593b787be03c0b15426a14f12622c6a574d429a910be57"
+      },
+      {
+        "seq": 5973,
+        "id": "aud_mu7zh4q7_66_h57erm",
+        "ts": "2026-09-19T06:05:29.263Z",
+        "actor": "DARREN",
+        "role": "manager",
+        "action": "auth.login",
+        "what": "DARREN signed in as manager",
+        "details": {
+          "role": "manager"
+        },
+        "prevHash": "214ae64c18ff97d7ea593b787be03c0b15426a14f12622c6a574d429a910be57",
+        "hash": "90ec40de4e42aff1ca80f6fd946f0375146fd02ca3ca9e53f4f07b3622074fc2"
+      },
+      {
+        "seq": 5974,
+        "id": "aud_mu7zhbex_67_7ydt7j",
+        "ts": "2026-09-19T06:05:37.929Z",
+        "actor": "DARREN",
+        "role": "manager",
+        "action": "backup.github",
+        "what": "Backup committed to thethreethreethree/FRONT-DESK-TRANSACTION-TRACKER@main (auto-sync)",
+        "details": {
+          "reason": "auto-sync",
+          "coh": 19000,
+          "entries": 18578
+        },
+        "prevHash": "90ec40de4e42aff1ca80f6fd946f0375146fd02ca3ca9e53f4f07b3622074fc2",
+        "hash": "eb2383d9f5a6c03f1cbd7b94deb3616a7a28bae6916b2cb8a836a9780d195a94"
+      },
+      {
+        "seq": 5975,
+        "id": "aud_mu7zhcum_68_elog4n",
+        "ts": "2026-09-19T06:05:39.790Z",
+        "actor": "DARREN",
+        "role": "manager",
+        "action": "admin.remove",
+        "what": "Removed admin \"GINO\"",
+        "details": {
+          "id": "admin_gino",
+          "name": "GINO"
+        },
+        "prevHash": "eb2383d9f5a6c03f1cbd7b94deb3616a7a28bae6916b2cb8a836a9780d195a94",
+        "hash": "0a89022c68eae542414c424309107e0921a40097f6ca8b6a3a3434ed672835a2"
       }
     ],
     "towels": [
