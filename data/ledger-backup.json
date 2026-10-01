@@ -3,11 +3,11 @@
     "app": "Frendz Front Desk Transaction Tracker",
     "build": "2026-08-19-merge-sync",
     "writtenBy": "DARREN",
-    "exportedAt": "2026-10-01T06:25:19.220Z",
+    "exportedAt": "2026-10-01T06:29:20.910Z",
     "version": 1,
     "coh": 16800,
     "entries": 18737,
-    "auditEvents": 6337,
+    "auditEvents": 6339,
     "integrity": {
       "ok": true,
       "brokenAtSeq": null
@@ -16,7 +16,7 @@
       "ok": true,
       "brokenAtSeq": null
     },
-    "travelistaEntries": 97,
+    "travelistaEntries": 98,
     "travelistaIntegrity": {
       "ok": true,
       "brokenAtSeq": null
@@ -41,8 +41,8 @@
         "path": "data/ledger-backup.json",
         "autoSync": true,
         "enabled": true,
-        "lastBackupAt": "2026-10-01T06:24:40.139Z",
-        "lastBackupSha": "1cc6fd7747e7706e8ac03a2edd5f03705b2b70e8"
+        "lastBackupAt": "2026-10-01T06:25:31.209Z",
+        "lastBackupSha": "f92a52d1830bc9aa1fd62e11a6bd07581a00b63d"
       },
       "towelTracker": {
         "enabled": true,
@@ -572289,6 +572289,38 @@
         },
         "prevHash": "951ade1329a7780c25db792e631ad340c503e967746afb4bc3353439365c0053",
         "hash": "e3db6ad58fce2653f70fa06483e7ab3b0f4def080a8bbdf333c51130c2f1dd2a"
+      },
+      {
+        "seq": 6338,
+        "id": "aud_mup5h45l_6_vcmddq",
+        "ts": "2026-10-01T06:25:31.209Z",
+        "actor": "DARREN",
+        "role": "manager",
+        "action": "backup.github",
+        "what": "Backup committed to thethreethreethree/FRONT-DESK-TRANSACTION-TRACKER@main (auto-sync)",
+        "details": {
+          "reason": "auto-sync",
+          "coh": 16800,
+          "entries": 18737
+        },
+        "prevHash": "e3db6ad58fce2653f70fa06483e7ab3b0f4def080a8bbdf333c51130c2f1dd2a",
+        "hash": "3b40e5aed3194ced146a202e2e9dd49956c7177fca9bbcd2a5a8a51de6c56f77"
+      },
+      {
+        "seq": 6339,
+        "id": "aud_mup5lw9c_8_k708zx",
+        "ts": "2026-10-01T06:29:14.256Z",
+        "actor": "DARREN",
+        "role": "manager",
+        "action": "tv.void",
+        "what": "Voided travelista #96 (booking · JUSTIN ROXAS · ₱1,500)",
+        "details": {
+          "ref": 96,
+          "reversalSeq": 98,
+          "reason": "WRONG DATES"
+        },
+        "prevHash": "3b40e5aed3194ced146a202e2e9dd49956c7177fca9bbcd2a5a8a51de6c56f77",
+        "hash": "5a67d2a03f55a9ce1e2596b5f1291ae57fa89e656b1fd4963901ab3bc4d42676"
       }
     ],
     "towels": [
@@ -582252,6 +582284,42 @@
           "reversesKind": null,
           "prevHash": "8fe5020891b4c2e41686e56fb925ffd45c1afef582d1b1d813f9e6ec717414e6",
           "hash": "aaf6fb9ab4eb18e590ba4df91464224a34ff08373a9d7eefd3af94c1a941db3d"
+        },
+        {
+          "seq": 98,
+          "id": "tv_mup5lw9b_7_7ma8cy",
+          "ts": "2026-10-01T06:29:14.255Z",
+          "kind": "reversal",
+          "direction": -1,
+          "amount": 1500,
+          "departureDate": "2026-10-01",
+          "guest": "JUSTIN ROXAS",
+          "destination": "EL NIDO SHARING VAN",
+          "destinationId": "dest_msrh30tg_g_n0iv15",
+          "pax": 2,
+          "fare": 750,
+          "fareBasis": "per_pax",
+          "total": 1500,
+          "travelistaShare": 1300,
+          "commission": 200,
+          "bookedBy": "DARREN",
+          "remarks": "VOID of #96 (booking · JUSTIN ROXAS). Reason: WRONG DATES",
+          "payoutType": "",
+          "payee": "",
+          "method": "",
+          "amendsSeq": null,
+          "dTotal": 0,
+          "dShare": 0,
+          "dCommission": 0,
+          "dPax": 0,
+          "periodKey": "2026-10-A",
+          "staff": "DARREN",
+          "staffRole": "manager",
+          "businessDate": "2026-10-01",
+          "reversesId": "tv_mup5fly7_1_gjue3s",
+          "reversesKind": "booking",
+          "prevHash": "aaf6fb9ab4eb18e590ba4df91464224a34ff08373a9d7eefd3af94c1a941db3d",
+          "hash": "4239beb86c66ad64975e7e4b933ac9aa61c3956cc48e3754c6e157490b63ae4c"
         }
       ]
     }
