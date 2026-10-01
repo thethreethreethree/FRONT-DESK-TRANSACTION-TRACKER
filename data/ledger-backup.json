@@ -3,11 +3,11 @@
     "app": "Frendz Front Desk Transaction Tracker",
     "build": "2026-08-19-merge-sync",
     "writtenBy": "DARREN",
-    "exportedAt": "2026-10-01T06:29:20.910Z",
+    "exportedAt": "2026-10-01T06:31:01.693Z",
     "version": 1,
     "coh": 16800,
     "entries": 18737,
-    "auditEvents": 6339,
+    "auditEvents": 6341,
     "integrity": {
       "ok": true,
       "brokenAtSeq": null
@@ -16,7 +16,7 @@
       "ok": true,
       "brokenAtSeq": null
     },
-    "travelistaEntries": 98,
+    "travelistaEntries": 99,
     "travelistaIntegrity": {
       "ok": true,
       "brokenAtSeq": null
@@ -41,8 +41,8 @@
         "path": "data/ledger-backup.json",
         "autoSync": true,
         "enabled": true,
-        "lastBackupAt": "2026-10-01T06:25:31.209Z",
-        "lastBackupSha": "f92a52d1830bc9aa1fd62e11a6bd07581a00b63d"
+        "lastBackupAt": "2026-10-01T06:29:31.145Z",
+        "lastBackupSha": "47fe6178c0843139494b6abf26a5035e0a9d512f"
       },
       "towelTracker": {
         "enabled": true,
@@ -572321,6 +572321,43 @@
         },
         "prevHash": "3b40e5aed3194ced146a202e2e9dd49956c7177fca9bbcd2a5a8a51de6c56f77",
         "hash": "5a67d2a03f55a9ce1e2596b5f1291ae57fa89e656b1fd4963901ab3bc4d42676"
+      },
+      {
+        "seq": 6340,
+        "id": "aud_mup5m9ah_9_bhjevb",
+        "ts": "2026-10-01T06:29:31.145Z",
+        "actor": "DARREN",
+        "role": "manager",
+        "action": "backup.github",
+        "what": "Backup committed to thethreethreethree/FRONT-DESK-TRANSACTION-TRACKER@main (auto-sync)",
+        "details": {
+          "reason": "auto-sync",
+          "coh": 16800,
+          "entries": 18737
+        },
+        "prevHash": "5a67d2a03f55a9ce1e2596b5f1291ae57fa89e656b1fd4963901ab3bc4d42676",
+        "hash": "ac2de17de43e7d6d48c45fbe66ed4eb94ff972c00413365cec5c1f4fdc9a0987"
+      },
+      {
+        "seq": 6341,
+        "id": "aud_mup5o20e_b_6pb3yl",
+        "ts": "2026-10-01T06:30:55.022Z",
+        "actor": "DARREN",
+        "role": "manager",
+        "action": "tv.booking.create",
+        "what": "Travelista booking #99 · GILI OFEK · LIO AIRPORT ×1 pax · ₱1,500 (commission ₱500)",
+        "details": {
+          "ref": 99,
+          "id": "tv_mup5o20e_a_bcighg",
+          "guest": "GILI OFEK",
+          "destination": "LIO AIRPORT",
+          "pax": 1,
+          "total": 1500,
+          "commission": 500,
+          "bookedBy": "DARREN"
+        },
+        "prevHash": "ac2de17de43e7d6d48c45fbe66ed4eb94ff972c00413365cec5c1f4fdc9a0987",
+        "hash": "02411ec6c1141f6480f51382828b4f9378eb1e2db6e15920f0351b99d389f5c2"
       }
     ],
     "towels": [
@@ -582320,6 +582357,42 @@
           "reversesKind": "booking",
           "prevHash": "aaf6fb9ab4eb18e590ba4df91464224a34ff08373a9d7eefd3af94c1a941db3d",
           "hash": "4239beb86c66ad64975e7e4b933ac9aa61c3956cc48e3754c6e157490b63ae4c"
+        },
+        {
+          "seq": 99,
+          "id": "tv_mup5o20e_a_bcighg",
+          "ts": "2026-10-01T06:30:55.022Z",
+          "kind": "booking",
+          "direction": 1,
+          "amount": 1500,
+          "departureDate": "2026-09-19",
+          "guest": "GILI OFEK",
+          "destination": "LIO AIRPORT",
+          "destinationId": "dest_mttpa67e_2_el10b1",
+          "pax": 1,
+          "fare": 1500,
+          "fareBasis": "per_pax",
+          "total": 1500,
+          "travelistaShare": 1000,
+          "commission": 500,
+          "bookedBy": "DARREN",
+          "remarks": "",
+          "payoutType": "",
+          "payee": "",
+          "method": "",
+          "amendsSeq": null,
+          "dTotal": 0,
+          "dShare": 0,
+          "dCommission": 0,
+          "dPax": 0,
+          "periodKey": "2026-09-B",
+          "staff": "DARREN",
+          "staffRole": "manager",
+          "businessDate": "2026-10-01",
+          "reversesId": null,
+          "reversesKind": null,
+          "prevHash": "4239beb86c66ad64975e7e4b933ac9aa61c3956cc48e3754c6e157490b63ae4c",
+          "hash": "823238fa47b0f2cbc7df303f46798bf955287a47b1de800f68d1c478ba7f47e8"
         }
       ]
     }
