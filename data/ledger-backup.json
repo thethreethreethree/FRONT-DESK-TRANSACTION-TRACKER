@@ -3,11 +3,11 @@
     "app": "Frendz Front Desk Transaction Tracker",
     "build": "2026-08-19-merge-sync",
     "writtenBy": "DARREN",
-    "exportedAt": "2026-10-01T06:31:01.693Z",
+    "exportedAt": "2026-10-01T06:32:08.707Z",
     "version": 1,
     "coh": 16800,
     "entries": 18737,
-    "auditEvents": 6341,
+    "auditEvents": 6343,
     "integrity": {
       "ok": true,
       "brokenAtSeq": null
@@ -16,7 +16,7 @@
       "ok": true,
       "brokenAtSeq": null
     },
-    "travelistaEntries": 99,
+    "travelistaEntries": 100,
     "travelistaIntegrity": {
       "ok": true,
       "brokenAtSeq": null
@@ -41,8 +41,8 @@
         "path": "data/ledger-backup.json",
         "autoSync": true,
         "enabled": true,
-        "lastBackupAt": "2026-10-01T06:29:31.145Z",
-        "lastBackupSha": "47fe6178c0843139494b6abf26a5035e0a9d512f"
+        "lastBackupAt": "2026-10-01T06:31:13.450Z",
+        "lastBackupSha": "651ebaf1a53c22f10e6fe72442edc5b9584c1e57"
       },
       "towelTracker": {
         "enabled": true,
@@ -572358,6 +572358,43 @@
         },
         "prevHash": "ac2de17de43e7d6d48c45fbe66ed4eb94ff972c00413365cec5c1f4fdc9a0987",
         "hash": "02411ec6c1141f6480f51382828b4f9378eb1e2db6e15920f0351b99d389f5c2"
+      },
+      {
+        "seq": 6342,
+        "id": "aud_mup5og8a_c_4cogxu",
+        "ts": "2026-10-01T06:31:13.450Z",
+        "actor": "DARREN",
+        "role": "manager",
+        "action": "backup.github",
+        "what": "Backup committed to thethreethreethree/FRONT-DESK-TRANSACTION-TRACKER@main (auto-sync)",
+        "details": {
+          "reason": "auto-sync",
+          "coh": 16800,
+          "entries": 18737
+        },
+        "prevHash": "02411ec6c1141f6480f51382828b4f9378eb1e2db6e15920f0351b99d389f5c2",
+        "hash": "f4afb74b0d0096347b30106d1b9f7c80012c709dae650d9ad7e51af37c26ae0b"
+      },
+      {
+        "seq": 6343,
+        "id": "aud_mup5phq5_e_h5tk5b",
+        "ts": "2026-10-01T06:32:02.045Z",
+        "actor": "DARREN",
+        "role": "manager",
+        "action": "tv.booking.create",
+        "what": "Travelista booking #100 · JOHN REY BARREDO · PPS SHARING VAN ×1 pax · ₱750 (commission ₱100)",
+        "details": {
+          "ref": 100,
+          "id": "tv_mup5phq5_d_1jmylj",
+          "guest": "JOHN REY BARREDO",
+          "destination": "PPS SHARING VAN",
+          "pax": 1,
+          "total": 750,
+          "commission": 100,
+          "bookedBy": "DARREN"
+        },
+        "prevHash": "f4afb74b0d0096347b30106d1b9f7c80012c709dae650d9ad7e51af37c26ae0b",
+        "hash": "3eac0e3a6c8f8a986d52d2ac2dc91fd5bc8f3cde3794a953868955287ad7a136"
       }
     ],
     "towels": [
@@ -582393,6 +582430,42 @@
           "reversesKind": null,
           "prevHash": "4239beb86c66ad64975e7e4b933ac9aa61c3956cc48e3754c6e157490b63ae4c",
           "hash": "823238fa47b0f2cbc7df303f46798bf955287a47b1de800f68d1c478ba7f47e8"
+        },
+        {
+          "seq": 100,
+          "id": "tv_mup5phq5_d_1jmylj",
+          "ts": "2026-10-01T06:32:02.045Z",
+          "kind": "booking",
+          "direction": 1,
+          "amount": 750,
+          "departureDate": "2026-09-24",
+          "guest": "JOHN REY BARREDO",
+          "destination": "PPS SHARING VAN",
+          "destinationId": "dest_msrh2ktf_d_xyn4hg",
+          "pax": 1,
+          "fare": 750,
+          "fareBasis": "per_pax",
+          "total": 750,
+          "travelistaShare": 650,
+          "commission": 100,
+          "bookedBy": "DARREN",
+          "remarks": "",
+          "payoutType": "",
+          "payee": "",
+          "method": "",
+          "amendsSeq": null,
+          "dTotal": 0,
+          "dShare": 0,
+          "dCommission": 0,
+          "dPax": 0,
+          "periodKey": "2026-09-B",
+          "staff": "DARREN",
+          "staffRole": "manager",
+          "businessDate": "2026-10-01",
+          "reversesId": null,
+          "reversesKind": null,
+          "prevHash": "823238fa47b0f2cbc7df303f46798bf955287a47b1de800f68d1c478ba7f47e8",
+          "hash": "0111ccd699f6d569692630a6c1f3f4bb7292afb9f507fd4cd2e728dfc61b881d"
         }
       ]
     }
