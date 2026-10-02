@@ -3,11 +3,11 @@
     "app": "Frendz Front Desk Transaction Tracker",
     "build": "2026-08-19-merge-sync",
     "writtenBy": "Monie",
-    "exportedAt": "2026-10-01T23:01:01.450Z",
+    "exportedAt": "2026-10-02T01:04:50.344Z",
     "version": 1,
     "coh": 11800,
     "entries": 18746,
-    "auditEvents": 6371,
+    "auditEvents": 6373,
     "integrity": {
       "ok": true,
       "brokenAtSeq": null
@@ -16,7 +16,7 @@
       "ok": true,
       "brokenAtSeq": null
     },
-    "travelistaEntries": 102,
+    "travelistaEntries": 103,
     "travelistaIntegrity": {
       "ok": true,
       "brokenAtSeq": null
@@ -41,8 +41,8 @@
         "path": "data/ledger-backup.json",
         "autoSync": true,
         "enabled": true,
-        "lastBackupAt": "2026-10-01T22:06:29.531Z",
-        "lastBackupSha": "2c9cb165f37b406e51424efa9858f517d4904b4f"
+        "lastBackupAt": "2026-10-01T23:01:11.092Z",
+        "lastBackupSha": "ff36b05e754f5e89242aac7f0bf8c38054ca758f"
       },
       "towelTracker": {
         "enabled": true,
@@ -573140,6 +573140,43 @@
         },
         "prevHash": "52620d0f469134a7f0c92de281047e31234921ac96f4c4a2a8ec8bac9c10f4e0",
         "hash": "e5c672246411628290497dc39a501521c9ed6467170108bcf8adc701a4fa381f"
+      },
+      {
+        "seq": 6372,
+        "id": "aud_muq51jvt_7_eb98fh",
+        "ts": "2026-10-01T23:01:11.273Z",
+        "actor": "Monie",
+        "role": "staff",
+        "action": "backup.github",
+        "what": "Backup committed to thethreethreethree/FRONT-DESK-TRANSACTION-TRACKER@main (auto-sync)",
+        "details": {
+          "reason": "auto-sync",
+          "coh": 11800,
+          "entries": 18746
+        },
+        "prevHash": "e5c672246411628290497dc39a501521c9ed6467170108bcf8adc701a4fa381f",
+        "hash": "de4972667761dd5f297f55ed095050814033f9089e77e00b0980130194b0ac8c"
+      },
+      {
+        "seq": 6373,
+        "id": "aud_muq9gf1f_9_j52vei",
+        "ts": "2026-10-02T01:04:43.299Z",
+        "actor": "Monie",
+        "role": "staff",
+        "action": "tv.booking.create",
+        "what": "Travelista booking #103 · LILIAN RENOUF · EL NIDO SHARING VAN ×1 pax · ₱750 (commission ₱100)",
+        "details": {
+          "ref": 103,
+          "id": "tv_muq9gf1f_8_9bswl7",
+          "guest": "LILIAN RENOUF",
+          "destination": "EL NIDO SHARING VAN",
+          "pax": 1,
+          "total": 750,
+          "commission": 100,
+          "bookedBy": "MONIE"
+        },
+        "prevHash": "de4972667761dd5f297f55ed095050814033f9089e77e00b0980130194b0ac8c",
+        "hash": "c1c27f8659a1d0ea6d92b56c263ba1d4aefbe66982fd38106fab86bc8d1e60f8"
       }
     ],
     "towels": [
@@ -583283,6 +583320,42 @@
           "reversesKind": null,
           "prevHash": "df1dab3b11e8afc3cddc47dfbeab94804c8a1f435297ad47bd1e458d54b49095",
           "hash": "c0e28fa490207f28e314298f3859d6933ffac306023fd550732d5bc0eed8e35d"
+        },
+        {
+          "seq": 103,
+          "id": "tv_muq9gf1f_8_9bswl7",
+          "ts": "2026-10-02T01:04:43.299Z",
+          "kind": "booking",
+          "direction": 1,
+          "amount": 750,
+          "departureDate": "2026-10-02",
+          "guest": "LILIAN RENOUF",
+          "destination": "EL NIDO SHARING VAN",
+          "destinationId": "dest_msrh30tg_g_n0iv15",
+          "pax": 1,
+          "fare": 750,
+          "fareBasis": "per_pax",
+          "total": 750,
+          "travelistaShare": 650,
+          "commission": 100,
+          "bookedBy": "MONIE",
+          "remarks": "(ADDITIONAL FOR TOBY MALLINSON",
+          "payoutType": "",
+          "payee": "",
+          "method": "",
+          "amendsSeq": null,
+          "dTotal": 0,
+          "dShare": 0,
+          "dCommission": 0,
+          "dPax": 0,
+          "periodKey": "2026-10-A",
+          "staff": "Monie",
+          "staffRole": "staff",
+          "businessDate": "2026-10-02",
+          "reversesId": null,
+          "reversesKind": null,
+          "prevHash": "c0e28fa490207f28e314298f3859d6933ffac306023fd550732d5bc0eed8e35d",
+          "hash": "aad70ef1223b0e557f83e4ad973f012b3928a65f818c693219d9b2605884139f"
         }
       ]
     }
