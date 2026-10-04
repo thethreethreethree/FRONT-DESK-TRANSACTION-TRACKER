@@ -3,11 +3,11 @@
     "app": "Frendz Front Desk Transaction Tracker",
     "build": "2026-08-19-merge-sync",
     "writtenBy": "Marie",
-    "exportedAt": "2026-10-04T05:50:16.251Z",
+    "exportedAt": "2026-10-04T08:54:05.654Z",
     "version": 1,
     "coh": 29800,
-    "entries": 18767,
-    "auditEvents": 6440,
+    "entries": 18768,
+    "auditEvents": 6442,
     "integrity": {
       "ok": true,
       "brokenAtSeq": null
@@ -41,8 +41,8 @@
         "path": "data/ledger-backup.json",
         "autoSync": true,
         "enabled": true,
-        "lastBackupAt": "2026-10-04T04:55:28.659Z",
-        "lastBackupSha": "2b5e2a46e507d738c756a7ee70f153fd1abfa127"
+        "lastBackupAt": "2026-10-04T05:50:25.622Z",
+        "lastBackupSha": "8e79201ee48e31047eebc7cd7d9aa5a0e564bcba"
       },
       "towelTracker": {
         "enabled": true,
@@ -465965,6 +465965,37 @@
         "reversesId": null,
         "prevHash": "49fb539007c4d8d0408df1ed8837f67abf0b1ae9e3fe80230ab30e677d3e4a3d",
         "hash": "027b26b9fceb95a187f03f2e4da41d70fe64863c5c55872e19288627109faa28"
+      },
+      {
+        "seq": 18768,
+        "id": "txn_mutl3l53_d_dn4plj",
+        "ts": "2026-10-04T08:53:58.599Z",
+        "kind": "exchange",
+        "itemTypeId": "item_mpxxdbc3_2_s3d7ag",
+        "itemName": "Towel",
+        "qty": 1,
+        "unitAmount": 0,
+        "amount": 0,
+        "direction": 0,
+        "guest": "ISA SMOLDER",
+        "room": "302",
+        "pax": null,
+        "shiftId": "shift_mpy3b19n_5_j6nxol",
+        "shiftLabel": "PM",
+        "businessDate": "2026-10-04",
+        "staff": "Marie",
+        "staffRole": "staff",
+        "note": "Towel exchange: #94 → #290 (deposit #18759)",
+        "towelNo": "290",
+        "oldTowelNo": "94",
+        "towelLost": false,
+        "refundsSeq": null,
+        "exchangesSeq": 18759,
+        "mewsRes": "",
+        "privateRoom": false,
+        "reversesId": null,
+        "prevHash": "027b26b9fceb95a187f03f2e4da41d70fe64863c5c55872e19288627109faa28",
+        "hash": "edc899d4f56e31ee6a69b65e79eeb5ae032503130a9feede1ccc083f1a9a91a0"
       }
     ],
     "audit": [
@@ -574921,6 +574952,40 @@
         },
         "prevHash": "61f1ab5fb543d772e5fee8a9fc4366d304b948adbfc71cfc78c66e545ab457f6",
         "hash": "d2dff8ad60d587e055b56ea3474b733fda41572a72419d893953b862374614f2"
+      },
+      {
+        "seq": 6441,
+        "id": "aud_mutejjko_c_oikqlk",
+        "ts": "2026-10-04T05:50:25.752Z",
+        "actor": "Marie",
+        "role": "staff",
+        "action": "backup.github",
+        "what": "Backup committed to thethreethreethree/FRONT-DESK-TRANSACTION-TRACKER@main (auto-sync)",
+        "details": {
+          "reason": "auto-sync",
+          "coh": 29800,
+          "entries": 18767
+        },
+        "prevHash": "d2dff8ad60d587e055b56ea3474b733fda41572a72419d893953b862374614f2",
+        "hash": "7b644f1e85c0517970cf3de3b1f5d414be2c9ba449f06642d0fcfc0ddcb222b5"
+      },
+      {
+        "seq": 6442,
+        "id": "aud_mutl3l53_e_vt6hzs",
+        "ts": "2026-10-04T08:53:58.599Z",
+        "actor": "Marie",
+        "role": "staff",
+        "action": "towel.exchange",
+        "what": "Towel exchange · ISA SMOLDER · #94 → #290 (deposit #18759)",
+        "details": {
+          "oldTowelNo": "94",
+          "newTowelNo": "290",
+          "exchangesSeq": 18759,
+          "guest": "ISA SMOLDER",
+          "room": "302"
+        },
+        "prevHash": "7b644f1e85c0517970cf3de3b1f5d414be2c9ba449f06642d0fcfc0ddcb222b5",
+        "hash": "6e89dde9370bbe62ca4ead32fc7559e7d794568ebc98e5aebc28a16c416502ca"
       }
     ],
     "towels": [
