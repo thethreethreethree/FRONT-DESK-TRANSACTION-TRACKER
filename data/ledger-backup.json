@@ -3,11 +3,11 @@
     "app": "Frendz Front Desk Transaction Tracker",
     "build": "2026-08-19-merge-sync",
     "writtenBy": "Chalyn",
-    "exportedAt": "2026-10-06T02:02:03.436Z",
+    "exportedAt": "2026-10-06T03:16:03.931Z",
     "version": 1,
-    "coh": 30800,
-    "entries": 18783,
-    "auditEvents": 6492,
+    "coh": 29800,
+    "entries": 18784,
+    "auditEvents": 6494,
     "integrity": {
       "ok": true,
       "brokenAtSeq": null
@@ -41,8 +41,8 @@
         "path": "data/ledger-backup.json",
         "autoSync": true,
         "enabled": true,
-        "lastBackupAt": "2026-10-05T22:29:30.423Z",
-        "lastBackupSha": "78adfffc468326db429b39ca9140c0634be19e43"
+        "lastBackupAt": "2026-10-06T02:02:14.715Z",
+        "lastBackupSha": "4cf4b2b1317b06ee6e55d640b5568c7d43a6be2f"
       },
       "towelTracker": {
         "enabled": true,
@@ -466461,6 +466461,37 @@
         "reversesId": null,
         "prevHash": "d834aa949bdcf54d24a5ff0c28937118c96da3613edf7107b62867c1f7a5ef1b",
         "hash": "a048d6d6bcf56fc4556ea3fa5e002b0a73a2ecdbbcada9b8596c49548e7d30bc"
+      },
+      {
+        "seq": 18784,
+        "id": "txn_muw3wlaj_7_qas43p",
+        "ts": "2026-10-06T03:15:57.259Z",
+        "kind": "refund",
+        "itemTypeId": "item_mpxxdbc3_2_s3d7ag",
+        "itemName": "Towel",
+        "qty": 1,
+        "unitAmount": 1000,
+        "amount": 1000,
+        "direction": -1,
+        "guest": "victoria Winter",
+        "room": "308",
+        "pax": null,
+        "shiftId": "shift_mpy3b19n_5_j6nxol",
+        "shiftLabel": "PM",
+        "businessDate": "2026-10-06",
+        "staff": "Chalyn",
+        "staffRole": "staff",
+        "note": "",
+        "towelNo": "307",
+        "oldTowelNo": "",
+        "towelLost": false,
+        "refundsSeq": 18756,
+        "exchangesSeq": null,
+        "mewsRes": "",
+        "privateRoom": false,
+        "reversesId": null,
+        "prevHash": "a048d6d6bcf56fc4556ea3fa5e002b0a73a2ecdbbcada9b8596c49548e7d30bc",
+        "hash": "4e62d699d26d35420acdfbfd29a4bf6a0ca2bbb5a0dd2af2dd9f0e2707268f8a"
       }
     ],
     "audit": [
@@ -576280,6 +576311,41 @@
         },
         "prevHash": "869682e4e4b627a0a2f4f9e37373c550ab840b078f4fb90cf3da63e6940f72ce",
         "hash": "5c588936d1ff58383861ff62547257351857ccbc64f75a0be984ee585c866bed"
+      },
+      {
+        "seq": 6493,
+        "id": "aud_muw19su4_6_sjxpbn",
+        "ts": "2026-10-06T02:02:14.716Z",
+        "actor": "Chalyn",
+        "role": "staff",
+        "action": "backup.github",
+        "what": "Backup committed to thethreethreethree/FRONT-DESK-TRANSACTION-TRACKER@main (auto-sync)",
+        "details": {
+          "reason": "auto-sync",
+          "coh": 30800,
+          "entries": 18783
+        },
+        "prevHash": "5c588936d1ff58383861ff62547257351857ccbc64f75a0be984ee585c866bed",
+        "hash": "faa7e7416bdd90039539443aa1e416e2587835a2123970f8b63372bebf440e76"
+      },
+      {
+        "seq": 6494,
+        "id": "aud_muw3wlak_8_4mvam6",
+        "ts": "2026-10-06T03:15:57.260Z",
+        "actor": "Chalyn",
+        "role": "staff",
+        "action": "refund.create",
+        "what": "Refund ₱1,000.00 · Towel ×1 · victoria Winter",
+        "details": {
+          "ref": 18784,
+          "id": "txn_muw3wlaj_7_qas43p",
+          "amount": 1000,
+          "item": "Towel",
+          "guest": "victoria Winter",
+          "room": "308"
+        },
+        "prevHash": "faa7e7416bdd90039539443aa1e416e2587835a2123970f8b63372bebf440e76",
+        "hash": "45e4026177c8df4ccdb0ffb192f23f7a60c57675a6acceff8b9d3c9bcf6a5486"
       }
     ],
     "towels": [
