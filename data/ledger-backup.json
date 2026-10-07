@@ -3,11 +3,11 @@
     "app": "Frendz Front Desk Transaction Tracker",
     "build": "2026-08-19-merge-sync",
     "writtenBy": "Marie",
-    "exportedAt": "2026-10-07T22:43:28.763Z",
+    "exportedAt": "2026-10-07T22:54:35.771Z",
     "version": 1,
-    "coh": 41800,
-    "entries": 18815,
-    "auditEvents": 6573,
+    "coh": 39800,
+    "entries": 18816,
+    "auditEvents": 6575,
     "integrity": {
       "ok": true,
       "brokenAtSeq": null
@@ -41,8 +41,8 @@
         "path": "data/ledger-backup.json",
         "autoSync": true,
         "enabled": true,
-        "lastBackupAt": "2026-10-07T22:03:32.003Z",
-        "lastBackupSha": "41eed0d4dad6ea1ccc6bc98106ea7c246d8c9bb7"
+        "lastBackupAt": "2026-10-07T22:43:38.559Z",
+        "lastBackupSha": "6d4951517051d5ea62e047c52c286fd4c741f6bf"
       },
       "towelTracker": {
         "enabled": true,
@@ -467453,6 +467453,37 @@
         "reversesId": null,
         "prevHash": "719de7e85b82e79fd8ec421a2cad5a917767a2ec94910bb32d7962de45c97006",
         "hash": "d47940f614ab25ebf06025797c7aa91f1c3abf9d3c4ddd3bb471216686501972"
+      },
+      {
+        "seq": 18816,
+        "id": "txn_muypg1ha_3f_scc81v",
+        "ts": "2026-10-07T22:54:28.990Z",
+        "kind": "refund",
+        "itemTypeId": "item_mpxxdbc3_2_s3d7ag",
+        "itemName": "Towel",
+        "qty": 1,
+        "unitAmount": 2000,
+        "amount": 2000,
+        "direction": -1,
+        "guest": "Hilkka Sinnemäki",
+        "room": "307",
+        "pax": null,
+        "shiftId": "shift_mpy3b19n_5_j6nxol",
+        "shiftLabel": "PM",
+        "businessDate": "2026-10-08",
+        "staff": "Marie",
+        "staffRole": "staff",
+        "note": "",
+        "towelNo": "64 454",
+        "oldTowelNo": "",
+        "towelLost": false,
+        "refundsSeq": 18772,
+        "exchangesSeq": null,
+        "mewsRes": "",
+        "privateRoom": false,
+        "reversesId": null,
+        "prevHash": "d47940f614ab25ebf06025797c7aa91f1c3abf9d3c4ddd3bb471216686501972",
+        "hash": "99416529bd9d5709b266cdbf0a77bba6398864efdf197b91241940f3fe98ae09"
       }
     ],
     "audit": [
@@ -578654,6 +578685,41 @@
         },
         "prevHash": "42ccdc6d2f50d9ff2497466040f27bcc62fa506bab454d082ea234c8afb39990",
         "hash": "15d0cbf4d59f27df2d230aa1b33b035368e0a0f86c08d7a89f36f59e63b74e72"
+      },
+      {
+        "seq": 6574,
+        "id": "aud_muyp23lu_3e_7urlth",
+        "ts": "2026-10-07T22:43:38.562Z",
+        "actor": "Marie",
+        "role": "staff",
+        "action": "backup.github",
+        "what": "Backup committed to thethreethreethree/FRONT-DESK-TRANSACTION-TRACKER@main (auto-sync)",
+        "details": {
+          "reason": "auto-sync",
+          "coh": 41800,
+          "entries": 18815
+        },
+        "prevHash": "15d0cbf4d59f27df2d230aa1b33b035368e0a0f86c08d7a89f36f59e63b74e72",
+        "hash": "9445434cf7fd1461676d045dd00f45e4c15098daff17f8fbdb1ac28849b5a74a"
+      },
+      {
+        "seq": 6575,
+        "id": "aud_muypg1ha_3g_1543ec",
+        "ts": "2026-10-07T22:54:28.990Z",
+        "actor": "Marie",
+        "role": "staff",
+        "action": "refund.create",
+        "what": "Refund ₱2,000.00 · Towel ×1 · Hilkka Sinnemäki",
+        "details": {
+          "ref": 18816,
+          "id": "txn_muypg1ha_3f_scc81v",
+          "amount": 2000,
+          "item": "Towel",
+          "guest": "Hilkka Sinnemäki",
+          "room": "307"
+        },
+        "prevHash": "9445434cf7fd1461676d045dd00f45e4c15098daff17f8fbdb1ac28849b5a74a",
+        "hash": "27f8de18f37ba37584a1dd55a0c321a2697559fb04852d33bd925a015be6da81"
       }
     ],
     "towels": [
