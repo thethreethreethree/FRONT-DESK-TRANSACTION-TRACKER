@@ -3,11 +3,11 @@
     "app": "Frendz Front Desk Transaction Tracker",
     "build": "2026-08-19-merge-sync",
     "writtenBy": "Chalyn",
-    "exportedAt": "2026-10-08T05:02:25.663Z",
+    "exportedAt": "2026-10-08T11:09:03.093Z",
     "version": 1,
     "coh": 35800,
-    "entries": 18825,
-    "auditEvents": 6598,
+    "entries": 18826,
+    "auditEvents": 6600,
     "integrity": {
       "ok": true,
       "brokenAtSeq": null
@@ -41,8 +41,8 @@
         "path": "data/ledger-backup.json",
         "autoSync": true,
         "enabled": true,
-        "lastBackupAt": "2026-10-08T04:26:30.538Z",
-        "lastBackupSha": "3c43f84ac3858a22735e93f9da661f49cb766aa1"
+        "lastBackupAt": "2026-10-08T05:02:36.153Z",
+        "lastBackupSha": "cb3288fba854018fc5457f123cbe96433429104b"
       },
       "towelTracker": {
         "enabled": true,
@@ -467763,6 +467763,37 @@
         "reversesId": null,
         "prevHash": "2af44e7a479b048b0e0586551219044f790dd60cf802e802c69e000958301c8c",
         "hash": "61dcca45fcfa49130c71b1f9c212c8bc1376ba6f1c961126254fbcb5cb4b6cff"
+      },
+      {
+        "seq": 18826,
+        "id": "txn_muzfok4w_4f_zau2uo",
+        "ts": "2026-10-08T11:08:56.432Z",
+        "kind": "exchange",
+        "itemTypeId": "item_mpxxdbc3_2_s3d7ag",
+        "itemName": "Towel",
+        "qty": 1,
+        "unitAmount": 0,
+        "amount": 0,
+        "direction": 0,
+        "guest": "Maria Antonieta Herrera",
+        "room": "303",
+        "pax": null,
+        "shiftId": "shift_mpy3b19n_5_j6nxol",
+        "shiftLabel": "PM",
+        "businessDate": "2026-10-08",
+        "staff": "Chalyn",
+        "staffRole": "staff",
+        "note": "Towel exchange: #417 → #458 (deposit #18803)",
+        "towelNo": "458",
+        "oldTowelNo": "417",
+        "towelLost": false,
+        "refundsSeq": null,
+        "exchangesSeq": 18803,
+        "mewsRes": "",
+        "privateRoom": false,
+        "reversesId": null,
+        "prevHash": "61dcca45fcfa49130c71b1f9c212c8bc1376ba6f1c961126254fbcb5cb4b6cff",
+        "hash": "6d83499380bcaf3547479326944543ae48eaef7c8604e4e95ff9c46a922095e4"
       }
     ],
     "audit": [
@@ -579393,6 +579424,40 @@
         },
         "prevHash": "c279e70653d1f351128dad4ad5140f1bcf6c9b84438cc5641686558e457bef7a",
         "hash": "2a5766fd7103ab40f3777b36c83d9496245da31515912257188a9696508eb560"
+      },
+      {
+        "seq": 6599,
+        "id": "aud_muz2lg7b_4e_7jwuyx",
+        "ts": "2026-10-08T05:02:36.359Z",
+        "actor": "Chalyn",
+        "role": "staff",
+        "action": "backup.github",
+        "what": "Backup committed to thethreethreethree/FRONT-DESK-TRANSACTION-TRACKER@main (auto-sync)",
+        "details": {
+          "reason": "auto-sync",
+          "coh": 35800,
+          "entries": 18825
+        },
+        "prevHash": "2a5766fd7103ab40f3777b36c83d9496245da31515912257188a9696508eb560",
+        "hash": "eda0859221e3ba48bed17b3dddafb5f323dbf7ffb4204ceb7319396441472634"
+      },
+      {
+        "seq": 6600,
+        "id": "aud_muzfok4w_4g_anc0r0",
+        "ts": "2026-10-08T11:08:56.432Z",
+        "actor": "Chalyn",
+        "role": "staff",
+        "action": "towel.exchange",
+        "what": "Towel exchange · Maria Antonieta Herrera · #417 → #458 (deposit #18803)",
+        "details": {
+          "oldTowelNo": "417",
+          "newTowelNo": "458",
+          "exchangesSeq": 18803,
+          "guest": "Maria Antonieta Herrera",
+          "room": "303"
+        },
+        "prevHash": "eda0859221e3ba48bed17b3dddafb5f323dbf7ffb4204ceb7319396441472634",
+        "hash": "600b333df5ca83dda16eb828c1035b4b3f34892e734ca3068ebe68cce2a6f0b2"
       }
     ],
     "towels": [
