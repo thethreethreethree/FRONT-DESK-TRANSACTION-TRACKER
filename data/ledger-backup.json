@@ -3,11 +3,11 @@
     "app": "Frendz Front Desk Transaction Tracker",
     "build": "2026-08-19-merge-sync",
     "writtenBy": "Rebecca",
-    "exportedAt": "2026-10-09T11:43:52.196Z",
+    "exportedAt": "2026-10-09T11:44:10.943Z",
     "version": 1,
-    "coh": 58800,
-    "entries": 18857,
-    "auditEvents": 6678,
+    "coh": 59800,
+    "entries": 18858,
+    "auditEvents": 6680,
     "integrity": {
       "ok": true,
       "brokenAtSeq": null
@@ -41,8 +41,8 @@
         "path": "data/ledger-backup.json",
         "autoSync": true,
         "enabled": true,
-        "lastBackupAt": "2026-10-09T11:43:40.620Z",
-        "lastBackupSha": "dc9255223d9f5080ca85526cfa5a2dce589b273b"
+        "lastBackupAt": "2026-10-09T11:44:04.258Z",
+        "lastBackupSha": "315bc7af53267ebe500baf295a37c807279d6e4b"
       },
       "towelTracker": {
         "enabled": true,
@@ -468755,6 +468755,37 @@
         "reversesId": null,
         "prevHash": "6cfd1b6d3694618b7293002455f8369b1c2b45c6ad07e92ea221743e8d1361a3",
         "hash": "ff526b77ca2fd4ff27aaa132a65ff3c20b02087d7d7bf58b4534156ff06fdb95"
+      },
+      {
+        "seq": 18858,
+        "id": "txn_mv0wdj4i_t_47p1dy",
+        "ts": "2026-10-09T11:44:01.554Z",
+        "kind": "deposit",
+        "itemTypeId": "item_mpxxdbc3_2_s3d7ag",
+        "itemName": "Towel",
+        "qty": 1,
+        "unitAmount": 1000,
+        "amount": 1000,
+        "direction": 1,
+        "guest": "KIERA",
+        "room": "308",
+        "pax": null,
+        "shiftId": "shift_mpy3b19n_5_j6nxol",
+        "shiftLabel": "PM",
+        "businessDate": "2026-10-09",
+        "staff": "Rebecca",
+        "staffRole": "staff",
+        "note": "",
+        "towelNo": "105",
+        "oldTowelNo": "",
+        "towelLost": false,
+        "refundsSeq": null,
+        "exchangesSeq": null,
+        "mewsRes": "",
+        "privateRoom": false,
+        "reversesId": null,
+        "prevHash": "ff526b77ca2fd4ff27aaa132a65ff3c20b02087d7d7bf58b4534156ff06fdb95",
+        "hash": "edcc6c38fe3230bf970e47729a7148a330075b560648dff003228ef5a58ca8b8"
       }
     ],
     "audit": [
@@ -581752,6 +581783,41 @@
         },
         "prevHash": "cb4d57021965e63cd69cdd4826d0bfa42e5d552a3f1be7d0b4e4094597df47a8",
         "hash": "d967b95b3bd97a2975caa550c0faec1aa8a8a16c7cd506e3e0b3d448e27500ec"
+      },
+      {
+        "seq": 6679,
+        "id": "aud_mv0wdj4i_u_3h0ix1",
+        "ts": "2026-10-09T11:44:01.554Z",
+        "actor": "Rebecca",
+        "role": "staff",
+        "action": "deposit.create",
+        "what": "Deposit ₱1,000.00 · Towel ×1 · KIERA",
+        "details": {
+          "ref": 18858,
+          "id": "txn_mv0wdj4i_t_47p1dy",
+          "amount": 1000,
+          "item": "Towel",
+          "guest": "KIERA",
+          "room": "308"
+        },
+        "prevHash": "d967b95b3bd97a2975caa550c0faec1aa8a8a16c7cd506e3e0b3d448e27500ec",
+        "hash": "66a7090fdc4fa194a1dfd4dafc4e14f6ddf2677982b8d63c0d5d1cea2797d4e7"
+      },
+      {
+        "seq": 6680,
+        "id": "aud_mv0wdl7m_v_80q4hp",
+        "ts": "2026-10-09T11:44:04.258Z",
+        "actor": "Rebecca",
+        "role": "staff",
+        "action": "backup.github",
+        "what": "Backup committed to thethreethreethree/FRONT-DESK-TRANSACTION-TRACKER@main (auto-sync)",
+        "details": {
+          "reason": "auto-sync",
+          "coh": 58800,
+          "entries": 18858
+        },
+        "prevHash": "66a7090fdc4fa194a1dfd4dafc4e14f6ddf2677982b8d63c0d5d1cea2797d4e7",
+        "hash": "abbad58f93cf78c3e61a0e9d2112db7b51943bd0194978a733eef1a52d5ac444"
       }
     ],
     "towels": [
