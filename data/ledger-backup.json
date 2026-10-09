@@ -3,11 +3,11 @@
     "app": "Frendz Front Desk Transaction Tracker",
     "build": "2026-08-19-merge-sync",
     "writtenBy": "Rebecca",
-    "exportedAt": "2026-10-09T11:40:17.928Z",
+    "exportedAt": "2026-10-09T11:40:41.660Z",
     "version": 1,
     "coh": 50800,
-    "entries": 18848,
-    "auditEvents": 6661,
+    "entries": 18849,
+    "auditEvents": 6663,
     "integrity": {
       "ok": true,
       "brokenAtSeq": null
@@ -41,8 +41,8 @@
         "path": "data/ledger-backup.json",
         "autoSync": true,
         "enabled": true,
-        "lastBackupAt": "2026-10-09T08:08:28.871Z",
-        "lastBackupSha": "a090b5eaa2f9daa9bd660f349dcdc9bfc85b2f8b"
+        "lastBackupAt": "2026-10-09T11:40:28.694Z",
+        "lastBackupSha": "039f256b588cd7a42ded46548307f5c733c13611"
       },
       "towelTracker": {
         "enabled": true,
@@ -468476,6 +468476,37 @@
         "reversesId": null,
         "prevHash": "ddbf998b930fea29e8cea15c84edbc510c14f75013ab42c58efcf892efdcf513",
         "hash": "bdfaed9ef60c46efc85d6eb1e24631e0650011bf258044c20000272d1c2bade2"
+      },
+      {
+        "seq": 18849,
+        "id": "txn_mv0w93pi_4_4l2pz1",
+        "ts": "2026-10-09T11:40:34.950Z",
+        "kind": "exchange",
+        "itemTypeId": "item_mpxxdbc3_2_s3d7ag",
+        "itemName": "Towel",
+        "qty": 1,
+        "unitAmount": 0,
+        "amount": 0,
+        "direction": 0,
+        "guest": "MARIJN",
+        "room": "308",
+        "pax": null,
+        "shiftId": "shift_mpy3b19n_5_j6nxol",
+        "shiftLabel": "PM",
+        "businessDate": "2026-10-09",
+        "staff": "Rebecca",
+        "staffRole": "staff",
+        "note": "Towel exchange: #453 293 17 → #200  424  92 (deposit #18808)",
+        "towelNo": "200  424  92",
+        "oldTowelNo": "453 293 17",
+        "towelLost": false,
+        "refundsSeq": null,
+        "exchangesSeq": 18808,
+        "mewsRes": "",
+        "privateRoom": false,
+        "reversesId": null,
+        "prevHash": "bdfaed9ef60c46efc85d6eb1e24631e0650011bf258044c20000272d1c2bade2",
+        "hash": "f087c9e00b19b954498d41df116ba5f468488fc1993a7028c20f878ecbf363ab"
       }
     ],
     "audit": [
@@ -581176,6 +581207,40 @@
         },
         "prevHash": "3aefd72f4d7c25a460d15026e1eeab1372f548df485e125432b3dd726aae5870",
         "hash": "d557ceed834f561bfe007bc3e4d63963f16ca94265db3cc6e3714f8c06c8eef6"
+      },
+      {
+        "seq": 6662,
+        "id": "aud_mv0w8yvq_3_nnyodd",
+        "ts": "2026-10-09T11:40:28.694Z",
+        "actor": "Rebecca",
+        "role": "staff",
+        "action": "backup.github",
+        "what": "Backup committed to thethreethreethree/FRONT-DESK-TRANSACTION-TRACKER@main (auto-sync)",
+        "details": {
+          "reason": "auto-sync",
+          "coh": 50800,
+          "entries": 18848
+        },
+        "prevHash": "d557ceed834f561bfe007bc3e4d63963f16ca94265db3cc6e3714f8c06c8eef6",
+        "hash": "353c78f844f6e801384ee433b23df6dce5671a4f55aefe4e6530d982d05cf319"
+      },
+      {
+        "seq": 6663,
+        "id": "aud_mv0w93pi_5_k0disu",
+        "ts": "2026-10-09T11:40:34.950Z",
+        "actor": "Rebecca",
+        "role": "staff",
+        "action": "towel.exchange",
+        "what": "Towel exchange · MARIJN · #453 293 17 → #200  424  92 (deposit #18808)",
+        "details": {
+          "oldTowelNo": "453 293 17",
+          "newTowelNo": "200  424  92",
+          "exchangesSeq": 18808,
+          "guest": "MARIJN",
+          "room": "308"
+        },
+        "prevHash": "353c78f844f6e801384ee433b23df6dce5671a4f55aefe4e6530d982d05cf319",
+        "hash": "326aa22aa9e0d6b05faab712b6e302f348659b1a30a03a2f61beb5c3b43df05d"
       }
     ],
     "towels": [
