@@ -3,11 +3,11 @@
     "app": "Frendz Front Desk Transaction Tracker",
     "build": "2026-08-19-merge-sync",
     "writtenBy": "Marie",
-    "exportedAt": "2026-10-10T02:35:17.626Z",
+    "exportedAt": "2026-10-10T02:42:25.319Z",
     "version": 1,
-    "coh": 60800,
-    "entries": 18875,
-    "auditEvents": 6724,
+    "coh": 59800,
+    "entries": 18876,
+    "auditEvents": 6726,
     "integrity": {
       "ok": true,
       "brokenAtSeq": null
@@ -41,8 +41,8 @@
         "path": "data/ledger-backup.json",
         "autoSync": true,
         "enabled": true,
-        "lastBackupAt": "2026-10-10T01:49:36.244Z",
-        "lastBackupSha": "c73cb638e2c52b67093ed15a4a943dd48acd46b5"
+        "lastBackupAt": "2026-10-10T02:35:27.578Z",
+        "lastBackupSha": "0cc848de1157c8bb92eca5ce70271ffea266f941"
       },
       "towelTracker": {
         "enabled": true,
@@ -469313,6 +469313,37 @@
         "reversesId": null,
         "prevHash": "3ef6e093c7ddcf862c24a968930a363b0793f411713e662f31a3c170f68372ab",
         "hash": "229485a0422b514b727406705af812673e19c5f1e2fd75a8d84b09fdec26b3c1"
+      },
+      {
+        "seq": 18876,
+        "id": "txn_mv1sgq8c_2o_yakw9h",
+        "ts": "2026-10-10T02:42:18.444Z",
+        "kind": "refund",
+        "itemTypeId": "item_mpxxdbc3_2_s3d7ag",
+        "itemName": "Towel",
+        "qty": 1,
+        "unitAmount": 1000,
+        "amount": 1000,
+        "direction": -1,
+        "guest": "Fabius Schilling",
+        "room": "303",
+        "pax": null,
+        "shiftId": "shift_mpy3b19n_5_j6nxol",
+        "shiftLabel": "PM",
+        "businessDate": "2026-10-10",
+        "staff": "Marie",
+        "staffRole": "staff",
+        "note": "",
+        "towelNo": "14",
+        "oldTowelNo": "",
+        "towelLost": false,
+        "refundsSeq": 18799,
+        "exchangesSeq": null,
+        "mewsRes": "",
+        "privateRoom": false,
+        "reversesId": null,
+        "prevHash": "229485a0422b514b727406705af812673e19c5f1e2fd75a8d84b09fdec26b3c1",
+        "hash": "e03a95941d5ff0efe99f46cc355f9d48eaee379806caebb93ad3bafc9e1d4bb0"
       }
     ],
     "audit": [
@@ -583095,6 +583126,41 @@
         },
         "prevHash": "e8254c8861f5964f0884bca0a471bcea7c744d2384a3f525380edea8bf398bac",
         "hash": "827819acb37e4ed6e593c4d4da80d8c17df177a43e988853f3ca261f4f49b3a0"
+      },
+      {
+        "seq": 6725,
+        "id": "aud_mv1s7xbs_2n_tr4x77",
+        "ts": "2026-10-10T02:35:27.736Z",
+        "actor": "Marie",
+        "role": "staff",
+        "action": "backup.github",
+        "what": "Backup committed to thethreethreethree/FRONT-DESK-TRANSACTION-TRACKER@main (auto-sync)",
+        "details": {
+          "reason": "auto-sync",
+          "coh": 60800,
+          "entries": 18875
+        },
+        "prevHash": "827819acb37e4ed6e593c4d4da80d8c17df177a43e988853f3ca261f4f49b3a0",
+        "hash": "24d1869474f670e555d59122a6f4c3f8c64fd4ee8b18573def38e3e54cdc746b"
+      },
+      {
+        "seq": 6726,
+        "id": "aud_mv1sgq8c_2p_l35efe",
+        "ts": "2026-10-10T02:42:18.444Z",
+        "actor": "Marie",
+        "role": "staff",
+        "action": "refund.create",
+        "what": "Refund ₱1,000.00 · Towel ×1 · Fabius Schilling",
+        "details": {
+          "ref": 18876,
+          "id": "txn_mv1sgq8c_2o_yakw9h",
+          "amount": 1000,
+          "item": "Towel",
+          "guest": "Fabius Schilling",
+          "room": "303"
+        },
+        "prevHash": "24d1869474f670e555d59122a6f4c3f8c64fd4ee8b18573def38e3e54cdc746b",
+        "hash": "d20ac77692fab4e20bb54ab64871590232138beef91a3203356ff361485623e4"
       }
     ],
     "towels": [
