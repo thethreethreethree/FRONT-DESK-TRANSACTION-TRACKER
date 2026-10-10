@@ -3,11 +3,11 @@
     "app": "Frendz Front Desk Transaction Tracker",
     "build": "2026-08-19-merge-sync",
     "writtenBy": "Rebecca",
-    "exportedAt": "2026-10-10T10:41:40.909Z",
+    "exportedAt": "2026-10-10T10:43:20.175Z",
     "version": 1,
-    "coh": 73800,
-    "entries": 18896,
-    "auditEvents": 6762,
+    "coh": 72800,
+    "entries": 18898,
+    "auditEvents": 6765,
     "integrity": {
       "ok": true,
       "brokenAtSeq": null
@@ -41,7 +41,7 @@
         "path": "data/ledger-backup.json",
         "autoSync": true,
         "enabled": true,
-        "lastBackupAt": "2026-10-10T10:41:32.449Z",
+        "lastBackupAt": "2026-10-10T10:42:24.162Z",
         "lastBackupSha": "f95cd80f78c3a4ec0d88917281a4b1b2a43c8336"
       },
       "towelTracker": {
@@ -469964,6 +469964,68 @@
         "reversesId": null,
         "prevHash": "5cf5eb16fd6152d4b6b2955ac44bb3e1147bfae633472697cf7f99090e9a298a",
         "hash": "960f4246459ea32f8a7e0e3fa06e43820ef6e5ed8e9351eb46a392df732ea9dd"
+      },
+      {
+        "seq": 18897,
+        "id": "txn_mv29mbfb_10_bsq7xz",
+        "ts": "2026-10-10T10:42:32.663Z",
+        "kind": "exchange",
+        "itemTypeId": "item_mpxxdbc3_2_s3d7ag",
+        "itemName": "Towel",
+        "qty": 1,
+        "unitAmount": 0,
+        "amount": 0,
+        "direction": 0,
+        "guest": "Maria Antonieta Herrera",
+        "room": "303",
+        "pax": null,
+        "shiftId": "shift_mpy3b19n_5_j6nxol",
+        "shiftLabel": "PM",
+        "businessDate": "2026-10-10",
+        "staff": "Rebecca",
+        "staffRole": "staff",
+        "note": "Towel exchange: #458 → #93 (deposit #18803)",
+        "towelNo": "93",
+        "oldTowelNo": "458",
+        "towelLost": false,
+        "refundsSeq": null,
+        "exchangesSeq": 18803,
+        "mewsRes": "",
+        "privateRoom": false,
+        "reversesId": null,
+        "prevHash": "960f4246459ea32f8a7e0e3fa06e43820ef6e5ed8e9351eb46a392df732ea9dd",
+        "hash": "5b7b082e9b980c1eab47ebab92bab84bf8750047935cdb30ce3f810cde9746f2"
+      },
+      {
+        "seq": 18898,
+        "id": "txn_mv29mwpb_12_2m4kr3",
+        "ts": "2026-10-10T10:43:00.239Z",
+        "kind": "refund",
+        "itemTypeId": "item_mpxxdbc3_2_s3d7ag",
+        "itemName": "Towel",
+        "qty": 1,
+        "unitAmount": 1000,
+        "amount": 1000,
+        "direction": -1,
+        "guest": "JAMIE",
+        "room": "207",
+        "pax": null,
+        "shiftId": "shift_mpy3b19n_5_j6nxol",
+        "shiftLabel": "PM",
+        "businessDate": "2026-10-10",
+        "staff": "Rebecca",
+        "staffRole": "staff",
+        "note": "",
+        "towelNo": "280",
+        "oldTowelNo": "",
+        "towelLost": false,
+        "refundsSeq": 18859,
+        "exchangesSeq": null,
+        "mewsRes": "",
+        "privateRoom": false,
+        "reversesId": null,
+        "prevHash": "5b7b082e9b980c1eab47ebab92bab84bf8750047935cdb30ce3f810cde9746f2",
+        "hash": "f8c1bfa0e901f627c6a1e3488352058586530816519fae285d45026516768076"
       }
     ],
     "audit": [
@@ -584410,6 +584472,59 @@
         },
         "prevHash": "b63e60913c06886aeb26d30ef898329f9afa9aca83862052b589dcd9c43eae27",
         "hash": "2bff0561251777f62ad7cc27066d6206d34d1ee8f0f86bccfd20870174013557"
+      },
+      {
+        "seq": 6763,
+        "id": "aud_mv29m4v6_z_7c6pqe",
+        "ts": "2026-10-10T10:42:24.162Z",
+        "actor": "Rebecca",
+        "role": "staff",
+        "action": "backup.github",
+        "what": "Backup committed to thethreethreethree/FRONT-DESK-TRANSACTION-TRACKER@main (auto-sync)",
+        "details": {
+          "reason": "auto-sync",
+          "coh": 73800,
+          "entries": 18896
+        },
+        "prevHash": "2bff0561251777f62ad7cc27066d6206d34d1ee8f0f86bccfd20870174013557",
+        "hash": "3f01be81952474b460c1dc22b5e141eaae25ae68e9fd40a5cdd2876cf9dd2380"
+      },
+      {
+        "seq": 6764,
+        "id": "aud_mv29mbfb_11_xgfgee",
+        "ts": "2026-10-10T10:42:32.663Z",
+        "actor": "Rebecca",
+        "role": "staff",
+        "action": "towel.exchange",
+        "what": "Towel exchange · Maria Antonieta Herrera · #458 → #93 (deposit #18803)",
+        "details": {
+          "oldTowelNo": "458",
+          "newTowelNo": "93",
+          "exchangesSeq": 18803,
+          "guest": "Maria Antonieta Herrera",
+          "room": "303"
+        },
+        "prevHash": "3f01be81952474b460c1dc22b5e141eaae25ae68e9fd40a5cdd2876cf9dd2380",
+        "hash": "3743eda0d49ae69bd96aa055cff212e13fb849fcba0f7cc3ea6197c055d21982"
+      },
+      {
+        "seq": 6765,
+        "id": "aud_mv29mwpb_13_ekdqf6",
+        "ts": "2026-10-10T10:43:00.239Z",
+        "actor": "Rebecca",
+        "role": "staff",
+        "action": "refund.create",
+        "what": "Refund ₱1,000.00 · Towel ×1 · JAMIE",
+        "details": {
+          "ref": 18898,
+          "id": "txn_mv29mwpb_12_2m4kr3",
+          "amount": 1000,
+          "item": "Towel",
+          "guest": "JAMIE",
+          "room": "207"
+        },
+        "prevHash": "3743eda0d49ae69bd96aa055cff212e13fb849fcba0f7cc3ea6197c055d21982",
+        "hash": "cbf47a136e12e7066e104eb9a87ece09218741747c0ff21314dea6ea5b7c297a"
       }
     ],
     "towels": [
