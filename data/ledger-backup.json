@@ -3,11 +3,11 @@
     "app": "Frendz Front Desk Transaction Tracker",
     "build": "2026-08-19-merge-sync",
     "writtenBy": "Marie",
-    "exportedAt": "2026-10-11T11:44:00.025Z",
+    "exportedAt": "2026-10-11T12:03:19.776Z",
     "version": 1,
-    "coh": 43800,
-    "entries": 18938,
-    "auditEvents": 6856,
+    "coh": 46800,
+    "entries": 18939,
+    "auditEvents": 6858,
     "integrity": {
       "ok": true,
       "brokenAtSeq": null
@@ -41,8 +41,8 @@
         "path": "data/ledger-backup.json",
         "autoSync": true,
         "enabled": true,
-        "lastBackupAt": "2026-10-11T11:33:33.410Z",
-        "lastBackupSha": "306914284197484bbbe74b1e7977f9bdd9e56dad"
+        "lastBackupAt": "2026-10-11T11:44:09.603Z",
+        "lastBackupSha": "3fbfd008dec27cf7e99f929665c32e0eda9fdef6"
       },
       "towelTracker": {
         "enabled": true,
@@ -471266,6 +471266,37 @@
         "reversesId": null,
         "prevHash": "f7fad6caaee7fbbd78eb77e31a7ba40ce968ac860a86c3ec1d8e87345d5ab67e",
         "hash": "4c58bd10d83c075165719ac6be55d80016554f561a1b59423d018536817bb680"
+      },
+      {
+        "seq": 18939,
+        "id": "txn_mv3rxwym_2m_2pqcjl",
+        "ts": "2026-10-11T12:03:13.054Z",
+        "kind": "deposit",
+        "itemTypeId": "item_mpxxdbc3_2_s3d7ag",
+        "itemName": "Towel",
+        "qty": 3,
+        "unitAmount": 1000,
+        "amount": 3000,
+        "direction": 1,
+        "guest": "Alex Holliday",
+        "room": "303",
+        "pax": null,
+        "shiftId": "shift_mpy3b19n_5_j6nxol",
+        "shiftLabel": "PM",
+        "businessDate": "2026-10-11",
+        "staff": "Marie",
+        "staffRole": "staff",
+        "note": "",
+        "towelNo": "420 274 401",
+        "oldTowelNo": "",
+        "towelLost": false,
+        "refundsSeq": null,
+        "exchangesSeq": null,
+        "mewsRes": "",
+        "privateRoom": false,
+        "reversesId": null,
+        "prevHash": "4c58bd10d83c075165719ac6be55d80016554f561a1b59423d018536817bb680",
+        "hash": "0949df81f45d893f3be57524f5ad512eb05a22b9e6d501b54f5928decab84ae5"
       }
     ],
     "audit": [
@@ -587339,6 +587370,41 @@
         },
         "prevHash": "aa97309ab5ad0ced0ee97fc5efa887802e689d9b2d19ffecabf9aaaad6b04c55",
         "hash": "0d06d23382aaad5f2a46543ff4e98ccbc282f14d3086f0cd14fcf0216b8922b8"
+      },
+      {
+        "seq": 6857,
+        "id": "aud_mv3r9etg_2l_kh0ayg",
+        "ts": "2026-10-11T11:44:09.796Z",
+        "actor": "Marie",
+        "role": "staff",
+        "action": "backup.github",
+        "what": "Backup committed to thethreethreethree/FRONT-DESK-TRANSACTION-TRACKER@main (auto-sync)",
+        "details": {
+          "reason": "auto-sync",
+          "coh": 43800,
+          "entries": 18938
+        },
+        "prevHash": "0d06d23382aaad5f2a46543ff4e98ccbc282f14d3086f0cd14fcf0216b8922b8",
+        "hash": "e213688733a76d3f54ca340bacbc7498507245e8aec7dafb47d5fed7248aa2e8"
+      },
+      {
+        "seq": 6858,
+        "id": "aud_mv3rxwym_2n_rhb3mw",
+        "ts": "2026-10-11T12:03:13.054Z",
+        "actor": "Marie",
+        "role": "staff",
+        "action": "deposit.create",
+        "what": "Deposit ₱3,000.00 · Towel ×3 · Alex Holliday",
+        "details": {
+          "ref": 18939,
+          "id": "txn_mv3rxwym_2m_2pqcjl",
+          "amount": 3000,
+          "item": "Towel",
+          "guest": "Alex Holliday",
+          "room": "303"
+        },
+        "prevHash": "e213688733a76d3f54ca340bacbc7498507245e8aec7dafb47d5fed7248aa2e8",
+        "hash": "2a2523220d5ac01b4a266dcc06723b793ef1631d9853c5c74c95df6426012a12"
       }
     ],
     "towels": [
