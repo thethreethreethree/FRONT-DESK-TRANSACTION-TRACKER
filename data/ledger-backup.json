@@ -3,11 +3,11 @@
     "app": "Frendz Front Desk Transaction Tracker",
     "build": "2026-08-19-merge-sync",
     "writtenBy": "Marie",
-    "exportedAt": "2026-10-11T09:20:25.164Z",
+    "exportedAt": "2026-10-11T09:44:39.325Z",
     "version": 1,
-    "coh": 45800,
-    "entries": 18928,
-    "auditEvents": 6836,
+    "coh": 47800,
+    "entries": 18929,
+    "auditEvents": 6838,
     "integrity": {
       "ok": true,
       "brokenAtSeq": null
@@ -41,8 +41,8 @@
         "path": "data/ledger-backup.json",
         "autoSync": true,
         "enabled": true,
-        "lastBackupAt": "2026-10-11T09:19:09.885Z",
-        "lastBackupSha": "eceda915feae4939f975c764a0daa40b26d32523"
+        "lastBackupAt": "2026-10-11T09:20:35.190Z",
+        "lastBackupSha": "4d148b935c1d7c4ba4f72e15ddca5e6503f4e7cc"
       },
       "towelTracker": {
         "enabled": true,
@@ -470956,6 +470956,37 @@
         "reversesId": null,
         "prevHash": "dd5ed8921543fad63ce9305630c7fdce6b020da03247a085ac7054758e56430d",
         "hash": "221630488a1d15641eaf586235ae663ba5a78507935c7502fe7676700867292b"
+      },
+      {
+        "seq": 18929,
+        "id": "txn_mv3mzkwb_1s_ckujj8",
+        "ts": "2026-10-11T09:44:32.651Z",
+        "kind": "deposit",
+        "itemTypeId": "item_mpxxdbc3_2_s3d7ag",
+        "itemName": "Towel",
+        "qty": 2,
+        "unitAmount": 1000,
+        "amount": 2000,
+        "direction": 1,
+        "guest": "Rosa van geest",
+        "room": "308",
+        "pax": null,
+        "shiftId": "shift_mpy3b19n_5_j6nxol",
+        "shiftLabel": "PM",
+        "businessDate": "2026-10-11",
+        "staff": "Marie",
+        "staffRole": "staff",
+        "note": "",
+        "towelNo": "66 287",
+        "oldTowelNo": "",
+        "towelLost": false,
+        "refundsSeq": null,
+        "exchangesSeq": null,
+        "mewsRes": "",
+        "privateRoom": false,
+        "reversesId": null,
+        "prevHash": "221630488a1d15641eaf586235ae663ba5a78507935c7502fe7676700867292b",
+        "hash": "d6fd96aa2999cbc33adb8b4f79fd2ab5af249fdfe36cc5ab618dc35a076739f4"
       }
     ],
     "audit": [
@@ -586682,6 +586713,41 @@
         },
         "prevHash": "2cebacaecdb822a35710d3ef3ef5d99344d513076922fab60d68efbcb4894930",
         "hash": "e08a50c7ded8004394a81ef113fdd0f3c32c5611042d019340ae3f561e770448"
+      },
+      {
+        "seq": 6837,
+        "id": "aud_mv3m4rqu_1r_r734ba",
+        "ts": "2026-10-11T09:20:35.190Z",
+        "actor": "Marie",
+        "role": "staff",
+        "action": "backup.github",
+        "what": "Backup committed to thethreethreethree/FRONT-DESK-TRANSACTION-TRACKER@main (auto-sync)",
+        "details": {
+          "reason": "auto-sync",
+          "coh": 45800,
+          "entries": 18928
+        },
+        "prevHash": "e08a50c7ded8004394a81ef113fdd0f3c32c5611042d019340ae3f561e770448",
+        "hash": "4f55e81c2fd2d2dc4c5b43ddadbe852839cf3ed286405f18bc10b72dd21c8f7e"
+      },
+      {
+        "seq": 6838,
+        "id": "aud_mv3mzkwb_1t_ssgxy4",
+        "ts": "2026-10-11T09:44:32.651Z",
+        "actor": "Marie",
+        "role": "staff",
+        "action": "deposit.create",
+        "what": "Deposit ₱2,000.00 · Towel ×2 · Rosa van geest",
+        "details": {
+          "ref": 18929,
+          "id": "txn_mv3mzkwb_1s_ckujj8",
+          "amount": 2000,
+          "item": "Towel",
+          "guest": "Rosa van geest",
+          "room": "308"
+        },
+        "prevHash": "4f55e81c2fd2d2dc4c5b43ddadbe852839cf3ed286405f18bc10b72dd21c8f7e",
+        "hash": "046be79ccae20da03d6936ab1aead3262f5923c2f971199dfc96fdc156f0d3f7"
       }
     ],
     "towels": [
