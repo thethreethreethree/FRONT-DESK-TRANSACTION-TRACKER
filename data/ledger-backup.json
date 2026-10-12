@@ -3,11 +3,11 @@
     "app": "Frendz Front Desk Transaction Tracker",
     "build": "2026-08-19-merge-sync",
     "writtenBy": "GINO",
-    "exportedAt": "2026-10-12T04:54:08.538Z",
+    "exportedAt": "2026-10-12T07:38:27.029Z",
     "version": 1,
     "coh": 41800,
     "entries": 18945,
-    "auditEvents": 6881,
+    "auditEvents": 6883,
     "integrity": {
       "ok": true,
       "brokenAtSeq": null
@@ -16,7 +16,7 @@
       "ok": true,
       "brokenAtSeq": null
     },
-    "travelistaEntries": 119,
+    "travelistaEntries": 120,
     "travelistaIntegrity": {
       "ok": true,
       "brokenAtSeq": null
@@ -41,8 +41,8 @@
         "path": "data/ledger-backup.json",
         "autoSync": true,
         "enabled": true,
-        "lastBackupAt": "2026-10-12T04:54:01.598Z",
-        "lastBackupSha": "ed04ca97a9bafc825098038c8c22498bcec32f91"
+        "lastBackupAt": "2026-10-12T04:54:17.445Z",
+        "lastBackupSha": "b36c9c9e2a325493551d1ee4971a2d5551c2dac7"
       },
       "towelTracker": {
         "enabled": true,
@@ -587956,6 +587956,43 @@
         },
         "prevHash": "e0961d73c5528f4ae7547596661c5991217a4af43707aec7b397406be257db50",
         "hash": "2a25a797019454dba1e303454c98060f1c5b319a5aa023dc9d98ffe8fe294051"
+      },
+      {
+        "seq": 6882,
+        "id": "aud_mv4s260e_7_63ggt0",
+        "ts": "2026-10-12T04:54:17.582Z",
+        "actor": "GINO",
+        "role": "staff",
+        "action": "backup.github",
+        "what": "Backup committed to thethreethreethree/FRONT-DESK-TRANSACTION-TRACKER@main (auto-sync)",
+        "details": {
+          "reason": "auto-sync",
+          "coh": 41800,
+          "entries": 18945
+        },
+        "prevHash": "2a25a797019454dba1e303454c98060f1c5b319a5aa023dc9d98ffe8fe294051",
+        "hash": "69d0e2cb9739c408c8af577579bd42b0dccb2fc54949332b8603578c3a7aae8c"
+      },
+      {
+        "seq": 6883,
+        "id": "aud_mv4xx4pz_9_6o4nqd",
+        "ts": "2026-10-12T07:38:20.327Z",
+        "actor": "GINO",
+        "role": "staff",
+        "action": "tv.booking.create",
+        "what": "Travelista booking #120 · GABRIEL ADRIANNE · PPS SHARING VAN ×1 pax · ₱750 (commission ₱100)",
+        "details": {
+          "ref": 120,
+          "id": "tv_mv4xx4py_8_9g0g22",
+          "guest": "GABRIEL ADRIANNE",
+          "destination": "PPS SHARING VAN",
+          "pax": 1,
+          "total": 750,
+          "commission": 100,
+          "bookedBy": "GINO"
+        },
+        "prevHash": "69d0e2cb9739c408c8af577579bd42b0dccb2fc54949332b8603578c3a7aae8c",
+        "hash": "9daac0b45a31f04082531694ca48f6145d26557fb96aee8b4f62cfbd279fd4a4"
       }
     ],
     "towels": [
@@ -598711,6 +598748,42 @@
           "reversesKind": null,
           "prevHash": "58435dd08cc69b1f026fb5ea11a259ca720a819efcffcc0d5b8ce2ef1d963e01",
           "hash": "d44f67d9b7ce627e597c478be54c0a1acfba2c006fc80528826b764eb3b6fc1a"
+        },
+        {
+          "seq": 120,
+          "id": "tv_mv4xx4py_8_9g0g22",
+          "ts": "2026-10-12T07:38:20.326Z",
+          "kind": "booking",
+          "direction": 1,
+          "amount": 750,
+          "departureDate": "2026-10-13",
+          "guest": "GABRIEL ADRIANNE",
+          "destination": "PPS SHARING VAN",
+          "destinationId": "dest_msrh2ktf_d_xyn4hg",
+          "pax": 1,
+          "fare": 750,
+          "fareBasis": "per_pax",
+          "total": 750,
+          "travelistaShare": 650,
+          "commission": 100,
+          "bookedBy": "GINO",
+          "remarks": "",
+          "payoutType": "",
+          "payee": "",
+          "method": "",
+          "amendsSeq": null,
+          "dTotal": 0,
+          "dShare": 0,
+          "dCommission": 0,
+          "dPax": 0,
+          "periodKey": "2026-10-A",
+          "staff": "GINO",
+          "staffRole": "staff",
+          "businessDate": "2026-10-12",
+          "reversesId": null,
+          "reversesKind": null,
+          "prevHash": "d44f67d9b7ce627e597c478be54c0a1acfba2c006fc80528826b764eb3b6fc1a",
+          "hash": "d62efda4bf3fdab3797aae6b5b8cad2ca568b35bcc7784192abe03eabd39b42d"
         }
       ]
     }
