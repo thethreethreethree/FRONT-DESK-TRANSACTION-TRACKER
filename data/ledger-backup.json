@@ -3,11 +3,11 @@
     "app": "Frendz Front Desk Transaction Tracker",
     "build": "2026-08-19-merge-sync",
     "writtenBy": "GINO",
-    "exportedAt": "2026-10-12T10:36:29.419Z",
+    "exportedAt": "2026-10-12T11:33:45.915Z",
     "version": 1,
     "coh": 43800,
     "entries": 18950,
-    "auditEvents": 6893,
+    "auditEvents": 6895,
     "integrity": {
       "ok": true,
       "brokenAtSeq": null
@@ -16,7 +16,7 @@
       "ok": true,
       "brokenAtSeq": null
     },
-    "travelistaEntries": 120,
+    "travelistaEntries": 121,
     "travelistaIntegrity": {
       "ok": true,
       "brokenAtSeq": null
@@ -41,8 +41,8 @@
         "path": "data/ledger-backup.json",
         "autoSync": true,
         "enabled": true,
-        "lastBackupAt": "2026-10-12T10:36:22.523Z",
-        "lastBackupSha": "9c09f15208e9d85e310f76035397631c57607df5"
+        "lastBackupAt": "2026-10-12T10:36:40.454Z",
+        "lastBackupSha": "ddeabdee29d5b59323089b44e1d908b92f9ed2d4"
       },
       "towelTracker": {
         "enabled": true,
@@ -588323,6 +588323,43 @@
         },
         "prevHash": "173083d019728875b24f55a917a2cf32dd35f930cba1c6a3d5a9b3bf75b9ad14",
         "hash": "d98f38f9fbd39c10de539e40828721b3058c43beaf792bdea93586fa3e3857c5"
+      },
+      {
+        "seq": 6894,
+        "id": "aud_mv54ah38_p_7nprch",
+        "ts": "2026-10-12T10:36:40.580Z",
+        "actor": "GINO",
+        "role": "staff",
+        "action": "backup.github",
+        "what": "Backup committed to thethreethreethree/FRONT-DESK-TRANSACTION-TRACKER@main (auto-sync)",
+        "details": {
+          "reason": "auto-sync",
+          "coh": 43800,
+          "entries": 18950
+        },
+        "prevHash": "d98f38f9fbd39c10de539e40828721b3058c43beaf792bdea93586fa3e3857c5",
+        "hash": "cb22b03b7a55affa5d50dc1f886dd449c1bf53a47d4b45de9530f78ae972c7bb"
+      },
+      {
+        "seq": 6895,
+        "id": "aud_mv56bqyj_r_6xv1wu",
+        "ts": "2026-10-12T11:33:39.259Z",
+        "actor": "GINO",
+        "role": "staff",
+        "action": "tv.booking.create",
+        "what": "Travelista booking #121 · IMBERT LUCKA · PPS SHARING VAN ×2 pax · ₱1,500 (commission ₱200)",
+        "details": {
+          "ref": 121,
+          "id": "tv_mv56bqyi_q_17l6hh",
+          "guest": "IMBERT LUCKA",
+          "destination": "PPS SHARING VAN",
+          "pax": 2,
+          "total": 1500,
+          "commission": 200,
+          "bookedBy": "GINO"
+        },
+        "prevHash": "cb22b03b7a55affa5d50dc1f886dd449c1bf53a47d4b45de9530f78ae972c7bb",
+        "hash": "b5649183f9e18c828aa109ec01d81581092830d202edf8e2bb94e67435817dfa"
       }
     ],
     "towels": [
@@ -599114,6 +599151,42 @@
           "reversesKind": null,
           "prevHash": "d44f67d9b7ce627e597c478be54c0a1acfba2c006fc80528826b764eb3b6fc1a",
           "hash": "d62efda4bf3fdab3797aae6b5b8cad2ca568b35bcc7784192abe03eabd39b42d"
+        },
+        {
+          "seq": 121,
+          "id": "tv_mv56bqyi_q_17l6hh",
+          "ts": "2026-10-12T11:33:39.258Z",
+          "kind": "booking",
+          "direction": 1,
+          "amount": 1500,
+          "departureDate": "2026-10-13",
+          "guest": "IMBERT LUCKA",
+          "destination": "PPS SHARING VAN",
+          "destinationId": "dest_msrh2ktf_d_xyn4hg",
+          "pax": 2,
+          "fare": 750,
+          "fareBasis": "per_pax",
+          "total": 1500,
+          "travelistaShare": 1300,
+          "commission": 200,
+          "bookedBy": "GINO",
+          "remarks": "",
+          "payoutType": "",
+          "payee": "",
+          "method": "",
+          "amendsSeq": null,
+          "dTotal": 0,
+          "dShare": 0,
+          "dCommission": 0,
+          "dPax": 0,
+          "periodKey": "2026-10-A",
+          "staff": "GINO",
+          "staffRole": "staff",
+          "businessDate": "2026-10-12",
+          "reversesId": null,
+          "reversesKind": null,
+          "prevHash": "d62efda4bf3fdab3797aae6b5b8cad2ca568b35bcc7784192abe03eabd39b42d",
+          "hash": "b845f7fa5888eea427ef457cc454f4ca0705094173cba58e2084af86e4c05c94"
         }
       ]
     }
