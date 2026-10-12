@@ -3,11 +3,11 @@
     "app": "Frendz Front Desk Transaction Tracker",
     "build": "2026-08-19-merge-sync",
     "writtenBy": "Chalyn",
-    "exportedAt": "2026-10-11T23:54:41.347Z",
+    "exportedAt": "2026-10-12T02:26:38.024Z",
     "version": 1,
     "coh": 46800,
-    "entries": 18939,
-    "auditEvents": 6866,
+    "entries": 18940,
+    "auditEvents": 6868,
     "integrity": {
       "ok": true,
       "brokenAtSeq": null
@@ -42,7 +42,7 @@
         "autoSync": true,
         "enabled": true,
         "lastBackupAt": "2026-10-11T23:54:29.859Z",
-        "lastBackupSha": "81202d88932b2bab9787dfe6cea1b9a3f0426f75"
+        "lastBackupSha": "78d84916dab2167c4162c326cafc2d6d5319bdc4"
       },
       "towelTracker": {
         "enabled": true,
@@ -471297,6 +471297,37 @@
         "reversesId": null,
         "prevHash": "4c58bd10d83c075165719ac6be55d80016554f561a1b59423d018536817bb680",
         "hash": "0949df81f45d893f3be57524f5ad512eb05a22b9e6d501b54f5928decab84ae5"
+      },
+      {
+        "seq": 18940,
+        "id": "txn_mv4ms4pw_2_8z17ry",
+        "ts": "2026-10-12T02:26:31.268Z",
+        "kind": "refund",
+        "itemTypeId": "item_mpxxdbc3_2_s3d7ag",
+        "itemName": "Towel",
+        "qty": 1,
+        "unitAmount": 0,
+        "amount": 0,
+        "direction": -1,
+        "guest": "SAFE",
+        "room": "204",
+        "pax": null,
+        "shiftId": "shift_mpy3b19n_5_j6nxol",
+        "shiftLabel": "PM",
+        "businessDate": "2026-10-12",
+        "staff": "Chalyn",
+        "staffRole": "staff",
+        "note": "Passport + Towel returned · MEWS 129186 (deposit #18861)",
+        "towelNo": "239",
+        "oldTowelNo": "",
+        "towelLost": false,
+        "refundsSeq": 18861,
+        "exchangesSeq": null,
+        "mewsRes": "129186",
+        "privateRoom": false,
+        "reversesId": null,
+        "prevHash": "0949df81f45d893f3be57524f5ad512eb05a22b9e6d501b54f5928decab84ae5",
+        "hash": "6ad662dfbf7d6d6b78647d85c6c5c89f76a38a6b447850cd3d1ba6c0c567d10b"
       }
     ],
     "audit": [
@@ -587521,6 +587552,38 @@
         },
         "prevHash": "7a732bbecae9de43c393f429221993cd8d82c2bf66354c8f2415ce9a32397d7d",
         "hash": "efd99aa911386b3bd4559c0297cf38255b320a47742bee461ce3acc244eaee5e"
+      },
+      {
+        "seq": 6867,
+        "id": "aud_mv4mir7z_1_b990p3",
+        "ts": "2026-10-12T02:19:13.871Z",
+        "actor": "Chalyn",
+        "role": "staff",
+        "action": "data.import",
+        "what": "Imported backup (18939 ledger entries)",
+        "details": {
+          "entries": 18939
+        },
+        "prevHash": "efd99aa911386b3bd4559c0297cf38255b320a47742bee461ce3acc244eaee5e",
+        "hash": "4c7bea228b818d52292e3a7695fab3216aba1336a013bafcf37088dd99e5eceb"
+      },
+      {
+        "seq": 6868,
+        "id": "aud_mv4ms4pw_3_a7o0ts",
+        "ts": "2026-10-12T02:26:31.268Z",
+        "actor": "Chalyn",
+        "role": "staff",
+        "action": "passport.return",
+        "what": "Passport returned · SAFE · MEWS 129186 (deposit #18861)",
+        "details": {
+          "seq": 18861,
+          "guest": "SAFE",
+          "room": "204",
+          "mewsRes": "129186",
+          "itemName": "Towel"
+        },
+        "prevHash": "4c7bea228b818d52292e3a7695fab3216aba1336a013bafcf37088dd99e5eceb",
+        "hash": "2379eed0ec3417deebca5f3fa65b65d68f6213a398c14598ffa5c104df730848"
       }
     ],
     "towels": [
