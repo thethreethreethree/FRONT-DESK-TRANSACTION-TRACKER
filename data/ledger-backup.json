@@ -3,11 +3,11 @@
     "app": "Frendz Front Desk Transaction Tracker",
     "build": "2026-08-19-merge-sync",
     "writtenBy": "GINO",
-    "exportedAt": "2026-10-13T10:42:52.619Z",
+    "exportedAt": "2026-10-13T11:38:19.645Z",
     "version": 1,
     "coh": 32800,
     "entries": 18967,
-    "auditEvents": 6937,
+    "auditEvents": 6939,
     "integrity": {
       "ok": true,
       "brokenAtSeq": null
@@ -16,7 +16,7 @@
       "ok": true,
       "brokenAtSeq": null
     },
-    "travelistaEntries": 123,
+    "travelistaEntries": 124,
     "travelistaIntegrity": {
       "ok": true,
       "brokenAtSeq": null
@@ -41,8 +41,8 @@
         "path": "data/ledger-backup.json",
         "autoSync": true,
         "enabled": true,
-        "lastBackupAt": "2026-10-13T10:19:56.773Z",
-        "lastBackupSha": "9ccc80d3ea7fdbc1d0dc8ac4dca30d87454f43f9"
+        "lastBackupAt": "2026-10-13T10:43:02.242Z",
+        "lastBackupSha": "d6161710d284fece8d5c80dd95f5c909d595d1d4"
       },
       "towelTracker": {
         "enabled": true,
@@ -589603,6 +589603,43 @@
         },
         "prevHash": "66f06f73e9734c3e53cc545deceeb498fab8a781c5c8d887cdfc4f44f2888a0d",
         "hash": "360c40536b9efa78b2174e8303a71316bd4715050f00de3b0e50300ce1c56050"
+      },
+      {
+        "seq": 6938,
+        "id": "aud_mv6jyi8y_c_f52jow",
+        "ts": "2026-10-13T10:43:02.242Z",
+        "actor": "GINO",
+        "role": "staff",
+        "action": "backup.github",
+        "what": "Backup committed to thethreethreethree/FRONT-DESK-TRANSACTION-TRACKER@main (auto-sync)",
+        "details": {
+          "reason": "auto-sync",
+          "coh": 32800,
+          "entries": 18967
+        },
+        "prevHash": "360c40536b9efa78b2174e8303a71316bd4715050f00de3b0e50300ce1c56050",
+        "hash": "8b5bf09fee90c8fbb5c954447bdf9f66627ab48e8d0287a941e0cc4719e136ed"
+      },
+      {
+        "seq": 6939,
+        "id": "aud_mv6lxghy_e_gqsl0q",
+        "ts": "2026-10-13T11:38:12.550Z",
+        "actor": "GINO",
+        "role": "staff",
+        "action": "tv.booking.create",
+        "what": "Travelista booking #124 · NOBLE LE DUC · PPS SHARING VAN ×1 pax · ₱750 (commission ₱100)",
+        "details": {
+          "ref": 124,
+          "id": "tv_mv6lxghy_d_7shvko",
+          "guest": "NOBLE LE DUC",
+          "destination": "PPS SHARING VAN",
+          "pax": 1,
+          "total": 750,
+          "commission": 100,
+          "bookedBy": "GINO"
+        },
+        "prevHash": "8b5bf09fee90c8fbb5c954447bdf9f66627ab48e8d0287a941e0cc4719e136ed",
+        "hash": "dcdbc7b037c27904315912f07ed23700f083f9d47c97a4cd425c56e13a3337a5"
       }
     ],
     "towels": [
@@ -600502,6 +600539,42 @@
           "reversesKind": null,
           "prevHash": "80f71e86f0ac1bbf238f1b42515dd56ef75c42ec02de79879a32eefd4e8d2b7e",
           "hash": "3aa1d579052a0a09f916c7a8eefc8ecce402011c37b57f3bb93a2d702e9a3cc0"
+        },
+        {
+          "seq": 124,
+          "id": "tv_mv6lxghy_d_7shvko",
+          "ts": "2026-10-13T11:38:12.550Z",
+          "kind": "booking",
+          "direction": 1,
+          "amount": 750,
+          "departureDate": "2026-10-15",
+          "guest": "NOBLE LE DUC",
+          "destination": "PPS SHARING VAN",
+          "destinationId": "dest_msrh2ktf_d_xyn4hg",
+          "pax": 1,
+          "fare": 750,
+          "fareBasis": "per_pax",
+          "total": 750,
+          "travelistaShare": 650,
+          "commission": 100,
+          "bookedBy": "GINO",
+          "remarks": "",
+          "payoutType": "",
+          "payee": "",
+          "method": "",
+          "amendsSeq": null,
+          "dTotal": 0,
+          "dShare": 0,
+          "dCommission": 0,
+          "dPax": 0,
+          "periodKey": "2026-10-A",
+          "staff": "GINO",
+          "staffRole": "staff",
+          "businessDate": "2026-10-13",
+          "reversesId": null,
+          "reversesKind": null,
+          "prevHash": "3aa1d579052a0a09f916c7a8eefc8ecce402011c37b57f3bb93a2d702e9a3cc0",
+          "hash": "4fbd8e8228145fe39f6ad3c6521374029887c7f1d2da85541dfc8f610912b6e6"
         }
       ]
     }
