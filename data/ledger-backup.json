@@ -2,12 +2,12 @@
   "meta": {
     "app": "Frendz Front Desk Transaction Tracker",
     "build": "2026-08-19-merge-sync",
-    "writtenBy": "James",
-    "exportedAt": "2026-10-14T02:14:36.379Z",
+    "writtenBy": "Marie",
+    "exportedAt": "2026-10-14T02:52:19.584Z",
     "version": 1,
-    "coh": 25800,
-    "entries": 18975,
-    "auditEvents": 6965,
+    "coh": 24800,
+    "entries": 18976,
+    "auditEvents": 6964,
     "integrity": {
       "ok": true,
       "brokenAtSeq": null
@@ -41,8 +41,8 @@
         "path": "data/ledger-backup.json",
         "autoSync": true,
         "enabled": true,
-        "lastBackupAt": "2026-10-14T01:23:39.938Z",
-        "lastBackupSha": "d562185199740ae6a5d28b5040831d1d9b1dde6c"
+        "lastBackupAt": "2026-10-14T01:54:25.891Z",
+        "lastBackupSha": "4760be2b5d5606a5fa6a5bab139931974641d90e"
       },
       "towelTracker": {
         "enabled": true,
@@ -472413,6 +472413,37 @@
         "reversesId": null,
         "prevHash": "e1b24d952aca318476b1096b6c5dcb8e62948587902c0d836b2f1d69a2b55fd2",
         "hash": "e37173b524ad0d2a48609b25c6bf64db3f540f4d287e435e6c880380099d2248"
+      },
+      {
+        "seq": 18976,
+        "id": "txn_mv7ikvl3_w_ahk4kt",
+        "ts": "2026-10-14T02:52:12.903Z",
+        "kind": "refund",
+        "itemTypeId": "item_mpxxdbc3_2_s3d7ag",
+        "itemName": "Towel",
+        "qty": 1,
+        "unitAmount": 1000,
+        "amount": 1000,
+        "direction": -1,
+        "guest": "Jenna Whelan",
+        "room": "202",
+        "pax": null,
+        "shiftId": "shift_mpy3b19n_5_j6nxol",
+        "shiftLabel": "PM",
+        "businessDate": "2026-10-14",
+        "staff": "Marie",
+        "staffRole": "staff",
+        "note": "",
+        "towelNo": "10",
+        "oldTowelNo": "",
+        "towelLost": false,
+        "refundsSeq": 18880,
+        "exchangesSeq": null,
+        "mewsRes": "",
+        "privateRoom": false,
+        "reversesId": null,
+        "prevHash": "e37173b524ad0d2a48609b25c6bf64db3f540f4d287e435e6c880380099d2248",
+        "hash": "38783845d23ff4f6f16a28289671373ddc1b6ad8542108eb1fa4eccc88387407"
       }
     ],
     "audit": [
@@ -590269,43 +590300,38 @@
       },
       {
         "seq": 6963,
-        "id": "aud_mv7h7nl2_1_q2w0nl",
-        "ts": "2026-10-14T02:13:56.390Z",
-        "actor": "Chalyn",
+        "id": "aud_mv7gikkp_v_n17bju",
+        "ts": "2026-10-14T01:54:26.089Z",
+        "actor": "Marie",
         "role": "staff",
-        "action": "data.import",
-        "what": "Imported backup (18975 ledger entries)",
+        "action": "backup.github",
+        "what": "Backup committed to thethreethreethree/FRONT-DESK-TRANSACTION-TRACKER@main (auto-sync)",
         "details": {
+          "reason": "auto-sync",
+          "coh": 25800,
           "entries": 18975
         },
         "prevHash": "4c0b84322796b365c6123061fa2f0166dbe429dcc212a2aeb57a1683939cc74a",
-        "hash": "c392e8c14e00f1062849b247e62bb75a814f9b63af56b4813ab3d68ee3d6d639"
+        "hash": "a39e6517f75e141685690a3e3012aaf1b582e5ac6647417f9bc83eb6be046fa8"
       },
       {
         "seq": 6964,
-        "id": "aud_mv7h7uyy_2_8301pn",
-        "ts": "2026-10-14T02:14:05.962Z",
-        "actor": "Chalyn",
+        "id": "aud_mv7ikvl3_x_odurqb",
+        "ts": "2026-10-14T02:52:12.903Z",
+        "actor": "Marie",
         "role": "staff",
-        "action": "auth.logout",
-        "what": "Chalyn signed out",
-        "details": {},
-        "prevHash": "c392e8c14e00f1062849b247e62bb75a814f9b63af56b4813ab3d68ee3d6d639",
-        "hash": "3f58a53f9ad9de08ec4ab50ac4f24d45ed6f2dbb14c2919512bcfb27a552d9d3"
-      },
-      {
-        "seq": 6965,
-        "id": "aud_mv7h8baq_3_qpp08p",
-        "ts": "2026-10-14T02:14:27.122Z",
-        "actor": "James",
-        "role": "manager",
-        "action": "auth.login",
-        "what": "James signed in as manager",
+        "action": "refund.create",
+        "what": "Refund ₱1,000.00 · Towel ×1 · Jenna Whelan",
         "details": {
-          "role": "manager"
+          "ref": 18976,
+          "id": "txn_mv7ikvl3_w_ahk4kt",
+          "amount": 1000,
+          "item": "Towel",
+          "guest": "Jenna Whelan",
+          "room": "202"
         },
-        "prevHash": "3f58a53f9ad9de08ec4ab50ac4f24d45ed6f2dbb14c2919512bcfb27a552d9d3",
-        "hash": "431dee007e1730b262ed1bf6792bfce648f7fe175777fcbe160d0da34455633d"
+        "prevHash": "a39e6517f75e141685690a3e3012aaf1b582e5ac6647417f9bc83eb6be046fa8",
+        "hash": "73200edb614d845f07958a6789cd1a52e7efd84d86e16f7c3a87032afa5be1ad"
       }
     ],
     "towels": [
