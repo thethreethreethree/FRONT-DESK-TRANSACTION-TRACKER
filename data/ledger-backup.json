@@ -3,11 +3,11 @@
     "app": "Frendz Front Desk Transaction Tracker",
     "build": "2026-08-19-merge-sync",
     "writtenBy": "GINO",
-    "exportedAt": "2026-10-14T09:32:31.710Z",
+    "exportedAt": "2026-10-14T09:33:41.041Z",
     "version": 1,
-    "coh": 22000,
-    "entries": 18983,
-    "auditEvents": 6981,
+    "coh": 25000,
+    "entries": 18984,
+    "auditEvents": 6983,
     "integrity": {
       "ok": true,
       "brokenAtSeq": null
@@ -41,8 +41,8 @@
         "path": "data/ledger-backup.json",
         "autoSync": true,
         "enabled": true,
-        "lastBackupAt": "2026-10-14T09:17:28.742Z",
-        "lastBackupSha": "6ae9c952b6374c5100aeb3a93af844c1e8047fe8"
+        "lastBackupAt": "2026-10-14T09:32:41.300Z",
+        "lastBackupSha": "16ac0c5ecd4a9466a8be68508d6bb552d5fdbcbb"
       },
       "towelTracker": {
         "enabled": true,
@@ -472661,6 +472661,37 @@
         "reversesId": null,
         "prevHash": "f92c11443b4419a6bf47052d26325f4ecb3715994b18b19432e1d77d906bca3a",
         "hash": "cf09ed6cb8928b8cfbf19c1b9aa5b2bcbfe33274224d62301ab9a174b808e11e"
+      },
+      {
+        "seq": 18984,
+        "id": "txn_mv7wx0yq_1n_7cbzpb",
+        "ts": "2026-10-14T09:33:34.370Z",
+        "kind": "deposit",
+        "itemTypeId": "item_mpxxdbc3_2_s3d7ag",
+        "itemName": "Towel",
+        "qty": 3,
+        "unitAmount": 1000,
+        "amount": 3000,
+        "direction": 1,
+        "guest": "AMELIE",
+        "room": "408",
+        "pax": null,
+        "shiftId": "shift_mpy3b19n_5_j6nxol",
+        "shiftLabel": "PM",
+        "businessDate": "2026-10-14",
+        "staff": "GINO",
+        "staffRole": "staff",
+        "note": "",
+        "towelNo": "256 90 260",
+        "oldTowelNo": "",
+        "towelLost": false,
+        "refundsSeq": null,
+        "exchangesSeq": null,
+        "mewsRes": "",
+        "privateRoom": false,
+        "reversesId": null,
+        "prevHash": "cf09ed6cb8928b8cfbf19c1b9aa5b2bcbfe33274224d62301ab9a174b808e11e",
+        "hash": "656889275d6a4cdea64c8ba4777638e71ea8e866711f941023febba890363fd0"
       }
     ],
     "audit": [
@@ -590836,6 +590867,41 @@
         },
         "prevHash": "b299013e3157ac095bdb8448a5a551c28d3aac7d325f6c9e6d34e9eaecd32bb8",
         "hash": "0a903becf5d547f91d1c47ad9fbd3cc0fb9c17454ddd05e6297053277749ccab"
+      },
+      {
+        "seq": 6982,
+        "id": "aud_mv7wvw0l_1m_9wch2k",
+        "ts": "2026-10-14T09:32:41.301Z",
+        "actor": "GINO",
+        "role": "staff",
+        "action": "backup.github",
+        "what": "Backup committed to thethreethreethree/FRONT-DESK-TRANSACTION-TRACKER@main (auto-sync)",
+        "details": {
+          "reason": "auto-sync",
+          "coh": 22000,
+          "entries": 18983
+        },
+        "prevHash": "0a903becf5d547f91d1c47ad9fbd3cc0fb9c17454ddd05e6297053277749ccab",
+        "hash": "01f41060b7b0a2009899a84fbca88c1e5d318a9a2442bfd0f2afe99f477bc65c"
+      },
+      {
+        "seq": 6983,
+        "id": "aud_mv7wx0yq_1o_urzxz6",
+        "ts": "2026-10-14T09:33:34.370Z",
+        "actor": "GINO",
+        "role": "staff",
+        "action": "deposit.create",
+        "what": "Deposit ₱3,000.00 · Towel ×3 · AMELIE",
+        "details": {
+          "ref": 18984,
+          "id": "txn_mv7wx0yq_1n_7cbzpb",
+          "amount": 3000,
+          "item": "Towel",
+          "guest": "AMELIE",
+          "room": "408"
+        },
+        "prevHash": "01f41060b7b0a2009899a84fbca88c1e5d318a9a2442bfd0f2afe99f477bc65c",
+        "hash": "7713c1888c177273a0bb808b70c94c551d5accd9760241f2e8d6f247c793738b"
       }
     ],
     "towels": [
