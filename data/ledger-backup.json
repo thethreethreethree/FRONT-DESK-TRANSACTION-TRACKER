@@ -3,11 +3,11 @@
     "app": "Frendz Front Desk Transaction Tracker",
     "build": "2026-08-19-merge-sync",
     "writtenBy": "Marie",
-    "exportedAt": "2026-10-14T00:15:55.030Z",
+    "exportedAt": "2026-10-14T00:44:49.636Z",
     "version": 1,
-    "coh": 31800,
-    "entries": 18970,
-    "auditEvents": 6953,
+    "coh": 30800,
+    "entries": 18972,
+    "auditEvents": 6956,
     "integrity": {
       "ok": true,
       "brokenAtSeq": null
@@ -41,8 +41,8 @@
         "path": "data/ledger-backup.json",
         "autoSync": true,
         "enabled": true,
-        "lastBackupAt": "2026-10-14T00:02:00.577Z",
-        "lastBackupSha": "54167013c1e07f0d287a0ae82f89537ceceab5b4"
+        "lastBackupAt": "2026-10-14T00:16:06.566Z",
+        "lastBackupSha": "ccff108c013469b12294d29fefcb809778044083"
       },
       "towelTracker": {
         "enabled": true,
@@ -472258,6 +472258,68 @@
         "reversesId": null,
         "prevHash": "b7327a68ef5479de99db3ea255c84520d87e20ec5061d5d12cac2d7bff1882b2",
         "hash": "0ba880b3d9331007484ff33640aba573c219a11485c8671a6a9a3f89d50effd8"
+      },
+      {
+        "seq": 18971,
+        "id": "txn_mv7e0dlr_i_g45i3y",
+        "ts": "2026-10-14T00:44:18.015Z",
+        "kind": "exchange",
+        "itemTypeId": "item_mpxxdbc3_2_s3d7ag",
+        "itemName": "Towel",
+        "qty": 1,
+        "unitAmount": 0,
+        "amount": 0,
+        "direction": 0,
+        "guest": "Tim Lakner",
+        "room": "203",
+        "pax": null,
+        "shiftId": "shift_mpy3b19n_5_j6nxol",
+        "shiftLabel": "PM",
+        "businessDate": "2026-10-14",
+        "staff": "Marie",
+        "staffRole": "staff",
+        "note": "Towel exchange: #411 → #157 (deposit #18881)",
+        "towelNo": "157",
+        "oldTowelNo": "411",
+        "towelLost": false,
+        "refundsSeq": null,
+        "exchangesSeq": 18881,
+        "mewsRes": "",
+        "privateRoom": false,
+        "reversesId": null,
+        "prevHash": "0ba880b3d9331007484ff33640aba573c219a11485c8671a6a9a3f89d50effd8",
+        "hash": "e3819d6e6019020c3c5ff54c4bbb21767787eb50474393af7bfe6a2c6826a799"
+      },
+      {
+        "seq": 18972,
+        "id": "txn_mv7e0nl3_k_z5pjow",
+        "ts": "2026-10-14T00:44:30.951Z",
+        "kind": "refund",
+        "itemTypeId": "item_mpxxdbc3_2_s3d7ag",
+        "itemName": "Towel",
+        "qty": 1,
+        "unitAmount": 1000,
+        "amount": 1000,
+        "direction": -1,
+        "guest": "Tim Lakner",
+        "room": "203",
+        "pax": null,
+        "shiftId": "shift_mpy3b19n_5_j6nxol",
+        "shiftLabel": "PM",
+        "businessDate": "2026-10-14",
+        "staff": "Marie",
+        "staffRole": "staff",
+        "note": "",
+        "towelNo": "157",
+        "oldTowelNo": "",
+        "towelLost": false,
+        "refundsSeq": 18881,
+        "exchangesSeq": null,
+        "mewsRes": "",
+        "privateRoom": false,
+        "reversesId": null,
+        "prevHash": "e3819d6e6019020c3c5ff54c4bbb21767787eb50474393af7bfe6a2c6826a799",
+        "hash": "5e61f0a4f4004b2c116c0c42eb477ba5cff16f0a5e3cb3d25ac3f8b764b958ce"
       }
     ],
     "audit": [
@@ -589953,6 +590015,59 @@
         },
         "prevHash": "2a6fd2f6f23edf56609355c44b9bbc95e9e88a4b07286d8026f5c003cd2a6091",
         "hash": "723c7d460b1cb14a2f1aa1f73f7e3eb4a8f36b0a3a7c4abd228c53259881d6eb"
+      },
+      {
+        "seq": 6954,
+        "id": "aud_mv7d04ln_h_behcgu",
+        "ts": "2026-10-14T00:16:06.731Z",
+        "actor": "Marie",
+        "role": "staff",
+        "action": "backup.github",
+        "what": "Backup committed to thethreethreethree/FRONT-DESK-TRANSACTION-TRACKER@main (auto-sync)",
+        "details": {
+          "reason": "auto-sync",
+          "coh": 31800,
+          "entries": 18970
+        },
+        "prevHash": "723c7d460b1cb14a2f1aa1f73f7e3eb4a8f36b0a3a7c4abd228c53259881d6eb",
+        "hash": "165592c2f16cf6c0d269a471459924e2eb66ebbb0aed448686f9e8d20794b0e6"
+      },
+      {
+        "seq": 6955,
+        "id": "aud_mv7e0dlr_j_yyres7",
+        "ts": "2026-10-14T00:44:18.015Z",
+        "actor": "Marie",
+        "role": "staff",
+        "action": "towel.exchange",
+        "what": "Towel exchange · Tim Lakner · #411 → #157 (deposit #18881)",
+        "details": {
+          "oldTowelNo": "411",
+          "newTowelNo": "157",
+          "exchangesSeq": 18881,
+          "guest": "Tim Lakner",
+          "room": "203"
+        },
+        "prevHash": "165592c2f16cf6c0d269a471459924e2eb66ebbb0aed448686f9e8d20794b0e6",
+        "hash": "3c9a2cb36306d6dd38e5e1a307316abc1e5c269b1aa8295cc007d42b172567ea"
+      },
+      {
+        "seq": 6956,
+        "id": "aud_mv7e0nl3_l_2xp02a",
+        "ts": "2026-10-14T00:44:30.951Z",
+        "actor": "Marie",
+        "role": "staff",
+        "action": "refund.create",
+        "what": "Refund ₱1,000.00 · Towel ×1 · Tim Lakner",
+        "details": {
+          "ref": 18972,
+          "id": "txn_mv7e0nl3_k_z5pjow",
+          "amount": 1000,
+          "item": "Towel",
+          "guest": "Tim Lakner",
+          "room": "203"
+        },
+        "prevHash": "3c9a2cb36306d6dd38e5e1a307316abc1e5c269b1aa8295cc007d42b172567ea",
+        "hash": "a4ffb4ab51c9c26ee3e16768172cf0600b2a38aae61cf18d14254b28da47142f"
       }
     ],
     "towels": [
