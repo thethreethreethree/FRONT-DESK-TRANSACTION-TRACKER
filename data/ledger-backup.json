@@ -3,11 +3,11 @@
     "app": "Frendz Front Desk Transaction Tracker",
     "build": "2026-08-19-merge-sync",
     "writtenBy": "Marie",
-    "exportedAt": "2026-10-14T23:42:41.160Z",
+    "exportedAt": "2026-10-15T00:36:50.041Z",
     "version": 1,
-    "coh": 27000,
-    "entries": 18996,
-    "auditEvents": 7013,
+    "coh": 29000,
+    "entries": 18997,
+    "auditEvents": 7015,
     "integrity": {
       "ok": true,
       "brokenAtSeq": null
@@ -41,8 +41,8 @@
         "path": "data/ledger-backup.json",
         "autoSync": true,
         "enabled": true,
-        "lastBackupAt": "2026-10-14T23:41:55.072Z",
-        "lastBackupSha": "a106beedca7c4456214e7a04cc7d98de14acd1e8"
+        "lastBackupAt": "2026-10-14T23:42:53.853Z",
+        "lastBackupSha": "1787b98caf613004e16c8c11416ec32a9613b1f4"
       },
       "towelTracker": {
         "enabled": true,
@@ -473064,6 +473064,37 @@
         "reversesId": null,
         "prevHash": "1764b5b5bf5239b416a1c025b2a09cf1a5cad1e154941e6a39db588d922468fb",
         "hash": "0cede2f120c04995217acdd7f39ba924c4f9389899efa0add85c342b63e1595d"
+      },
+      {
+        "seq": 18997,
+        "id": "txn_mv8t6hgg_s_5dq7ch",
+        "ts": "2026-10-15T00:36:43.360Z",
+        "kind": "deposit",
+        "itemTypeId": "item_mpxxdbc3_2_s3d7ag",
+        "itemName": "Towel",
+        "qty": 2,
+        "unitAmount": 1000,
+        "amount": 2000,
+        "direction": 1,
+        "guest": "Arnav Bharadwaj",
+        "room": "202",
+        "pax": null,
+        "shiftId": "shift_mpy3b19n_5_j6nxol",
+        "shiftLabel": "PM",
+        "businessDate": "2026-10-15",
+        "staff": "Marie",
+        "staffRole": "staff",
+        "note": "",
+        "towelNo": "149 249",
+        "oldTowelNo": "",
+        "towelLost": false,
+        "refundsSeq": null,
+        "exchangesSeq": null,
+        "mewsRes": "",
+        "privateRoom": false,
+        "reversesId": null,
+        "prevHash": "0cede2f120c04995217acdd7f39ba924c4f9389899efa0add85c342b63e1595d",
+        "hash": "e852b5911bb251fd5eee2b2760e4f4ab41edd30dd3976fd767dab8b1e26c3d90"
       }
     ],
     "audit": [
@@ -591776,6 +591807,41 @@
         },
         "prevHash": "108ca699f6073cde2feecbf9f24925ced5e6aff2fdee6d7d478bff956e956b2f",
         "hash": "7248d50968a058ae067ba222e84f0b71a81fc6c5b92c3851ba25e8e710641724"
+      },
+      {
+        "seq": 7014,
+        "id": "aud_mv8r99jy_r_vphrmd",
+        "ts": "2026-10-14T23:42:53.854Z",
+        "actor": "Marie",
+        "role": "staff",
+        "action": "backup.github",
+        "what": "Backup committed to thethreethreethree/FRONT-DESK-TRANSACTION-TRACKER@main (auto-sync)",
+        "details": {
+          "reason": "auto-sync",
+          "coh": 27000,
+          "entries": 18996
+        },
+        "prevHash": "7248d50968a058ae067ba222e84f0b71a81fc6c5b92c3851ba25e8e710641724",
+        "hash": "819cbc5bdefa2ce7dd5d76b9afc51b08ad36e69037e530c3c1eaed987f7128f4"
+      },
+      {
+        "seq": 7015,
+        "id": "aud_mv8t6hgh_t_x3znkv",
+        "ts": "2026-10-15T00:36:43.361Z",
+        "actor": "Marie",
+        "role": "staff",
+        "action": "deposit.create",
+        "what": "Deposit ₱2,000.00 · Towel ×2 · Arnav Bharadwaj",
+        "details": {
+          "ref": 18997,
+          "id": "txn_mv8t6hgg_s_5dq7ch",
+          "amount": 2000,
+          "item": "Towel",
+          "guest": "Arnav Bharadwaj",
+          "room": "202"
+        },
+        "prevHash": "819cbc5bdefa2ce7dd5d76b9afc51b08ad36e69037e530c3c1eaed987f7128f4",
+        "hash": "dbf59c7fd4615ce81f14b29c7806963e945664a4c34d625bf3e2cc026395b75b"
       }
     ],
     "towels": [
