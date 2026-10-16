@@ -3,11 +3,11 @@
     "app": "Frendz Front Desk Transaction Tracker",
     "build": "2026-08-19-merge-sync",
     "writtenBy": "GINO",
-    "exportedAt": "2026-10-16T05:14:08.483Z",
+    "exportedAt": "2026-10-16T05:38:25.584Z",
     "version": 1,
     "coh": 32000,
     "entries": 19023,
-    "auditEvents": 7076,
+    "auditEvents": 7078,
     "integrity": {
       "ok": true,
       "brokenAtSeq": null
@@ -16,7 +16,7 @@
       "ok": true,
       "brokenAtSeq": null
     },
-    "travelistaEntries": 126,
+    "travelistaEntries": 127,
     "travelistaIntegrity": {
       "ok": true,
       "brokenAtSeq": null
@@ -41,8 +41,8 @@
         "path": "data/ledger-backup.json",
         "autoSync": true,
         "enabled": true,
-        "lastBackupAt": "2026-10-16T05:13:09.102Z",
-        "lastBackupSha": "1e37340eb416ac30d0adc2d3351da823ee6725f0"
+        "lastBackupAt": "2026-10-16T05:14:16.291Z",
+        "lastBackupSha": "da9e099b3756887821df79cea4976098078a63d3"
       },
       "towelTracker": {
         "enabled": true,
@@ -593682,6 +593682,43 @@
         },
         "prevHash": "82f028e6f19bdb242e1ef563d0fbe160c2ff60bf5a270f9da14c4d16157ca00a",
         "hash": "d43690d37b300e9363c118d5d36dc40cf1f0bcd460c3976af95cc13c7127d24b"
+      },
+      {
+        "seq": 7077,
+        "id": "aud_mvaij9q4_39_88weu6",
+        "ts": "2026-10-16T05:14:16.444Z",
+        "actor": "GINO",
+        "role": "staff",
+        "action": "backup.github",
+        "what": "Backup committed to thethreethreethree/FRONT-DESK-TRANSACTION-TRACKER@main (auto-sync)",
+        "details": {
+          "reason": "auto-sync",
+          "coh": 32000,
+          "entries": 19023
+        },
+        "prevHash": "d43690d37b300e9363c118d5d36dc40cf1f0bcd460c3976af95cc13c7127d24b",
+        "hash": "18c63ab929a0b5d412c1788a7f110ca6f77e552f86fef71972993cef6499717f"
+      },
+      {
+        "seq": 7078,
+        "id": "aud_mvaje6ux_3b_8rseg5",
+        "ts": "2026-10-16T05:38:19.065Z",
+        "actor": "GINO",
+        "role": "staff",
+        "action": "tv.booking.create",
+        "what": "Travelista booking #127 · El Izmerli OMAR · LIO AIRPORT ×1 pax · ₱2,000 (commission ₱500)",
+        "details": {
+          "ref": 127,
+          "id": "tv_mvaje6ux_3a_7mq0gy",
+          "guest": "El Izmerli OMAR",
+          "destination": "LIO AIRPORT",
+          "pax": 1,
+          "total": 2000,
+          "commission": 500,
+          "bookedBy": "GINO"
+        },
+        "prevHash": "18c63ab929a0b5d412c1788a7f110ca6f77e552f86fef71972993cef6499717f",
+        "hash": "1974be589828a2072fde0588c5afdec0cb3cadd4d4048693a46434838ec82990"
       }
     ],
     "towels": [
@@ -604689,6 +604726,42 @@
           "reversesKind": null,
           "prevHash": "7cd9aa6ed6e9381f47fc793599eb7120489cb4e633a1532cb2e56dc1ad3fadb7",
           "hash": "e90761a61d370643a32b5f30428d8aec718d74bc748641d8aeb8487c91ac5d71"
+        },
+        {
+          "seq": 127,
+          "id": "tv_mvaje6ux_3a_7mq0gy",
+          "ts": "2026-10-16T05:38:19.065Z",
+          "kind": "booking",
+          "direction": 1,
+          "amount": 2000,
+          "departureDate": "2026-10-16",
+          "guest": "El Izmerli OMAR",
+          "destination": "LIO AIRPORT",
+          "destinationId": "dest_mttpa67e_2_el10b1",
+          "pax": 1,
+          "fare": 2000,
+          "fareBasis": "per_pax",
+          "total": 2000,
+          "travelistaShare": 1500,
+          "commission": 500,
+          "bookedBy": "GINO",
+          "remarks": "",
+          "payoutType": "",
+          "payee": "",
+          "method": "",
+          "amendsSeq": null,
+          "dTotal": 0,
+          "dShare": 0,
+          "dCommission": 0,
+          "dPax": 0,
+          "periodKey": "2026-10-B",
+          "staff": "GINO",
+          "staffRole": "staff",
+          "businessDate": "2026-10-16",
+          "reversesId": null,
+          "reversesKind": null,
+          "prevHash": "e90761a61d370643a32b5f30428d8aec718d74bc748641d8aeb8487c91ac5d71",
+          "hash": "596719d27cec1d618095a7b40c5b2201902e8fdc7647f396668e935a7c07380b"
         }
       ]
     }
