@@ -3,11 +3,11 @@
     "app": "Frendz Front Desk Transaction Tracker",
     "build": "2026-08-19-merge-sync",
     "writtenBy": "GINO",
-    "exportedAt": "2026-10-17T10:17:08.364Z",
+    "exportedAt": "2026-10-17T10:18:39.833Z",
     "version": 1,
     "coh": 32800,
-    "entries": 19033,
-    "auditEvents": 7105,
+    "entries": 19034,
+    "auditEvents": 7107,
     "integrity": {
       "ok": true,
       "brokenAtSeq": null
@@ -41,8 +41,8 @@
         "path": "data/ledger-backup.json",
         "autoSync": true,
         "enabled": true,
-        "lastBackupAt": "2026-10-17T04:54:29.612Z",
-        "lastBackupSha": "38dd5e1959ab6d23879a05d5442f2dae9170ed36"
+        "lastBackupAt": "2026-10-17T10:17:18.198Z",
+        "lastBackupSha": "c9d60be9f9796a43c37c049603bbe911043dde59"
       },
       "towelTracker": {
         "enabled": true,
@@ -474211,6 +474211,37 @@
         "reversesId": null,
         "prevHash": "e96fde7c2db76ee7a1b7459a4080238924475fd877e9e0c23f4879d30681774e",
         "hash": "0fe2a6c739183ff44403e43b2aa9da03b3f569e287f43c5a73e3666381e3ce5f"
+      },
+      {
+        "seq": 19034,
+        "id": "txn_mvc8ufvk_4e_yossrk",
+        "ts": "2026-10-17T10:18:33.824Z",
+        "kind": "exchange",
+        "itemTypeId": "item_mpxxdbc3_2_s3d7ag",
+        "itemName": "Towel",
+        "qty": 1,
+        "unitAmount": 0,
+        "amount": 0,
+        "direction": 0,
+        "guest": "NEVE",
+        "room": "409",
+        "pax": null,
+        "shiftId": "shift_mpy3b19n_5_j6nxol",
+        "shiftLabel": "PM",
+        "businessDate": "2026-10-17",
+        "staff": "GINO",
+        "staffRole": "staff",
+        "note": "Towel exchange: #267 148 → #449 274 (deposit #19010)",
+        "towelNo": "449 274",
+        "oldTowelNo": "267 148",
+        "towelLost": false,
+        "refundsSeq": null,
+        "exchangesSeq": 19010,
+        "mewsRes": "",
+        "privateRoom": false,
+        "reversesId": null,
+        "prevHash": "0fe2a6c739183ff44403e43b2aa9da03b3f569e287f43c5a73e3666381e3ce5f",
+        "hash": "a56771fbc30024e896f3f20cb677893e2fd60a3d8cbef4c25b798f49c1b0b8ce"
       }
     ],
     "audit": [
@@ -594472,6 +594503,40 @@
         },
         "prevHash": "a3b23038d8195d70fa4ed3db74ae9c7685d20aedb3fca82a30cfb49c8da8d326",
         "hash": "34a69c9cb35045b0b1f1582a592e441413b15f84438473d6bd1b3bd48a05cfe7"
+      },
+      {
+        "seq": 7106,
+        "id": "aud_mvc8stiu_4d_m81rv1",
+        "ts": "2026-10-17T10:17:18.198Z",
+        "actor": "GINO",
+        "role": "staff",
+        "action": "backup.github",
+        "what": "Backup committed to thethreethreethree/FRONT-DESK-TRANSACTION-TRACKER@main (auto-sync)",
+        "details": {
+          "reason": "auto-sync",
+          "coh": 32800,
+          "entries": 19033
+        },
+        "prevHash": "34a69c9cb35045b0b1f1582a592e441413b15f84438473d6bd1b3bd48a05cfe7",
+        "hash": "4b16a356cff982f621d46e2f5989fc70432f01ec63f2ea278b5a5e9e197a8e60"
+      },
+      {
+        "seq": 7107,
+        "id": "aud_mvc8ufvl_4f_bmazup",
+        "ts": "2026-10-17T10:18:33.825Z",
+        "actor": "GINO",
+        "role": "staff",
+        "action": "towel.exchange",
+        "what": "Towel exchange · NEVE · #267 148 → #449 274 (deposit #19010)",
+        "details": {
+          "oldTowelNo": "267 148",
+          "newTowelNo": "449 274",
+          "exchangesSeq": 19010,
+          "guest": "NEVE",
+          "room": "409"
+        },
+        "prevHash": "4b16a356cff982f621d46e2f5989fc70432f01ec63f2ea278b5a5e9e197a8e60",
+        "hash": "bcc6820b5266dafd20c01335576386dd9d141a29e3334769b6b48c88228662ca"
       }
     ],
     "towels": [
