@@ -3,11 +3,11 @@
     "app": "Frendz Front Desk Transaction Tracker",
     "build": "2026-08-19-merge-sync",
     "writtenBy": "GINO",
-    "exportedAt": "2026-10-17T10:20:17.655Z",
+    "exportedAt": "2026-10-17T10:43:53.764Z",
     "version": 1,
     "coh": 36800,
-    "entries": 19037,
-    "auditEvents": 7112,
+    "entries": 19038,
+    "auditEvents": 7115,
     "integrity": {
       "ok": true,
       "brokenAtSeq": null
@@ -16,7 +16,7 @@
       "ok": true,
       "brokenAtSeq": null
     },
-    "travelistaEntries": 127,
+    "travelistaEntries": 128,
     "travelistaIntegrity": {
       "ok": true,
       "brokenAtSeq": null
@@ -41,8 +41,8 @@
         "path": "data/ledger-backup.json",
         "autoSync": true,
         "enabled": true,
-        "lastBackupAt": "2026-10-17T10:19:29.989Z",
-        "lastBackupSha": "521f6a2accc33b169e10c612457e7b32057fe65c"
+        "lastBackupAt": "2026-10-17T10:20:32.259Z",
+        "lastBackupSha": "4f41b423837d986b09168d640e9a0755e1d07ad9"
       },
       "towelTracker": {
         "enabled": true,
@@ -474335,6 +474335,37 @@
         "reversesId": null,
         "prevHash": "8c9a2bccae11632efff1772dfa110776d5553cacd8e8eb1d50d6f15a490ee766",
         "hash": "f7392212ea208f39a45f6586b3df0f1cdd037e5a49074707bdb9c0251053638a"
+      },
+      {
+        "seq": 19038,
+        "id": "txn_mvc9mgww_4p_3o98ar",
+        "ts": "2026-10-17T10:40:21.536Z",
+        "kind": "exchange",
+        "itemTypeId": "item_mpxxdbc3_2_s3d7ag",
+        "itemName": "Towel",
+        "qty": 1,
+        "unitAmount": 0,
+        "amount": 0,
+        "direction": 0,
+        "guest": "TOR",
+        "room": "303",
+        "pax": null,
+        "shiftId": "shift_mpy3b19n_5_j6nxol",
+        "shiftLabel": "PM",
+        "businessDate": "2026-10-17",
+        "staff": "GINO",
+        "staffRole": "staff",
+        "note": "Towel exchange: #20 → #89 (deposit #18983)",
+        "towelNo": "89",
+        "oldTowelNo": "20",
+        "towelLost": false,
+        "refundsSeq": null,
+        "exchangesSeq": 18983,
+        "mewsRes": "",
+        "privateRoom": false,
+        "reversesId": null,
+        "prevHash": "f7392212ea208f39a45f6586b3df0f1cdd037e5a49074707bdb9c0251053638a",
+        "hash": "6d4c3cce7ccf650b45f32b3589fc01a6f3ed0ea563740140531c4baae1a86054"
       }
     ],
     "audit": [
@@ -594718,6 +594749,61 @@
         },
         "prevHash": "a7edff132d8e80c6b95f303ce51bbab31448e365fc779ba78cab97cb2257ab3f",
         "hash": "6f17afc8c85747f4b45da31c81bbd75caf3e138d11f5ec3ee017f0adfc1f4a5f"
+      },
+      {
+        "seq": 7113,
+        "id": "aud_mvc8wzg4_4o_rpcj60",
+        "ts": "2026-10-17T10:20:32.500Z",
+        "actor": "GINO",
+        "role": "staff",
+        "action": "backup.github",
+        "what": "Backup committed to thethreethreethree/FRONT-DESK-TRANSACTION-TRACKER@main (auto-sync)",
+        "details": {
+          "reason": "auto-sync",
+          "coh": 36800,
+          "entries": 19037
+        },
+        "prevHash": "6f17afc8c85747f4b45da31c81bbd75caf3e138d11f5ec3ee017f0adfc1f4a5f",
+        "hash": "e36b4b46fb8579eb52cdc726cf7504f9e18a6ad49278db2579e90b19a4f1ea7f"
+      },
+      {
+        "seq": 7114,
+        "id": "aud_mvc9mgww_4q_ndsyw4",
+        "ts": "2026-10-17T10:40:21.536Z",
+        "actor": "GINO",
+        "role": "staff",
+        "action": "towel.exchange",
+        "what": "Towel exchange · TOR · #20 → #89 (deposit #18983)",
+        "details": {
+          "oldTowelNo": "20",
+          "newTowelNo": "89",
+          "exchangesSeq": 18983,
+          "guest": "TOR",
+          "room": "303"
+        },
+        "prevHash": "e36b4b46fb8579eb52cdc726cf7504f9e18a6ad49278db2579e90b19a4f1ea7f",
+        "hash": "dd6f670a149334696cfb502491e313f483ac791b79fed34982fc1c52c8957a16"
+      },
+      {
+        "seq": 7115,
+        "id": "aud_mvc9qd3w_4s_sah5rb",
+        "ts": "2026-10-17T10:43:23.228Z",
+        "actor": "GINO",
+        "role": "staff",
+        "action": "tv.booking.create",
+        "what": "Travelista booking #128 · SHADI BADAMI · PPS SHARING VAN ×1 pax · ₱750 (commission ₱100)",
+        "details": {
+          "ref": 128,
+          "id": "tv_mvc9qd3v_4r_f25a0r",
+          "guest": "SHADI BADAMI",
+          "destination": "PPS SHARING VAN",
+          "pax": 1,
+          "total": 750,
+          "commission": 100,
+          "bookedBy": "GINO"
+        },
+        "prevHash": "dd6f670a149334696cfb502491e313f483ac791b79fed34982fc1c52c8957a16",
+        "hash": "e22fc9a373a7450089db1b1fd76a9663cc709c24c4bc5754d708b2150b09c21c"
       }
     ],
     "towels": [
@@ -605761,6 +605847,42 @@
           "reversesKind": null,
           "prevHash": "e90761a61d370643a32b5f30428d8aec718d74bc748641d8aeb8487c91ac5d71",
           "hash": "596719d27cec1d618095a7b40c5b2201902e8fdc7647f396668e935a7c07380b"
+        },
+        {
+          "seq": 128,
+          "id": "tv_mvc9qd3v_4r_f25a0r",
+          "ts": "2026-10-17T10:43:23.227Z",
+          "kind": "booking",
+          "direction": 1,
+          "amount": 750,
+          "departureDate": "2026-10-18",
+          "guest": "SHADI BADAMI",
+          "destination": "PPS SHARING VAN",
+          "destinationId": "dest_msrh2ktf_d_xyn4hg",
+          "pax": 1,
+          "fare": 750,
+          "fareBasis": "per_pax",
+          "total": 750,
+          "travelistaShare": 650,
+          "commission": 100,
+          "bookedBy": "GINO",
+          "remarks": "",
+          "payoutType": "",
+          "payee": "",
+          "method": "",
+          "amendsSeq": null,
+          "dTotal": 0,
+          "dShare": 0,
+          "dCommission": 0,
+          "dPax": 0,
+          "periodKey": "2026-10-B",
+          "staff": "GINO",
+          "staffRole": "staff",
+          "businessDate": "2026-10-17",
+          "reversesId": null,
+          "reversesKind": null,
+          "prevHash": "596719d27cec1d618095a7b40c5b2201902e8fdc7647f396668e935a7c07380b",
+          "hash": "8185f1df58c9ea83e3414878260d17217b3d8cbad660de35f4bfa698cf7c9c4e"
         }
       ]
     }
