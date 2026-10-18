@@ -3,11 +3,11 @@
     "app": "Frendz Front Desk Transaction Tracker",
     "build": "2026-08-19-merge-sync",
     "writtenBy": "darren",
-    "exportedAt": "2026-10-18T05:15:53.488Z",
+    "exportedAt": "2026-10-18T05:17:03.575Z",
     "version": 1,
     "coh": 33800,
     "entries": 19045,
-    "auditEvents": 7140,
+    "auditEvents": 7143,
     "integrity": {
       "ok": true,
       "brokenAtSeq": null
@@ -16,7 +16,7 @@
       "ok": true,
       "brokenAtSeq": null
     },
-    "travelistaEntries": 130,
+    "travelistaEntries": 132,
     "travelistaIntegrity": {
       "ok": true,
       "brokenAtSeq": null
@@ -41,8 +41,8 @@
         "path": "data/ledger-backup.json",
         "autoSync": true,
         "enabled": true,
-        "lastBackupAt": "2026-10-18T05:15:04.477Z",
-        "lastBackupSha": "ad7d59995181252fa9882ca5c89626363c534609"
+        "lastBackupAt": "2026-10-18T05:16:06.999Z",
+        "lastBackupSha": "7cebf7ea1475de1203d7acb16ee45b393fed4c3f"
       },
       "towelTracker": {
         "enabled": true,
@@ -595431,6 +595431,64 @@
         },
         "prevHash": "d3f2feeae6b12f4bf7ecc88e8401a71ec5ad51f481a736fef48b3fb19c9a912d",
         "hash": "fb1b212916424d7cbafb40996ba52879696eebdeed6e85c07fbea9037c755a7a"
+      },
+      {
+        "seq": 7141,
+        "id": "aud_mvddh4ph_f_dxgibh",
+        "ts": "2026-10-18T05:15:57.077Z",
+        "actor": "darren",
+        "role": "manager",
+        "action": "tv.booking.create",
+        "what": "Travelista booking #131 · shuchita krishnan · EL NIDO SHARING VAN ×1 pax · ₱750 (commission ₱100)",
+        "details": {
+          "ref": 131,
+          "id": "tv_mvddh4pg_e_qcybmu",
+          "guest": "shuchita krishnan",
+          "destination": "EL NIDO SHARING VAN",
+          "pax": 1,
+          "total": 750,
+          "commission": 100,
+          "bookedBy": "DARREN"
+        },
+        "prevHash": "fb1b212916424d7cbafb40996ba52879696eebdeed6e85c07fbea9037c755a7a",
+        "hash": "5b7089a5c26361f573f4e213e527d297399454d9acdce80f8640e5934beecb89"
+      },
+      {
+        "seq": 7142,
+        "id": "aud_mvddhcd3_g_9oqtqy",
+        "ts": "2026-10-18T05:16:06.999Z",
+        "actor": "darren",
+        "role": "manager",
+        "action": "backup.github",
+        "what": "Backup committed to thethreethreethree/FRONT-DESK-TRANSACTION-TRACKER@main (auto-sync)",
+        "details": {
+          "reason": "auto-sync",
+          "coh": 33800,
+          "entries": 19045
+        },
+        "prevHash": "5b7089a5c26361f573f4e213e527d297399454d9acdce80f8640e5934beecb89",
+        "hash": "d83e639ad5954cf96d46c9e532246ec2df60507fcf0f494a989ae545f480ba9b"
+      },
+      {
+        "seq": 7143,
+        "id": "aud_mvddhjhw_i_jhg087",
+        "ts": "2026-10-18T05:16:16.244Z",
+        "actor": "darren",
+        "role": "manager",
+        "action": "tv.booking.create",
+        "what": "Travelista booking #132 · anna smart · EL NIDO SHARING VAN ×3 pax · ₱2,250 (commission ₱300)",
+        "details": {
+          "ref": 132,
+          "id": "tv_mvddhjhw_h_8b80h1",
+          "guest": "anna smart",
+          "destination": "EL NIDO SHARING VAN",
+          "pax": 3,
+          "total": 2250,
+          "commission": 300,
+          "bookedBy": "DARREN"
+        },
+        "prevHash": "d83e639ad5954cf96d46c9e532246ec2df60507fcf0f494a989ae545f480ba9b",
+        "hash": "e147020c452f0298164e4b91b4c563ef567fc5563afd48fd9fc46c8550f4fb07"
       }
     ],
     "towels": [
@@ -606582,6 +606640,78 @@
           "reversesKind": null,
           "prevHash": "8826f0550aea5ab59b4bc4b89e887feafca458e1af330fde61f4b8b3109e820c",
           "hash": "3e4b932dfb51e6d97345838478d15fb0f99ab187c1c6190bb7800c8d7e9ca35d"
+        },
+        {
+          "seq": 131,
+          "id": "tv_mvddh4pg_e_qcybmu",
+          "ts": "2026-10-18T05:15:57.076Z",
+          "kind": "booking",
+          "direction": 1,
+          "amount": 750,
+          "departureDate": "2026-10-14",
+          "guest": "shuchita krishnan",
+          "destination": "EL NIDO SHARING VAN",
+          "destinationId": "dest_msrh30tg_g_n0iv15",
+          "pax": 1,
+          "fare": 750,
+          "fareBasis": "per_pax",
+          "total": 750,
+          "travelistaShare": 650,
+          "commission": 100,
+          "bookedBy": "DARREN",
+          "remarks": "",
+          "payoutType": "",
+          "payee": "",
+          "method": "",
+          "amendsSeq": null,
+          "dTotal": 0,
+          "dShare": 0,
+          "dCommission": 0,
+          "dPax": 0,
+          "periodKey": "2026-10-A",
+          "staff": "darren",
+          "staffRole": "manager",
+          "businessDate": "2026-10-18",
+          "reversesId": null,
+          "reversesKind": null,
+          "prevHash": "3e4b932dfb51e6d97345838478d15fb0f99ab187c1c6190bb7800c8d7e9ca35d",
+          "hash": "14358cda9487c9f091fa8747a0e1314294de481bb7160fea618a1566b1a44c67"
+        },
+        {
+          "seq": 132,
+          "id": "tv_mvddhjhw_h_8b80h1",
+          "ts": "2026-10-18T05:16:16.244Z",
+          "kind": "booking",
+          "direction": 1,
+          "amount": 2250,
+          "departureDate": "2026-10-15",
+          "guest": "anna smart",
+          "destination": "EL NIDO SHARING VAN",
+          "destinationId": "dest_msrh30tg_g_n0iv15",
+          "pax": 3,
+          "fare": 750,
+          "fareBasis": "per_pax",
+          "total": 2250,
+          "travelistaShare": 1950,
+          "commission": 300,
+          "bookedBy": "DARREN",
+          "remarks": "",
+          "payoutType": "",
+          "payee": "",
+          "method": "",
+          "amendsSeq": null,
+          "dTotal": 0,
+          "dShare": 0,
+          "dCommission": 0,
+          "dPax": 0,
+          "periodKey": "2026-10-A",
+          "staff": "darren",
+          "staffRole": "manager",
+          "businessDate": "2026-10-18",
+          "reversesId": null,
+          "reversesKind": null,
+          "prevHash": "14358cda9487c9f091fa8747a0e1314294de481bb7160fea618a1566b1a44c67",
+          "hash": "a66d440ac531e1f12cb1a8057b2a91137eae686dbb8174ef2455bb3887f828b2"
         }
       ]
     }
