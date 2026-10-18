@@ -3,11 +3,11 @@
     "app": "Frendz Front Desk Transaction Tracker",
     "build": "2026-08-19-merge-sync",
     "writtenBy": "darren",
-    "exportedAt": "2026-10-18T06:42:11.290Z",
+    "exportedAt": "2026-10-18T06:43:18.918Z",
     "version": 1,
     "coh": 33800,
     "entries": 19045,
-    "auditEvents": 7158,
+    "auditEvents": 7160,
     "integrity": {
       "ok": true,
       "brokenAtSeq": null
@@ -16,7 +16,7 @@
       "ok": true,
       "brokenAtSeq": null
     },
-    "travelistaEntries": 134,
+    "travelistaEntries": 135,
     "travelistaIntegrity": {
       "ok": true,
       "brokenAtSeq": null
@@ -41,8 +41,8 @@
         "path": "data/ledger-backup.json",
         "autoSync": true,
         "enabled": true,
-        "lastBackupAt": "2026-10-18T06:41:09.149Z",
-        "lastBackupSha": "92eae497f45de2708245dca37afb76bce2043510"
+        "lastBackupAt": "2026-10-18T06:42:20.481Z",
+        "lastBackupSha": "c33acc7a25b1c5b99fa489b2cb9a8baadb2009da"
       },
       "towelTracker": {
         "enabled": true,
@@ -595787,6 +595787,43 @@
         },
         "prevHash": "63d30d8fbb451ad9d2484dbc59a77a81801082c83ca479493413a7aa3c7e3ee3",
         "hash": "f49179a47056fb06bf54250e6703dd8c3e579a87953d02a4d87206a8056d5c84"
+      },
+      {
+        "seq": 7159,
+        "id": "aud_mvdgk88x_z_htpn4i",
+        "ts": "2026-10-18T06:42:20.481Z",
+        "actor": "darren",
+        "role": "manager",
+        "action": "backup.github",
+        "what": "Backup committed to thethreethreethree/FRONT-DESK-TRANSACTION-TRACKER@main (auto-sync)",
+        "details": {
+          "reason": "auto-sync",
+          "coh": 33800,
+          "entries": 19045
+        },
+        "prevHash": "f49179a47056fb06bf54250e6703dd8c3e579a87953d02a4d87206a8056d5c84",
+        "hash": "3e3dbd4cae231a56be358531b2ced51a0574f763376bdba659efc3bf285be677"
+      },
+      {
+        "seq": 7160,
+        "id": "aud_mvdgkkxh_11_axnxn1",
+        "ts": "2026-10-18T06:42:36.917Z",
+        "actor": "darren",
+        "role": "manager",
+        "action": "tv.booking.create",
+        "what": "Travelista booking #135 · DAVID KIELY · LIO AIRPORT TO FRENDZ ×1 pax · ₱2,000 (commission ₱800)",
+        "details": {
+          "ref": 135,
+          "id": "tv_mvdgkkxg_10_milrmm",
+          "guest": "DAVID KIELY",
+          "destination": "LIO AIRPORT TO FRENDZ",
+          "pax": 1,
+          "total": 2000,
+          "commission": 800,
+          "bookedBy": "DARREN"
+        },
+        "prevHash": "3e3dbd4cae231a56be358531b2ced51a0574f763376bdba659efc3bf285be677",
+        "hash": "6856e968faef8ff1684019761fe7482d3f9e530598cb8219f94a685c5981275a"
       }
     ],
     "towels": [
@@ -607093,6 +607130,42 @@
           "reversesKind": "booking",
           "prevHash": "a2605df14cb56a21ccefa96856dfe35b8c5af6abe2633ace6092410e3090ad1a",
           "hash": "86d9a2f869df005af25acbdb6e2a67667746db14c6993842475e18834c2796a5"
+        },
+        {
+          "seq": 135,
+          "id": "tv_mvdgkkxg_10_milrmm",
+          "ts": "2026-10-18T06:42:36.916Z",
+          "kind": "booking",
+          "direction": 1,
+          "amount": 2000,
+          "departureDate": "2026-10-08",
+          "guest": "DAVID KIELY",
+          "destination": "LIO AIRPORT TO FRENDZ",
+          "destinationId": "dest_mvdgh24w_r_jxkslp",
+          "pax": 1,
+          "fare": 2000,
+          "fareBasis": "per_pax",
+          "total": 2000,
+          "travelistaShare": 1200,
+          "commission": 800,
+          "bookedBy": "DARREN",
+          "remarks": "",
+          "payoutType": "",
+          "payee": "",
+          "method": "",
+          "amendsSeq": null,
+          "dTotal": 0,
+          "dShare": 0,
+          "dCommission": 0,
+          "dPax": 0,
+          "periodKey": "2026-10-A",
+          "staff": "darren",
+          "staffRole": "manager",
+          "businessDate": "2026-10-18",
+          "reversesId": null,
+          "reversesKind": null,
+          "prevHash": "86d9a2f869df005af25acbdb6e2a67667746db14c6993842475e18834c2796a5",
+          "hash": "c4cb9938647299ac6076d29c1e34bd42e061311e8ef3a9e7e0b82b0d8eed32a2"
         }
       ]
     }
