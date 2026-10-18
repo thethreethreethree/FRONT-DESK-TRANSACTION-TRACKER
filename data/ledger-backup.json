@@ -3,11 +3,11 @@
     "app": "Frendz Front Desk Transaction Tracker",
     "build": "2026-08-19-merge-sync",
     "writtenBy": "darren",
-    "exportedAt": "2026-10-18T05:14:49.555Z",
+    "exportedAt": "2026-10-18T05:15:53.488Z",
     "version": 1,
     "coh": 33800,
     "entries": 19045,
-    "auditEvents": 7138,
+    "auditEvents": 7140,
     "integrity": {
       "ok": true,
       "brokenAtSeq": null
@@ -16,7 +16,7 @@
       "ok": true,
       "brokenAtSeq": null
     },
-    "travelistaEntries": 129,
+    "travelistaEntries": 130,
     "travelistaIntegrity": {
       "ok": true,
       "brokenAtSeq": null
@@ -41,7 +41,7 @@
         "path": "data/ledger-backup.json",
         "autoSync": true,
         "enabled": true,
-        "lastBackupAt": "2026-10-18T05:01:42.417Z",
+        "lastBackupAt": "2026-10-18T05:15:04.477Z",
         "lastBackupSha": "ad7d59995181252fa9882ca5c89626363c534609"
       },
       "towelTracker": {
@@ -595394,6 +595394,43 @@
         },
         "prevHash": "f9fdab5edbac34dabf5a2ac3c123dac50ccf84e1e2d186402e0c662f9e06fe33",
         "hash": "7bbb509c18407abe6e78ab3f609b71b951b5d0d18eef4b821ed2e2cf1366ad12"
+      },
+      {
+        "seq": 7139,
+        "id": "aud_mvddg04e_b_icpmev",
+        "ts": "2026-10-18T05:15:04.478Z",
+        "actor": "darren",
+        "role": "manager",
+        "action": "backup.github",
+        "what": "Backup committed to thethreethreethree/FRONT-DESK-TRANSACTION-TRACKER@main (auto-sync)",
+        "details": {
+          "reason": "auto-sync",
+          "coh": 33800,
+          "entries": 19045
+        },
+        "prevHash": "7bbb509c18407abe6e78ab3f609b71b951b5d0d18eef4b821ed2e2cf1366ad12",
+        "hash": "d3f2feeae6b12f4bf7ecc88e8401a71ec5ad51f481a736fef48b3fb19c9a912d"
+      },
+      {
+        "seq": 7140,
+        "id": "aud_mvddgj6l_d_k0evp8",
+        "ts": "2026-10-18T05:15:29.181Z",
+        "actor": "darren",
+        "role": "manager",
+        "action": "tv.booking.create",
+        "what": "Travelista booking #130 · blake healey · EL NIDO SHARING VAN ×3 pax · ₱2,250 (commission ₱300)",
+        "details": {
+          "ref": 130,
+          "id": "tv_mvddgj6l_c_neknlb",
+          "guest": "blake healey",
+          "destination": "EL NIDO SHARING VAN",
+          "pax": 3,
+          "total": 2250,
+          "commission": 300,
+          "bookedBy": "DARREN"
+        },
+        "prevHash": "d3f2feeae6b12f4bf7ecc88e8401a71ec5ad51f481a736fef48b3fb19c9a912d",
+        "hash": "fb1b212916424d7cbafb40996ba52879696eebdeed6e85c07fbea9037c755a7a"
       }
     ],
     "towels": [
@@ -606509,6 +606546,42 @@
           "reversesKind": null,
           "prevHash": "8185f1df58c9ea83e3414878260d17217b3d8cbad660de35f4bfa698cf7c9c4e",
           "hash": "8826f0550aea5ab59b4bc4b89e887feafca458e1af330fde61f4b8b3109e820c"
+        },
+        {
+          "seq": 130,
+          "id": "tv_mvddgj6l_c_neknlb",
+          "ts": "2026-10-18T05:15:29.181Z",
+          "kind": "booking",
+          "direction": 1,
+          "amount": 2250,
+          "departureDate": "2026-10-14",
+          "guest": "blake healey",
+          "destination": "EL NIDO SHARING VAN",
+          "destinationId": "dest_msrh30tg_g_n0iv15",
+          "pax": 3,
+          "fare": 750,
+          "fareBasis": "per_pax",
+          "total": 2250,
+          "travelistaShare": 1950,
+          "commission": 300,
+          "bookedBy": "DARREN",
+          "remarks": "",
+          "payoutType": "",
+          "payee": "",
+          "method": "",
+          "amendsSeq": null,
+          "dTotal": 0,
+          "dShare": 0,
+          "dCommission": 0,
+          "dPax": 0,
+          "periodKey": "2026-10-A",
+          "staff": "darren",
+          "staffRole": "manager",
+          "businessDate": "2026-10-18",
+          "reversesId": null,
+          "reversesKind": null,
+          "prevHash": "8826f0550aea5ab59b4bc4b89e887feafca458e1af330fde61f4b8b3109e820c",
+          "hash": "3e4b932dfb51e6d97345838478d15fb0f99ab187c1c6190bb7800c8d7e9ca35d"
         }
       ]
     }
