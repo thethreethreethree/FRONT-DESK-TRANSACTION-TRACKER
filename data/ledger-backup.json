@@ -3,11 +3,11 @@
     "app": "Frendz Front Desk Transaction Tracker",
     "build": "2026-08-19-merge-sync",
     "writtenBy": "darren",
-    "exportedAt": "2026-10-21T00:47:03.389Z",
+    "exportedAt": "2026-10-21T00:47:25.005Z",
     "version": 1,
     "coh": 23800,
-    "entries": 19079,
-    "auditEvents": 7250,
+    "entries": 19080,
+    "auditEvents": 7252,
     "integrity": {
       "ok": true,
       "brokenAtSeq": null
@@ -41,8 +41,8 @@
         "path": "data/ledger-backup.json",
         "autoSync": true,
         "enabled": true,
-        "lastBackupAt": "2026-10-20T13:01:48.442Z",
-        "lastBackupSha": "1193766861e54d847c2caa11256e187ba7026a07"
+        "lastBackupAt": "2026-10-21T00:47:18.855Z",
+        "lastBackupSha": "324d0e0776a3b1f20f5b7e41a6c752e82b331a50"
       },
       "towelTracker": {
         "enabled": true,
@@ -475637,6 +475637,37 @@
         "reversesId": null,
         "prevHash": "d5b8cf11bc11847b2871e13778b9267aee136627c352d3e493b04c901ea3a149",
         "hash": "4b578a0c7fad606a71afe05aab5e4e7b2781a2fde537e4b9d6a95c1eabc26e96"
+      },
+      {
+        "seq": 19080,
+        "id": "txn_mvhe71tn_4_yuj06j",
+        "ts": "2026-10-21T00:47:11.099Z",
+        "kind": "refund",
+        "itemTypeId": "item_mpxxdbc3_2_s3d7ag",
+        "itemName": "Towel",
+        "qty": 1,
+        "unitAmount": 0,
+        "amount": 0,
+        "direction": -1,
+        "guest": "",
+        "room": "201",
+        "pax": null,
+        "shiftId": "shift_mpy3b19n_5_j6nxol",
+        "shiftLabel": "PM",
+        "businessDate": "2026-10-21",
+        "staff": "darren",
+        "staffRole": "manager",
+        "note": "Guest checked out — private room hold closed, Towel returned (deposit #19017)",
+        "towelNo": "457 209 409 270",
+        "oldTowelNo": "",
+        "towelLost": false,
+        "refundsSeq": 19017,
+        "exchangesSeq": null,
+        "mewsRes": "",
+        "privateRoom": true,
+        "reversesId": null,
+        "prevHash": "4b578a0c7fad606a71afe05aab5e4e7b2781a2fde537e4b9d6a95c1eabc26e96",
+        "hash": "721919b658dd872f6d17651941208c7e97e376c46a74758d1552de90b2d37299"
       }
     ],
     "audit": [
@@ -598391,6 +598422,40 @@
         },
         "prevHash": "24616bf63c10d694957ef97b7fae7232483b20b471db72d6b68206c8d3875453",
         "hash": "9d91215e0412c3c51a558d16200944cbcba21c8c6a73c9527efca271c6da7674"
+      },
+      {
+        "seq": 7251,
+        "id": "aud_mvhe71tn_5_chtjwz",
+        "ts": "2026-10-21T00:47:11.099Z",
+        "actor": "darren",
+        "role": "manager",
+        "action": "privateroom.checkout",
+        "what": "Guest checked out · 201 · Rm 201 · Towel #457 209 409 270 returned (deposit #19017)",
+        "details": {
+          "seq": 19017,
+          "guest": "",
+          "room": "201",
+          "itemName": "Towel",
+          "towelNo": "457 209 409 270"
+        },
+        "prevHash": "9d91215e0412c3c51a558d16200944cbcba21c8c6a73c9527efca271c6da7674",
+        "hash": "5ef7e71a2d24a087b82bfcc68aeb3f2107cfb9efbf6bc7361907fc5b0576de85"
+      },
+      {
+        "seq": 7252,
+        "id": "aud_mvhe77t4_6_an49si",
+        "ts": "2026-10-21T00:47:18.856Z",
+        "actor": "darren",
+        "role": "manager",
+        "action": "backup.github",
+        "what": "Backup committed to thethreethreethree/FRONT-DESK-TRANSACTION-TRACKER@main (auto-sync)",
+        "details": {
+          "reason": "auto-sync",
+          "coh": 23800,
+          "entries": 19080
+        },
+        "prevHash": "5ef7e71a2d24a087b82bfcc68aeb3f2107cfb9efbf6bc7361907fc5b0576de85",
+        "hash": "cb4beca88b7b86202afca2519e071680f92fccc89c7b32e277575db60494afe3"
       }
     ],
     "towels": [
