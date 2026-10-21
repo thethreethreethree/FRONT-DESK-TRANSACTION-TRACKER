@@ -2,12 +2,12 @@
   "meta": {
     "app": "Frendz Front Desk Transaction Tracker",
     "build": "2026-08-19-merge-sync",
-    "writtenBy": "darren",
-    "exportedAt": "2026-10-21T00:54:18.034Z",
+    "writtenBy": "Monie",
+    "exportedAt": "2026-10-21T02:27:13.021Z",
     "version": 1,
     "coh": 23800,
-    "entries": 19088,
-    "auditEvents": 7264,
+    "entries": 19087,
+    "auditEvents": 7263,
     "integrity": {
       "ok": true,
       "brokenAtSeq": null
@@ -16,7 +16,7 @@
       "ok": true,
       "brokenAtSeq": null
     },
-    "travelistaEntries": 141,
+    "travelistaEntries": 142,
     "travelistaIntegrity": {
       "ok": true,
       "brokenAtSeq": null
@@ -41,8 +41,8 @@
         "path": "data/ledger-backup.json",
         "autoSync": true,
         "enabled": true,
-        "lastBackupAt": "2026-10-21T00:52:10.007Z",
-        "lastBackupSha": "304807154db0c1abff0fdfd57cbc751a3838b30f"
+        "lastBackupAt": "2026-10-21T00:51:00.475Z",
+        "lastBackupSha": "960ca3cecae4bd3179383c8bf60f8aafac8cd596"
       },
       "towelTracker": {
         "enabled": true,
@@ -475885,37 +475885,6 @@
         "reversesId": null,
         "prevHash": "48acb0fb46c5a9aff9d0dce834985699a4b348dbd81c9248b8ca14377e2865c0",
         "hash": "e83d15b055ac40a8857e10034dda9785a16085b697102624fbb5dd72fe656f27"
-      },
-      {
-        "seq": 19088,
-        "id": "txn_mvheg1ar_p_fderyh",
-        "ts": "2026-10-21T00:54:10.324Z",
-        "kind": "deposit",
-        "itemTypeId": "item_mpxxdbc3_2_s3d7ag",
-        "itemName": "Towel",
-        "qty": 1,
-        "unitAmount": 0,
-        "amount": 0,
-        "direction": 1,
-        "guest": "Ma. Angela Dizon",
-        "room": "305",
-        "pax": 2,
-        "shiftId": "shift_mpy3b19n_5_j6nxol",
-        "shiftLabel": "PM",
-        "businessDate": "2026-10-21",
-        "staff": "darren",
-        "staffRole": "manager",
-        "note": "",
-        "towelNo": "267 204",
-        "oldTowelNo": "",
-        "towelLost": false,
-        "refundsSeq": null,
-        "exchangesSeq": null,
-        "mewsRes": "",
-        "privateRoom": true,
-        "reversesId": null,
-        "prevHash": "e83d15b055ac40a8857e10034dda9785a16085b697102624fbb5dd72fe656f27",
-        "hash": "350658defac04a872be5bfe5f1dc8af52b53f8b803e146c51bf2129607fe163b"
       }
     ],
     "audit": [
@@ -598881,38 +598850,24 @@
       },
       {
         "seq": 7263,
-        "id": "aud_mvhedggo_o_vug1eb",
-        "ts": "2026-10-21T00:52:10.008Z",
-        "actor": "darren",
-        "role": "manager",
-        "action": "backup.github",
-        "what": "Backup committed to thethreethreethree/FRONT-DESK-TRANSACTION-TRACKER@main (auto-sync)",
+        "id": "aud_mvhhrjlt_2_v462zc",
+        "ts": "2026-10-21T02:27:06.113Z",
+        "actor": "Monie",
+        "role": "staff",
+        "action": "tv.booking.create",
+        "what": "Travelista booking #142 · TIMOTY KOLB · EL NIDO SHARING VAN ×1 pax · ₱750 (commission ₱100)",
         "details": {
-          "reason": "auto-sync",
-          "coh": 23800,
-          "entries": 19087
+          "ref": 142,
+          "id": "tv_mvhhrjls_1_qmapmb",
+          "guest": "TIMOTY KOLB",
+          "destination": "EL NIDO SHARING VAN",
+          "pax": 1,
+          "total": 750,
+          "commission": 100,
+          "bookedBy": "MONIE"
         },
         "prevHash": "5a269b1dd2f7620efc01d92bdf9ec523d925b0ced8e28671739ac127370280ed",
-        "hash": "561d34db6bd1a7b4ef2c63f0ff6e34ca7e62d15c9246ca278ea4607515eb8707"
-      },
-      {
-        "seq": 7264,
-        "id": "aud_mvheg1as_q_fpopa3",
-        "ts": "2026-10-21T00:54:10.324Z",
-        "actor": "darren",
-        "role": "manager",
-        "action": "deposit.create",
-        "what": "Deposit ₱0.00 · Towel ×1 · Ma. Angela Dizon",
-        "details": {
-          "ref": 19088,
-          "id": "txn_mvheg1ar_p_fderyh",
-          "amount": 0,
-          "item": "Towel",
-          "guest": "Ma. Angela Dizon",
-          "room": "305"
-        },
-        "prevHash": "561d34db6bd1a7b4ef2c63f0ff6e34ca7e62d15c9246ca278ea4607515eb8707",
-        "hash": "ab9a731cdc66ba1c1001881cd239c6fd6607d6dfc075bdc483c2bbb592b2603f"
+        "hash": "2d5c30602ac49e452b5cfa2a325935fd01ec2920a32e1cc4f827504093977868"
       }
     ],
     "towels": [
@@ -610471,6 +610426,42 @@
           "reversesKind": null,
           "prevHash": "37741d59c7370e49a8a0811a24004a81b847dec3b0d7b9a95c14c6be14784b03",
           "hash": "55c9c416ab04ff042b29fad9d77a4f193566b6e678d809d1f8532daf275dbb70"
+        },
+        {
+          "seq": 142,
+          "id": "tv_mvhhrjls_1_qmapmb",
+          "ts": "2026-10-21T02:27:06.112Z",
+          "kind": "booking",
+          "direction": 1,
+          "amount": 750,
+          "departureDate": "2026-10-21",
+          "guest": "TIMOTY KOLB",
+          "destination": "EL NIDO SHARING VAN",
+          "destinationId": "dest_msrh30tg_g_n0iv15",
+          "pax": 1,
+          "fare": 750,
+          "fareBasis": "per_pax",
+          "total": 750,
+          "travelistaShare": 650,
+          "commission": 100,
+          "bookedBy": "MONIE",
+          "remarks": "",
+          "payoutType": "",
+          "payee": "",
+          "method": "",
+          "amendsSeq": null,
+          "dTotal": 0,
+          "dShare": 0,
+          "dCommission": 0,
+          "dPax": 0,
+          "periodKey": "2026-10-B",
+          "staff": "Monie",
+          "staffRole": "staff",
+          "businessDate": "2026-10-21",
+          "reversesId": null,
+          "reversesKind": null,
+          "prevHash": "55c9c416ab04ff042b29fad9d77a4f193566b6e678d809d1f8532daf275dbb70",
+          "hash": "d4f93bf3b3525af9eb70978c81008d22bb5f7d1ba9624ce8c5325a963baa8b71"
         }
       ]
     }
