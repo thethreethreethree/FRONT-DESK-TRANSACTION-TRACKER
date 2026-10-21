@@ -3,11 +3,11 @@
     "app": "Frendz Front Desk Transaction Tracker",
     "build": "2026-08-19-merge-sync",
     "writtenBy": "system",
-    "exportedAt": "2026-10-21T09:20:12.751Z",
+    "exportedAt": "2026-10-21T09:21:10.267Z",
     "version": 1,
     "coh": 18800,
     "entries": 19096,
-    "auditEvents": 7283,
+    "auditEvents": 7287,
     "integrity": {
       "ok": true,
       "brokenAtSeq": null
@@ -16,7 +16,7 @@
       "ok": true,
       "brokenAtSeq": null
     },
-    "travelistaEntries": 142,
+    "travelistaEntries": 143,
     "travelistaIntegrity": {
       "ok": true,
       "brokenAtSeq": null
@@ -41,7 +41,7 @@
         "path": "data/ledger-backup.json",
         "autoSync": true,
         "enabled": true,
-        "lastBackupAt": "2026-10-21T05:08:26.777Z",
+        "lastBackupAt": "2026-10-21T09:20:22.573Z",
         "lastBackupSha": "532bda081458dcd89b7f71b6e54085f912baa1fd"
       },
       "towelTracker": {
@@ -599484,6 +599484,69 @@
         "details": {},
         "prevHash": "4c457914321af31e69449478a4fcc22d4188f4a03cf1798a95c26bd30937b683",
         "hash": "a7f7311bba62af0d50465f06db8e9359d179d3e2f74f1e324cd947bcbf5133b4"
+      },
+      {
+        "seq": 7284,
+        "id": "aud_mvhwivfr_s_8tub16",
+        "ts": "2026-10-21T09:20:15.783Z",
+        "actor": "DARREN",
+        "role": "manager",
+        "action": "auth.login",
+        "what": "DARREN signed in as manager",
+        "details": {
+          "role": "manager"
+        },
+        "prevHash": "a7f7311bba62af0d50465f06db8e9359d179d3e2f74f1e324cd947bcbf5133b4",
+        "hash": "aec4c8cc162fcca2c3fd481133d3f020c45fcfcdb19155d8c351d6f9d3b1512e"
+      },
+      {
+        "seq": 7285,
+        "id": "aud_mvhwj0od_t_sodr43",
+        "ts": "2026-10-21T09:20:22.573Z",
+        "actor": "DARREN",
+        "role": "manager",
+        "action": "backup.github",
+        "what": "Backup committed to thethreethreethree/FRONT-DESK-TRANSACTION-TRACKER@main (auto-sync)",
+        "details": {
+          "reason": "auto-sync",
+          "coh": 18800,
+          "entries": 19096
+        },
+        "prevHash": "aec4c8cc162fcca2c3fd481133d3f020c45fcfcdb19155d8c351d6f9d3b1512e",
+        "hash": "9353f027a8d2bb96a2e0e83fda3bd1f7d583bb98b120d59477cc65223071750b"
+      },
+      {
+        "seq": 7286,
+        "id": "aud_mvhwjdq7_v_3rfq3t",
+        "ts": "2026-10-21T09:20:39.487Z",
+        "actor": "DARREN",
+        "role": "manager",
+        "action": "tv.booking.create",
+        "what": "Travelista booking #143 · TINA ZACHMEIER · PPS SHARING VAN ×1 pax · ₱750 (commission ₱100)",
+        "details": {
+          "ref": 143,
+          "id": "tv_mvhwjdq6_u_q3cto5",
+          "guest": "TINA ZACHMEIER",
+          "destination": "PPS SHARING VAN",
+          "pax": 1,
+          "total": 750,
+          "commission": 100,
+          "bookedBy": "DARREN"
+        },
+        "prevHash": "9353f027a8d2bb96a2e0e83fda3bd1f7d583bb98b120d59477cc65223071750b",
+        "hash": "5fda076e16182b40ab2d2d4d247694830ffc173a928245773fff93353d639523"
+      },
+      {
+        "seq": 7287,
+        "id": "aud_mvhwjp8u_w_fskgsn",
+        "ts": "2026-10-21T09:20:54.414Z",
+        "actor": "DARREN",
+        "role": "manager",
+        "action": "auth.logout",
+        "what": "DARREN signed out",
+        "details": {},
+        "prevHash": "5fda076e16182b40ab2d2d4d247694830ffc173a928245773fff93353d639523",
+        "hash": "615702ee02962033dc6b580ab5b22f74100e1f0c0b7cad9a29bfd5eb7f814c6d"
       }
     ],
     "towels": [
@@ -611078,6 +611141,42 @@
           "reversesKind": null,
           "prevHash": "55c9c416ab04ff042b29fad9d77a4f193566b6e678d809d1f8532daf275dbb70",
           "hash": "d4f93bf3b3525af9eb70978c81008d22bb5f7d1ba9624ce8c5325a963baa8b71"
+        },
+        {
+          "seq": 143,
+          "id": "tv_mvhwjdq6_u_q3cto5",
+          "ts": "2026-10-21T09:20:39.486Z",
+          "kind": "booking",
+          "direction": 1,
+          "amount": 750,
+          "departureDate": "2026-10-21",
+          "guest": "TINA ZACHMEIER",
+          "destination": "PPS SHARING VAN",
+          "destinationId": "dest_msrh2ktf_d_xyn4hg",
+          "pax": 1,
+          "fare": 750,
+          "fareBasis": "per_pax",
+          "total": 750,
+          "travelistaShare": 650,
+          "commission": 100,
+          "bookedBy": "DARREN",
+          "remarks": "",
+          "payoutType": "",
+          "payee": "",
+          "method": "",
+          "amendsSeq": null,
+          "dTotal": 0,
+          "dShare": 0,
+          "dCommission": 0,
+          "dPax": 0,
+          "periodKey": "2026-10-B",
+          "staff": "DARREN",
+          "staffRole": "manager",
+          "businessDate": "2026-10-21",
+          "reversesId": null,
+          "reversesKind": null,
+          "prevHash": "d4f93bf3b3525af9eb70978c81008d22bb5f7d1ba9624ce8c5325a963baa8b71",
+          "hash": "3c32fa319649a75b437b1dc5e93aa5fa7c02e8085d07a4982bd883a3e6624867"
         }
       ]
     }
