@@ -3,11 +3,11 @@
     "app": "Frendz Front Desk Transaction Tracker",
     "build": "2026-08-19-merge-sync",
     "writtenBy": "DARREN",
-    "exportedAt": "2026-10-22T12:23:49.383Z",
+    "exportedAt": "2026-10-22T12:24:14.561Z",
     "version": 1,
-    "coh": 28800,
-    "entries": 19109,
-    "auditEvents": 7332,
+    "coh": 27800,
+    "entries": 19110,
+    "auditEvents": 7334,
     "integrity": {
       "ok": true,
       "brokenAtSeq": null
@@ -41,8 +41,8 @@
         "path": "data/ledger-backup.json",
         "autoSync": true,
         "enabled": true,
-        "lastBackupAt": "2026-10-22T12:23:42.604Z",
-        "lastBackupSha": "78ce8b82000316c208bed75b21b01fab4e828c2e"
+        "lastBackupAt": "2026-10-22T12:24:07.706Z",
+        "lastBackupSha": "7033db30972e27a18014c969a15c9c76dff888ea"
       },
       "towelTracker": {
         "enabled": true,
@@ -476567,6 +476567,37 @@
         "reversesId": null,
         "prevHash": "06a9981d18da8d9a712683c9bee70b98b9199d6707404a53c810f11e1431b77e",
         "hash": "4c1908bee8dfa4633d1a5a8f7f6cccc73af7d1ad74a54eb53c031aae482082f2"
+      },
+      {
+        "seq": 19110,
+        "id": "txn_mvjij15u_6_mjn7vc",
+        "ts": "2026-10-22T12:24:00.930Z",
+        "kind": "reversal",
+        "itemTypeId": "item_mpxxdbc3_2_s3d7ag",
+        "itemName": "Towel",
+        "qty": 1,
+        "unitAmount": 1000,
+        "amount": 1000,
+        "direction": -1,
+        "guest": "HENRY",
+        "room": "203",
+        "pax": null,
+        "shiftId": "shift_mpy3b19n_5_j6nxol",
+        "shiftLabel": "PM",
+        "businessDate": "2026-10-22",
+        "staff": "DARREN",
+        "staffRole": "manager",
+        "note": "VOID of #19108 (deposit Towel HENRY). Reason: DOUBLE INPUT OF GUEST NAME AND AMOUNT.",
+        "towelNo": "257",
+        "oldTowelNo": "",
+        "towelLost": false,
+        "refundsSeq": null,
+        "exchangesSeq": null,
+        "mewsRes": "",
+        "privateRoom": false,
+        "reversesId": "txn_mvjig4cu_29_twqxqm",
+        "prevHash": "4c1908bee8dfa4633d1a5a8f7f6cccc73af7d1ad74a54eb53c031aae482082f2",
+        "hash": "37f3535b9992dcc65e06c34468a87b0a578138e55f1b388d5f637c1d29da64f3"
       }
     ],
     "audit": [
@@ -600682,6 +600713,38 @@
         },
         "prevHash": "ad0309e1cc6425de4fe68006d14e9c26dc9dc9b67fa0f52c1e8b0b888c1b0744",
         "hash": "aa30abba76b45e681c22b72667e41722a914bb6de3da7de1f4c50f6c035fe7d8"
+      },
+      {
+        "seq": 7333,
+        "id": "aud_mvjij15u_7_7uf9aj",
+        "ts": "2026-10-22T12:24:00.930Z",
+        "actor": "DARREN",
+        "role": "manager",
+        "action": "txn.void",
+        "what": "Voided #19108 (deposit Towel · HENRY · ₱1,000.00)",
+        "details": {
+          "ref": 19108,
+          "reversalSeq": 19110,
+          "reason": "DOUBLE INPUT OF GUEST NAME AND AMOUNT."
+        },
+        "prevHash": "aa30abba76b45e681c22b72667e41722a914bb6de3da7de1f4c50f6c035fe7d8",
+        "hash": "f34a80dc9bbcd55ffa15d37bfe8b86e3e70a7c44d5fda804e838dc6a1b659082"
+      },
+      {
+        "seq": 7334,
+        "id": "aud_mvjij6e2_8_rdyj4s",
+        "ts": "2026-10-22T12:24:07.706Z",
+        "actor": "DARREN",
+        "role": "manager",
+        "action": "backup.github",
+        "what": "Backup committed to thethreethreethree/FRONT-DESK-TRANSACTION-TRACKER@main (auto-sync)",
+        "details": {
+          "reason": "auto-sync",
+          "coh": 28800,
+          "entries": 19110
+        },
+        "prevHash": "f34a80dc9bbcd55ffa15d37bfe8b86e3e70a7c44d5fda804e838dc6a1b659082",
+        "hash": "831fbc642d5b43077a848b097641aea21f34b28b84920b7f262408c8af0f7eef"
       }
     ],
     "towels": [
