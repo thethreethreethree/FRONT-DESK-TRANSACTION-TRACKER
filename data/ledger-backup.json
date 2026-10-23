@@ -3,11 +3,11 @@
     "app": "Frendz Front Desk Transaction Tracker",
     "build": "2026-08-19-merge-sync",
     "writtenBy": "DARREN",
-    "exportedAt": "2026-10-23T10:12:08.499Z",
+    "exportedAt": "2026-10-23T10:12:43.114Z",
     "version": 1,
-    "coh": 26800,
-    "entries": 19120,
-    "auditEvents": 7371,
+    "coh": 25800,
+    "entries": 19121,
+    "auditEvents": 7373,
     "integrity": {
       "ok": true,
       "brokenAtSeq": null
@@ -41,8 +41,8 @@
         "path": "data/ledger-backup.json",
         "autoSync": true,
         "enabled": true,
-        "lastBackupAt": "2026-10-23T10:10:09.087Z",
-        "lastBackupSha": "a5a4d164fee1e34f7ece723eb463216fbd018936"
+        "lastBackupAt": "2026-10-23T10:12:20.354Z",
+        "lastBackupSha": "50504600372c44cb8db66b70b19bf3a9c4985b1a"
       },
       "towelTracker": {
         "enabled": true,
@@ -476908,6 +476908,37 @@
         "reversesId": null,
         "prevHash": "711d869dc6bb158ff9685116cb947968081d5c51ce346aa46c4474919265a7b5",
         "hash": "0bd2a8e4822412e76949666bb5dc903cf017340748b5b537ecff3e2cff003a4f"
+      },
+      {
+        "seq": 19121,
+        "id": "txn_mvkt9w3d_13_9xr5us",
+        "ts": "2026-10-23T10:12:36.409Z",
+        "kind": "reversal",
+        "itemTypeId": "item_mpxxdbc3_2_s3d7ag",
+        "itemName": "Towel",
+        "qty": 1,
+        "unitAmount": 1000,
+        "amount": 1000,
+        "direction": -1,
+        "guest": "ANNUSKA",
+        "room": "207",
+        "pax": null,
+        "shiftId": "shift_mpy3b19n_5_j6nxol",
+        "shiftLabel": "PM",
+        "businessDate": "2026-10-23",
+        "staff": "DARREN",
+        "staffRole": "manager",
+        "note": "VOID of #19119 (deposit Towel ANNUSKA). Reason: WRONG TOWEL NUMBER. SHOULD BE 449 NOT 82",
+        "towelNo": "82",
+        "oldTowelNo": "",
+        "towelLost": false,
+        "refundsSeq": null,
+        "exchangesSeq": null,
+        "mewsRes": "",
+        "privateRoom": false,
+        "reversesId": "txn_mvkt66qx_u_wuqp9k",
+        "prevHash": "0bd2a8e4822412e76949666bb5dc903cf017340748b5b537ecff3e2cff003a4f",
+        "hash": "2e0b992cfc4fad3e64349d8954ebb56b26eb388fcf50d874b5832a51854cbf97"
       }
     ],
     "audit": [
@@ -601639,6 +601670,38 @@
         },
         "prevHash": "eb5ebc66474b67de1cb7d75153759e5afb4b2544fd6ec5f1000eb216d1887ee7",
         "hash": "78989b941102857707539a3e9bbb9add2de15b794b4e88f045827fed00c8a28d"
+      },
+      {
+        "seq": 7372,
+        "id": "aud_mvkt9jpe_12_gsujs6",
+        "ts": "2026-10-23T10:12:20.354Z",
+        "actor": "DARREN",
+        "role": "manager",
+        "action": "backup.github",
+        "what": "Backup committed to thethreethreethree/FRONT-DESK-TRANSACTION-TRACKER@main (auto-sync)",
+        "details": {
+          "reason": "auto-sync",
+          "coh": 26800,
+          "entries": 19120
+        },
+        "prevHash": "78989b941102857707539a3e9bbb9add2de15b794b4e88f045827fed00c8a28d",
+        "hash": "3d5fefeeafba0be1876bc16cd3f4a0edd2df28f02ca89fde18b310bc992b40aa"
+      },
+      {
+        "seq": 7373,
+        "id": "aud_mvkt9w3d_14_unu8i6",
+        "ts": "2026-10-23T10:12:36.409Z",
+        "actor": "DARREN",
+        "role": "manager",
+        "action": "txn.void",
+        "what": "Voided #19119 (deposit Towel · ANNUSKA · ₱1,000.00)",
+        "details": {
+          "ref": 19119,
+          "reversalSeq": 19121,
+          "reason": "WRONG TOWEL NUMBER. SHOULD BE 449 NOT 82"
+        },
+        "prevHash": "3d5fefeeafba0be1876bc16cd3f4a0edd2df28f02ca89fde18b310bc992b40aa",
+        "hash": "09b2e3ee035572fa397520ef02629d7d3dfb6a5049de208c0d158570206aba82"
       }
     ],
     "towels": [
