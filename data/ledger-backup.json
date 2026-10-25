@@ -3,11 +3,11 @@
     "app": "Frendz Front Desk Transaction Tracker",
     "build": "2026-08-19-merge-sync",
     "writtenBy": "Monie",
-    "exportedAt": "2026-10-25T04:19:41.790Z",
+    "exportedAt": "2026-10-25T04:20:06.289Z",
     "version": 1,
-    "coh": 28800,
-    "entries": 19146,
-    "auditEvents": 7442,
+    "coh": 25800,
+    "entries": 19148,
+    "auditEvents": 7445,
     "integrity": {
       "ok": true,
       "brokenAtSeq": null
@@ -41,8 +41,8 @@
         "path": "data/ledger-backup.json",
         "autoSync": true,
         "enabled": true,
-        "lastBackupAt": "2026-10-25T02:52:53.334Z",
-        "lastBackupSha": "59c3d28aab313f6a4c8e7db7bac45ebdd34461bd"
+        "lastBackupAt": "2026-10-25T04:19:58.824Z",
+        "lastBackupSha": "445f83512ed233052e181a6c2c53befecd7d420d"
       },
       "towelTracker": {
         "enabled": true,
@@ -477714,6 +477714,68 @@
         "reversesId": null,
         "prevHash": "30ccd25f1d9bead51abc6a91e541c93b8803e14d156ca721a04312f4c1d5524e",
         "hash": "e8c6351cd78a8f62dade642409902e4ed4f8281744a4860129128b02ec3ae2e5"
+      },
+      {
+        "seq": 19147,
+        "id": "txn_mvnbjt0v_6_kf554v",
+        "ts": "2026-10-25T04:19:44.431Z",
+        "kind": "refund",
+        "itemTypeId": "item_mpxxdbc3_2_s3d7ag",
+        "itemName": "Towel",
+        "qty": 1,
+        "unitAmount": 2000,
+        "amount": 2000,
+        "direction": -1,
+        "guest": "FLORINE",
+        "room": "302",
+        "pax": null,
+        "shiftId": "shift_mpy3b19n_5_j6nxol",
+        "shiftLabel": "PM",
+        "businessDate": "2026-10-25",
+        "staff": "Monie",
+        "staffRole": "staff",
+        "note": "",
+        "towelNo": "142 276",
+        "oldTowelNo": "",
+        "towelLost": false,
+        "refundsSeq": 19143,
+        "exchangesSeq": null,
+        "mewsRes": "",
+        "privateRoom": false,
+        "reversesId": null,
+        "prevHash": "e8c6351cd78a8f62dade642409902e4ed4f8281744a4860129128b02ec3ae2e5",
+        "hash": "6ad568a0a3e44ebf67887e16bdf0f70a1184f9a0dec9b05338cf62821bc12827"
+      },
+      {
+        "seq": 19148,
+        "id": "txn_mvnbjz0n_8_s9cnd5",
+        "ts": "2026-10-25T04:19:52.199Z",
+        "kind": "refund",
+        "itemTypeId": "item_mpxxdbc3_2_s3d7ag",
+        "itemName": "Towel",
+        "qty": 1,
+        "unitAmount": 1000,
+        "amount": 1000,
+        "direction": -1,
+        "guest": "EDWARD",
+        "room": "408",
+        "pax": null,
+        "shiftId": "shift_mpy3b19n_5_j6nxol",
+        "shiftLabel": "PM",
+        "businessDate": "2026-10-25",
+        "staff": "Monie",
+        "staffRole": "staff",
+        "note": "",
+        "towelNo": "407",
+        "oldTowelNo": "",
+        "towelLost": false,
+        "refundsSeq": 19104,
+        "exchangesSeq": null,
+        "mewsRes": "",
+        "privateRoom": false,
+        "reversesId": null,
+        "prevHash": "6ad568a0a3e44ebf67887e16bdf0f70a1184f9a0dec9b05338cf62821bc12827",
+        "hash": "e60bbd2cda26d32f0b71206994119849fdcb8bc2f9c14dfcc673414b3e42b1b3"
       }
     ],
     "audit": [
@@ -603633,6 +603695,60 @@
         },
         "prevHash": "ef2f3d26347c6a80ca02425a66673784b6fb8500548c0831c4ff34a0beada37f",
         "hash": "5f4b6a30bf2dc93b3be2aae2d7deaf6aedea19d4e0a45f0a21aa3f52619cabb2"
+      },
+      {
+        "seq": 7443,
+        "id": "aud_mvnbjt0v_7_dsyio0",
+        "ts": "2026-10-25T04:19:44.431Z",
+        "actor": "Monie",
+        "role": "staff",
+        "action": "refund.create",
+        "what": "Refund ₱2,000.00 · Towel ×1 · FLORINE",
+        "details": {
+          "ref": 19147,
+          "id": "txn_mvnbjt0v_6_kf554v",
+          "amount": 2000,
+          "item": "Towel",
+          "guest": "FLORINE",
+          "room": "302"
+        },
+        "prevHash": "5f4b6a30bf2dc93b3be2aae2d7deaf6aedea19d4e0a45f0a21aa3f52619cabb2",
+        "hash": "58bee5ba08ea9592161c6e7137abe6ed41d87f80ffa270884c40d710580be061"
+      },
+      {
+        "seq": 7444,
+        "id": "aud_mvnbjz0o_9_m194bc",
+        "ts": "2026-10-25T04:19:52.200Z",
+        "actor": "Monie",
+        "role": "staff",
+        "action": "refund.create",
+        "what": "Refund ₱1,000.00 · Towel ×1 · EDWARD",
+        "details": {
+          "ref": 19148,
+          "id": "txn_mvnbjz0n_8_s9cnd5",
+          "amount": 1000,
+          "item": "Towel",
+          "guest": "EDWARD",
+          "room": "408"
+        },
+        "prevHash": "58bee5ba08ea9592161c6e7137abe6ed41d87f80ffa270884c40d710580be061",
+        "hash": "b67a2fde3dd9f88a3f41a9d8b96109e9aaa37514847ac54a6b4e94addde5e7b5"
+      },
+      {
+        "seq": 7445,
+        "id": "aud_mvnbk44o_a_77qlcg",
+        "ts": "2026-10-25T04:19:58.824Z",
+        "actor": "Monie",
+        "role": "staff",
+        "action": "backup.github",
+        "what": "Backup committed to thethreethreethree/FRONT-DESK-TRANSACTION-TRACKER@main (auto-sync)",
+        "details": {
+          "reason": "auto-sync",
+          "coh": 28800,
+          "entries": 19148
+        },
+        "prevHash": "b67a2fde3dd9f88a3f41a9d8b96109e9aaa37514847ac54a6b4e94addde5e7b5",
+        "hash": "35f2cbe7b5218aa769f71443d2992e8bfff1e012fd7ced5a8a1cd074c454d313"
       }
     ],
     "towels": [
