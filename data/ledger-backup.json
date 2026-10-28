@@ -3,11 +3,11 @@
     "app": "Frendz Front Desk Transaction Tracker",
     "build": "2026-08-19-merge-sync",
     "writtenBy": "Marie",
-    "exportedAt": "2026-10-28T11:04:44.509Z",
+    "exportedAt": "2026-10-28T11:33:06.645Z",
     "version": 1,
-    "coh": 62800,
-    "entries": 19238,
-    "auditEvents": 7651,
+    "coh": 61800,
+    "entries": 19239,
+    "auditEvents": 7653,
     "integrity": {
       "ok": true,
       "brokenAtSeq": null
@@ -41,8 +41,8 @@
         "path": "data/ledger-backup.json",
         "autoSync": true,
         "enabled": true,
-        "lastBackupAt": "2026-10-28T10:50:05.494Z",
-        "lastBackupSha": "6ce06ee84b5aca99c8807f40bfb0fe1357466fe3"
+        "lastBackupAt": "2026-10-28T11:05:02.142Z",
+        "lastBackupSha": "c71810ba4eceb65cd8bc3fbe11b30a12c9ab6b24"
       },
       "towelTracker": {
         "enabled": true,
@@ -480566,6 +480566,37 @@
         "reversesId": null,
         "prevHash": "4f32fa0ad1869201bb199605955c0c5e7a89b368856a9ab6e4ce4c97aad05b1e",
         "hash": "8560e6af5c4fe5085f7ebd6dce0773b315134dc8f03ff5e82d1c4a200b371940"
+      },
+      {
+        "seq": 19239,
+        "id": "txn_mvs1cjb9_6d_9tltzd",
+        "ts": "2026-10-28T11:32:59.973Z",
+        "kind": "refund",
+        "itemTypeId": "item_mpxxdbc3_2_s3d7ag",
+        "itemName": "Towel",
+        "qty": 1,
+        "unitAmount": 1000,
+        "amount": 1000,
+        "direction": -1,
+        "guest": "Ignacio Pujol Gil",
+        "room": "307",
+        "pax": null,
+        "shiftId": "shift_mpy3b19n_5_j6nxol",
+        "shiftLabel": "PM",
+        "businessDate": "2026-10-28",
+        "staff": "Marie",
+        "staffRole": "staff",
+        "note": "",
+        "towelNo": "205",
+        "oldTowelNo": "",
+        "towelLost": false,
+        "refundsSeq": 19203,
+        "exchangesSeq": null,
+        "mewsRes": "",
+        "privateRoom": false,
+        "reversesId": null,
+        "prevHash": "8560e6af5c4fe5085f7ebd6dce0773b315134dc8f03ff5e82d1c4a200b371940",
+        "hash": "10be2e6b6afa6fa18fa26084c3822bf5c95215a3efd94ca05dbd547b41aba1fa"
       }
     ],
     "audit": [
@@ -610059,6 +610090,41 @@
         },
         "prevHash": "42df1ad72d8999c568505b671c688e4cc2ae37b3ba950ec5f047c857dac11274",
         "hash": "acf718316773e2bfadb553c04b56f685b438c7ad5a1860690dbf350f632bb26a"
+      },
+      {
+        "seq": 7652,
+        "id": "aud_mvs0cku0_6c_6akzni",
+        "ts": "2026-10-28T11:05:02.328Z",
+        "actor": "Marie",
+        "role": "staff",
+        "action": "backup.github",
+        "what": "Backup committed to thethreethreethree/FRONT-DESK-TRANSACTION-TRACKER@main (auto-sync)",
+        "details": {
+          "reason": "auto-sync",
+          "coh": 62800,
+          "entries": 19238
+        },
+        "prevHash": "acf718316773e2bfadb553c04b56f685b438c7ad5a1860690dbf350f632bb26a",
+        "hash": "e798cf6d8a3a5aacb5e4b0c383adc06b838e5a7e483b3087c74db322c74c9ce4"
+      },
+      {
+        "seq": 7653,
+        "id": "aud_mvs1cjb9_6e_ciswwr",
+        "ts": "2026-10-28T11:32:59.973Z",
+        "actor": "Marie",
+        "role": "staff",
+        "action": "refund.create",
+        "what": "Refund ₱1,000.00 · Towel ×1 · Ignacio Pujol Gil",
+        "details": {
+          "ref": 19239,
+          "id": "txn_mvs1cjb9_6d_9tltzd",
+          "amount": 1000,
+          "item": "Towel",
+          "guest": "Ignacio Pujol Gil",
+          "room": "307"
+        },
+        "prevHash": "e798cf6d8a3a5aacb5e4b0c383adc06b838e5a7e483b3087c74db322c74c9ce4",
+        "hash": "ae17ee2320f95cfbc7c0dc97ee70f94bcf079c478190d4d39ef1f23eaa4a22b1"
       }
     ],
     "towels": [
