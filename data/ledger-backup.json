@@ -3,11 +3,11 @@
     "app": "Frendz Front Desk Transaction Tracker",
     "build": "2026-08-19-merge-sync",
     "writtenBy": "Marie",
-    "exportedAt": "2026-10-28T05:51:42.248Z",
+    "exportedAt": "2026-10-28T07:01:49.261Z",
     "version": 1,
-    "coh": 48800,
-    "entries": 19227,
-    "auditEvents": 7631,
+    "coh": 50800,
+    "entries": 19228,
+    "auditEvents": 7633,
     "integrity": {
       "ok": true,
       "brokenAtSeq": null
@@ -41,8 +41,8 @@
         "path": "data/ledger-backup.json",
         "autoSync": true,
         "enabled": true,
-        "lastBackupAt": "2026-10-28T05:03:03.235Z",
-        "lastBackupSha": "8439db661659ca0307ddeeda34472d319ed1e46b"
+        "lastBackupAt": "2026-10-28T05:51:52.069Z",
+        "lastBackupSha": "2e9882db7bc378865060be4527c948803141845f"
       },
       "towelTracker": {
         "enabled": true,
@@ -480225,6 +480225,37 @@
         "reversesId": null,
         "prevHash": "21885e6d17e58bc89f9a57855ac8d95ae399e389dac5a4b8032e9098af2dccb4",
         "hash": "15c7a8b90d01c9ac87d0ea084ba09a0ebaadb05a3b4c51fd9bb7b0a72bc0a080"
+      },
+      {
+        "seq": 19228,
+        "id": "txn_mvrrnmw7_5i_k6bnq6",
+        "ts": "2026-10-28T07:01:41.671Z",
+        "kind": "deposit",
+        "itemTypeId": "item_mpxxdbc3_2_s3d7ag",
+        "itemName": "Towel",
+        "qty": 2,
+        "unitAmount": 1000,
+        "amount": 2000,
+        "direction": 1,
+        "guest": "Emma SANDNER",
+        "room": "202",
+        "pax": null,
+        "shiftId": "shift_mpy3b19n_5_j6nxol",
+        "shiftLabel": "PM",
+        "businessDate": "2026-10-28",
+        "staff": "Marie",
+        "staffRole": "staff",
+        "note": "",
+        "towelNo": "264 65",
+        "oldTowelNo": "",
+        "towelLost": false,
+        "refundsSeq": null,
+        "exchangesSeq": null,
+        "mewsRes": "",
+        "privateRoom": false,
+        "reversesId": null,
+        "prevHash": "15c7a8b90d01c9ac87d0ea084ba09a0ebaadb05a3b4c51fd9bb7b0a72bc0a080",
+        "hash": "b4daaeb24ec91b04f7eb26805ab38dd9e75d34da4f3b7576bc0554ccac85b288"
       }
     ],
     "audit": [
@@ -609366,6 +609397,41 @@
         },
         "prevHash": "3ca91438e8b8aeb7d9a8a2b605e9c379b7119a12a36623e64929aa79feb88519",
         "hash": "626560ba58661909dcc82d74d72732bee2d1abccc10141a6354bdbbed023097d"
+      },
+      {
+        "seq": 7632,
+        "id": "aud_mvrp5ubk_5h_lu064l",
+        "ts": "2026-10-28T05:51:52.256Z",
+        "actor": "Marie",
+        "role": "staff",
+        "action": "backup.github",
+        "what": "Backup committed to thethreethreethree/FRONT-DESK-TRANSACTION-TRACKER@main (auto-sync)",
+        "details": {
+          "reason": "auto-sync",
+          "coh": 48800,
+          "entries": 19227
+        },
+        "prevHash": "626560ba58661909dcc82d74d72732bee2d1abccc10141a6354bdbbed023097d",
+        "hash": "329d7ca0d861cab4c2a9496ecb23d20a2eec1e277d336292c2844be3495398c6"
+      },
+      {
+        "seq": 7633,
+        "id": "aud_mvrrnmw8_5j_xne5m9",
+        "ts": "2026-10-28T07:01:41.672Z",
+        "actor": "Marie",
+        "role": "staff",
+        "action": "deposit.create",
+        "what": "Deposit ₱2,000.00 · Towel ×2 · Emma SANDNER",
+        "details": {
+          "ref": 19228,
+          "id": "txn_mvrrnmw7_5i_k6bnq6",
+          "amount": 2000,
+          "item": "Towel",
+          "guest": "Emma SANDNER",
+          "room": "202"
+        },
+        "prevHash": "329d7ca0d861cab4c2a9496ecb23d20a2eec1e277d336292c2844be3495398c6",
+        "hash": "cb70b4e0233f8e984a0fb8371d3ebc80f34cf0cc2e129401054ff8731294fc00"
       }
     ],
     "towels": [
