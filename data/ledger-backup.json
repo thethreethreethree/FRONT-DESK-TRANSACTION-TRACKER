@@ -3,11 +3,11 @@
     "app": "Frendz Front Desk Transaction Tracker",
     "build": "2026-08-19-merge-sync",
     "writtenBy": "Chalyn",
-    "exportedAt": "2026-10-27T13:12:01.770Z",
+    "exportedAt": "2026-10-28T04:03:01.395Z",
     "version": 1,
     "coh": 54800,
     "entries": 19214,
-    "auditEvents": 7597,
+    "auditEvents": 7599,
     "integrity": {
       "ok": true,
       "brokenAtSeq": null
@@ -16,7 +16,7 @@
       "ok": true,
       "brokenAtSeq": null
     },
-    "travelistaEntries": 149,
+    "travelistaEntries": 150,
     "travelistaIntegrity": {
       "ok": true,
       "brokenAtSeq": null
@@ -41,8 +41,8 @@
         "path": "data/ledger-backup.json",
         "autoSync": true,
         "enabled": true,
-        "lastBackupAt": "2026-10-27T11:26:51.806Z",
-        "lastBackupSha": "b2b03b0762f7763d181950fdb2f0d0f1726d9d99"
+        "lastBackupAt": "2026-10-27T13:12:29.769Z",
+        "lastBackupSha": "d00801454c68bbafae7f0aeb99a8d557e20a9243"
       },
       "towelTracker": {
         "enabled": true,
@@ -608382,6 +608382,43 @@
         },
         "prevHash": "439d1eddc848108e9e198f4183aab3a06819ded27305bc5b102a923c68f5b629",
         "hash": "dacf876afbabce8878ee3cddeb0402a8742d9bcf0e63200ccbc51150b52c8b32"
+      },
+      {
+        "seq": 7598,
+        "id": "aud_mvqpgn34_44_wvd2ch",
+        "ts": "2026-10-27T13:12:29.920Z",
+        "actor": "Chalyn",
+        "role": "staff",
+        "action": "backup.github",
+        "what": "Backup committed to thethreethreethree/FRONT-DESK-TRANSACTION-TRACKER@main (auto-sync)",
+        "details": {
+          "reason": "auto-sync",
+          "coh": 54800,
+          "entries": 19214
+        },
+        "prevHash": "dacf876afbabce8878ee3cddeb0402a8742d9bcf0e63200ccbc51150b52c8b32",
+        "hash": "0bf86d64fda6b8b28313f59d322d83906fb4b792cf4820d743cf55dcad46dceb"
+      },
+      {
+        "seq": 7599,
+        "id": "aud_mvrl9pxi_46_6gsop1",
+        "ts": "2026-10-28T04:02:54.726Z",
+        "actor": "Chalyn",
+        "role": "staff",
+        "action": "tv.booking.create",
+        "what": "Travelista booking #150 · EMMA GILL · EL NIDO SHARING VAN ×1 pax · ₱750 (commission ₱100)",
+        "details": {
+          "ref": 150,
+          "id": "tv_mvrl9pxi_45_0et1xi",
+          "guest": "EMMA GILL",
+          "destination": "EL NIDO SHARING VAN",
+          "pax": 1,
+          "total": 750,
+          "commission": 100,
+          "bookedBy": "CHALYN"
+        },
+        "prevHash": "0bf86d64fda6b8b28313f59d322d83906fb4b792cf4820d743cf55dcad46dceb",
+        "hash": "756dd5ac6ed5886d081ec29fde3a88d0a5830695be0824d48f80758cc1aaf578"
       }
     ],
     "towels": [
@@ -620228,6 +620265,42 @@
           "reversesKind": null,
           "prevHash": "32c71e2d2fa11732f6cd75d96da1490c0ffafb11ce4b16bcdbe40cc03514d863",
           "hash": "6a7b9ef423403ac32604eca059f5c7bb996047f35ba62f00b7d0bb1088d6fc74"
+        },
+        {
+          "seq": 150,
+          "id": "tv_mvrl9pxi_45_0et1xi",
+          "ts": "2026-10-28T04:02:54.726Z",
+          "kind": "booking",
+          "direction": 1,
+          "amount": 750,
+          "departureDate": "2026-10-28",
+          "guest": "EMMA GILL",
+          "destination": "EL NIDO SHARING VAN",
+          "destinationId": "dest_msrh30tg_g_n0iv15",
+          "pax": 1,
+          "fare": 750,
+          "fareBasis": "per_pax",
+          "total": 750,
+          "travelistaShare": 650,
+          "commission": 100,
+          "bookedBy": "CHALYN",
+          "remarks": "",
+          "payoutType": "",
+          "payee": "",
+          "method": "",
+          "amendsSeq": null,
+          "dTotal": 0,
+          "dShare": 0,
+          "dCommission": 0,
+          "dPax": 0,
+          "periodKey": "2026-10-B",
+          "staff": "Chalyn",
+          "staffRole": "staff",
+          "businessDate": "2026-10-28",
+          "reversesId": null,
+          "reversesKind": null,
+          "prevHash": "6a7b9ef423403ac32604eca059f5c7bb996047f35ba62f00b7d0bb1088d6fc74",
+          "hash": "d134b9279f464f52f2d20c5d55b716fea814b68a6bf70b96b45faa5a5753ba54"
         }
       ]
     }
