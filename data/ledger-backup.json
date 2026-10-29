@@ -3,11 +3,11 @@
     "app": "Frendz Front Desk Transaction Tracker",
     "build": "2026-08-19-merge-sync",
     "writtenBy": "Marie",
-    "exportedAt": "2026-10-29T08:48:29.179Z",
+    "exportedAt": "2026-10-29T09:06:50.197Z",
     "version": 1,
-    "coh": 55800,
-    "entries": 19263,
-    "auditEvents": 7705,
+    "coh": 54800,
+    "entries": 19264,
+    "auditEvents": 7707,
     "integrity": {
       "ok": true,
       "brokenAtSeq": null
@@ -41,8 +41,8 @@
         "path": "data/ledger-backup.json",
         "autoSync": true,
         "enabled": true,
-        "lastBackupAt": "2026-10-29T08:46:32.522Z",
-        "lastBackupSha": "b5f46e9c91bf886c4685027217c5d181a15b2ca2"
+        "lastBackupAt": "2026-10-29T08:49:12.582Z",
+        "lastBackupSha": "9363d50156ed7ec836640927fc7741e98dcee6e6"
       },
       "towelTracker": {
         "enabled": true,
@@ -481341,6 +481341,37 @@
         "reversesId": null,
         "prevHash": "15b8013972ae0c2fb123b5421a5454efbadc2dd9c54f2ccf0d8f84fedf87c3c6",
         "hash": "1e1a79ad7a3af757b68468c48ad66c9e8bd908b925340658444df452fa82d3b0"
+      },
+      {
+        "seq": 19264,
+        "id": "txn_mvtbg66m_1t_4lcwg7",
+        "ts": "2026-10-29T09:03:31.918Z",
+        "kind": "refund",
+        "itemTypeId": "item_mpxxdbc3_2_s3d7ag",
+        "itemName": "Towel",
+        "qty": 1,
+        "unitAmount": 1000,
+        "amount": 1000,
+        "direction": -1,
+        "guest": "Eve Rose Howlett",
+        "room": "207",
+        "pax": null,
+        "shiftId": "shift_mpy3b19n_5_j6nxol",
+        "shiftLabel": "PM",
+        "businessDate": "2026-10-29",
+        "staff": "Marie",
+        "staffRole": "staff",
+        "note": "",
+        "towelNo": "285",
+        "oldTowelNo": "",
+        "towelLost": false,
+        "refundsSeq": 19208,
+        "exchangesSeq": null,
+        "mewsRes": "",
+        "privateRoom": false,
+        "reversesId": null,
+        "prevHash": "1e1a79ad7a3af757b68468c48ad66c9e8bd908b925340658444df452fa82d3b0",
+        "hash": "60cf748121809e35709be76c14978c3372f1fbd83854a604a24510152a3c3857"
       }
     ],
     "audit": [
@@ -611754,6 +611785,41 @@
         },
         "prevHash": "bd7000d0f9e089abf3fbbaf9fc2f3f1eba86837093e403b4e61c00aacbacecd1",
         "hash": "b2554405ad374d7027fd3f9096b60ca06772ece59ba762bb2066593ef453b903"
+      },
+      {
+        "seq": 7706,
+        "id": "aud_mvtaxr97_1s_uhj2yu",
+        "ts": "2026-10-29T08:49:12.763Z",
+        "actor": "Marie",
+        "role": "staff",
+        "action": "backup.github",
+        "what": "Backup committed to thethreethreethree/FRONT-DESK-TRANSACTION-TRACKER@main (auto-sync)",
+        "details": {
+          "reason": "auto-sync",
+          "coh": 55800,
+          "entries": 19263
+        },
+        "prevHash": "b2554405ad374d7027fd3f9096b60ca06772ece59ba762bb2066593ef453b903",
+        "hash": "53004b713e8b8b7b2f58c94e2db75baa3530d18f335245140e96aa9a8c7f1a2f"
+      },
+      {
+        "seq": 7707,
+        "id": "aud_mvtbg66n_1u_nee1nf",
+        "ts": "2026-10-29T09:03:31.919Z",
+        "actor": "Marie",
+        "role": "staff",
+        "action": "refund.create",
+        "what": "Refund ₱1,000.00 · Towel ×1 · Eve Rose Howlett",
+        "details": {
+          "ref": 19264,
+          "id": "txn_mvtbg66m_1t_4lcwg7",
+          "amount": 1000,
+          "item": "Towel",
+          "guest": "Eve Rose Howlett",
+          "room": "207"
+        },
+        "prevHash": "53004b713e8b8b7b2f58c94e2db75baa3530d18f335245140e96aa9a8c7f1a2f",
+        "hash": "cee1ceed44450a5189e8ef944a33982652a34da89d3c632ba466cbc39719536d"
       }
     ],
     "towels": [
