@@ -2,12 +2,12 @@
   "meta": {
     "app": "Frendz Front Desk Transaction Tracker",
     "build": "2026-08-19-merge-sync",
-    "writtenBy": "Marie",
-    "exportedAt": "2026-10-29T09:32:45.237Z",
+    "writtenBy": "darren",
+    "exportedAt": "2026-10-29T09:42:33.359Z",
     "version": 1,
-    "coh": 60800,
-    "entries": 19268,
-    "auditEvents": 7715,
+    "coh": 58800,
+    "entries": 19269,
+    "auditEvents": 7719,
     "integrity": {
       "ok": true,
       "brokenAtSeq": null
@@ -41,8 +41,8 @@
         "path": "data/ledger-backup.json",
         "autoSync": true,
         "enabled": true,
-        "lastBackupAt": "2026-10-29T09:27:24.553Z",
-        "lastBackupSha": "2dcb8a091d81be61032e306ef159be095e99d0e3"
+        "lastBackupAt": "2026-10-29T09:33:14.988Z",
+        "lastBackupSha": "ad2b7deb32f97c62edf3e315fdb49689ae228ff1"
       },
       "towelTracker": {
         "enabled": true,
@@ -481496,6 +481496,37 @@
         "reversesId": null,
         "prevHash": "6bd8b0b33d1b58f46a64f39b0b5d21c4e0c792b4893b3e290249c92cec8884da",
         "hash": "9a2bf70f1c89e6594185811546ac8cd0438b90873f88e785982813df26497917"
+      },
+      {
+        "seq": 19269,
+        "id": "txn_mvtcu7m0_1_vb6crq",
+        "ts": "2026-10-29T09:42:26.568Z",
+        "kind": "reversal",
+        "itemTypeId": "item_mpxxdbc3_2_s3d7ag",
+        "itemName": "Towel",
+        "qty": 2,
+        "unitAmount": 1000,
+        "amount": 2000,
+        "direction": -1,
+        "guest": "Lauren Kerkemeyer",
+        "room": "308",
+        "pax": null,
+        "shiftId": "shift_mpy3b19n_5_j6nxol",
+        "shiftLabel": "PM",
+        "businessDate": "2026-10-29",
+        "staff": "darren",
+        "staffRole": "manager",
+        "note": "VOID of #19265 (deposit Towel Lauren Kerkemeyer). Reason: double input of deposit, and wrong input of room#.",
+        "towelNo": "81 74",
+        "oldTowelNo": "",
+        "towelLost": false,
+        "refundsSeq": null,
+        "exchangesSeq": null,
+        "mewsRes": "",
+        "privateRoom": false,
+        "reversesId": "txn_mvtc3d9d_1w_2jjs2o",
+        "prevHash": "9a2bf70f1c89e6594185811546ac8cd0438b90873f88e785982813df26497917",
+        "hash": "ee1c9df341f532229daa65ca3919d2671aa5bbe49881fae1b5732c4e57b76b65"
       }
     ],
     "audit": [
@@ -612084,6 +612115,64 @@
         },
         "prevHash": "2e33d9ad159e6d101f8b6daeafa2c5d2cdb69a1c721fa71ce1f770c9bf3bba9c",
         "hash": "486c23d15df7a7d67f19c27b54e2e1b55b90552dd7fd9ca1b0f9048c9d2f04b2"
+      },
+      {
+        "seq": 7716,
+        "id": "aud_mvtcie0d_27_mww01k",
+        "ts": "2026-10-29T09:33:14.989Z",
+        "actor": "Marie",
+        "role": "staff",
+        "action": "backup.github",
+        "what": "Backup committed to thethreethreethree/FRONT-DESK-TRANSACTION-TRACKER@main (auto-sync)",
+        "details": {
+          "reason": "auto-sync",
+          "coh": 60800,
+          "entries": 19268
+        },
+        "prevHash": "486c23d15df7a7d67f19c27b54e2e1b55b90552dd7fd9ca1b0f9048c9d2f04b2",
+        "hash": "f245457ded9f6d03e3072961406d419775077d998fda9db995f0ffff79447800"
+      },
+      {
+        "seq": 7717,
+        "id": "aud_mvtcsx8u_28_6ws6s6",
+        "ts": "2026-10-29T09:41:26.478Z",
+        "actor": "Marie",
+        "role": "staff",
+        "action": "auth.logout",
+        "what": "Marie signed out",
+        "details": {},
+        "prevHash": "f245457ded9f6d03e3072961406d419775077d998fda9db995f0ffff79447800",
+        "hash": "003330293398c66d87ba0bff2259527695bc5613220058738b807241536ede3e"
+      },
+      {
+        "seq": 7718,
+        "id": "aud_mvtct0b4_29_gffqyy",
+        "ts": "2026-10-29T09:41:30.448Z",
+        "actor": "darren",
+        "role": "manager",
+        "action": "auth.login",
+        "what": "darren signed in as manager",
+        "details": {
+          "role": "manager"
+        },
+        "prevHash": "003330293398c66d87ba0bff2259527695bc5613220058738b807241536ede3e",
+        "hash": "900166411c237ba5ead5b07cebcde9a0ab9058bb8c46a9aa7578e37d7ed976c3"
+      },
+      {
+        "seq": 7719,
+        "id": "aud_mvtcu7m1_2_5dr26q",
+        "ts": "2026-10-29T09:42:26.569Z",
+        "actor": "darren",
+        "role": "manager",
+        "action": "txn.void",
+        "what": "Voided #19265 (deposit Towel · Lauren Kerkemeyer · ₱2,000.00)",
+        "details": {
+          "ref": 19265,
+          "reversalSeq": 19269,
+          "reason": "double input of deposit, and wrong input of room#."
+        },
+        "prevHash": "900166411c237ba5ead5b07cebcde9a0ab9058bb8c46a9aa7578e37d7ed976c3",
+        "hash": "17217046739b2e63e6c0421329c26cbce7c0554e77bbd119ccb7856e3d9df2ce"
       }
     ],
     "towels": [
