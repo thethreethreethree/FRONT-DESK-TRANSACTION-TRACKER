@@ -3,11 +3,11 @@
     "app": "Frendz Front Desk Transaction Tracker",
     "build": "2026-08-19-merge-sync",
     "writtenBy": "Marie",
-    "exportedAt": "2026-10-30T10:16:42.124Z",
+    "exportedAt": "2026-10-30T12:40:29.111Z",
     "version": 1,
-    "coh": 76800,
-    "entries": 19310,
-    "auditEvents": 7808,
+    "coh": 75200,
+    "entries": 19312,
+    "auditEvents": 7811,
     "integrity": {
       "ok": true,
       "brokenAtSeq": null
@@ -41,8 +41,8 @@
         "path": "data/ledger-backup.json",
         "autoSync": true,
         "enabled": true,
-        "lastBackupAt": "2026-10-30T09:59:32.868Z",
-        "lastBackupSha": "d980234a5f0bedb2cd7e1bbc8e1e5802201b7ab5"
+        "lastBackupAt": "2026-10-30T10:16:56.194Z",
+        "lastBackupSha": "16b9694ebb2a58e80b99a3a37a9e13b54e86a1f7"
       },
       "towelTracker": {
         "enabled": true,
@@ -482798,6 +482798,68 @@
         "reversesId": null,
         "prevHash": "d7c18b973ad7e3cd2e07941b5b520d75531941b42c3f4b1b0f29824c3daedf0d",
         "hash": "7ed12d25a1c94b02655bcc08e1b6e314453dfb3cf725d28238530f50c56e2264"
+      },
+      {
+        "seq": 19311,
+        "id": "txn_mvuwp4g0_18_v1vyp6",
+        "ts": "2026-10-30T11:46:07.680Z",
+        "kind": "refund",
+        "itemTypeId": "item_mpxxdbc3_2_s3d7ag",
+        "itemName": "Towel",
+        "qty": 1,
+        "unitAmount": 2000,
+        "amount": 2000,
+        "direction": -1,
+        "guest": "Tali Gavin",
+        "room": "207",
+        "pax": null,
+        "shiftId": "shift_mpy3b19n_5_j6nxol",
+        "shiftLabel": "PM",
+        "businessDate": "2026-10-30",
+        "staff": "Marie",
+        "staffRole": "staff",
+        "note": "",
+        "towelNo": "281 76",
+        "oldTowelNo": "",
+        "towelLost": false,
+        "refundsSeq": 19202,
+        "exchangesSeq": null,
+        "mewsRes": "",
+        "privateRoom": false,
+        "reversesId": null,
+        "prevHash": "7ed12d25a1c94b02655bcc08e1b6e314453dfb3cf725d28238530f50c56e2264",
+        "hash": "5cf18b9061756e0b9bb6a215f867181e3f1dc1bb4ca413e97cedeea25184ff7f"
+      },
+      {
+        "seq": 19312,
+        "id": "txn_mvuwrx43_1a_wfjzq7",
+        "ts": "2026-10-30T11:48:18.147Z",
+        "kind": "deposit",
+        "itemTypeId": "item_mpxxdbc8_3_0avyxn",
+        "itemName": "Padlock",
+        "qty": 2,
+        "unitAmount": 200,
+        "amount": 400,
+        "direction": 1,
+        "guest": "Valentyn Ipolitov",
+        "room": "203",
+        "pax": null,
+        "shiftId": "shift_mpy3b19n_5_j6nxol",
+        "shiftLabel": "PM",
+        "businessDate": "2026-10-30",
+        "staff": "Marie",
+        "staffRole": "staff",
+        "note": "",
+        "towelNo": "",
+        "oldTowelNo": "",
+        "towelLost": false,
+        "refundsSeq": null,
+        "exchangesSeq": null,
+        "mewsRes": "",
+        "privateRoom": false,
+        "reversesId": null,
+        "prevHash": "5cf18b9061756e0b9bb6a215f867181e3f1dc1bb4ca413e97cedeea25184ff7f",
+        "hash": "2fb961c2d7e237672504a5cdde106cb9b2b32e35d2756a2604f125024d1cc53e"
       }
     ],
     "audit": [
@@ -614976,6 +615038,60 @@
         },
         "prevHash": "259ba3e16b46fe713aa2936a1478f400dae44410bbbc660ebbff78fc03810b3c",
         "hash": "0f951758532071478e743222b3b5171c5cffc6bf4dbdc64eced032a7a86bd309"
+      },
+      {
+        "seq": 7809,
+        "id": "aud_mvutif7n_17_hjzgpq",
+        "ts": "2026-10-30T10:16:56.195Z",
+        "actor": "Marie",
+        "role": "staff",
+        "action": "backup.github",
+        "what": "Backup committed to thethreethreethree/FRONT-DESK-TRANSACTION-TRACKER@main (auto-sync)",
+        "details": {
+          "reason": "auto-sync",
+          "coh": 76800,
+          "entries": 19310
+        },
+        "prevHash": "0f951758532071478e743222b3b5171c5cffc6bf4dbdc64eced032a7a86bd309",
+        "hash": "44e10c0800016e7c5ee40ad8c4218cbfcb284f7290abec5ab21c71171bb319fd"
+      },
+      {
+        "seq": 7810,
+        "id": "aud_mvuwp4g0_19_0ek417",
+        "ts": "2026-10-30T11:46:07.680Z",
+        "actor": "Marie",
+        "role": "staff",
+        "action": "refund.create",
+        "what": "Refund ₱2,000.00 · Towel ×1 · Tali Gavin",
+        "details": {
+          "ref": 19311,
+          "id": "txn_mvuwp4g0_18_v1vyp6",
+          "amount": 2000,
+          "item": "Towel",
+          "guest": "Tali Gavin",
+          "room": "207"
+        },
+        "prevHash": "44e10c0800016e7c5ee40ad8c4218cbfcb284f7290abec5ab21c71171bb319fd",
+        "hash": "109851315eb886cdd4ffca155d7dabf01526c8e6de294b8cb46dcc6449ca4efe"
+      },
+      {
+        "seq": 7811,
+        "id": "aud_mvuwrx43_1b_5cpwmy",
+        "ts": "2026-10-30T11:48:18.147Z",
+        "actor": "Marie",
+        "role": "staff",
+        "action": "deposit.create",
+        "what": "Deposit ₱400.00 · Padlock ×2 · Valentyn Ipolitov",
+        "details": {
+          "ref": 19312,
+          "id": "txn_mvuwrx43_1a_wfjzq7",
+          "amount": 400,
+          "item": "Padlock",
+          "guest": "Valentyn Ipolitov",
+          "room": "203"
+        },
+        "prevHash": "109851315eb886cdd4ffca155d7dabf01526c8e6de294b8cb46dcc6449ca4efe",
+        "hash": "98a048963f65a48760068ccaed61f353cffa7dbf35abc12410749434bdd7296f"
       }
     ],
     "towels": [
