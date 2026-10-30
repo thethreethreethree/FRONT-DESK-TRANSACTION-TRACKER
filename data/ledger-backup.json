@@ -3,11 +3,11 @@
     "app": "Frendz Front Desk Transaction Tracker",
     "build": "2026-08-19-merge-sync",
     "writtenBy": "Marie",
-    "exportedAt": "2026-10-30T09:03:35.631Z",
+    "exportedAt": "2026-10-30T09:06:31.089Z",
     "version": 1,
     "coh": 73800,
-    "entries": 19305,
-    "auditEvents": 7799,
+    "entries": 19307,
+    "auditEvents": 7802,
     "integrity": {
       "ok": true,
       "brokenAtSeq": null
@@ -41,8 +41,8 @@
         "path": "data/ledger-backup.json",
         "autoSync": true,
         "enabled": true,
-        "lastBackupAt": "2026-10-30T08:55:59.364Z",
-        "lastBackupSha": "50e09ef4057296fb24954a38b5f12e23b8eaae53"
+        "lastBackupAt": "2026-10-30T09:04:00.327Z",
+        "lastBackupSha": "e44a3da39a8ec207b796ad2e22f4c1b6ba0d304c"
       },
       "towelTracker": {
         "enabled": true,
@@ -482643,6 +482643,68 @@
         "reversesId": null,
         "prevHash": "81d98bd0929de2e983c36359055c57c8218395e300df22ea9393493772abb351",
         "hash": "080a3e41534537147f034e85d6fa21665808ddef771f7bef4110a69af5122dd1"
+      },
+      {
+        "seq": 19306,
+        "id": "txn_mvuqxc4j_u_tscs21",
+        "ts": "2026-10-30T09:04:33.187Z",
+        "kind": "deposit",
+        "itemTypeId": "item_mpxxdbc3_2_s3d7ag",
+        "itemName": "Towel",
+        "qty": 1,
+        "unitAmount": 1000,
+        "amount": 1000,
+        "direction": 1,
+        "guest": "Daniel Mulpeter",
+        "room": "204",
+        "pax": null,
+        "shiftId": "shift_mpy3b19n_5_j6nxol",
+        "shiftLabel": "PM",
+        "businessDate": "2026-10-30",
+        "staff": "Marie",
+        "staffRole": "staff",
+        "note": "",
+        "towelNo": "426",
+        "oldTowelNo": "",
+        "towelLost": false,
+        "refundsSeq": null,
+        "exchangesSeq": null,
+        "mewsRes": "",
+        "privateRoom": false,
+        "reversesId": null,
+        "prevHash": "080a3e41534537147f034e85d6fa21665808ddef771f7bef4110a69af5122dd1",
+        "hash": "e175a5063967d3eb9feff7cd946a923964aad4565c68c548494978f78f2c242b"
+      },
+      {
+        "seq": 19307,
+        "id": "txn_mvuqzo38_w_2q25rd",
+        "ts": "2026-10-30T09:06:22.004Z",
+        "kind": "refund",
+        "itemTypeId": "item_mpxxdbc3_2_s3d7ag",
+        "itemName": "Towel",
+        "qty": 1,
+        "unitAmount": 1000,
+        "amount": 1000,
+        "direction": -1,
+        "guest": "Nicola Owen",
+        "room": "208",
+        "pax": null,
+        "shiftId": "shift_mpy3b19n_5_j6nxol",
+        "shiftLabel": "PM",
+        "businessDate": "2026-10-30",
+        "staff": "Marie",
+        "staffRole": "staff",
+        "note": "",
+        "towelNo": "205",
+        "oldTowelNo": "",
+        "towelLost": false,
+        "refundsSeq": 19298,
+        "exchangesSeq": null,
+        "mewsRes": "",
+        "privateRoom": false,
+        "reversesId": null,
+        "prevHash": "e175a5063967d3eb9feff7cd946a923964aad4565c68c548494978f78f2c242b",
+        "hash": "a93c245cb0f4953a1c697ccb05276e0fac8b78b3a1d3ee5b253362f0302adfd3"
       }
     ],
     "audit": [
@@ -614662,6 +614724,60 @@
         },
         "prevHash": "bb4863bf0100116061ccdd9943bdb1cbfe6b1b86179da7fc1cd33a619934cff0",
         "hash": "90a0595067b7a4a7d4b8af286dc72fc2bf5284d2a10aca1e104bad0b9e0f906f"
+      },
+      {
+        "seq": 7800,
+        "id": "aud_mvuqwmxr_t_fw3zwn",
+        "ts": "2026-10-30T09:04:00.543Z",
+        "actor": "Marie",
+        "role": "staff",
+        "action": "backup.github",
+        "what": "Backup committed to thethreethreethree/FRONT-DESK-TRANSACTION-TRACKER@main (auto-sync)",
+        "details": {
+          "reason": "auto-sync",
+          "coh": 73800,
+          "entries": 19305
+        },
+        "prevHash": "90a0595067b7a4a7d4b8af286dc72fc2bf5284d2a10aca1e104bad0b9e0f906f",
+        "hash": "590add79d8b2641ff8d3a092bc3645e0d9a1a186d7b06707dd2e01cf09c4ed52"
+      },
+      {
+        "seq": 7801,
+        "id": "aud_mvuqxc4j_v_kvhhvt",
+        "ts": "2026-10-30T09:04:33.187Z",
+        "actor": "Marie",
+        "role": "staff",
+        "action": "deposit.create",
+        "what": "Deposit ₱1,000.00 · Towel ×1 · Daniel Mulpeter",
+        "details": {
+          "ref": 19306,
+          "id": "txn_mvuqxc4j_u_tscs21",
+          "amount": 1000,
+          "item": "Towel",
+          "guest": "Daniel Mulpeter",
+          "room": "204"
+        },
+        "prevHash": "590add79d8b2641ff8d3a092bc3645e0d9a1a186d7b06707dd2e01cf09c4ed52",
+        "hash": "03a6926552b00f08bcb32338f51d4453262445e752780a14f691a1301e61f5a9"
+      },
+      {
+        "seq": 7802,
+        "id": "aud_mvuqzo39_x_kmbaoa",
+        "ts": "2026-10-30T09:06:22.005Z",
+        "actor": "Marie",
+        "role": "staff",
+        "action": "refund.create",
+        "what": "Refund ₱1,000.00 · Towel ×1 · Nicola Owen",
+        "details": {
+          "ref": 19307,
+          "id": "txn_mvuqzo38_w_2q25rd",
+          "amount": 1000,
+          "item": "Towel",
+          "guest": "Nicola Owen",
+          "room": "208"
+        },
+        "prevHash": "03a6926552b00f08bcb32338f51d4453262445e752780a14f691a1301e61f5a9",
+        "hash": "df160409b91d47aa0542561ee14729247bd5d077944fa27b20c2a8612813852b"
       }
     ],
     "towels": [
