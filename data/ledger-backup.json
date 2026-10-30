@@ -3,11 +3,11 @@
     "app": "Frendz Front Desk Transaction Tracker",
     "build": "2026-08-19-merge-sync",
     "writtenBy": "Marie",
-    "exportedAt": "2026-10-30T07:53:11.832Z",
+    "exportedAt": "2026-10-30T07:53:31.853Z",
     "version": 1,
     "coh": 64800,
     "entries": 19298,
-    "auditEvents": 7784,
+    "auditEvents": 7786,
     "integrity": {
       "ok": true,
       "brokenAtSeq": null
@@ -16,7 +16,7 @@
       "ok": true,
       "brokenAtSeq": null
     },
-    "travelistaEntries": 152,
+    "travelistaEntries": 153,
     "travelistaIntegrity": {
       "ok": true,
       "brokenAtSeq": null
@@ -41,8 +41,8 @@
         "path": "data/ledger-backup.json",
         "autoSync": true,
         "enabled": true,
-        "lastBackupAt": "2026-10-30T07:28:47.534Z",
-        "lastBackupSha": "b6eaa02ae466106eb2b11f810a85bc915e4a2c23"
+        "lastBackupAt": "2026-10-30T07:53:24.511Z",
+        "lastBackupSha": "ed9bbc3c0ad235ed139d29aad3fe9efd83344136"
       },
       "towelTracker": {
         "enabled": true,
@@ -614179,6 +614179,43 @@
         },
         "prevHash": "2d05ef24da101d9ba913e9e2e7d43b3567dd1dd03ac67628a216336d2343357c",
         "hash": "3a90463d6f3b9fb3886b987fb79c6a8b36ca18d451973fcff82985d8f3a8c453"
+      },
+      {
+        "seq": 7785,
+        "id": "aud_mvuodtmr_7_dlyvqp",
+        "ts": "2026-10-30T07:53:23.523Z",
+        "actor": "Marie",
+        "role": "staff",
+        "action": "tv.booking.create",
+        "what": "Travelista booking #153 · JASMIN GALILA · PPS SHARING VAN ×1 pax · ₱750 (commission ₱100)",
+        "details": {
+          "ref": 153,
+          "id": "tv_mvuodtmq_6_nvxckt",
+          "guest": "JASMIN GALILA",
+          "destination": "PPS SHARING VAN",
+          "pax": 1,
+          "total": 750,
+          "commission": 100,
+          "bookedBy": "MARIE"
+        },
+        "prevHash": "3a90463d6f3b9fb3886b987fb79c6a8b36ca18d451973fcff82985d8f3a8c453",
+        "hash": "85354ec12f311a6b9e117d5254aa55698688e31069934ac4ba19f18c1f0bda1a"
+      },
+      {
+        "seq": 7786,
+        "id": "aud_mvuoduea_8_pqfhzn",
+        "ts": "2026-10-30T07:53:24.514Z",
+        "actor": "Marie",
+        "role": "staff",
+        "action": "backup.github",
+        "what": "Backup committed to thethreethreethree/FRONT-DESK-TRANSACTION-TRACKER@main (auto-sync)",
+        "details": {
+          "reason": "auto-sync",
+          "coh": 64800,
+          "entries": 19298
+        },
+        "prevHash": "85354ec12f311a6b9e117d5254aa55698688e31069934ac4ba19f18c1f0bda1a",
+        "hash": "c53e559df1dd00b21f2224b4cd1a9b41870a679b550f0cae8d7470051d284745"
       }
     ],
     "towels": [
@@ -626133,6 +626170,42 @@
           "reversesKind": null,
           "prevHash": "43d485fb38f43c5c9afcfaae8ca1380d2667632b95732ab6993750f8768a55ba",
           "hash": "ca114f74cdf9031661e4ed85f11fbcb20dc959e598d6af845bc4e8e33cd16d87"
+        },
+        {
+          "seq": 153,
+          "id": "tv_mvuodtmq_6_nvxckt",
+          "ts": "2026-10-30T07:53:23.522Z",
+          "kind": "booking",
+          "direction": 1,
+          "amount": 750,
+          "departureDate": "2026-10-30",
+          "guest": "JASMIN GALILA",
+          "destination": "PPS SHARING VAN",
+          "destinationId": "dest_msrh2ktf_d_xyn4hg",
+          "pax": 1,
+          "fare": 750,
+          "fareBasis": "per_pax",
+          "total": 750,
+          "travelistaShare": 650,
+          "commission": 100,
+          "bookedBy": "MARIE",
+          "remarks": "",
+          "payoutType": "",
+          "payee": "",
+          "method": "",
+          "amendsSeq": null,
+          "dTotal": 0,
+          "dShare": 0,
+          "dCommission": 0,
+          "dPax": 0,
+          "periodKey": "2026-10-B",
+          "staff": "Marie",
+          "staffRole": "staff",
+          "businessDate": "2026-10-30",
+          "reversesId": null,
+          "reversesKind": null,
+          "prevHash": "ca114f74cdf9031661e4ed85f11fbcb20dc959e598d6af845bc4e8e33cd16d87",
+          "hash": "5d1cda483b798fb68e09ddc51686b8b93a491cb8ab25d6105e35f95f739c841b"
         }
       ]
     }
