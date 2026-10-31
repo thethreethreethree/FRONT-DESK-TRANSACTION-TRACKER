@@ -3,11 +3,11 @@
     "app": "Frendz Front Desk Transaction Tracker",
     "build": "2026-08-19-merge-sync",
     "writtenBy": "Marie",
-    "exportedAt": "2026-10-31T08:44:35.769Z",
+    "exportedAt": "2026-10-31T08:52:59.400Z",
     "version": 1,
-    "coh": 57200,
-    "entries": 19342,
-    "auditEvents": 7875,
+    "coh": 58200,
+    "entries": 19343,
+    "auditEvents": 7877,
     "integrity": {
       "ok": true,
       "brokenAtSeq": null
@@ -41,8 +41,8 @@
         "path": "data/ledger-backup.json",
         "autoSync": true,
         "enabled": true,
-        "lastBackupAt": "2026-10-31T07:02:51.211Z",
-        "lastBackupSha": "16650fe2765a81cabbf17fd5dd5451efb171861e"
+        "lastBackupAt": "2026-10-31T08:45:40.009Z",
+        "lastBackupSha": "29487332de67753ccaa8208da6e77dde7a073188"
       },
       "towelTracker": {
         "enabled": true,
@@ -483790,6 +483790,37 @@
         "reversesId": null,
         "prevHash": "5fdeca9da66c93c564cc521fe4c35d32259d62d5e2f8f761330f8867e523d518",
         "hash": "1934dcb93d297f7e15ef04b82827985ba75c526a3f6892cd5e0a2ecfa50792c2"
+      },
+      {
+        "seq": 19343,
+        "id": "txn_mvw5y6tr_2j_1orwkx",
+        "ts": "2026-10-31T08:52:53.391Z",
+        "kind": "deposit",
+        "itemTypeId": "item_mpxxdbc3_2_s3d7ag",
+        "itemName": "Towel",
+        "qty": 1,
+        "unitAmount": 1000,
+        "amount": 1000,
+        "direction": 1,
+        "guest": "Brenda Ruiz",
+        "room": "302",
+        "pax": null,
+        "shiftId": "shift_mpy3b19n_5_j6nxol",
+        "shiftLabel": "PM",
+        "businessDate": "2026-10-31",
+        "staff": "Marie",
+        "staffRole": "staff",
+        "note": "",
+        "towelNo": "297",
+        "oldTowelNo": "",
+        "towelLost": false,
+        "refundsSeq": null,
+        "exchangesSeq": null,
+        "mewsRes": "",
+        "privateRoom": false,
+        "reversesId": null,
+        "prevHash": "1934dcb93d297f7e15ef04b82827985ba75c526a3f6892cd5e0a2ecfa50792c2",
+        "hash": "e8c2d9a4126f91413efd9c6d37c50ef602eb473365372b15cfda26e5df2356f6"
       }
     ],
     "audit": [
@@ -617134,6 +617165,41 @@
         },
         "prevHash": "a7970d8d05b2332231cb2f09ff7c6c5d6e0b60f270be56c9a47755b571722d22",
         "hash": "c72175b0f41c8e4e1932284739d55ebc5d600aceaf5378a54bbd081ade9fff96"
+      },
+      {
+        "seq": 7876,
+        "id": "aud_mvw5owfd_2i_c1qga7",
+        "ts": "2026-10-31T08:45:40.009Z",
+        "actor": "Marie",
+        "role": "staff",
+        "action": "backup.github",
+        "what": "Backup committed to thethreethreethree/FRONT-DESK-TRANSACTION-TRACKER@main (auto-sync)",
+        "details": {
+          "reason": "auto-sync",
+          "coh": 57200,
+          "entries": 19342
+        },
+        "prevHash": "c72175b0f41c8e4e1932284739d55ebc5d600aceaf5378a54bbd081ade9fff96",
+        "hash": "0fe358ff0127dcf394366917d222a85cabf6f0b38d8ac0e55f686d6817ca96a9"
+      },
+      {
+        "seq": 7877,
+        "id": "aud_mvw5y6ts_2k_d8gsf0",
+        "ts": "2026-10-31T08:52:53.392Z",
+        "actor": "Marie",
+        "role": "staff",
+        "action": "deposit.create",
+        "what": "Deposit ₱1,000.00 · Towel ×1 · Brenda Ruiz",
+        "details": {
+          "ref": 19343,
+          "id": "txn_mvw5y6tr_2j_1orwkx",
+          "amount": 1000,
+          "item": "Towel",
+          "guest": "Brenda Ruiz",
+          "room": "302"
+        },
+        "prevHash": "0fe358ff0127dcf394366917d222a85cabf6f0b38d8ac0e55f686d6817ca96a9",
+        "hash": "6009b1e875d55e8f4dd84b313e9df970fce8824b47ec54390099e7f53f4b010e"
       }
     ],
     "towels": [
