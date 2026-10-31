@@ -3,11 +3,11 @@
     "app": "Frendz Front Desk Transaction Tracker",
     "build": "2026-08-19-merge-sync",
     "writtenBy": "Marie",
-    "exportedAt": "2026-10-31T10:47:21.837Z",
+    "exportedAt": "2026-10-31T11:20:05.324Z",
     "version": 1,
-    "coh": 69400,
-    "entries": 19350,
-    "auditEvents": 7897,
+    "coh": 68400,
+    "entries": 19351,
+    "auditEvents": 7899,
     "integrity": {
       "ok": true,
       "brokenAtSeq": null
@@ -41,8 +41,8 @@
         "path": "data/ledger-backup.json",
         "autoSync": true,
         "enabled": true,
-        "lastBackupAt": "2026-10-31T10:47:04.336Z",
-        "lastBackupSha": "6f09506f9d4a1ebe74110af22edc82769ddcee6d"
+        "lastBackupAt": "2026-10-31T10:47:33.249Z",
+        "lastBackupSha": "9da0cc31c2896b64e6ae1f58f4adac93c0178e0a"
       },
       "towelTracker": {
         "enabled": true,
@@ -484038,6 +484038,37 @@
         "reversesId": null,
         "prevHash": "4ffe0cd20724364ffa7b6d82760948c7791e4ca84ebefe8c2de7e50aa0ee1f7c",
         "hash": "842aa4b24d45246868b524b2bb7b5bd54e1e6210680b210a9f289c1bf0ce81b4"
+      },
+      {
+        "seq": 19351,
+        "id": "txn_mvwb3ima_3g_n3m6xi",
+        "ts": "2026-10-31T11:17:00.034Z",
+        "kind": "refund",
+        "itemTypeId": "item_mpxxdbc3_2_s3d7ag",
+        "itemName": "Towel",
+        "qty": 1,
+        "unitAmount": 1000,
+        "amount": 1000,
+        "direction": -1,
+        "guest": "Jascha Kestler",
+        "room": "209",
+        "pax": null,
+        "shiftId": "shift_mpy3b19n_5_j6nxol",
+        "shiftLabel": "PM",
+        "businessDate": "2026-10-31",
+        "staff": "Marie",
+        "staffRole": "staff",
+        "note": "",
+        "towelNo": "453",
+        "oldTowelNo": "",
+        "towelLost": false,
+        "refundsSeq": 19260,
+        "exchangesSeq": null,
+        "mewsRes": "",
+        "privateRoom": false,
+        "reversesId": null,
+        "prevHash": "842aa4b24d45246868b524b2bb7b5bd54e1e6210680b210a9f289c1bf0ce81b4",
+        "hash": "c9da00a17bc26ba95ad8cdefd30ce755bae9da468c273fa90aa3cd851b761c06"
       }
     ],
     "audit": [
@@ -617773,6 +617804,41 @@
         },
         "prevHash": "4073490f4c530da87116cfbe22d1ca3a34953537dbca45cc156af66182805c09",
         "hash": "317e3c47cbc5794d0b16424db3252a0c0da82e846868a44d5b84590a91ee115b"
+      },
+      {
+        "seq": 7898,
+        "id": "aud_mvwa1ncy_3f_gb5f3m",
+        "ts": "2026-10-31T10:47:33.250Z",
+        "actor": "Marie",
+        "role": "staff",
+        "action": "backup.github",
+        "what": "Backup committed to thethreethreethree/FRONT-DESK-TRANSACTION-TRACKER@main (auto-sync)",
+        "details": {
+          "reason": "auto-sync",
+          "coh": 69400,
+          "entries": 19350
+        },
+        "prevHash": "317e3c47cbc5794d0b16424db3252a0c0da82e846868a44d5b84590a91ee115b",
+        "hash": "3f33c31022e6176d73e6e9d3df19e52e10fdb7531490923b7830bb222b8ce67e"
+      },
+      {
+        "seq": 7899,
+        "id": "aud_mvwb3ima_3h_hdm9cf",
+        "ts": "2026-10-31T11:17:00.034Z",
+        "actor": "Marie",
+        "role": "staff",
+        "action": "refund.create",
+        "what": "Refund ₱1,000.00 · Towel ×1 · Jascha Kestler",
+        "details": {
+          "ref": 19351,
+          "id": "txn_mvwb3ima_3g_n3m6xi",
+          "amount": 1000,
+          "item": "Towel",
+          "guest": "Jascha Kestler",
+          "room": "209"
+        },
+        "prevHash": "3f33c31022e6176d73e6e9d3df19e52e10fdb7531490923b7830bb222b8ce67e",
+        "hash": "5b9a253e4a61c934687d8c56c5e8817e2663c338391325e6768f95e0404ab79c"
       }
     ],
     "towels": [
