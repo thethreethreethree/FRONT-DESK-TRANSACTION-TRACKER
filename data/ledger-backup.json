@@ -3,11 +3,11 @@
     "app": "Frendz Front Desk Transaction Tracker",
     "build": "2026-08-19-merge-sync",
     "writtenBy": "Monie",
-    "exportedAt": "2026-10-31T05:21:07.639Z",
+    "exportedAt": "2026-10-31T05:24:31.645Z",
     "version": 1,
-    "coh": 53200,
-    "entries": 19336,
-    "auditEvents": 7860,
+    "coh": 52200,
+    "entries": 19337,
+    "auditEvents": 7862,
     "integrity": {
       "ok": true,
       "brokenAtSeq": null
@@ -41,8 +41,8 @@
         "path": "data/ledger-backup.json",
         "autoSync": true,
         "enabled": true,
-        "lastBackupAt": "2026-10-31T05:19:46.968Z",
-        "lastBackupSha": "7098e21f381ceef2a6d3d1e8151848dddb6c7ad8"
+        "lastBackupAt": "2026-10-31T05:21:20.543Z",
+        "lastBackupSha": "e60336c67d7995d1605252cf1254c52b3cc8722a"
       },
       "towelTracker": {
         "enabled": true,
@@ -483604,6 +483604,37 @@
         "reversesId": null,
         "prevHash": "03ed1cb6624a153fbb087918d5232a2f9711ffba919d018a9b5cca2260a0ea20",
         "hash": "f8173f1a7ed4cd4fa5c7f75b7c48a8df79a855763a0fc259361745279dab0666"
+      },
+      {
+        "seq": 19337,
+        "id": "txn_mvvyi3s3_1y_lqft69",
+        "ts": "2026-10-31T05:24:25.635Z",
+        "kind": "refund",
+        "itemTypeId": "item_mpxxdbc3_2_s3d7ag",
+        "itemName": "Towel",
+        "qty": 1,
+        "unitAmount": 1000,
+        "amount": 1000,
+        "direction": -1,
+        "guest": "Amelie Nadeau",
+        "room": "304",
+        "pax": null,
+        "shiftId": "shift_mpy3b19n_5_j6nxol",
+        "shiftLabel": "PM",
+        "businessDate": "2026-10-31",
+        "staff": "Monie",
+        "staffRole": "staff",
+        "note": "",
+        "towelNo": "402",
+        "oldTowelNo": "",
+        "towelLost": false,
+        "refundsSeq": 19231,
+        "exchangesSeq": null,
+        "mewsRes": "",
+        "privateRoom": false,
+        "reversesId": null,
+        "prevHash": "f8173f1a7ed4cd4fa5c7f75b7c48a8df79a855763a0fc259361745279dab0666",
+        "hash": "af1bd0472ab7391abd115d389652f491fae58c4a2f874ccf979aeaf46578aebd"
       }
     ],
     "audit": [
@@ -616696,6 +616727,41 @@
         },
         "prevHash": "0d030947978ee7faed8d78f5c1938522ba6a04c17de060e46d5ce3efbaa472a6",
         "hash": "34016a30b796b2acf6718033d0d21e2ae516da6bcfa4e97cffd7bcb045ac37b2"
+      },
+      {
+        "seq": 7861,
+        "id": "aud_mvvye4yq_1x_3v7kn6",
+        "ts": "2026-10-31T05:21:20.546Z",
+        "actor": "Monie",
+        "role": "staff",
+        "action": "backup.github",
+        "what": "Backup committed to thethreethreethree/FRONT-DESK-TRANSACTION-TRACKER@main (auto-sync)",
+        "details": {
+          "reason": "auto-sync",
+          "coh": 53200,
+          "entries": 19336
+        },
+        "prevHash": "34016a30b796b2acf6718033d0d21e2ae516da6bcfa4e97cffd7bcb045ac37b2",
+        "hash": "72c01ab4194e13490a5146cc6bbbac18da0410d004ce05522890c5309f6b48f3"
+      },
+      {
+        "seq": 7862,
+        "id": "aud_mvvyi3s4_1z_rztdjo",
+        "ts": "2026-10-31T05:24:25.636Z",
+        "actor": "Monie",
+        "role": "staff",
+        "action": "refund.create",
+        "what": "Refund ₱1,000.00 · Towel ×1 · Amelie Nadeau",
+        "details": {
+          "ref": 19337,
+          "id": "txn_mvvyi3s3_1y_lqft69",
+          "amount": 1000,
+          "item": "Towel",
+          "guest": "Amelie Nadeau",
+          "room": "304"
+        },
+        "prevHash": "72c01ab4194e13490a5146cc6bbbac18da0410d004ce05522890c5309f6b48f3",
+        "hash": "d6a5bf5757f1fac7e3f36633126466b3c9223914ed9f82190efbc2dd4a26be02"
       }
     ],
     "towels": [
