@@ -3,11 +3,11 @@
     "app": "Frendz Front Desk Transaction Tracker",
     "build": "2026-08-19-merge-sync",
     "writtenBy": "darren",
-    "exportedAt": "2026-11-01T06:48:23.681Z",
+    "exportedAt": "2026-11-01T06:48:51.038Z",
     "version": 1,
     "coh": 44400,
     "entries": 19374,
-    "auditEvents": 7965,
+    "auditEvents": 7967,
     "integrity": {
       "ok": true,
       "brokenAtSeq": null
@@ -16,7 +16,7 @@
       "ok": true,
       "brokenAtSeq": null
     },
-    "travelistaEntries": 160,
+    "travelistaEntries": 161,
     "travelistaIntegrity": {
       "ok": true,
       "brokenAtSeq": null
@@ -41,8 +41,8 @@
         "path": "data/ledger-backup.json",
         "autoSync": true,
         "enabled": true,
-        "lastBackupAt": "2026-11-01T06:14:36.266Z",
-        "lastBackupSha": "1478ca80274d1b9082feaeea8a80c9c6145c8055"
+        "lastBackupAt": "2026-11-01T06:48:36.458Z",
+        "lastBackupSha": "d0e9506f8be23dd315e48a51d4fb17097967d4fb"
       },
       "towelTracker": {
         "enabled": true,
@@ -619634,6 +619634,38 @@
         },
         "prevHash": "b4828f072c176085dc46821e415ff7991c5c550e436fad293ed99405ec4b7729",
         "hash": "e39e28fc801f37366ae20d68e7bfe570c41c090c8d12d3515674519d4992a714"
+      },
+      {
+        "seq": 7966,
+        "id": "aud_mvxgy7oq_25_1ui35x",
+        "ts": "2026-11-01T06:48:36.458Z",
+        "actor": "darren",
+        "role": "manager",
+        "action": "backup.github",
+        "what": "Backup committed to thethreethreethree/FRONT-DESK-TRANSACTION-TRACKER@main (auto-sync)",
+        "details": {
+          "reason": "auto-sync",
+          "coh": 44400,
+          "entries": 19374
+        },
+        "prevHash": "e39e28fc801f37366ae20d68e7bfe570c41c090c8d12d3515674519d4992a714",
+        "hash": "6690efab79c02276dd048e03cafb8359a68a83fb05ca7e5aabc1c02aef7929ff"
+      },
+      {
+        "seq": 7967,
+        "id": "aud_mvxgydsk_27_r3s9j5",
+        "ts": "2026-11-01T06:48:44.372Z",
+        "actor": "darren",
+        "role": "manager",
+        "action": "tv.void",
+        "what": "Voided travelista #160 (booking · SOFIYA MANJI · ₱750)",
+        "details": {
+          "ref": 160,
+          "reversalSeq": 161,
+          "reason": "wrong dates. should be for november1"
+        },
+        "prevHash": "6690efab79c02276dd048e03cafb8359a68a83fb05ca7e5aabc1c02aef7929ff",
+        "hash": "971b093c07bd338b481a9ca2e68007538709dfe49f9be165e25cdfbe0920801a"
       }
     ],
     "towels": [
@@ -631876,6 +631908,42 @@
           "reversesKind": null,
           "prevHash": "212ab4abcec4a2c8c20903ee5fd14c5d522f9704741ff671ba17c8d6a357060a",
           "hash": "15ea52a6d413b68edcb0484b74976afebecc7074da23fbf067216625bbfe1eb2"
+        },
+        {
+          "seq": 161,
+          "id": "tv_mvxgydsk_26_nge895",
+          "ts": "2026-11-01T06:48:44.372Z",
+          "kind": "reversal",
+          "direction": -1,
+          "amount": 750,
+          "departureDate": "2026-10-31",
+          "guest": "SOFIYA MANJI",
+          "destination": "PPS SHARING VAN",
+          "destinationId": "dest_msrh2ktf_d_xyn4hg",
+          "pax": 1,
+          "fare": 750,
+          "fareBasis": "per_pax",
+          "total": 750,
+          "travelistaShare": 650,
+          "commission": 100,
+          "bookedBy": "MARIE",
+          "remarks": "VOID of #160 (booking · SOFIYA MANJI). Reason: wrong dates. should be for november1",
+          "payoutType": "",
+          "payee": "",
+          "method": "",
+          "amendsSeq": null,
+          "dTotal": 0,
+          "dShare": 0,
+          "dCommission": 0,
+          "dPax": 0,
+          "periodKey": "2026-10-B",
+          "staff": "darren",
+          "staffRole": "manager",
+          "businessDate": "2026-11-01",
+          "reversesId": "tv_mvwa17xg_3d_t6ge8i",
+          "reversesKind": "booking",
+          "prevHash": "15ea52a6d413b68edcb0484b74976afebecc7074da23fbf067216625bbfe1eb2",
+          "hash": "e448cd9d919a9565f07b83436b1bb825ebfec59b483255bbbef5bbd39b21b0d4"
         }
       ]
     }
