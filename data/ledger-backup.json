@@ -3,11 +3,11 @@
     "app": "Frendz Front Desk Transaction Tracker",
     "build": "2026-08-19-merge-sync",
     "writtenBy": "Rebecca",
-    "exportedAt": "2026-11-01T14:18:52.363Z",
+    "exportedAt": "2026-11-01T14:33:43.377Z",
     "version": 1,
     "coh": 56400,
     "entries": 19384,
-    "auditEvents": 8005,
+    "auditEvents": 8007,
     "integrity": {
       "ok": true,
       "brokenAtSeq": null
@@ -16,7 +16,7 @@
       "ok": true,
       "brokenAtSeq": null
     },
-    "travelistaEntries": 167,
+    "travelistaEntries": 168,
     "travelistaIntegrity": {
       "ok": true,
       "brokenAtSeq": null
@@ -41,8 +41,8 @@
         "path": "data/ledger-backup.json",
         "autoSync": true,
         "enabled": true,
-        "lastBackupAt": "2026-11-01T14:13:36.217Z",
-        "lastBackupSha": "bca6f7830e3b86caf29cf6b84837922baa1c0b7f"
+        "lastBackupAt": "2026-11-01T14:19:02.743Z",
+        "lastBackupSha": "a1c7f0c371572e98e57a6efdf7146bd103ab5ff0"
       },
       "towelTracker": {
         "enabled": true,
@@ -620622,6 +620622,43 @@
         },
         "prevHash": "300a0b77c719c8b317119b48c72397850660f0c25142b3529b98e940600b2c13",
         "hash": "0ea3833af040bcdce69f996d1018b7db1e4d73668d0721788934f8136b0d54cf"
+      },
+      {
+        "seq": 8006,
+        "id": "aud_mvxx1haz_3q_zq3ky1",
+        "ts": "2026-11-01T14:19:02.747Z",
+        "actor": "Rebecca",
+        "role": "staff",
+        "action": "backup.github",
+        "what": "Backup committed to thethreethreethree/FRONT-DESK-TRANSACTION-TRACKER@main (auto-sync)",
+        "details": {
+          "reason": "auto-sync",
+          "coh": 56400,
+          "entries": 19384
+        },
+        "prevHash": "0ea3833af040bcdce69f996d1018b7db1e4d73668d0721788934f8136b0d54cf",
+        "hash": "1e8bc51192e635cec2966b02ba673cd57f6b696715e24f3783020df90babf0af"
+      },
+      {
+        "seq": 8007,
+        "id": "aud_mvxxk7ci_3s_clx1s4",
+        "ts": "2026-11-01T14:33:36.306Z",
+        "actor": "Rebecca",
+        "role": "staff",
+        "action": "tv.booking.create",
+        "what": "Travelista booking #168 · KRISTYNA NOVOTNA · PPS SHARING VAN ×2 pax · ₱1,500 (commission ₱200)",
+        "details": {
+          "ref": 168,
+          "id": "tv_mvxxk7ci_3r_gyi85a",
+          "guest": "KRISTYNA NOVOTNA",
+          "destination": "PPS SHARING VAN",
+          "pax": 2,
+          "total": 1500,
+          "commission": 200,
+          "bookedBy": "BECCA"
+        },
+        "prevHash": "1e8bc51192e635cec2966b02ba673cd57f6b696715e24f3783020df90babf0af",
+        "hash": "aec506daf8cff97eecae9dd48b04a558fdcd1616d8af3839267e323e5f57f47e"
       }
     ],
     "towels": [
@@ -633116,6 +633153,42 @@
           "reversesKind": null,
           "prevHash": "58b7cfcdaea5a5707ee677fe1d9fe66d72ee3c1642562617fc9a7f975c423719",
           "hash": "5f7344826cf624168141666ec1fd298da8f5844579fb12506fa412cfd08ed3cc"
+        },
+        {
+          "seq": 168,
+          "id": "tv_mvxxk7ci_3r_gyi85a",
+          "ts": "2026-11-01T14:33:36.306Z",
+          "kind": "booking",
+          "direction": 1,
+          "amount": 1500,
+          "departureDate": "2026-11-02",
+          "guest": "KRISTYNA NOVOTNA",
+          "destination": "PPS SHARING VAN",
+          "destinationId": "dest_msrh2ktf_d_xyn4hg",
+          "pax": 2,
+          "fare": 750,
+          "fareBasis": "per_pax",
+          "total": 1500,
+          "travelistaShare": 1300,
+          "commission": 200,
+          "bookedBy": "BECCA",
+          "remarks": "WITH JAMIE MCKALVIE",
+          "payoutType": "",
+          "payee": "",
+          "method": "",
+          "amendsSeq": null,
+          "dTotal": 0,
+          "dShare": 0,
+          "dCommission": 0,
+          "dPax": 0,
+          "periodKey": "2026-11-A",
+          "staff": "Rebecca",
+          "staffRole": "staff",
+          "businessDate": "2026-11-01",
+          "reversesId": null,
+          "reversesKind": null,
+          "prevHash": "5f7344826cf624168141666ec1fd298da8f5844579fb12506fa412cfd08ed3cc",
+          "hash": "a6b2b992a920e54ab1ad00e2e56ffcfecf2af5ee977f871cc20fc538c0760a2a"
         }
       ]
     }
