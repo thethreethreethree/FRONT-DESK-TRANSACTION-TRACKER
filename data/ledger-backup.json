@@ -3,11 +3,11 @@
     "app": "Frendz Front Desk Transaction Tracker",
     "build": "2026-08-19-merge-sync",
     "writtenBy": "Monie",
-    "exportedAt": "2026-11-01T06:50:08.008Z",
+    "exportedAt": "2026-11-01T06:51:08.743Z",
     "version": 1,
     "coh": 44400,
     "entries": 19374,
-    "auditEvents": 7974,
+    "auditEvents": 7976,
     "integrity": {
       "ok": true,
       "brokenAtSeq": null
@@ -16,7 +16,7 @@
       "ok": true,
       "brokenAtSeq": null
     },
-    "travelistaEntries": 163,
+    "travelistaEntries": 164,
     "travelistaIntegrity": {
       "ok": true,
       "brokenAtSeq": null
@@ -41,8 +41,8 @@
         "path": "data/ledger-backup.json",
         "autoSync": true,
         "enabled": true,
-        "lastBackupAt": "2026-11-01T06:49:40.246Z",
-        "lastBackupSha": "b34db3e93da385da44cfcbc90a723b531eec3911"
+        "lastBackupAt": "2026-11-01T06:50:17.755Z",
+        "lastBackupSha": "b4b39e7769951aa2882403bd46d74a58a91228bd"
       },
       "towelTracker": {
         "enabled": true,
@@ -619772,6 +619772,43 @@
         },
         "prevHash": "cb9e3a6292bc8372028c492d3e798fd4191ce81251ba9a55eb914ddd249a49a7",
         "hash": "0d4ab01897f147545850389abe39ae0c2b0351604fe19a39f5373915ada35d8c"
+      },
+      {
+        "seq": 7975,
+        "id": "aud_mvxh0duj_2h_ve78sz",
+        "ts": "2026-11-01T06:50:17.755Z",
+        "actor": "Monie",
+        "role": "staff",
+        "action": "backup.github",
+        "what": "Backup committed to thethreethreethree/FRONT-DESK-TRANSACTION-TRACKER@main (auto-sync)",
+        "details": {
+          "reason": "auto-sync",
+          "coh": 44400,
+          "entries": 19374
+        },
+        "prevHash": "0d4ab01897f147545850389abe39ae0c2b0351604fe19a39f5373915ada35d8c",
+        "hash": "154f607bafc0a6b183f6eb1bd0046640c67434ff02e97118b102bfe082077864"
+      },
+      {
+        "seq": 7976,
+        "id": "aud_mvxh1bq6_2j_6nikxz",
+        "ts": "2026-11-01T06:51:01.662Z",
+        "actor": "Monie",
+        "role": "staff",
+        "action": "tv.booking.create",
+        "what": "Travelista booking #164 · ELENA MAGIONE · EL NIDO SHARING VAN ×2 pax · ₱1,500 (commission ₱200)",
+        "details": {
+          "ref": 164,
+          "id": "tv_mvxh1bq5_2i_ep8ugh",
+          "guest": "ELENA MAGIONE",
+          "destination": "EL NIDO SHARING VAN",
+          "pax": 2,
+          "total": 1500,
+          "commission": 200,
+          "bookedBy": "MONIE"
+        },
+        "prevHash": "154f607bafc0a6b183f6eb1bd0046640c67434ff02e97118b102bfe082077864",
+        "hash": "3b262f3ee155b25328d1deb66e79b1ec617e30a6f0cb3ddc280652742cdc3331"
       }
     ],
     "towels": [
@@ -632122,6 +632159,42 @@
           "reversesKind": "booking",
           "prevHash": "fdead93d57bbad4d0d05b48503c210e7ad4b19c40be587e418eddd0145712521",
           "hash": "baec45bd196024187d7514c035a5b39ef9168d71bd9e023c62e8ef004660ae17"
+        },
+        {
+          "seq": 164,
+          "id": "tv_mvxh1bq5_2i_ep8ugh",
+          "ts": "2026-11-01T06:51:01.661Z",
+          "kind": "booking",
+          "direction": 1,
+          "amount": 1500,
+          "departureDate": "2026-11-01",
+          "guest": "ELENA MAGIONE",
+          "destination": "EL NIDO SHARING VAN",
+          "destinationId": "dest_msrh30tg_g_n0iv15",
+          "pax": 2,
+          "fare": 750,
+          "fareBasis": "per_pax",
+          "total": 1500,
+          "travelistaShare": 1300,
+          "commission": 200,
+          "bookedBy": "MONIE",
+          "remarks": "",
+          "payoutType": "",
+          "payee": "",
+          "method": "",
+          "amendsSeq": null,
+          "dTotal": 0,
+          "dShare": 0,
+          "dCommission": 0,
+          "dPax": 0,
+          "periodKey": "2026-11-A",
+          "staff": "Monie",
+          "staffRole": "staff",
+          "businessDate": "2026-11-01",
+          "reversesId": null,
+          "reversesKind": null,
+          "prevHash": "baec45bd196024187d7514c035a5b39ef9168d71bd9e023c62e8ef004660ae17",
+          "hash": "cf0125a801914f635fbde77893c910eec1174bd605d6c83781ab29f0cb88fb3b"
         }
       ]
     }
