@@ -3,11 +3,11 @@
     "app": "Frendz Front Desk Transaction Tracker",
     "build": "2026-08-19-merge-sync",
     "writtenBy": "Rebecca",
-    "exportedAt": "2026-11-01T14:33:43.377Z",
+    "exportedAt": "2026-11-01T21:42:10.527Z",
     "version": 1,
-    "coh": 56400,
-    "entries": 19384,
-    "auditEvents": 8007,
+    "coh": 54400,
+    "entries": 19386,
+    "auditEvents": 8010,
     "integrity": {
       "ok": true,
       "brokenAtSeq": null
@@ -41,8 +41,8 @@
         "path": "data/ledger-backup.json",
         "autoSync": true,
         "enabled": true,
-        "lastBackupAt": "2026-11-01T14:19:02.743Z",
-        "lastBackupSha": "a1c7f0c371572e98e57a6efdf7146bd103ab5ff0"
+        "lastBackupAt": "2026-11-01T14:33:54.904Z",
+        "lastBackupSha": "edd53e167df768c771d58a001b029742a634d9b1"
       },
       "towelTracker": {
         "enabled": true,
@@ -485092,6 +485092,68 @@
         "reversesId": null,
         "prevHash": "a0a4505b4b993c910353b7f49ef6c58ffa51086eebfbc4919a05340e9e906792",
         "hash": "b41cef1a750e512d7ba5cd4207a7fcd1ded1abddba6043fd5594675e696d93bd"
+      },
+      {
+        "seq": 19385,
+        "id": "txn_mvyctfp1_3u_ufj90v",
+        "ts": "2026-11-01T21:40:41.269Z",
+        "kind": "refund",
+        "itemTypeId": "item_mpxxdbc3_2_s3d7ag",
+        "itemName": "Towel",
+        "qty": 1,
+        "unitAmount": 1000,
+        "amount": 1000,
+        "direction": -1,
+        "guest": "Madeline Thaning",
+        "room": "308",
+        "pax": null,
+        "shiftId": "shift_mpy3b19n_5_j6nxol",
+        "shiftLabel": "PM",
+        "businessDate": "2026-11-02",
+        "staff": "Rebecca",
+        "staffRole": "staff",
+        "note": "Given back deposit to Madeline",
+        "towelNo": "478",
+        "oldTowelNo": "",
+        "towelLost": false,
+        "refundsSeq": 19273,
+        "exchangesSeq": null,
+        "mewsRes": "",
+        "privateRoom": false,
+        "reversesId": null,
+        "prevHash": "b41cef1a750e512d7ba5cd4207a7fcd1ded1abddba6043fd5594675e696d93bd",
+        "hash": "40fb10bcbdd7cd6dd980a39f982c9e1abbfa83a13803900894172fa833f6b93f"
+      },
+      {
+        "seq": 19386,
+        "id": "txn_mvyctq26_3w_l0ci03",
+        "ts": "2026-11-01T21:40:54.702Z",
+        "kind": "refund",
+        "itemTypeId": "item_mpxxdbc3_2_s3d7ag",
+        "itemName": "Towel",
+        "qty": 1,
+        "unitAmount": 1000,
+        "amount": 1000,
+        "direction": -1,
+        "guest": "Anna Loots",
+        "room": "204",
+        "pax": null,
+        "shiftId": "shift_mpy3b19n_5_j6nxol",
+        "shiftLabel": "PM",
+        "businessDate": "2026-11-02",
+        "staff": "Rebecca",
+        "staffRole": "staff",
+        "note": "",
+        "towelNo": "401",
+        "oldTowelNo": "",
+        "towelLost": false,
+        "refundsSeq": 19300,
+        "exchangesSeq": null,
+        "mewsRes": "",
+        "privateRoom": false,
+        "reversesId": null,
+        "prevHash": "40fb10bcbdd7cd6dd980a39f982c9e1abbfa83a13803900894172fa833f6b93f",
+        "hash": "461bf17a01629456d6c4987710e86aeb33d306d6e30c9d0d0d26418d03ce31a4"
       }
     ],
     "audit": [
@@ -620659,6 +620721,60 @@
         },
         "prevHash": "1e8bc51192e635cec2966b02ba673cd57f6b696715e24f3783020df90babf0af",
         "hash": "aec506daf8cff97eecae9dd48b04a558fdcd1616d8af3839267e323e5f57f47e"
+      },
+      {
+        "seq": 8008,
+        "id": "aud_mvxxklsw_3t_sst8yj",
+        "ts": "2026-11-01T14:33:55.040Z",
+        "actor": "Rebecca",
+        "role": "staff",
+        "action": "backup.github",
+        "what": "Backup committed to thethreethreethree/FRONT-DESK-TRANSACTION-TRACKER@main (auto-sync)",
+        "details": {
+          "reason": "auto-sync",
+          "coh": 56400,
+          "entries": 19384
+        },
+        "prevHash": "aec506daf8cff97eecae9dd48b04a558fdcd1616d8af3839267e323e5f57f47e",
+        "hash": "16c8f3416e86f8db06c17c03885d10027104b1b55685604e432ba9b1effdb1ba"
+      },
+      {
+        "seq": 8009,
+        "id": "aud_mvyctfp1_3v_6n8xfh",
+        "ts": "2026-11-01T21:40:41.269Z",
+        "actor": "Rebecca",
+        "role": "staff",
+        "action": "refund.create",
+        "what": "Refund ₱1,000.00 · Towel ×1 · Madeline Thaning",
+        "details": {
+          "ref": 19385,
+          "id": "txn_mvyctfp1_3u_ufj90v",
+          "amount": 1000,
+          "item": "Towel",
+          "guest": "Madeline Thaning",
+          "room": "308"
+        },
+        "prevHash": "16c8f3416e86f8db06c17c03885d10027104b1b55685604e432ba9b1effdb1ba",
+        "hash": "e850852088954c60d24a00fb04307f000bd57e5cf2ab8955c8c875e4d30dfa61"
+      },
+      {
+        "seq": 8010,
+        "id": "aud_mvyctq26_3x_gupjok",
+        "ts": "2026-11-01T21:40:54.702Z",
+        "actor": "Rebecca",
+        "role": "staff",
+        "action": "refund.create",
+        "what": "Refund ₱1,000.00 · Towel ×1 · Anna Loots",
+        "details": {
+          "ref": 19386,
+          "id": "txn_mvyctq26_3w_l0ci03",
+          "amount": 1000,
+          "item": "Towel",
+          "guest": "Anna Loots",
+          "room": "204"
+        },
+        "prevHash": "e850852088954c60d24a00fb04307f000bd57e5cf2ab8955c8c875e4d30dfa61",
+        "hash": "dabde0f42ca261c87969b490435d9b4fe069dda6e9bc631b50056bf02a5550ef"
       }
     ],
     "towels": [
