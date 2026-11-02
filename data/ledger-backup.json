@@ -3,11 +3,11 @@
     "app": "Frendz Front Desk Transaction Tracker",
     "build": "2026-08-19-merge-sync",
     "writtenBy": "Marie",
-    "exportedAt": "2026-11-02T06:21:16.402Z",
+    "exportedAt": "2026-11-02T06:22:17.364Z",
     "version": 1,
-    "coh": 48400,
-    "entries": 19398,
-    "auditEvents": 8040,
+    "coh": 50400,
+    "entries": 19399,
+    "auditEvents": 8042,
     "integrity": {
       "ok": true,
       "brokenAtSeq": null
@@ -41,8 +41,8 @@
         "path": "data/ledger-backup.json",
         "autoSync": true,
         "enabled": true,
-        "lastBackupAt": "2026-11-02T04:59:44.742Z",
-        "lastBackupSha": "1d22d5f268c35f8272dcc25939b99aae94d8fc21"
+        "lastBackupAt": "2026-11-02T06:21:26.929Z",
+        "lastBackupSha": "9230f99df943ca2df00a8ee9a7b6503a6e3fed5f"
       },
       "towelTracker": {
         "enabled": true,
@@ -485526,6 +485526,37 @@
         "reversesId": null,
         "prevHash": "c46d977f1d35d3f545b04a1f689b506d38d855161e0a612c448e65a6ca524230",
         "hash": "d78be9b58a0101d0051e201cc570adcfe2d676321d79dd5ed7dff25c8c7a5805"
+      },
+      {
+        "seq": 19399,
+        "id": "txn_mvyvg24i_55_gq7kvk",
+        "ts": "2026-11-02T06:22:09.858Z",
+        "kind": "deposit",
+        "itemTypeId": "item_mpxxdbc3_2_s3d7ag",
+        "itemName": "Towel",
+        "qty": 2,
+        "unitAmount": 1000,
+        "amount": 2000,
+        "direction": 1,
+        "guest": "Owen Martin Donnelly",
+        "room": "404",
+        "pax": null,
+        "shiftId": "shift_mpy3b19n_5_j6nxol",
+        "shiftLabel": "PM",
+        "businessDate": "2026-11-02",
+        "staff": "Marie",
+        "staffRole": "staff",
+        "note": "",
+        "towelNo": "256 185",
+        "oldTowelNo": "",
+        "towelLost": false,
+        "refundsSeq": null,
+        "exchangesSeq": null,
+        "mewsRes": "",
+        "privateRoom": false,
+        "reversesId": null,
+        "prevHash": "d78be9b58a0101d0051e201cc570adcfe2d676321d79dd5ed7dff25c8c7a5805",
+        "hash": "ac88750110513a183456591806bf989a42f43598871015d30b46847828185276"
       }
     ],
     "audit": [
@@ -621651,6 +621682,41 @@
         },
         "prevHash": "b816aa7ee3880512c508a6b0bb47b19c40efcc29f7b4d1b52a75db711a61aabb",
         "hash": "67cd83fa1c0ccde2d026cb3f2bd1d4678aaf03b3ddb80ab81f33605584cc9612"
+      },
+      {
+        "seq": 8041,
+        "id": "aud_mvyvf501_54_2jsxb4",
+        "ts": "2026-11-02T06:21:26.930Z",
+        "actor": "Marie",
+        "role": "staff",
+        "action": "backup.github",
+        "what": "Backup committed to thethreethreethree/FRONT-DESK-TRANSACTION-TRACKER@main (auto-sync)",
+        "details": {
+          "reason": "auto-sync",
+          "coh": 48400,
+          "entries": 19398
+        },
+        "prevHash": "67cd83fa1c0ccde2d026cb3f2bd1d4678aaf03b3ddb80ab81f33605584cc9612",
+        "hash": "81d204881a0da27d511db9c81a121464602d7d0663f8a8678fd6aaa9f2117c8a"
+      },
+      {
+        "seq": 8042,
+        "id": "aud_mvyvg24i_56_qb45c7",
+        "ts": "2026-11-02T06:22:09.858Z",
+        "actor": "Marie",
+        "role": "staff",
+        "action": "deposit.create",
+        "what": "Deposit ₱2,000.00 · Towel ×2 · Owen Martin Donnelly",
+        "details": {
+          "ref": 19399,
+          "id": "txn_mvyvg24i_55_gq7kvk",
+          "amount": 2000,
+          "item": "Towel",
+          "guest": "Owen Martin Donnelly",
+          "room": "404"
+        },
+        "prevHash": "81d204881a0da27d511db9c81a121464602d7d0663f8a8678fd6aaa9f2117c8a",
+        "hash": "5c4362d6af354b5567cb8b2e2182697d97ee3ae514490ddc29a21fc3832a6d0f"
       }
     ],
     "towels": [
