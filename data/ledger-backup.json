@@ -3,11 +3,11 @@
     "app": "Frendz Front Desk Transaction Tracker",
     "build": "2026-08-19-merge-sync",
     "writtenBy": "Marie",
-    "exportedAt": "2026-11-02T09:36:20.617Z",
+    "exportedAt": "2026-11-02T09:48:02.828Z",
     "version": 1,
     "coh": 55400,
-    "entries": 19403,
-    "auditEvents": 8050,
+    "entries": 19404,
+    "auditEvents": 8052,
     "integrity": {
       "ok": true,
       "brokenAtSeq": null
@@ -41,8 +41,8 @@
         "path": "data/ledger-backup.json",
         "autoSync": true,
         "enabled": true,
-        "lastBackupAt": "2026-11-02T07:48:31.309Z",
-        "lastBackupSha": "a6c0b86b973abbf47068ec1e6e0035f58849d23b"
+        "lastBackupAt": "2026-11-02T09:36:30.609Z",
+        "lastBackupSha": "9d8c5fbb843a0dd5e723479e242bcc31e7af1946"
       },
       "towelTracker": {
         "enabled": true,
@@ -485681,6 +485681,37 @@
         "reversesId": null,
         "prevHash": "5d045ee45e54a3b000e73f93cb90d96cc95d33da1acefe4a110d55071eb3b54e",
         "hash": "15563534af2464a65ea67e19123f8508ad27db05b12a026ed6634984fb1d3fbe"
+      },
+      {
+        "seq": 19404,
+        "id": "txn_mvz2sokz_5k_hx9knp",
+        "ts": "2026-11-02T09:47:56.147Z",
+        "kind": "exchange",
+        "itemTypeId": "item_mpxxdbc3_2_s3d7ag",
+        "itemName": "Towel",
+        "qty": 1,
+        "unitAmount": 0,
+        "amount": 0,
+        "direction": 0,
+        "guest": "Dan Ames",
+        "room": "402",
+        "pax": null,
+        "shiftId": "shift_mpy3b19n_5_j6nxol",
+        "shiftLabel": "PM",
+        "businessDate": "2026-11-02",
+        "staff": "Marie",
+        "staffRole": "staff",
+        "note": "Towel exchange: #101 → #159 (deposit #19299)",
+        "towelNo": "159",
+        "oldTowelNo": "101",
+        "towelLost": false,
+        "refundsSeq": null,
+        "exchangesSeq": 19299,
+        "mewsRes": "",
+        "privateRoom": false,
+        "reversesId": null,
+        "prevHash": "15563534af2464a65ea67e19123f8508ad27db05b12a026ed6634984fb1d3fbe",
+        "hash": "045e336a05cd2ca938ad98fb66aef433753e66c7a3e9f227c3f9641c71a3e061"
       }
     ],
     "audit": [
@@ -621980,6 +622011,40 @@
         },
         "prevHash": "c593fa2e37d1e6c4969b18efcd6229395af1b275192fa69ca104459bf9e20d23",
         "hash": "671d58c124ce1b22e50eb09407d947778f4fdcba1e4556943887b2e371ca76f9"
+      },
+      {
+        "seq": 8051,
+        "id": "aud_mvz2dzqk_5j_gi2e7i",
+        "ts": "2026-11-02T09:36:30.764Z",
+        "actor": "Marie",
+        "role": "staff",
+        "action": "backup.github",
+        "what": "Backup committed to thethreethreethree/FRONT-DESK-TRANSACTION-TRACKER@main (auto-sync)",
+        "details": {
+          "reason": "auto-sync",
+          "coh": 55400,
+          "entries": 19403
+        },
+        "prevHash": "671d58c124ce1b22e50eb09407d947778f4fdcba1e4556943887b2e371ca76f9",
+        "hash": "3e5a80e478f11e55cd7167ff7a27494c7ca153d1fcdc361dda1ebce6ce392112"
+      },
+      {
+        "seq": 8052,
+        "id": "aud_mvz2sokz_5l_w2qb0l",
+        "ts": "2026-11-02T09:47:56.147Z",
+        "actor": "Marie",
+        "role": "staff",
+        "action": "towel.exchange",
+        "what": "Towel exchange · Dan Ames · #101 → #159 (deposit #19299)",
+        "details": {
+          "oldTowelNo": "101",
+          "newTowelNo": "159",
+          "exchangesSeq": 19299,
+          "guest": "Dan Ames",
+          "room": "402"
+        },
+        "prevHash": "3e5a80e478f11e55cd7167ff7a27494c7ca153d1fcdc361dda1ebce6ce392112",
+        "hash": "d2f21915f8b3637cdc671c92482203da14992d8b40f07fd815f0cf14d90534d5"
       }
     ],
     "towels": [
