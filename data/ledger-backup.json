@@ -3,11 +3,11 @@
     "app": "Frendz Front Desk Transaction Tracker",
     "build": "2026-08-19-merge-sync",
     "writtenBy": "Rebecca",
-    "exportedAt": "2026-11-03T04:12:07.280Z",
+    "exportedAt": "2026-11-03T04:13:01.003Z",
     "version": 1,
-    "coh": 51400,
-    "entries": 19409,
-    "auditEvents": 8070,
+    "coh": 51200,
+    "entries": 19410,
+    "auditEvents": 8072,
     "integrity": {
       "ok": true,
       "brokenAtSeq": null
@@ -41,8 +41,8 @@
         "path": "data/ledger-backup.json",
         "autoSync": true,
         "enabled": true,
-        "lastBackupAt": "2026-11-03T04:12:00.356Z",
-        "lastBackupSha": "bee2cced59989b8c44e5cc55855bcc8b68d77486"
+        "lastBackupAt": "2026-11-03T04:12:39.125Z",
+        "lastBackupSha": "bdd78da27248b9250904f0b900d023a8adac8d88"
       },
       "towelTracker": {
         "enabled": true,
@@ -485867,6 +485867,37 @@
         "reversesId": null,
         "prevHash": "a43800b5c1b37658b3b232d6a5b161097a10be1688cc3544eea0b9a41c75280e",
         "hash": "f712ce9f3dd325e422b0cb5e840f5230fec17998a8e47959cdb0d07d79783c6c"
+      },
+      {
+        "seq": 19410,
+        "id": "txn_mw069o9e_g_bnbr2n",
+        "ts": "2026-11-03T04:12:53.906Z",
+        "kind": "refund",
+        "itemTypeId": "item_mpxxdbc8_3_0avyxn",
+        "itemName": "Padlock",
+        "qty": 1,
+        "unitAmount": 200,
+        "amount": 200,
+        "direction": -1,
+        "guest": "Jon Rey Celaya",
+        "room": "303",
+        "pax": null,
+        "shiftId": "shift_mpy3b19n_5_j6nxol",
+        "shiftLabel": "PM",
+        "businessDate": "2026-11-03",
+        "staff": "Rebecca",
+        "staffRole": "staff",
+        "note": "",
+        "towelNo": "",
+        "oldTowelNo": "",
+        "towelLost": false,
+        "refundsSeq": 19346,
+        "exchangesSeq": null,
+        "mewsRes": "",
+        "privateRoom": false,
+        "reversesId": null,
+        "prevHash": "f712ce9f3dd325e422b0cb5e840f5230fec17998a8e47959cdb0d07d79783c6c",
+        "hash": "81f8915d4075959fdfa6704c8152cd324611e91f60535974e1fbfd2969e22e6e"
       }
     ],
     "audit": [
@@ -622507,6 +622538,41 @@
         },
         "prevHash": "df8c1f30b9b549a346f41ed50faa6991cf6819d976ab8c7a8cc498c1bd38a9fe",
         "hash": "25d88f85475365e373f3dbdf0daf5285a460ee59e8e20a312b6de7fae6186b20"
+      },
+      {
+        "seq": 8071,
+        "id": "aud_mw069cyb_f_hugxk2",
+        "ts": "2026-11-03T04:12:39.251Z",
+        "actor": "Rebecca",
+        "role": "staff",
+        "action": "backup.github",
+        "what": "Backup committed to thethreethreethree/FRONT-DESK-TRANSACTION-TRACKER@main (auto-sync)",
+        "details": {
+          "reason": "auto-sync",
+          "coh": 51400,
+          "entries": 19409
+        },
+        "prevHash": "25d88f85475365e373f3dbdf0daf5285a460ee59e8e20a312b6de7fae6186b20",
+        "hash": "2599c5c2929d9427045996112a930723b8c0578122965dd0a200a99477ad30f7"
+      },
+      {
+        "seq": 8072,
+        "id": "aud_mw069o9e_h_39fka6",
+        "ts": "2026-11-03T04:12:53.906Z",
+        "actor": "Rebecca",
+        "role": "staff",
+        "action": "refund.create",
+        "what": "Refund ₱200.00 · Padlock ×1 · Jon Rey Celaya",
+        "details": {
+          "ref": 19410,
+          "id": "txn_mw069o9e_g_bnbr2n",
+          "amount": 200,
+          "item": "Padlock",
+          "guest": "Jon Rey Celaya",
+          "room": "303"
+        },
+        "prevHash": "2599c5c2929d9427045996112a930723b8c0578122965dd0a200a99477ad30f7",
+        "hash": "e880ecc68bcfd28cfcf18d977df9057bf298ea707a28ba45bf0b55ecff71cc02"
       }
     ],
     "towels": [
