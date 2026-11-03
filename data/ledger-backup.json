@@ -3,11 +3,11 @@
     "app": "Frendz Front Desk Transaction Tracker",
     "build": "2026-08-19-merge-sync",
     "writtenBy": "Monie",
-    "exportedAt": "2026-11-03T12:20:14.279Z",
+    "exportedAt": "2026-11-03T12:21:22.436Z",
     "version": 1,
     "coh": 50200,
     "entries": 19424,
-    "auditEvents": 8112,
+    "auditEvents": 8114,
     "integrity": {
       "ok": true,
       "brokenAtSeq": null
@@ -16,7 +16,7 @@
       "ok": true,
       "brokenAtSeq": null
     },
-    "travelistaEntries": 171,
+    "travelistaEntries": 172,
     "travelistaIntegrity": {
       "ok": true,
       "brokenAtSeq": null
@@ -41,8 +41,8 @@
         "path": "data/ledger-backup.json",
         "autoSync": true,
         "enabled": true,
-        "lastBackupAt": "2026-11-03T11:39:58.514Z",
-        "lastBackupSha": "3aabb5d718ee7ea8a6ca1854d6ffcaf1e4388b17"
+        "lastBackupAt": "2026-11-03T12:21:15.550Z",
+        "lastBackupSha": "0a8e0775beb2147768018cb809147f7ab3f8e2a7"
       },
       "towelTracker": {
         "enabled": true,
@@ -623740,6 +623740,43 @@
         },
         "prevHash": "2a70d81695f312d60fd610aac81f3120276a459c855bcc3b469ae7f550b21afe",
         "hash": "046b04e0f7d1c20af09bf9a1c808292a7858efbd0bff8211a55c4f61cf48809f"
+      },
+      {
+        "seq": 8113,
+        "id": "aud_mw0np1d6_4_wdvwey",
+        "ts": "2026-11-03T12:20:44.202Z",
+        "actor": "Monie",
+        "role": "staff",
+        "action": "tv.booking.create",
+        "what": "Travelista booking #172 · AMAILLE BARCET · EL NIDO SHARING VAN ×6 pax · ₱4,500 (commission ₱600)",
+        "details": {
+          "ref": 172,
+          "id": "tv_mw0np1d5_3_su3xn8",
+          "guest": "AMAILLE BARCET",
+          "destination": "EL NIDO SHARING VAN",
+          "pax": 6,
+          "total": 4500,
+          "commission": 600,
+          "bookedBy": "MONIE"
+        },
+        "prevHash": "046b04e0f7d1c20af09bf9a1c808292a7858efbd0bff8211a55c4f61cf48809f",
+        "hash": "39a32a0a34ed3acf01c0b1a3d1fe0c62e7ea7b31ddea45ce82269fc35324e0e7"
+      },
+      {
+        "seq": 8114,
+        "id": "aud_mw0nppk1_5_a1d1uv",
+        "ts": "2026-11-03T12:21:15.553Z",
+        "actor": "Monie",
+        "role": "staff",
+        "action": "backup.github",
+        "what": "Backup committed to thethreethreethree/FRONT-DESK-TRANSACTION-TRACKER@main (auto-sync)",
+        "details": {
+          "reason": "auto-sync",
+          "coh": 50200,
+          "entries": 19424
+        },
+        "prevHash": "39a32a0a34ed3acf01c0b1a3d1fe0c62e7ea7b31ddea45ce82269fc35324e0e7",
+        "hash": "0a51c2ea115a608734d524a11a255acb13a1789a8cc04b502c3ca271f88cbdf8"
       }
     ],
     "towels": [
@@ -637441,6 +637478,42 @@
           "reversesKind": null,
           "prevHash": "660961aa545949708ba60481770f59248d51964f8ad08324d0aa0830b68572e0",
           "hash": "7c0b939026b7241ccbfe4a3a9f9639ce692c52e4d157e474f67c0b3b24a71762"
+        },
+        {
+          "seq": 172,
+          "id": "tv_mw0np1d5_3_su3xn8",
+          "ts": "2026-11-03T12:20:44.201Z",
+          "kind": "booking",
+          "direction": 1,
+          "amount": 4500,
+          "departureDate": "2026-11-03",
+          "guest": "AMAILLE BARCET",
+          "destination": "EL NIDO SHARING VAN",
+          "destinationId": "dest_msrh30tg_g_n0iv15",
+          "pax": 6,
+          "fare": 750,
+          "fareBasis": "per_pax",
+          "total": 4500,
+          "travelistaShare": 3900,
+          "commission": 600,
+          "bookedBy": "MONIE",
+          "remarks": "",
+          "payoutType": "",
+          "payee": "",
+          "method": "",
+          "amendsSeq": null,
+          "dTotal": 0,
+          "dShare": 0,
+          "dCommission": 0,
+          "dPax": 0,
+          "periodKey": "2026-11-A",
+          "staff": "Monie",
+          "staffRole": "staff",
+          "businessDate": "2026-11-03",
+          "reversesId": null,
+          "reversesKind": null,
+          "prevHash": "7c0b939026b7241ccbfe4a3a9f9639ce692c52e4d157e474f67c0b3b24a71762",
+          "hash": "cf844983ff7f5c9c1c9025fd0bb945018c22d26c77e2ba1f2af040ebbecd95b7"
         }
       ]
     }
