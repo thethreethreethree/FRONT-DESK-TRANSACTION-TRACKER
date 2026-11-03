@@ -3,11 +3,11 @@
     "app": "Frendz Front Desk Transaction Tracker",
     "build": "2026-08-19-merge-sync",
     "writtenBy": "James",
-    "exportedAt": "2026-11-03T11:39:48.385Z",
+    "exportedAt": "2026-11-03T12:08:13.665Z",
     "version": 1,
-    "coh": 56200,
-    "entries": 19423,
-    "auditEvents": 8109,
+    "coh": 50200,
+    "entries": 19424,
+    "auditEvents": 8111,
     "integrity": {
       "ok": true,
       "brokenAtSeq": null
@@ -41,8 +41,8 @@
         "path": "data/ledger-backup.json",
         "autoSync": true,
         "enabled": true,
-        "lastBackupAt": "2026-11-03T11:38:54.904Z",
-        "lastBackupSha": "7364e1511d4229e71e0dd07b30a61ab98976bd76"
+        "lastBackupAt": "2026-11-03T11:39:58.514Z",
+        "lastBackupSha": "e41d00c7449e6c737c46728186d2d8f538d3965a"
       },
       "towelTracker": {
         "enabled": true,
@@ -486301,6 +486301,37 @@
         "reversesId": null,
         "prevHash": "ee442d82017d2267ba2c31e429f04371b7db2f458d590579b0596d911ea06169",
         "hash": "7801f0dd3fbe86cf924ce327d1df8ffa7be8bf20e685859e9c1707cead221005"
+      },
+      {
+        "seq": 19424,
+        "id": "txn_mw0n8ssi_4h_zvnznq",
+        "ts": "2026-11-03T12:08:06.594Z",
+        "kind": "refund",
+        "itemTypeId": "item_mpxxdbc3_2_s3d7ag",
+        "itemName": "Towel",
+        "qty": 1,
+        "unitAmount": 6000,
+        "amount": 6000,
+        "direction": -1,
+        "guest": "Durand Chloé Marie Anne",
+        "room": "304",
+        "pax": null,
+        "shiftId": "shift_mpy3b19n_5_j6nxol",
+        "shiftLabel": "PM",
+        "businessDate": "2026-11-03",
+        "staff": "James",
+        "staffRole": "manager",
+        "note": "",
+        "towelNo": "82 111 261 232 451 285",
+        "oldTowelNo": "",
+        "towelLost": false,
+        "refundsSeq": 19348,
+        "exchangesSeq": null,
+        "mewsRes": "",
+        "privateRoom": false,
+        "reversesId": null,
+        "prevHash": "7801f0dd3fbe86cf924ce327d1df8ffa7be8bf20e685859e9c1707cead221005",
+        "hash": "e9cd2df033bc4004b7d840eb1a9220b29ca024e1b8fff84ff476061b1518b8ae"
       }
     ],
     "audit": [
@@ -623653,6 +623684,41 @@
         },
         "prevHash": "d168774bae464053d8151ce77f7fa514658cbdd10e7fbc3428402834b4ac5921",
         "hash": "25ccd7425e0ce6aa044f54f26bfddcdca87dd0c2441446d07aa9b67d75b8430f"
+      },
+      {
+        "seq": 8110,
+        "id": "aud_mw0m8m9e_4g_zqx5qs",
+        "ts": "2026-11-03T11:39:58.514Z",
+        "actor": "James",
+        "role": "manager",
+        "action": "backup.github",
+        "what": "Backup committed to thethreethreethree/FRONT-DESK-TRANSACTION-TRACKER@main (auto-sync)",
+        "details": {
+          "reason": "auto-sync",
+          "coh": 56200,
+          "entries": 19423
+        },
+        "prevHash": "25ccd7425e0ce6aa044f54f26bfddcdca87dd0c2441446d07aa9b67d75b8430f",
+        "hash": "e811546c4d2ab9a053acc54e44be1db39c481d926dee9eb0646c903c7d92af37"
+      },
+      {
+        "seq": 8111,
+        "id": "aud_mw0n8ssj_4i_xq86ln",
+        "ts": "2026-11-03T12:08:06.595Z",
+        "actor": "James",
+        "role": "manager",
+        "action": "refund.create",
+        "what": "Refund ₱6,000.00 · Towel ×1 · Durand Chloé Marie Anne",
+        "details": {
+          "ref": 19424,
+          "id": "txn_mw0n8ssi_4h_zvnznq",
+          "amount": 6000,
+          "item": "Towel",
+          "guest": "Durand Chloé Marie Anne",
+          "room": "304"
+        },
+        "prevHash": "e811546c4d2ab9a053acc54e44be1db39c481d926dee9eb0646c903c7d92af37",
+        "hash": "2a70d81695f312d60fd610aac81f3120276a459c855bcc3b469ae7f550b21afe"
       }
     ],
     "towels": [
