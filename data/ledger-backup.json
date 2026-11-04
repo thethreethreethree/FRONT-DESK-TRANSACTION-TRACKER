@@ -3,11 +3,11 @@
     "app": "Frendz Front Desk Transaction Tracker",
     "build": "2026-08-19-merge-sync",
     "writtenBy": "Marie",
-    "exportedAt": "2026-11-04T12:07:28.174Z",
+    "exportedAt": "2026-11-04T12:07:59.129Z",
     "version": 1,
     "coh": 46200,
     "entries": 19450,
-    "auditEvents": 8177,
+    "auditEvents": 8179,
     "integrity": {
       "ok": true,
       "brokenAtSeq": null
@@ -16,7 +16,7 @@
       "ok": true,
       "brokenAtSeq": null
     },
-    "travelistaEntries": 174,
+    "travelistaEntries": 175,
     "travelistaIntegrity": {
       "ok": true,
       "brokenAtSeq": null
@@ -41,8 +41,8 @@
         "path": "data/ledger-backup.json",
         "autoSync": true,
         "enabled": true,
-        "lastBackupAt": "2026-11-04T09:53:39.165Z",
-        "lastBackupSha": "9205a0d10cbf00f25f3c1adf993f542a48c1ad69"
+        "lastBackupAt": "2026-11-04T12:07:52.181Z",
+        "lastBackupSha": "1aeb8f3c1a4544a5edf904e8a79544849d05afb6"
       },
       "towelTracker": {
         "enabled": true,
@@ -625660,6 +625660,43 @@
         },
         "prevHash": "07673fd180593bcc8211a5de713db418e4df3964f7312fd71cf699bb5c3caea6",
         "hash": "d6cfa5123f61a7e6265d8422dc3a3f32036d17f2d565c9a4f35d95edd5712739"
+      },
+      {
+        "seq": 8178,
+        "id": "aud_mw22nx0v_2q_18b150",
+        "ts": "2026-11-04T12:07:32.335Z",
+        "actor": "Marie",
+        "role": "staff",
+        "action": "tv.booking.create",
+        "what": "Travelista booking #175 · Isabelle Lopez · PPS SHARING VAN ×1 pax · ₱750 (commission ₱100)",
+        "details": {
+          "ref": 175,
+          "id": "tv_mw22nx0v_2p_l4giwr",
+          "guest": "Isabelle Lopez",
+          "destination": "PPS SHARING VAN",
+          "pax": 1,
+          "total": 750,
+          "commission": 100,
+          "bookedBy": "MARIE"
+        },
+        "prevHash": "d6cfa5123f61a7e6265d8422dc3a3f32036d17f2d565c9a4f35d95edd5712739",
+        "hash": "d255e32f97ea8472ddcee0781d6e8a64fb0cf1826d6c1ec2000731516f61d143"
+      },
+      {
+        "seq": 8179,
+        "id": "aud_mw22occ8_2r_tn9x75",
+        "ts": "2026-11-04T12:07:52.184Z",
+        "actor": "Marie",
+        "role": "staff",
+        "action": "backup.github",
+        "what": "Backup committed to thethreethreethree/FRONT-DESK-TRANSACTION-TRACKER@main (auto-sync)",
+        "details": {
+          "reason": "auto-sync",
+          "coh": 46200,
+          "entries": 19450
+        },
+        "prevHash": "d255e32f97ea8472ddcee0781d6e8a64fb0cf1826d6c1ec2000731516f61d143",
+        "hash": "676b481439cfe0db245bae433a75ce52abbeb3055e949376bebcfd2490d981b7"
       }
     ],
     "towels": [
@@ -639469,6 +639506,42 @@
           "reversesKind": null,
           "prevHash": "c4a73b82dca84743a6adf328e35d7fda43a7bb1307fe3957148dca3ef55b8359",
           "hash": "d6e22aea47171328c8a59149946f5a8f6fd97bf62a3a1d9c571153f6ac1bd4c8"
+        },
+        {
+          "seq": 175,
+          "id": "tv_mw22nx0v_2p_l4giwr",
+          "ts": "2026-11-04T12:07:32.335Z",
+          "kind": "booking",
+          "direction": 1,
+          "amount": 750,
+          "departureDate": "2026-11-04",
+          "guest": "Isabelle Lopez",
+          "destination": "PPS SHARING VAN",
+          "destinationId": "dest_msrh2ktf_d_xyn4hg",
+          "pax": 1,
+          "fare": 750,
+          "fareBasis": "per_pax",
+          "total": 750,
+          "travelistaShare": 650,
+          "commission": 100,
+          "bookedBy": "MARIE",
+          "remarks": "",
+          "payoutType": "",
+          "payee": "",
+          "method": "",
+          "amendsSeq": null,
+          "dTotal": 0,
+          "dShare": 0,
+          "dCommission": 0,
+          "dPax": 0,
+          "periodKey": "2026-11-A",
+          "staff": "Marie",
+          "staffRole": "staff",
+          "businessDate": "2026-11-04",
+          "reversesId": null,
+          "reversesKind": null,
+          "prevHash": "d6e22aea47171328c8a59149946f5a8f6fd97bf62a3a1d9c571153f6ac1bd4c8",
+          "hash": "68f057ee76ebd15d7e8dd6ebf13d5189ed15406f311bc2c393dcdc41329506bc"
         }
       ]
     }
