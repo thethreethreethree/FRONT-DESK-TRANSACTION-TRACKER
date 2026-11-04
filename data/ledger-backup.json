@@ -3,11 +3,11 @@
     "app": "Frendz Front Desk Transaction Tracker",
     "build": "2026-08-19-merge-sync",
     "writtenBy": "GINO",
-    "exportedAt": "2026-11-04T01:05:35.233Z",
+    "exportedAt": "2026-11-04T04:23:36.716Z",
     "version": 1,
-    "coh": 54200,
-    "entries": 19429,
-    "auditEvents": 8131,
+    "coh": 52200,
+    "entries": 19430,
+    "auditEvents": 8133,
     "integrity": {
       "ok": true,
       "brokenAtSeq": null
@@ -41,8 +41,8 @@
         "path": "data/ledger-backup.json",
         "autoSync": true,
         "enabled": true,
-        "lastBackupAt": "2026-11-03T22:07:59.272Z",
-        "lastBackupSha": "3244aacb889569e58a63aaf816f778ba33ed8a33"
+        "lastBackupAt": "2026-11-04T01:05:46.071Z",
+        "lastBackupSha": "93b57ea0c00be93d814861b737034afad2052bcc"
       },
       "towelTracker": {
         "enabled": true,
@@ -486487,6 +486487,37 @@
         "reversesId": null,
         "prevHash": "004c843d8f2f47ad7352026d4b50833c92710c53241b2b82dd3ee79d6c857823",
         "hash": "8c5c862ea26b2eaa92e2cea98944e03f46dbfa38e843ce6f86479c436cae10a4"
+      },
+      {
+        "seq": 19430,
+        "id": "txn_mw1m35s6_u_p6bhqs",
+        "ts": "2026-11-04T04:23:30.054Z",
+        "kind": "refund",
+        "itemTypeId": "item_mpxxdbc3_2_s3d7ag",
+        "itemName": "Towel",
+        "qty": 1,
+        "unitAmount": 2000,
+        "amount": 2000,
+        "direction": -1,
+        "guest": "Alexandra Birch",
+        "room": "408",
+        "pax": null,
+        "shiftId": "shift_mpy3b19n_5_j6nxol",
+        "shiftLabel": "PM",
+        "businessDate": "2026-11-04",
+        "staff": "GINO",
+        "staffRole": "staff",
+        "note": "",
+        "towelNo": "65 121",
+        "oldTowelNo": "",
+        "towelLost": false,
+        "refundsSeq": 19401,
+        "exchangesSeq": null,
+        "mewsRes": "",
+        "privateRoom": false,
+        "reversesId": null,
+        "prevHash": "8c5c862ea26b2eaa92e2cea98944e03f46dbfa38e843ce6f86479c436cae10a4",
+        "hash": "414ac0e54e633fea8e6a17af556a4730ee41bc2d346113d1aa9fe4c19b711e8b"
       }
     ],
     "audit": [
@@ -624212,6 +624243,41 @@
         },
         "prevHash": "e29c686e2fd595461fa9d45b070dc7e441d490070a0594331438748c73498c0a",
         "hash": "fe0fe154cebdc77363bc1650531449169ba6c48337ace34ed0ccbd2c5d928fd2"
+      },
+      {
+        "seq": 8132,
+        "id": "aud_mw1f0vh6_t_8y8bp4",
+        "ts": "2026-11-04T01:05:46.074Z",
+        "actor": "GINO",
+        "role": "staff",
+        "action": "backup.github",
+        "what": "Backup committed to thethreethreethree/FRONT-DESK-TRANSACTION-TRACKER@main (auto-sync)",
+        "details": {
+          "reason": "auto-sync",
+          "coh": 54200,
+          "entries": 19429
+        },
+        "prevHash": "fe0fe154cebdc77363bc1650531449169ba6c48337ace34ed0ccbd2c5d928fd2",
+        "hash": "6748cf63cb92a5151ad33806a682960faca2ad0254231bfb3fddd84e46003272"
+      },
+      {
+        "seq": 8133,
+        "id": "aud_mw1m35s6_v_4m5lan",
+        "ts": "2026-11-04T04:23:30.054Z",
+        "actor": "GINO",
+        "role": "staff",
+        "action": "refund.create",
+        "what": "Refund ₱2,000.00 · Towel ×1 · Alexandra Birch",
+        "details": {
+          "ref": 19430,
+          "id": "txn_mw1m35s6_u_p6bhqs",
+          "amount": 2000,
+          "item": "Towel",
+          "guest": "Alexandra Birch",
+          "room": "408"
+        },
+        "prevHash": "6748cf63cb92a5151ad33806a682960faca2ad0254231bfb3fddd84e46003272",
+        "hash": "c1ed6265bba8d77cdf7891ebca1b2e091d0d7bbf643c1e0f19ceee5b2e37801c"
       }
     ],
     "towels": [
