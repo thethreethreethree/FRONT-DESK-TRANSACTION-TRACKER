@@ -3,11 +3,11 @@
     "app": "Frendz Front Desk Transaction Tracker",
     "build": "2026-08-19-merge-sync",
     "writtenBy": "Marie",
-    "exportedAt": "2026-11-04T12:20:13.112Z",
+    "exportedAt": "2026-11-04T12:21:10.116Z",
     "version": 1,
-    "coh": 47200,
-    "entries": 19451,
-    "auditEvents": 8181,
+    "coh": 49200,
+    "entries": 19452,
+    "auditEvents": 8183,
     "integrity": {
       "ok": true,
       "brokenAtSeq": null
@@ -41,8 +41,8 @@
         "path": "data/ledger-backup.json",
         "autoSync": true,
         "enabled": true,
-        "lastBackupAt": "2026-11-04T12:08:36.910Z",
-        "lastBackupSha": "db498c1ea3d937d4babe48e5654cd7b70dc20aef"
+        "lastBackupAt": "2026-11-04T12:20:23.354Z",
+        "lastBackupSha": "f95cf48a2365853a8fbc8a92f654788cf99a625b"
       },
       "towelTracker": {
         "enabled": true,
@@ -487169,6 +487169,37 @@
         "reversesId": null,
         "prevHash": "a437e3a49fa168f41f044c2fe3294c0c99d3507f2103008feb8e9bb438442db2",
         "hash": "a773e6fb84ef3afcb54d0875a1b6f1e7c563004e349c7c0190f62f677a57d991"
+      },
+      {
+        "seq": 19452,
+        "id": "txn_mw235ak4_2w_4zrmpo",
+        "ts": "2026-11-04T12:21:03.029Z",
+        "kind": "deposit",
+        "itemTypeId": "item_mpxxdbc3_2_s3d7ag",
+        "itemName": "Towel",
+        "qty": 2,
+        "unitAmount": 1000,
+        "amount": 2000,
+        "direction": 1,
+        "guest": "Jessica Feldtmann",
+        "room": "408",
+        "pax": null,
+        "shiftId": "shift_mpy3b19n_5_j6nxol",
+        "shiftLabel": "PM",
+        "businessDate": "2026-11-04",
+        "staff": "Marie",
+        "staffRole": "staff",
+        "note": "",
+        "towelNo": "226 274",
+        "oldTowelNo": "",
+        "towelLost": false,
+        "refundsSeq": null,
+        "exchangesSeq": null,
+        "mewsRes": "",
+        "privateRoom": false,
+        "reversesId": null,
+        "prevHash": "a773e6fb84ef3afcb54d0875a1b6f1e7c563004e349c7c0190f62f677a57d991",
+        "hash": "3b93bcbea49a14a0933706a5d94aeceabdf49ce9741720a561ad4ae25bc5d494"
       }
     ],
     "audit": [
@@ -625763,6 +625794,41 @@
         },
         "prevHash": "f563ec89789e9fd1dedefdf18b90d89d4f10014996e688afaabd3d4d618a409f",
         "hash": "5a1e747194d765920c6caee73ced1378e75e14e3037793dbe0699dc8a8686054"
+      },
+      {
+        "seq": 8182,
+        "id": "aud_mw234g3f_2v_q7i2s5",
+        "ts": "2026-11-04T12:20:23.547Z",
+        "actor": "Marie",
+        "role": "staff",
+        "action": "backup.github",
+        "what": "Backup committed to thethreethreethree/FRONT-DESK-TRANSACTION-TRACKER@main (auto-sync)",
+        "details": {
+          "reason": "auto-sync",
+          "coh": 47200,
+          "entries": 19451
+        },
+        "prevHash": "5a1e747194d765920c6caee73ced1378e75e14e3037793dbe0699dc8a8686054",
+        "hash": "5cd3715fb802485d718430d62944587d2225fb342207978ef43d95bb609e154c"
+      },
+      {
+        "seq": 8183,
+        "id": "aud_mw235ak5_2x_log7pi",
+        "ts": "2026-11-04T12:21:03.029Z",
+        "actor": "Marie",
+        "role": "staff",
+        "action": "deposit.create",
+        "what": "Deposit ₱2,000.00 · Towel ×2 · Jessica Feldtmann",
+        "details": {
+          "ref": 19452,
+          "id": "txn_mw235ak4_2w_4zrmpo",
+          "amount": 2000,
+          "item": "Towel",
+          "guest": "Jessica Feldtmann",
+          "room": "408"
+        },
+        "prevHash": "5cd3715fb802485d718430d62944587d2225fb342207978ef43d95bb609e154c",
+        "hash": "86d8a1f94dc0aac31261bc6070d2512d43abcde374ad1cd3f46a56a0374b8a30"
       }
     ],
     "towels": [
