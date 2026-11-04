@@ -3,11 +3,11 @@
     "app": "Frendz Front Desk Transaction Tracker",
     "build": "2026-08-19-merge-sync",
     "writtenBy": "GINO",
-    "exportedAt": "2026-11-04T04:33:57.527Z",
+    "exportedAt": "2026-11-04T04:34:16.257Z",
     "version": 1,
-    "coh": 41200,
-    "entries": 19439,
-    "auditEvents": 8150,
+    "coh": 39200,
+    "entries": 19440,
+    "auditEvents": 8152,
     "integrity": {
       "ok": true,
       "brokenAtSeq": null
@@ -41,8 +41,8 @@
         "path": "data/ledger-backup.json",
         "autoSync": true,
         "enabled": true,
-        "lastBackupAt": "2026-11-04T04:30:03.926Z",
-        "lastBackupSha": "05d8dd4a660772a120dcabf5d3b7271a78f00696"
+        "lastBackupAt": "2026-11-04T04:34:09.576Z",
+        "lastBackupSha": "09510c252188bd3c415fd77e203f75da20bdce04"
       },
       "towelTracker": {
         "enabled": true,
@@ -486797,6 +486797,37 @@
         "reversesId": null,
         "prevHash": "a1fd9e221ddbf508ebf2d0a94e46ccff8fa0872277d5a2889dd5648d91187a55",
         "hash": "de0aa132ae611453f03f8eac6f092bca04bc4a5cea5e27b3d839e7911306303a"
+      },
+      {
+        "seq": 19440,
+        "id": "txn_mw1mgtpc_1m_b3255i",
+        "ts": "2026-11-04T04:34:07.584Z",
+        "kind": "refund",
+        "itemTypeId": "item_mpxxdbc3_2_s3d7ag",
+        "itemName": "Towel",
+        "qty": 1,
+        "unitAmount": 2000,
+        "amount": 2000,
+        "direction": -1,
+        "guest": "Owen Martin Donnelly",
+        "room": "404",
+        "pax": null,
+        "shiftId": "shift_mpy3b19n_5_j6nxol",
+        "shiftLabel": "PM",
+        "businessDate": "2026-11-04",
+        "staff": "GINO",
+        "staffRole": "staff",
+        "note": "",
+        "towelNo": "256 185",
+        "oldTowelNo": "",
+        "towelLost": false,
+        "refundsSeq": 19399,
+        "exchangesSeq": null,
+        "mewsRes": "",
+        "privateRoom": false,
+        "reversesId": null,
+        "prevHash": "de0aa132ae611453f03f8eac6f092bca04bc4a5cea5e27b3d839e7911306303a",
+        "hash": "80f9455f65d39df3255e5a51a5716e9f7d70648a77639e7c96e126c550251403"
       }
     ],
     "audit": [
@@ -624856,6 +624887,41 @@
         },
         "prevHash": "6c6b503cead6aceaa3bd88131a9c9e6ceba77e6d0ec121b929e79f8b9d083564",
         "hash": "cb83629f2741ec1fcc21e8619fe35cf7db84c8bcf28240601a958f3765532623"
+      },
+      {
+        "seq": 8151,
+        "id": "aud_mw1mgtpc_1n_fg6d32",
+        "ts": "2026-11-04T04:34:07.584Z",
+        "actor": "GINO",
+        "role": "staff",
+        "action": "refund.create",
+        "what": "Refund ₱2,000.00 · Towel ×1 · Owen Martin Donnelly",
+        "details": {
+          "ref": 19440,
+          "id": "txn_mw1mgtpc_1m_b3255i",
+          "amount": 2000,
+          "item": "Towel",
+          "guest": "Owen Martin Donnelly",
+          "room": "404"
+        },
+        "prevHash": "cb83629f2741ec1fcc21e8619fe35cf7db84c8bcf28240601a958f3765532623",
+        "hash": "a4bdfc5e05c2f5af4746a8adb27b92215919d2f22665107b7f3f6224f3d88900"
+      },
+      {
+        "seq": 8152,
+        "id": "aud_mw1mgv8o_1o_t8ryh7",
+        "ts": "2026-11-04T04:34:09.576Z",
+        "actor": "GINO",
+        "role": "staff",
+        "action": "backup.github",
+        "what": "Backup committed to thethreethreethree/FRONT-DESK-TRANSACTION-TRACKER@main (auto-sync)",
+        "details": {
+          "reason": "auto-sync",
+          "coh": 41200,
+          "entries": 19440
+        },
+        "prevHash": "a4bdfc5e05c2f5af4746a8adb27b92215919d2f22665107b7f3f6224f3d88900",
+        "hash": "30afbe0fb7e3e3d1fafdac07cd698686004245a980ff1eb2941627265bb91991"
       }
     ],
     "towels": [
