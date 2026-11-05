@@ -3,11 +3,11 @@
     "app": "Frendz Front Desk Transaction Tracker",
     "build": "2026-08-19-merge-sync",
     "writtenBy": "GINO",
-    "exportedAt": "2026-11-05T03:09:45.318Z",
+    "exportedAt": "2026-11-05T04:21:42.355Z",
     "version": 1,
-    "coh": 54200,
-    "entries": 19456,
-    "auditEvents": 8203,
+    "coh": 52200,
+    "entries": 19457,
+    "auditEvents": 8205,
     "integrity": {
       "ok": true,
       "brokenAtSeq": null
@@ -41,8 +41,8 @@
         "path": "data/ledger-backup.json",
         "autoSync": true,
         "enabled": true,
-        "lastBackupAt": "2026-11-04T23:12:49.907Z",
-        "lastBackupSha": "64a00e2e71b2bcbb98e0058870c8d3ede79c1fe1"
+        "lastBackupAt": "2026-11-05T03:09:56.149Z",
+        "lastBackupSha": "991e7b20a322c6fbdc65703a0800f3c4870b1f36"
       },
       "towelTracker": {
         "enabled": true,
@@ -487324,6 +487324,37 @@
         "reversesId": null,
         "prevHash": "83471abb605355f50cf4394b1e06402b161c9c1b48918b5db585b5e717417929",
         "hash": "f2c1ce229c1d63d4b3a1e1cc293e28069f944b20bd10902bb6a13444c00bc9f0"
+      },
+      {
+        "seq": 19457,
+        "id": "txn_mw31gk7u_3q_gqlipz",
+        "ts": "2026-11-05T04:21:35.706Z",
+        "kind": "refund",
+        "itemTypeId": "item_mpxxdbc3_2_s3d7ag",
+        "itemName": "Towel",
+        "qty": 1,
+        "unitAmount": 2000,
+        "amount": 2000,
+        "direction": -1,
+        "guest": "Norret Mathias",
+        "room": "303",
+        "pax": null,
+        "shiftId": "shift_mpy3b19n_5_j6nxol",
+        "shiftLabel": "PM",
+        "businessDate": "2026-11-05",
+        "staff": "GINO",
+        "staffRole": "staff",
+        "note": "",
+        "towelNo": "456, 278",
+        "oldTowelNo": "",
+        "towelLost": false,
+        "refundsSeq": 19340,
+        "exchangesSeq": null,
+        "mewsRes": "",
+        "privateRoom": false,
+        "reversesId": null,
+        "prevHash": "f2c1ce229c1d63d4b3a1e1cc293e28069f944b20bd10902bb6a13444c00bc9f0",
+        "hash": "8a6d6ef966527d9b3dfbd2da45ce3cfb71b04f9e627fc1b3a6c182e14a33f165"
       }
     ],
     "audit": [
@@ -626288,6 +626319,41 @@
         },
         "prevHash": "f6051555e3729406d649d03d309d1bad5d0b3daba21c8da40740dda761c6c11a",
         "hash": "fa7c43043ace948c1d1c619ad00dce167e144613e1e11504fc26e1221340f23e"
+      },
+      {
+        "seq": 8204,
+        "id": "aud_mw2ywerc_3p_1fcu6q",
+        "ts": "2026-11-05T03:09:56.280Z",
+        "actor": "GINO",
+        "role": "staff",
+        "action": "backup.github",
+        "what": "Backup committed to thethreethreethree/FRONT-DESK-TRANSACTION-TRACKER@main (auto-sync)",
+        "details": {
+          "reason": "auto-sync",
+          "coh": 54200,
+          "entries": 19456
+        },
+        "prevHash": "fa7c43043ace948c1d1c619ad00dce167e144613e1e11504fc26e1221340f23e",
+        "hash": "3cd457913f39ce433c13f0ff0764b6d419ec40cc42ac11b2baa269b5816eb1b2"
+      },
+      {
+        "seq": 8205,
+        "id": "aud_mw31gk7u_3r_rwc6dp",
+        "ts": "2026-11-05T04:21:35.706Z",
+        "actor": "GINO",
+        "role": "staff",
+        "action": "refund.create",
+        "what": "Refund ₱2,000.00 · Towel ×1 · Norret Mathias",
+        "details": {
+          "ref": 19457,
+          "id": "txn_mw31gk7u_3q_gqlipz",
+          "amount": 2000,
+          "item": "Towel",
+          "guest": "Norret Mathias",
+          "room": "303"
+        },
+        "prevHash": "3cd457913f39ce433c13f0ff0764b6d419ec40cc42ac11b2baa269b5816eb1b2",
+        "hash": "045461faca6dfcc27281bf8bab0c80a2f7e2ccf201b1d6adccd388d0864b8ad1"
       }
     ],
     "towels": [
