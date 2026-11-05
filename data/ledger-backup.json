@@ -3,11 +3,11 @@
     "app": "Frendz Front Desk Transaction Tracker",
     "build": "2026-08-19-merge-sync",
     "writtenBy": "GINO",
-    "exportedAt": "2026-11-04T23:12:11.181Z",
+    "exportedAt": "2026-11-05T03:09:45.318Z",
     "version": 1,
     "coh": 54200,
     "entries": 19456,
-    "auditEvents": 8201,
+    "auditEvents": 8203,
     "integrity": {
       "ok": true,
       "brokenAtSeq": null
@@ -16,7 +16,7 @@
       "ok": true,
       "brokenAtSeq": null
     },
-    "travelistaEntries": 177,
+    "travelistaEntries": 178,
     "travelistaIntegrity": {
       "ok": true,
       "brokenAtSeq": null
@@ -41,8 +41,8 @@
         "path": "data/ledger-backup.json",
         "autoSync": true,
         "enabled": true,
-        "lastBackupAt": "2026-11-04T21:31:13.853Z",
-        "lastBackupSha": "e2fca4964759552cb9189dfcde26796b24d93f78"
+        "lastBackupAt": "2026-11-04T23:12:49.907Z",
+        "lastBackupSha": "64a00e2e71b2bcbb98e0058870c8d3ede79c1fe1"
       },
       "towelTracker": {
         "enabled": true,
@@ -626251,6 +626251,43 @@
         },
         "prevHash": "2ef68f690ed4dc516eaf69f15cb2d5a8a32d52c7ad672b3edf2af714e78ed984",
         "hash": "af7e3d1b5cda4ac0f25178f4c61856d0408db0b142bf482c904f40986acd9665"
+      },
+      {
+        "seq": 8202,
+        "id": "aud_mw2qfhru_3m_6267va",
+        "ts": "2026-11-04T23:12:50.106Z",
+        "actor": "GINO",
+        "role": "staff",
+        "action": "backup.github",
+        "what": "Backup committed to thethreethreethree/FRONT-DESK-TRANSACTION-TRACKER@main (auto-sync)",
+        "details": {
+          "reason": "auto-sync",
+          "coh": 54200,
+          "entries": 19456
+        },
+        "prevHash": "af7e3d1b5cda4ac0f25178f4c61856d0408db0b142bf482c904f40986acd9665",
+        "hash": "f6051555e3729406d649d03d309d1bad5d0b3daba21c8da40740dda761c6c11a"
+      },
+      {
+        "seq": 8203,
+        "id": "aud_mw2yw16a_3o_qqu5jq",
+        "ts": "2026-11-05T03:09:38.674Z",
+        "actor": "GINO",
+        "role": "staff",
+        "action": "tv.booking.create",
+        "what": "Travelista booking #178 · POLLIEN ELISA · PPS SHARING VAN ×2 pax · ₱1,500 (commission ₱200)",
+        "details": {
+          "ref": 178,
+          "id": "tv_mw2yw169_3n_752av8",
+          "guest": "POLLIEN ELISA",
+          "destination": "PPS SHARING VAN",
+          "pax": 2,
+          "total": 1500,
+          "commission": 200,
+          "bookedBy": "GINO"
+        },
+        "prevHash": "f6051555e3729406d649d03d309d1bad5d0b3daba21c8da40740dda761c6c11a",
+        "hash": "fa7c43043ace948c1d1c619ad00dce167e144613e1e11504fc26e1221340f23e"
       }
     ],
     "towels": [
@@ -640168,6 +640205,42 @@
           "reversesKind": null,
           "prevHash": "db1dd527dbda9d0da1390e24144a5a131d00411cc7ed4cb282368ef8f0c183fe",
           "hash": "e38d19f041cb79c7c393e02e576e883dab2d1d35349ad6b9085750ad0e5a30f3"
+        },
+        {
+          "seq": 178,
+          "id": "tv_mw2yw169_3n_752av8",
+          "ts": "2026-11-05T03:09:38.673Z",
+          "kind": "booking",
+          "direction": 1,
+          "amount": 1500,
+          "departureDate": "2026-11-05",
+          "guest": "POLLIEN ELISA",
+          "destination": "PPS SHARING VAN",
+          "destinationId": "dest_msrh2ktf_d_xyn4hg",
+          "pax": 2,
+          "fare": 750,
+          "fareBasis": "per_pax",
+          "total": 1500,
+          "travelistaShare": 1300,
+          "commission": 200,
+          "bookedBy": "GINO",
+          "remarks": "",
+          "payoutType": "",
+          "payee": "",
+          "method": "",
+          "amendsSeq": null,
+          "dTotal": 0,
+          "dShare": 0,
+          "dCommission": 0,
+          "dPax": 0,
+          "periodKey": "2026-11-A",
+          "staff": "GINO",
+          "staffRole": "staff",
+          "businessDate": "2026-11-05",
+          "reversesId": null,
+          "reversesKind": null,
+          "prevHash": "e38d19f041cb79c7c393e02e576e883dab2d1d35349ad6b9085750ad0e5a30f3",
+          "hash": "a9794a738014660015b870c51676b4b0d59add723e472a1f5f47aed95a641f88"
         }
       ]
     }
