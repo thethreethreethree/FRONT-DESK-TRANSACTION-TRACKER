@@ -3,11 +3,11 @@
     "app": "Frendz Front Desk Transaction Tracker",
     "build": "2026-08-19-merge-sync",
     "writtenBy": "Marie",
-    "exportedAt": "2026-11-07T00:28:35.233Z",
+    "exportedAt": "2026-11-07T00:47:47.594Z",
     "version": 1,
-    "coh": 44000,
-    "entries": 19520,
-    "auditEvents": 8337,
+    "coh": 43000,
+    "entries": 19521,
+    "auditEvents": 8339,
     "integrity": {
       "ok": true,
       "brokenAtSeq": null
@@ -41,8 +41,8 @@
         "path": "data/ledger-backup.json",
         "autoSync": true,
         "enabled": true,
-        "lastBackupAt": "2026-11-06T23:54:51.379Z",
-        "lastBackupSha": "dff26be659a7ee9d56e41872e7cf1d4e19e322b1"
+        "lastBackupAt": "2026-11-07T00:28:45.925Z",
+        "lastBackupSha": "645cd9ee6a196e97d08325a1a959fee2969ad3db"
       },
       "towelTracker": {
         "enabled": true,
@@ -489308,6 +489308,37 @@
         "reversesId": null,
         "prevHash": "2e378861c9a9abf550bff855c7dcdf50ab2dc65662c49235b55bea0b481ac076",
         "hash": "2373fd4ea9e51c47769f70ebf9a79b8dd2b60265aba2e71daf48793ebf20c110"
+      },
+      {
+        "seq": 19521,
+        "id": "txn_mw5op5v5_38_olmw7v",
+        "ts": "2026-11-07T00:47:40.529Z",
+        "kind": "refund",
+        "itemTypeId": "item_mpxxdbc3_2_s3d7ag",
+        "itemName": "Towel",
+        "qty": 1,
+        "unitAmount": 1000,
+        "amount": 1000,
+        "direction": -1,
+        "guest": "Alex Pullen",
+        "room": "402",
+        "pax": null,
+        "shiftId": "shift_mpy3b19n_5_j6nxol",
+        "shiftLabel": "PM",
+        "businessDate": "2026-11-07",
+        "staff": "Marie",
+        "staffRole": "staff",
+        "note": "",
+        "towelNo": "306",
+        "oldTowelNo": "",
+        "towelLost": false,
+        "refundsSeq": 19445,
+        "exchangesSeq": null,
+        "mewsRes": "",
+        "privateRoom": false,
+        "reversesId": null,
+        "prevHash": "2373fd4ea9e51c47769f70ebf9a79b8dd2b60265aba2e71daf48793ebf20c110",
+        "hash": "d3a151c1468587ef03786beec06a6ca478fd2174b6e736d5ac0d3b50781d8a78"
       }
     ],
     "audit": [
@@ -630581,6 +630612,41 @@
         },
         "prevHash": "9c7fd53377769f9fcca3a15551881ad0857124bade02340a1d3f92a08b6a6584",
         "hash": "746b1f35ce2f8060cdc4cf39a624ccc6884b0668744461841b1785cc7f8f4df5"
+      },
+      {
+        "seq": 8338,
+        "id": "aud_mw5o0uii_37_x0g3ii",
+        "ts": "2026-11-07T00:28:46.074Z",
+        "actor": "Marie",
+        "role": "staff",
+        "action": "backup.github",
+        "what": "Backup committed to thethreethreethree/FRONT-DESK-TRANSACTION-TRACKER@main (auto-sync)",
+        "details": {
+          "reason": "auto-sync",
+          "coh": 44000,
+          "entries": 19520
+        },
+        "prevHash": "746b1f35ce2f8060cdc4cf39a624ccc6884b0668744461841b1785cc7f8f4df5",
+        "hash": "0c7d88686cf1297502fd8b8a61860805d06f688237361a47f859a8eceb6495f8"
+      },
+      {
+        "seq": 8339,
+        "id": "aud_mw5op5v5_39_4e8wrw",
+        "ts": "2026-11-07T00:47:40.529Z",
+        "actor": "Marie",
+        "role": "staff",
+        "action": "refund.create",
+        "what": "Refund ₱1,000.00 · Towel ×1 · Alex Pullen",
+        "details": {
+          "ref": 19521,
+          "id": "txn_mw5op5v5_38_olmw7v",
+          "amount": 1000,
+          "item": "Towel",
+          "guest": "Alex Pullen",
+          "room": "402"
+        },
+        "prevHash": "0c7d88686cf1297502fd8b8a61860805d06f688237361a47f859a8eceb6495f8",
+        "hash": "35c40809d44404f7b28b5835a703f07f6e6cfda3f44e486a74588d76a20a10cc"
       }
     ],
     "towels": [
