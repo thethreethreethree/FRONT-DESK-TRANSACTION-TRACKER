@@ -3,11 +3,11 @@
     "app": "Frendz Front Desk Transaction Tracker",
     "build": "2026-08-19-merge-sync",
     "writtenBy": "Marie",
-    "exportedAt": "2026-11-09T23:26:51.255Z",
+    "exportedAt": "2026-11-09T23:57:01.286Z",
     "version": 1,
-    "coh": 73400,
-    "entries": 19603,
-    "auditEvents": 8508,
+    "coh": 72400,
+    "entries": 19604,
+    "auditEvents": 8510,
     "integrity": {
       "ok": true,
       "brokenAtSeq": null
@@ -41,8 +41,8 @@
         "path": "data/ledger-backup.json",
         "autoSync": true,
         "enabled": true,
-        "lastBackupAt": "2026-11-09T23:06:42.425Z",
-        "lastBackupSha": "67964eccede6dff824b5875a9dd3f4ba4d311c3e"
+        "lastBackupAt": "2026-11-09T23:27:16.462Z",
+        "lastBackupSha": "b5c8cb5e2245f1b2360a11756c3f8783e8c6945d"
       },
       "towelTracker": {
         "enabled": true,
@@ -491881,6 +491881,37 @@
         "reversesId": null,
         "prevHash": "6eb0b7584e17905773cf496bda08786ff8cfe2386556165152853c78f8194786",
         "hash": "9c2d5d0c932f737dfbfad0e74f31887c879b89b1383bb8712b96c397b8f436bf"
+      },
+      {
+        "seq": 19604,
+        "id": "txn_mw9x7fm1_28_dlgzpo",
+        "ts": "2026-11-09T23:56:54.601Z",
+        "kind": "refund",
+        "itemTypeId": "item_mpxxdbc3_2_s3d7ag",
+        "itemName": "Towel",
+        "qty": 1,
+        "unitAmount": 1000,
+        "amount": 1000,
+        "direction": -1,
+        "guest": "Saurabh Taneja",
+        "room": "304",
+        "pax": null,
+        "shiftId": "shift_mpy3b19n_5_j6nxol",
+        "shiftLabel": "PM",
+        "businessDate": "2026-11-10",
+        "staff": "Marie",
+        "staffRole": "staff",
+        "note": "",
+        "towelNo": "94",
+        "oldTowelNo": "",
+        "towelLost": false,
+        "refundsSeq": 19573,
+        "exchangesSeq": null,
+        "mewsRes": "",
+        "privateRoom": false,
+        "reversesId": null,
+        "prevHash": "9c2d5d0c932f737dfbfad0e74f31887c879b89b1383bb8712b96c397b8f436bf",
+        "hash": "6d34253bdc8efca439c5963000acc33861575f9d72e437d16a80753b933c8e07"
       }
     ],
     "audit": [
@@ -636076,6 +636107,41 @@
         },
         "prevHash": "8eeb0a10efe1abafbd456ecaa757b86a11c252719af6aa0ae5f9db097febb6ac",
         "hash": "c5ccdff905e3a7f33fc8aaa3c2c9799c1ca1ada5c0cd14d8b03d7ef7542f4343"
+      },
+      {
+        "seq": 8509,
+        "id": "aud_mw9w5bpg_27_2mlenf",
+        "ts": "2026-11-09T23:27:16.612Z",
+        "actor": "Marie",
+        "role": "staff",
+        "action": "backup.github",
+        "what": "Backup committed to thethreethreethree/FRONT-DESK-TRANSACTION-TRACKER@main (auto-sync)",
+        "details": {
+          "reason": "auto-sync",
+          "coh": 73400,
+          "entries": 19603
+        },
+        "prevHash": "c5ccdff905e3a7f33fc8aaa3c2c9799c1ca1ada5c0cd14d8b03d7ef7542f4343",
+        "hash": "d63af2eb847b61050074b7c407b1754133791dcfbf9ea8af42cbea4c9b137a85"
+      },
+      {
+        "seq": 8510,
+        "id": "aud_mw9x7fm1_29_618w0t",
+        "ts": "2026-11-09T23:56:54.601Z",
+        "actor": "Marie",
+        "role": "staff",
+        "action": "refund.create",
+        "what": "Refund ₱1,000.00 · Towel ×1 · Saurabh Taneja",
+        "details": {
+          "ref": 19604,
+          "id": "txn_mw9x7fm1_28_dlgzpo",
+          "amount": 1000,
+          "item": "Towel",
+          "guest": "Saurabh Taneja",
+          "room": "304"
+        },
+        "prevHash": "d63af2eb847b61050074b7c407b1754133791dcfbf9ea8af42cbea4c9b137a85",
+        "hash": "e9b712b58611ea7f609c4f1006de7ca0c50cc690a6120a3e188f0a5f37683a49"
       }
     ],
     "towels": [
