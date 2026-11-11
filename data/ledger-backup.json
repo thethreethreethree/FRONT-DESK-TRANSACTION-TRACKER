@@ -3,11 +3,11 @@
     "app": "Frendz Front Desk Transaction Tracker",
     "build": "2026-08-19-merge-sync",
     "writtenBy": "Chalyn",
-    "exportedAt": "2026-11-11T12:29:04.866Z",
+    "exportedAt": "2026-11-11T12:29:27.232Z",
     "version": 1,
-    "coh": 57400,
-    "entries": 19652,
-    "auditEvents": 8616,
+    "coh": 59400,
+    "entries": 19654,
+    "auditEvents": 8619,
     "integrity": {
       "ok": true,
       "brokenAtSeq": null
@@ -41,8 +41,8 @@
         "path": "data/ledger-backup.json",
         "autoSync": true,
         "enabled": true,
-        "lastBackupAt": "2026-11-11T12:28:55.511Z",
-        "lastBackupSha": "af95bf73e49862ef8c3e0318ac0d662827b04083"
+        "lastBackupAt": "2026-11-11T12:29:17.902Z",
+        "lastBackupSha": "2d7efdfb5eef2d5de8eb23b3ab087db4c26e4eb3"
       },
       "towelTracker": {
         "enabled": true,
@@ -493400,6 +493400,68 @@
         "reversesId": null,
         "prevHash": "ff5c13c6a52e7941651b0d4cc838811dd881eae87e422c6ea03133585352d4c3",
         "hash": "21726247c7b3eeb683a259d47a51db06437764e45abfdd7e33f873a498a37817"
+      },
+      {
+        "seq": 19653,
+        "id": "txn_mwc3ip07_l_nzbasa",
+        "ts": "2026-11-11T12:29:10.039Z",
+        "kind": "deposit",
+        "itemTypeId": "item_mpxxdbc3_2_s3d7ag",
+        "itemName": "Towel",
+        "qty": 1,
+        "unitAmount": 1000,
+        "amount": 1000,
+        "direction": 1,
+        "guest": "MIRIAM",
+        "room": "408",
+        "pax": null,
+        "shiftId": "shift_mpy3b19n_5_j6nxol",
+        "shiftLabel": "PM",
+        "businessDate": "2026-11-11",
+        "staff": "Chalyn",
+        "staffRole": "staff",
+        "note": "",
+        "towelNo": "443",
+        "oldTowelNo": "",
+        "towelLost": false,
+        "refundsSeq": null,
+        "exchangesSeq": null,
+        "mewsRes": "",
+        "privateRoom": false,
+        "reversesId": null,
+        "prevHash": "21726247c7b3eeb683a259d47a51db06437764e45abfdd7e33f873a498a37817",
+        "hash": "69193cda9dd69f20576bd87ca3dfa63aa5a06b4fc86cfd14d628f77ef6d0c2a5"
+      },
+      {
+        "seq": 19654,
+        "id": "txn_mwc3ix46_o_rc25t8",
+        "ts": "2026-11-11T12:29:20.550Z",
+        "kind": "deposit",
+        "itemTypeId": "item_mpxxdbc3_2_s3d7ag",
+        "itemName": "Towel",
+        "qty": 1,
+        "unitAmount": 1000,
+        "amount": 1000,
+        "direction": 1,
+        "guest": "TANJA",
+        "room": "403",
+        "pax": null,
+        "shiftId": "shift_mpy3b19n_5_j6nxol",
+        "shiftLabel": "PM",
+        "businessDate": "2026-11-11",
+        "staff": "Chalyn",
+        "staffRole": "staff",
+        "note": "",
+        "towelNo": "4",
+        "oldTowelNo": "",
+        "towelLost": false,
+        "refundsSeq": null,
+        "exchangesSeq": null,
+        "mewsRes": "",
+        "privateRoom": false,
+        "reversesId": null,
+        "prevHash": "69193cda9dd69f20576bd87ca3dfa63aa5a06b4fc86cfd14d628f77ef6d0c2a5",
+        "hash": "9feb6430111e2b16c791490699e693d4ec2d917c934fad9a643e2cae9ed3ac96"
       }
     ],
     "audit": [
@@ -639453,6 +639515,60 @@
         },
         "prevHash": "aab06aca9d657c7cc8604706b4554454010054dd1af93a6a83e24bbdb4c78fbb",
         "hash": "42391e709cbfbeeca5254134a96a22104ac6ceffb847bea69301ce3ed72b66d5"
+      },
+      {
+        "seq": 8617,
+        "id": "aud_mwc3ip07_m_drivwm",
+        "ts": "2026-11-11T12:29:10.039Z",
+        "actor": "Chalyn",
+        "role": "staff",
+        "action": "deposit.create",
+        "what": "Deposit ₱1,000.00 · Towel ×1 · MIRIAM",
+        "details": {
+          "ref": 19653,
+          "id": "txn_mwc3ip07_l_nzbasa",
+          "amount": 1000,
+          "item": "Towel",
+          "guest": "MIRIAM",
+          "room": "408"
+        },
+        "prevHash": "42391e709cbfbeeca5254134a96a22104ac6ceffb847bea69301ce3ed72b66d5",
+        "hash": "eef4cb88d8724dedbcce385670324b5227534c1350253bee3b1dd70669d4ed39"
+      },
+      {
+        "seq": 8618,
+        "id": "aud_mwc3iv2m_n_6x2o81",
+        "ts": "2026-11-11T12:29:17.902Z",
+        "actor": "Chalyn",
+        "role": "staff",
+        "action": "backup.github",
+        "what": "Backup committed to thethreethreethree/FRONT-DESK-TRANSACTION-TRACKER@main (auto-sync)",
+        "details": {
+          "reason": "auto-sync",
+          "coh": 57400,
+          "entries": 19653
+        },
+        "prevHash": "eef4cb88d8724dedbcce385670324b5227534c1350253bee3b1dd70669d4ed39",
+        "hash": "5cf1b434dae06430e6c4b5707cd3356a79295b4713f4df26e59c95a6c15bcea9"
+      },
+      {
+        "seq": 8619,
+        "id": "aud_mwc3ix47_p_buqvts",
+        "ts": "2026-11-11T12:29:20.551Z",
+        "actor": "Chalyn",
+        "role": "staff",
+        "action": "deposit.create",
+        "what": "Deposit ₱1,000.00 · Towel ×1 · TANJA",
+        "details": {
+          "ref": 19654,
+          "id": "txn_mwc3ix46_o_rc25t8",
+          "amount": 1000,
+          "item": "Towel",
+          "guest": "TANJA",
+          "room": "403"
+        },
+        "prevHash": "5cf1b434dae06430e6c4b5707cd3356a79295b4713f4df26e59c95a6c15bcea9",
+        "hash": "919c65acf86211fbb142b6bb14b0018374a1b214f3ce22ba43296496a7562360"
       }
     ],
     "towels": [
