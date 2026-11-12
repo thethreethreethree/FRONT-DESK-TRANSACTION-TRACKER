@@ -3,11 +3,11 @@
     "app": "Frendz Front Desk Transaction Tracker",
     "build": "2026-08-19-merge-sync",
     "writtenBy": "Monie",
-    "exportedAt": "2026-11-12T04:24:53.201Z",
+    "exportedAt": "2026-11-12T04:26:23.486Z",
     "version": 1,
-    "coh": 76400,
-    "entries": 19671,
-    "auditEvents": 8662,
+    "coh": 75400,
+    "entries": 19672,
+    "auditEvents": 8664,
     "integrity": {
       "ok": true,
       "brokenAtSeq": null
@@ -41,8 +41,8 @@
         "path": "data/ledger-backup.json",
         "autoSync": true,
         "enabled": true,
-        "lastBackupAt": "2026-11-12T04:24:46.497Z",
-        "lastBackupSha": "9a5529b6143028c7e2621b71c0f953afd6ca8385"
+        "lastBackupAt": "2026-11-12T04:25:04.591Z",
+        "lastBackupSha": "49b807dbc7c06c1f2d65e3e9bfdf36688a4bd972"
       },
       "towelTracker": {
         "enabled": true,
@@ -493989,6 +493989,37 @@
         "reversesId": null,
         "prevHash": "95d89887188303b5a5997e6cc62f3e71c4c3985fb61f7217f38a4c210039b01d",
         "hash": "8a1c1f18a68a93528038582fa24335c2b95491a3622a648fa368aa7219be85fd"
+      },
+      {
+        "seq": 19672,
+        "id": "txn_mwd1pjrp_g_92zijd",
+        "ts": "2026-11-12T04:26:16.789Z",
+        "kind": "refund",
+        "itemTypeId": "item_mpxxdbc3_2_s3d7ag",
+        "itemName": "Towel",
+        "qty": 1,
+        "unitAmount": 1000,
+        "amount": 1000,
+        "direction": -1,
+        "guest": "Jennifer Winkler",
+        "room": "207",
+        "pax": null,
+        "shiftId": "shift_mpy3b19n_5_j6nxol",
+        "shiftLabel": "PM",
+        "businessDate": "2026-11-12",
+        "staff": "Monie",
+        "staffRole": "staff",
+        "note": "254 changed towel",
+        "towelNo": "246",
+        "oldTowelNo": "",
+        "towelLost": false,
+        "refundsSeq": 19568,
+        "exchangesSeq": null,
+        "mewsRes": "",
+        "privateRoom": false,
+        "reversesId": null,
+        "prevHash": "8a1c1f18a68a93528038582fa24335c2b95491a3622a648fa368aa7219be85fd",
+        "hash": "4654e635674c01ef88db6feab171c7ca58b807495a0ca22bb034b654d8293835"
       }
     ],
     "audit": [
@@ -640833,6 +640864,41 @@
         },
         "prevHash": "490e5f1f36648cb1985682948da262f718cf86d9edd24ce0250b6de6bb5162d7",
         "hash": "e748ccd0d7aa832420f62ea24aab5cd6569fd299cb7774baa69bf97a1c71ecac"
+      },
+      {
+        "seq": 8663,
+        "id": "aud_mwd1o028_f_cpzbol",
+        "ts": "2026-11-12T04:25:04.592Z",
+        "actor": "Monie",
+        "role": "staff",
+        "action": "backup.github",
+        "what": "Backup committed to thethreethreethree/FRONT-DESK-TRANSACTION-TRACKER@main (auto-sync)",
+        "details": {
+          "reason": "auto-sync",
+          "coh": 76400,
+          "entries": 19671
+        },
+        "prevHash": "e748ccd0d7aa832420f62ea24aab5cd6569fd299cb7774baa69bf97a1c71ecac",
+        "hash": "04f5f73ca9746e60904753601bcfe2ca9ed2c9c66fd51874d14eb3725c62f4f9"
+      },
+      {
+        "seq": 8664,
+        "id": "aud_mwd1pjrq_h_pj23xh",
+        "ts": "2026-11-12T04:26:16.790Z",
+        "actor": "Monie",
+        "role": "staff",
+        "action": "refund.create",
+        "what": "Refund ₱1,000.00 · Towel ×1 · Jennifer Winkler",
+        "details": {
+          "ref": 19672,
+          "id": "txn_mwd1pjrp_g_92zijd",
+          "amount": 1000,
+          "item": "Towel",
+          "guest": "Jennifer Winkler",
+          "room": "207"
+        },
+        "prevHash": "04f5f73ca9746e60904753601bcfe2ca9ed2c9c66fd51874d14eb3725c62f4f9",
+        "hash": "665e58595b5ca906d7822bb5b616047d102f8a1b1ee14d380fa38f44f4c3036b"
       }
     ],
     "towels": [
