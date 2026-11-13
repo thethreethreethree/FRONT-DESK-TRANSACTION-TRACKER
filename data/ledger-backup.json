@@ -3,11 +3,11 @@
     "app": "Frendz Front Desk Transaction Tracker",
     "build": "2026-08-19-merge-sync",
     "writtenBy": "Monie",
-    "exportedAt": "2026-11-12T22:08:34.878Z",
+    "exportedAt": "2026-11-13T03:11:26.642Z",
     "version": 1,
     "coh": 89200,
-    "entries": 19708,
-    "auditEvents": 8738,
+    "entries": 19709,
+    "auditEvents": 8741,
     "integrity": {
       "ok": true,
       "brokenAtSeq": null
@@ -16,7 +16,7 @@
       "ok": true,
       "brokenAtSeq": null
     },
-    "travelistaEntries": 191,
+    "travelistaEntries": 192,
     "travelistaIntegrity": {
       "ok": true,
       "brokenAtSeq": null
@@ -41,8 +41,8 @@
         "path": "data/ledger-backup.json",
         "autoSync": true,
         "enabled": true,
-        "lastBackupAt": "2026-11-12T21:03:54.870Z",
-        "lastBackupSha": "b6df62caf2175217b4f0a0f0c0b3e3796a3f0872"
+        "lastBackupAt": "2026-11-12T22:08:48.581Z",
+        "lastBackupSha": "82a75f6540fee04d102b8887e0e0ca92b6f022e6"
       },
       "towelTracker": {
         "enabled": true,
@@ -495136,6 +495136,37 @@
         "reversesId": null,
         "prevHash": "e1e14205a5d36299a12691dcea431bdf24f94d303130cc41dc9a6a8318cdcf92",
         "hash": "2521f6c5af05df07433f3cbe46f1ef9c46ae59ac795893825029a6ff6bdd319f"
+      },
+      {
+        "seq": 19709,
+        "id": "txn_mweee9ny_d_puexxa",
+        "ts": "2026-11-13T03:09:11.662Z",
+        "kind": "deposit",
+        "itemTypeId": "item_mpxxdbc3_2_s3d7ag",
+        "itemName": "Towel",
+        "qty": 1,
+        "unitAmount": 0,
+        "amount": 0,
+        "direction": 1,
+        "guest": "11-13",
+        "room": "206",
+        "pax": null,
+        "shiftId": "shift_mpy3b19n_5_j6nxol",
+        "shiftLabel": "PM",
+        "businessDate": "2026-11-13",
+        "staff": "Monie",
+        "staffRole": "staff",
+        "note": "",
+        "towelNo": "145-76",
+        "oldTowelNo": "",
+        "towelLost": false,
+        "refundsSeq": null,
+        "exchangesSeq": null,
+        "mewsRes": "",
+        "privateRoom": true,
+        "reversesId": null,
+        "prevHash": "2521f6c5af05df07433f3cbe46f1ef9c46ae59ac795893825029a6ff6bdd319f",
+        "hash": "1c9ae374cdca87e6350c2f5c72ea934a62b9daf2fd86e81b7934c70b9cd1b720"
       }
     ],
     "audit": [
@@ -643297,6 +643328,62 @@
         },
         "prevHash": "e922fc1009dea7b81982ba9c730e97e4505d0a2a69ca797e2fd2d3f11f26c9c3",
         "hash": "2adbb225290cd9a0f19072eba62dff7df06ccf15109cc0a58cb71a2ee24e246e"
+      },
+      {
+        "seq": 8739,
+        "id": "aud_mwe3nz4i_c_lhg9bv",
+        "ts": "2026-11-12T22:08:48.786Z",
+        "actor": "Monie",
+        "role": "staff",
+        "action": "backup.github",
+        "what": "Backup committed to thethreethreethree/FRONT-DESK-TRANSACTION-TRACKER@main (auto-sync)",
+        "details": {
+          "reason": "auto-sync",
+          "coh": 89200,
+          "entries": 19708
+        },
+        "prevHash": "2adbb225290cd9a0f19072eba62dff7df06ccf15109cc0a58cb71a2ee24e246e",
+        "hash": "6a2caba134b0927ebb5fec3f7fa89b7fe34082d967e822e52a5bc00f97cc3d8c"
+      },
+      {
+        "seq": 8740,
+        "id": "aud_mweee9ny_e_ura91j",
+        "ts": "2026-11-13T03:09:11.662Z",
+        "actor": "Monie",
+        "role": "staff",
+        "action": "deposit.create",
+        "what": "Deposit ₱0.00 · Towel ×1 · 11-13",
+        "details": {
+          "ref": 19709,
+          "id": "txn_mweee9ny_d_puexxa",
+          "amount": 0,
+          "item": "Towel",
+          "guest": "11-13",
+          "room": "206"
+        },
+        "prevHash": "6a2caba134b0927ebb5fec3f7fa89b7fe34082d967e822e52a5bc00f97cc3d8c",
+        "hash": "5b312431fb3b7eb44ad4172f0d473c52e237234add611440d677871152c31f21"
+      },
+      {
+        "seq": 8741,
+        "id": "aud_mweegpxs_g_df2r7d",
+        "ts": "2026-11-13T03:11:06.064Z",
+        "actor": "Monie",
+        "role": "staff",
+        "action": "tv.booking.create",
+        "what": "Travelista booking #192 · LUKE DAVASSE · LIO AIRPORT TO FRENDZ ×1 pax · ₱1,800 (commission ₱800)",
+        "details": {
+          "ref": 192,
+          "id": "tv_mweegpxr_f_otmonp",
+          "guest": "LUKE DAVASSE",
+          "destination": "LIO AIRPORT TO FRENDZ",
+          "pax": 1,
+          "total": 1800,
+          "commission": 800,
+          "bookedBy": "MONIE"
+        },
+        "prevHash": "5b312431fb3b7eb44ad4172f0d473c52e237234add611440d677871152c31f21",
+        "hash": "c41e298eb9ff23425a12543cd11d7d5342d9dab9aa2c238b7a1d6b6de79c68d7"
       }
     ],
     "towels": [
@@ -657718,6 +657805,42 @@
           "reversesKind": null,
           "prevHash": "a9403db4af13f4954994e97b96ce3f5770dabcfabdd0835198eae433a4cceaa7",
           "hash": "4197df7733ee32e763eae70e59f02a0a92a2a6703a4e1098834112e5bcc94696"
+        },
+        {
+          "seq": 192,
+          "id": "tv_mweegpxr_f_otmonp",
+          "ts": "2026-11-13T03:11:06.063Z",
+          "kind": "booking",
+          "direction": 1,
+          "amount": 1800,
+          "departureDate": "2026-11-13",
+          "guest": "LUKE DAVASSE",
+          "destination": "LIO AIRPORT TO FRENDZ",
+          "destinationId": "dest_mvdgh24w_r_jxkslp",
+          "pax": 1,
+          "fare": 1800,
+          "fareBasis": "per_pax",
+          "total": 1800,
+          "travelistaShare": 1000,
+          "commission": 800,
+          "bookedBy": "MONIE",
+          "remarks": "",
+          "payoutType": "",
+          "payee": "",
+          "method": "",
+          "amendsSeq": null,
+          "dTotal": 0,
+          "dShare": 0,
+          "dCommission": 0,
+          "dPax": 0,
+          "periodKey": "2026-11-A",
+          "staff": "Monie",
+          "staffRole": "staff",
+          "businessDate": "2026-11-13",
+          "reversesId": null,
+          "reversesKind": null,
+          "prevHash": "4197df7733ee32e763eae70e59f02a0a92a2a6703a4e1098834112e5bcc94696",
+          "hash": "ff8a35f7c4287da532485ababfae665d1e26a6461d6303c05d922cf91e1024bf"
         }
       ]
     }
