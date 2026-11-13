@@ -3,11 +3,11 @@
     "app": "Frendz Front Desk Transaction Tracker",
     "build": "2026-08-19-merge-sync",
     "writtenBy": "Marie",
-    "exportedAt": "2026-11-13T14:12:06.703Z",
+    "exportedAt": "2026-11-13T14:12:36.874Z",
     "version": 1,
-    "coh": 73200,
-    "entries": 19737,
-    "auditEvents": 8796,
+    "coh": 74200,
+    "entries": 19738,
+    "auditEvents": 8798,
     "integrity": {
       "ok": true,
       "brokenAtSeq": null
@@ -41,8 +41,8 @@
         "path": "data/ledger-backup.json",
         "autoSync": true,
         "enabled": true,
-        "lastBackupAt": "2026-11-13T14:11:48.474Z",
-        "lastBackupSha": "236dadf110360896dff2ca5a1a3a40bc4f0f2257"
+        "lastBackupAt": "2026-11-13T14:12:28.364Z",
+        "lastBackupSha": "ebd71ef79ef578b366bdef0a541d564dde367619"
       },
       "towelTracker": {
         "enabled": true,
@@ -496035,6 +496035,37 @@
         "reversesId": null,
         "prevHash": "85e3fdb306be50ee7a6e6776011999f97c71066793e8fec87184df2d65bdc204",
         "hash": "538a13a2e374fe4bccd13973327eb336f827d826e3ea3a4aa3c3c8fe0a351de6"
+      },
+      {
+        "seq": 19738,
+        "id": "txn_mwf23a9r_g_xlz814",
+        "ts": "2026-11-13T14:12:30.015Z",
+        "kind": "deposit",
+        "itemTypeId": "item_mpxxdbc3_2_s3d7ag",
+        "itemName": "Towel",
+        "qty": 1,
+        "unitAmount": 1000,
+        "amount": 1000,
+        "direction": 1,
+        "guest": "Arthur Llewelyn",
+        "room": "407",
+        "pax": null,
+        "shiftId": "shift_mpy3b19n_5_j6nxol",
+        "shiftLabel": "PM",
+        "businessDate": "2026-11-13",
+        "staff": "Marie",
+        "staffRole": "staff",
+        "note": "",
+        "towelNo": "306",
+        "oldTowelNo": "",
+        "towelLost": false,
+        "refundsSeq": null,
+        "exchangesSeq": null,
+        "mewsRes": "",
+        "privateRoom": false,
+        "reversesId": null,
+        "prevHash": "538a13a2e374fe4bccd13973327eb336f827d826e3ea3a4aa3c3c8fe0a351de6",
+        "hash": "1224c92591821d44edfbcdea3ba7a164dd757222469caa01546d1991da89c8f0"
       }
     ],
     "audit": [
@@ -645210,6 +645241,41 @@
         },
         "prevHash": "624da1223cc1673dc67fab713382170b3bf79d7e7db4150b58ec64a7c5eec981",
         "hash": "bb469c817e595cfea2422dde3cbf630cf84931c9fccdcf7de38c677216e3f215"
+      },
+      {
+        "seq": 8797,
+        "id": "aud_mwf238zw_f_ymnfqz",
+        "ts": "2026-11-13T14:12:28.364Z",
+        "actor": "Marie",
+        "role": "staff",
+        "action": "backup.github",
+        "what": "Backup committed to thethreethreethree/FRONT-DESK-TRANSACTION-TRACKER@main (auto-sync)",
+        "details": {
+          "reason": "auto-sync",
+          "coh": 73200,
+          "entries": 19737
+        },
+        "prevHash": "bb469c817e595cfea2422dde3cbf630cf84931c9fccdcf7de38c677216e3f215",
+        "hash": "c0e9192bbde6bb8d4955560801928f6f1b4106b6bdf93747e9052da8cb9a0d7b"
+      },
+      {
+        "seq": 8798,
+        "id": "aud_mwf23a9s_h_f2sq11",
+        "ts": "2026-11-13T14:12:30.016Z",
+        "actor": "Marie",
+        "role": "staff",
+        "action": "deposit.create",
+        "what": "Deposit ₱1,000.00 · Towel ×1 · Arthur Llewelyn",
+        "details": {
+          "ref": 19738,
+          "id": "txn_mwf23a9r_g_xlz814",
+          "amount": 1000,
+          "item": "Towel",
+          "guest": "Arthur Llewelyn",
+          "room": "407"
+        },
+        "prevHash": "c0e9192bbde6bb8d4955560801928f6f1b4106b6bdf93747e9052da8cb9a0d7b",
+        "hash": "e55f2a8cd6ff87d2a1a49a3365b5e816c4a7e7ee644c0ad751d680e2c10794db"
       }
     ],
     "towels": [
