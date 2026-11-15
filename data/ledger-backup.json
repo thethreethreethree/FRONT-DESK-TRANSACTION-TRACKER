@@ -3,11 +3,11 @@
     "app": "Frendz Front Desk Transaction Tracker",
     "build": "2026-08-19-merge-sync",
     "writtenBy": "DARREN",
-    "exportedAt": "2026-11-15T05:40:06.781Z",
+    "exportedAt": "2026-11-15T05:41:11.186Z",
     "version": 1,
-    "coh": 72000,
-    "entries": 19829,
-    "auditEvents": 8965,
+    "coh": 73000,
+    "entries": 19830,
+    "auditEvents": 8967,
     "integrity": {
       "ok": true,
       "brokenAtSeq": null
@@ -41,8 +41,8 @@
         "path": "data/ledger-backup.json",
         "autoSync": true,
         "enabled": true,
-        "lastBackupAt": "2026-11-15T05:26:38.233Z",
-        "lastBackupSha": "fd8a54fc0f29ca160aebf3f5badccb87e38ea37e"
+        "lastBackupAt": "2026-11-15T05:41:04.097Z",
+        "lastBackupSha": "60d17f270fc3ef7dfb7c44940df35b637240766b"
       },
       "towelTracker": {
         "enabled": true,
@@ -498887,6 +498887,37 @@
         "reversesId": null,
         "prevHash": "9fd0359afe90a383947dd85b640da4fe5f51fd7e49bf24406c8d96f8fb65d51a",
         "hash": "30d6d4b3e5be393b3c2425f88f61260489287bad527171fe68b36884b55a086b"
+      },
+      {
+        "seq": 19830,
+        "id": "txn_mwhep9qe_4_cz1m66",
+        "ts": "2026-11-15T05:41:03.494Z",
+        "kind": "reversal",
+        "itemTypeId": "item_mpxxdbc3_2_s3d7ag",
+        "itemName": "Towel",
+        "qty": 1,
+        "unitAmount": 1000,
+        "amount": 1000,
+        "direction": 1,
+        "guest": "LUKAS",
+        "room": "408",
+        "pax": null,
+        "shiftId": "shift_mpy3b19n_5_j6nxol",
+        "shiftLabel": "PM",
+        "businessDate": "2026-11-15",
+        "staff": "DARREN",
+        "staffRole": "manager",
+        "note": "VOID of #19822 (refund Towel LUKAS). Reason: Not check out yet. Input mistake",
+        "towelNo": "159",
+        "oldTowelNo": "",
+        "towelLost": false,
+        "refundsSeq": null,
+        "exchangesSeq": null,
+        "mewsRes": "",
+        "privateRoom": false,
+        "reversesId": "txn_mwhcr2g2_6q_fm48st",
+        "prevHash": "30d6d4b3e5be393b3c2425f88f61260489287bad527171fe68b36884b55a086b",
+        "hash": "5a3fda1edabc51b23130d07c1a98c24ffb90fc552a266223370dca59d3c320df"
       }
     ],
     "audit": [
@@ -650972,6 +651003,38 @@
         },
         "prevHash": "b9f6015749405786c190c104aa78747c60f2bca11f924fed09dc273caed714b1",
         "hash": "3137ce427bbb772044584ef1a01e5174b1dec6b3500cc513b452a31c0d9c23d0"
+      },
+      {
+        "seq": 8966,
+        "id": "aud_mwhep9qe_5_noqbvc",
+        "ts": "2026-11-15T05:41:03.494Z",
+        "actor": "DARREN",
+        "role": "manager",
+        "action": "txn.void",
+        "what": "Voided #19822 (refund Towel · LUKAS · ₱1,000.00)",
+        "details": {
+          "ref": 19822,
+          "reversalSeq": 19830,
+          "reason": "Not check out yet. Input mistake"
+        },
+        "prevHash": "3137ce427bbb772044584ef1a01e5174b1dec6b3500cc513b452a31c0d9c23d0",
+        "hash": "ff53f699a5039008d409d1e669a0a4f2fedd8b71e6801f3890ff457efac2fc51"
+      },
+      {
+        "seq": 8967,
+        "id": "aud_mwhepa75_6_5jm14v",
+        "ts": "2026-11-15T05:41:04.097Z",
+        "actor": "DARREN",
+        "role": "manager",
+        "action": "backup.github",
+        "what": "Backup committed to thethreethreethree/FRONT-DESK-TRANSACTION-TRACKER@main (auto-sync)",
+        "details": {
+          "reason": "auto-sync",
+          "coh": 72000,
+          "entries": 19830
+        },
+        "prevHash": "ff53f699a5039008d409d1e669a0a4f2fedd8b71e6801f3890ff457efac2fc51",
+        "hash": "7c19cbde51cc9c61ccd657b8163e4df307f1abfdff3dd36b5b6f0528f3510193"
       }
     ],
     "towels": [
