@@ -3,11 +3,11 @@
     "app": "Frendz Front Desk Transaction Tracker",
     "build": "2026-08-19-merge-sync",
     "writtenBy": "Marie",
-    "exportedAt": "2026-11-15T04:50:56.410Z",
+    "exportedAt": "2026-11-15T05:18:19.553Z",
     "version": 1,
-    "coh": 73000,
-    "entries": 19828,
-    "auditEvents": 8956,
+    "coh": 72000,
+    "entries": 19829,
+    "auditEvents": 8958,
     "integrity": {
       "ok": true,
       "brokenAtSeq": null
@@ -41,8 +41,8 @@
         "path": "data/ledger-backup.json",
         "autoSync": true,
         "enabled": true,
-        "lastBackupAt": "2026-11-15T04:50:41.546Z",
-        "lastBackupSha": "e78c02f58acd35b6dad56e394bcb54fdff6daf42"
+        "lastBackupAt": "2026-11-15T04:51:08.159Z",
+        "lastBackupSha": "21d9069f46c0e25ce59503cb3a4e56eb78b020a9"
       },
       "towelTracker": {
         "enabled": true,
@@ -498856,6 +498856,37 @@
         "reversesId": null,
         "prevHash": "a165546d0db97961a2187907eb9318afd2b4cdc00401dc9f4bec5f0f3528ad7b",
         "hash": "9fd0359afe90a383947dd85b640da4fe5f51fd7e49bf24406c8d96f8fb65d51a"
+      },
+      {
+        "seq": 19829,
+        "id": "txn_mwhdvw63_7b_d2s23o",
+        "ts": "2026-11-15T05:18:12.891Z",
+        "kind": "refund",
+        "itemTypeId": "item_mpxxdbc3_2_s3d7ag",
+        "itemName": "Towel",
+        "qty": 1,
+        "unitAmount": 1000,
+        "amount": 1000,
+        "direction": -1,
+        "guest": "Teagan Allan",
+        "room": "302",
+        "pax": null,
+        "shiftId": "shift_mpy3b19n_5_j6nxol",
+        "shiftLabel": "PM",
+        "businessDate": "2026-11-15",
+        "staff": "Marie",
+        "staffRole": "staff",
+        "note": "",
+        "towelNo": "34",
+        "oldTowelNo": "",
+        "towelLost": false,
+        "refundsSeq": 19736,
+        "exchangesSeq": null,
+        "mewsRes": "",
+        "privateRoom": false,
+        "reversesId": null,
+        "prevHash": "9fd0359afe90a383947dd85b640da4fe5f51fd7e49bf24406c8d96f8fb65d51a",
+        "hash": "30d6d4b3e5be393b3c2425f88f61260489287bad527171fe68b36884b55a086b"
       }
     ],
     "audit": [
@@ -650808,6 +650839,41 @@
         },
         "prevHash": "d3750fbcc33834cd0d19856cbdd889b8d18c7f23eb726e47d8c393c11cfe673c",
         "hash": "a86c6d1ace0397d5994685ea52400e042ed0ee29bc937ac82dc418e29cc84aba"
+      },
+      {
+        "seq": 8957,
+        "id": "aud_mwhcx2in_7a_lew82h",
+        "ts": "2026-11-15T04:51:08.159Z",
+        "actor": "Marie",
+        "role": "staff",
+        "action": "backup.github",
+        "what": "Backup committed to thethreethreethree/FRONT-DESK-TRANSACTION-TRACKER@main (auto-sync)",
+        "details": {
+          "reason": "auto-sync",
+          "coh": 73000,
+          "entries": 19828
+        },
+        "prevHash": "a86c6d1ace0397d5994685ea52400e042ed0ee29bc937ac82dc418e29cc84aba",
+        "hash": "609e8e143459f8a0f5ce647b97fe5393c9fece543ca39875c397dfc167a319aa"
+      },
+      {
+        "seq": 8958,
+        "id": "aud_mwhdvw63_7c_wduz2l",
+        "ts": "2026-11-15T05:18:12.891Z",
+        "actor": "Marie",
+        "role": "staff",
+        "action": "refund.create",
+        "what": "Refund ₱1,000.00 · Towel ×1 · Teagan Allan",
+        "details": {
+          "ref": 19829,
+          "id": "txn_mwhdvw63_7b_d2s23o",
+          "amount": 1000,
+          "item": "Towel",
+          "guest": "Teagan Allan",
+          "room": "302"
+        },
+        "prevHash": "609e8e143459f8a0f5ce647b97fe5393c9fece543ca39875c397dfc167a319aa",
+        "hash": "d54804c6c98de90be7343106d154a33343096a44840186500e02d9c76901021f"
       }
     ],
     "towels": [
