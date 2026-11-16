@@ -3,11 +3,11 @@
     "app": "Frendz Front Desk Transaction Tracker",
     "build": "2026-08-19-merge-sync",
     "writtenBy": "DARREN",
-    "exportedAt": "2026-11-16T09:17:32.600Z",
+    "exportedAt": "2026-11-16T09:17:54.840Z",
     "version": 1,
     "coh": 64000,
     "entries": 19873,
-    "auditEvents": 9051,
+    "auditEvents": 9053,
     "integrity": {
       "ok": true,
       "brokenAtSeq": null
@@ -16,7 +16,7 @@
       "ok": true,
       "brokenAtSeq": null
     },
-    "travelistaEntries": 198,
+    "travelistaEntries": 199,
     "travelistaIntegrity": {
       "ok": true,
       "brokenAtSeq": null
@@ -41,8 +41,8 @@
         "path": "data/ledger-backup.json",
         "autoSync": true,
         "enabled": true,
-        "lastBackupAt": "2026-11-16T04:46:48.356Z",
-        "lastBackupSha": "0a51087d67a14fcc3e799d08ae241dc4afa207e7"
+        "lastBackupAt": "2026-11-16T09:17:43.400Z",
+        "lastBackupSha": "30650abc4e6734f7f13acedfd0bb1cbb0d51ec89"
       },
       "towelTracker": {
         "enabled": true,
@@ -653827,6 +653827,38 @@
         },
         "prevHash": "c8e891d66a8f07cfb6ea2cc97093a0968cb13d6370075431e240e30c12663b73",
         "hash": "fddf8919f8c9533ee4e2366de582b91389b7df5fdef4ba9e66120441bb190f0e"
+      },
+      {
+        "seq": 9052,
+        "id": "aud_mwj1vr6w_4_0osh9i",
+        "ts": "2026-11-16T09:17:43.400Z",
+        "actor": "DARREN",
+        "role": "manager",
+        "action": "backup.github",
+        "what": "Backup committed to thethreethreethree/FRONT-DESK-TRANSACTION-TRACKER@main (auto-sync)",
+        "details": {
+          "reason": "auto-sync",
+          "coh": 64000,
+          "entries": 19873
+        },
+        "prevHash": "fddf8919f8c9533ee4e2366de582b91389b7df5fdef4ba9e66120441bb190f0e",
+        "hash": "4be6fedad99fa79fd7956a4d2483aea7f95f521b79868309c4d26f585459152b"
+      },
+      {
+        "seq": 9053,
+        "id": "aud_mwj1vtb9_6_8yf7zy",
+        "ts": "2026-11-16T09:17:46.149Z",
+        "actor": "DARREN",
+        "role": "manager",
+        "action": "tv.void",
+        "what": "Voided travelista #195 (booking · maya guellner · ₱750)",
+        "details": {
+          "ref": 195,
+          "reversalSeq": 199,
+          "reason": "wrong dates"
+        },
+        "prevHash": "4be6fedad99fa79fd7956a4d2483aea7f95f521b79868309c4d26f585459152b",
+        "hash": "b191cf5c5ea4a080a2938ae4bcd46ffb6c65c2d7d2f095d52a8b732b0a7256ed"
       }
     ],
     "towels": [
@@ -668505,6 +668537,42 @@
           "reversesKind": null,
           "prevHash": "d496183d1fcb4e326f607a35b17bc5a0e36c62afe509feabd2ea82d48ed4942d",
           "hash": "32e36d7480a4d4a34b9c7000e112c5ea327efdc554ce493483fa01b36ac85dee"
+        },
+        {
+          "seq": 199,
+          "id": "tv_mwj1vtb9_5_no8wjl",
+          "ts": "2026-11-16T09:17:46.149Z",
+          "kind": "reversal",
+          "direction": -1,
+          "amount": 750,
+          "departureDate": "2026-11-15",
+          "guest": "maya guellner",
+          "destination": "PPS SHARING VAN",
+          "destinationId": "dest_msrh2ktf_d_xyn4hg",
+          "pax": 1,
+          "fare": 750,
+          "fareBasis": "per_pax",
+          "total": 750,
+          "travelistaShare": 650,
+          "commission": 100,
+          "bookedBy": "MARIE",
+          "remarks": "VOID of #195 (booking · maya guellner). Reason: wrong dates",
+          "payoutType": "",
+          "payee": "",
+          "method": "",
+          "amendsSeq": null,
+          "dTotal": 0,
+          "dShare": 0,
+          "dCommission": 0,
+          "dPax": 0,
+          "periodKey": "2026-11-A",
+          "staff": "DARREN",
+          "staffRole": "manager",
+          "businessDate": "2026-11-16",
+          "reversesId": "tv_mwheyzo3_5_62fu2z",
+          "reversesKind": "booking",
+          "prevHash": "32e36d7480a4d4a34b9c7000e112c5ea327efdc554ce493483fa01b36ac85dee",
+          "hash": "36022e6dde47cdc344dc6bc2121f204a82343f5e1274e77a1e8d5a8fb494ba9e"
         }
       ]
     }
