@@ -3,11 +3,11 @@
     "app": "Frendz Front Desk Transaction Tracker",
     "build": "2026-08-19-merge-sync",
     "writtenBy": "Chalyn",
-    "exportedAt": "2026-11-17T10:02:57.496Z",
+    "exportedAt": "2026-11-17T10:03:15.284Z",
     "version": 1,
     "coh": 65000,
     "entries": 19921,
-    "auditEvents": 9165,
+    "auditEvents": 9167,
     "integrity": {
       "ok": true,
       "brokenAtSeq": null
@@ -16,7 +16,7 @@
       "ok": true,
       "brokenAtSeq": null
     },
-    "travelistaEntries": 205,
+    "travelistaEntries": 206,
     "travelistaIntegrity": {
       "ok": true,
       "brokenAtSeq": null
@@ -41,8 +41,8 @@
         "path": "data/ledger-backup.json",
         "autoSync": true,
         "enabled": true,
-        "lastBackupAt": "2026-11-17T07:28:20.443Z",
-        "lastBackupSha": "91b1cc5c1fc5bb22108657fd92400c68f9b4107a"
+        "lastBackupAt": "2026-11-17T10:03:08.650Z",
+        "lastBackupSha": "111a21df19bc1b52f29bb19526ec909e0701b968"
       },
       "towelTracker": {
         "enabled": true,
@@ -657288,6 +657288,43 @@
         },
         "prevHash": "638d9c9b4b3ae7055019b2074597e703ab1cfc89d4fa9ce27b4f1663449e7365",
         "hash": "85c431dc14e62b19c600cb928a85ece42a0542259e260777a3df3cdcd4cb8f9c"
+      },
+      {
+        "seq": 9166,
+        "id": "aud_mwkixwz5_4f_ca80hc",
+        "ts": "2026-11-17T10:03:03.857Z",
+        "actor": "Chalyn",
+        "role": "staff",
+        "action": "tv.booking.create",
+        "what": "Travelista booking #206 · SIMONE MARTENS · PPS SHARING VAN ×1 pax · ₱750 (commission ₱100)",
+        "details": {
+          "ref": 206,
+          "id": "tv_mwkixwz5_4e_4hd5om",
+          "guest": "SIMONE MARTENS",
+          "destination": "PPS SHARING VAN",
+          "pax": 1,
+          "total": 750,
+          "commission": 100,
+          "bookedBy": "CHALYN"
+        },
+        "prevHash": "85c431dc14e62b19c600cb928a85ece42a0542259e260777a3df3cdcd4cb8f9c",
+        "hash": "77ed5bb96e8bdc8fe807d36e17a19f1c80517c0521cc32ebd84a4784c94b0551"
+      },
+      {
+        "seq": 9167,
+        "id": "aud_mwkiy0od_4g_j1ej7a",
+        "ts": "2026-11-17T10:03:08.653Z",
+        "actor": "Chalyn",
+        "role": "staff",
+        "action": "backup.github",
+        "what": "Backup committed to thethreethreethree/FRONT-DESK-TRANSACTION-TRACKER@main (auto-sync)",
+        "details": {
+          "reason": "auto-sync",
+          "coh": 65000,
+          "entries": 19921
+        },
+        "prevHash": "77ed5bb96e8bdc8fe807d36e17a19f1c80517c0521cc32ebd84a4784c94b0551",
+        "hash": "159620d82c523d10eeb7a9db4ef03444a23e486b18bb06a01a89abb8b96e70c7"
       }
     ],
     "towels": [
@@ -672218,6 +672255,42 @@
           "reversesKind": null,
           "prevHash": "9313da19ef8e32071636f97fe2bfec4046e5987e9df061a9b10cc7cb00329e2d",
           "hash": "ddb98799d1ae73c630a7f16dd7328dfc52a921447e637b9c577ac3be6d33922b"
+        },
+        {
+          "seq": 206,
+          "id": "tv_mwkixwz5_4e_4hd5om",
+          "ts": "2026-11-17T10:03:03.857Z",
+          "kind": "booking",
+          "direction": 1,
+          "amount": 750,
+          "departureDate": "2026-11-18",
+          "guest": "SIMONE MARTENS",
+          "destination": "PPS SHARING VAN",
+          "destinationId": "dest_msrh2ktf_d_xyn4hg",
+          "pax": 1,
+          "fare": 750,
+          "fareBasis": "per_pax",
+          "total": 750,
+          "travelistaShare": 650,
+          "commission": 100,
+          "bookedBy": "CHALYN",
+          "remarks": "",
+          "payoutType": "",
+          "payee": "",
+          "method": "",
+          "amendsSeq": null,
+          "dTotal": 0,
+          "dShare": 0,
+          "dCommission": 0,
+          "dPax": 0,
+          "periodKey": "2026-11-B",
+          "staff": "Chalyn",
+          "staffRole": "staff",
+          "businessDate": "2026-11-17",
+          "reversesId": null,
+          "reversesKind": null,
+          "prevHash": "ddb98799d1ae73c630a7f16dd7328dfc52a921447e637b9c577ac3be6d33922b",
+          "hash": "ab6c4ac287a3571477898bb6f3e35e44bf0a470a923b6711a13c48a401dc3f3e"
         }
       ]
     }
