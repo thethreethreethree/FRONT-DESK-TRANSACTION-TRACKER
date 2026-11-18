@@ -3,11 +3,11 @@
     "app": "Frendz Front Desk Transaction Tracker",
     "build": "2026-08-19-merge-sync",
     "writtenBy": "darren",
-    "exportedAt": "2026-11-18T13:42:11.815Z",
+    "exportedAt": "2026-11-18T20:07:12.561Z",
     "version": 1,
-    "coh": 98000,
-    "entries": 19993,
-    "auditEvents": 9316,
+    "coh": 99000,
+    "entries": 19994,
+    "auditEvents": 9318,
     "integrity": {
       "ok": true,
       "brokenAtSeq": null
@@ -41,8 +41,8 @@
         "path": "data/ledger-backup.json",
         "autoSync": true,
         "enabled": true,
-        "lastBackupAt": "2026-11-18T12:37:53.506Z",
-        "lastBackupSha": "eac37d0b894582561b335329fa393d89e10a5967"
+        "lastBackupAt": "2026-11-18T13:42:23.162Z",
+        "lastBackupSha": "571e300df4e73f9b48303183dcf663f59fc54751"
       },
       "towelTracker": {
         "enabled": true,
@@ -503971,6 +503971,37 @@
         "reversesId": null,
         "prevHash": "7156c67b668481abcb00faece690e37c0124543c151734a3c4510663623a9b7d",
         "hash": "e96b5d75ef5c94a8a942cc5650f52985ba4e39c80f804d1c9051037fea496452"
+      },
+      {
+        "seq": 19994,
+        "id": "txn_mwmjyju5_3l_x8zy64",
+        "ts": "2026-11-18T20:07:05.453Z",
+        "kind": "deposit",
+        "itemTypeId": "item_mpxxdbc3_2_s3d7ag",
+        "itemName": "Towel",
+        "qty": 1,
+        "unitAmount": 1000,
+        "amount": 1000,
+        "direction": 1,
+        "guest": "Thomas Goujet",
+        "room": "408",
+        "pax": null,
+        "shiftId": "shift_mpy3b19n_5_j6nxol",
+        "shiftLabel": "PM",
+        "businessDate": "2026-11-19",
+        "staff": "darren",
+        "staffRole": "manager",
+        "note": "",
+        "towelNo": "154",
+        "oldTowelNo": "",
+        "towelLost": false,
+        "refundsSeq": null,
+        "exchangesSeq": null,
+        "mewsRes": "",
+        "privateRoom": false,
+        "reversesId": null,
+        "prevHash": "e96b5d75ef5c94a8a942cc5650f52985ba4e39c80f804d1c9051037fea496452",
+        "hash": "027688ba9d6c8ca22591f191cc34453ea9cb93473390eec9dcb4305903991c55"
       }
     ],
     "audit": [
@@ -662133,6 +662164,41 @@
         },
         "prevHash": "1ca64ca4c19fd2988f5868f334e7d7e033e0a8bfe27f34ddf94974c9461d4bad",
         "hash": "f1755f6b5f1bb71b3f4861a1589435fbe419512fa4c238f9cd659c02852b97aa"
+      },
+      {
+        "seq": 9317,
+        "id": "aud_mwm67tjo_3k_alvc4m",
+        "ts": "2026-11-18T13:42:23.316Z",
+        "actor": "darren",
+        "role": "manager",
+        "action": "backup.github",
+        "what": "Backup committed to thethreethreethree/FRONT-DESK-TRANSACTION-TRACKER@main (auto-sync)",
+        "details": {
+          "reason": "auto-sync",
+          "coh": 98000,
+          "entries": 19993
+        },
+        "prevHash": "f1755f6b5f1bb71b3f4861a1589435fbe419512fa4c238f9cd659c02852b97aa",
+        "hash": "ceb34a42f31376e928e06d5c817912a2083c15c28779c4885c34fea886e13b48"
+      },
+      {
+        "seq": 9318,
+        "id": "aud_mwmjyju5_3m_bg5p6f",
+        "ts": "2026-11-18T20:07:05.453Z",
+        "actor": "darren",
+        "role": "manager",
+        "action": "deposit.create",
+        "what": "Deposit ₱1,000.00 · Towel ×1 · Thomas Goujet",
+        "details": {
+          "ref": 19994,
+          "id": "txn_mwmjyju5_3l_x8zy64",
+          "amount": 1000,
+          "item": "Towel",
+          "guest": "Thomas Goujet",
+          "room": "408"
+        },
+        "prevHash": "ceb34a42f31376e928e06d5c817912a2083c15c28779c4885c34fea886e13b48",
+        "hash": "0548c0d88682a5fb797fcd5f9c956e0dcd61e81dc1a6b88eb852349c4d821da0"
       }
     ],
     "towels": [
