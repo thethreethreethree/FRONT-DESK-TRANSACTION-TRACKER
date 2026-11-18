@@ -3,11 +3,11 @@
     "app": "Frendz Front Desk Transaction Tracker",
     "build": "2026-08-19-merge-sync",
     "writtenBy": "darren",
-    "exportedAt": "2026-11-18T20:10:31.949Z",
+    "exportedAt": "2026-11-18T20:13:35.747Z",
     "version": 1,
-    "coh": 97000,
-    "entries": 19998,
-    "auditEvents": 9326,
+    "coh": 96000,
+    "entries": 19999,
+    "auditEvents": 9328,
     "integrity": {
       "ok": true,
       "brokenAtSeq": null
@@ -41,8 +41,8 @@
         "path": "data/ledger-backup.json",
         "autoSync": true,
         "enabled": true,
-        "lastBackupAt": "2026-11-18T20:10:23.335Z",
-        "lastBackupSha": "9518ee5261dc7482127ddafbfa98fa3476677d68"
+        "lastBackupAt": "2026-11-18T20:10:54.882Z",
+        "lastBackupSha": "aa5ef3beb3599aaebd82a4b9ec7a606b329b6414"
       },
       "towelTracker": {
         "enabled": true,
@@ -504126,6 +504126,37 @@
         "reversesId": null,
         "prevHash": "b7e8421931031862a7cbf9ebf53663758a61fc1c9b7ceef53365c2dbd02a003c",
         "hash": "3c521bc2afd551655ef83b2de07f8eadfdc8fef11b310ae350f9c1a63e338a3c"
+      },
+      {
+        "seq": 19999,
+        "id": "txn_mwmk6rp8_40_pl7906",
+        "ts": "2026-11-18T20:13:28.892Z",
+        "kind": "refund",
+        "itemTypeId": "item_mpxxdbc3_2_s3d7ag",
+        "itemName": "Towel",
+        "qty": 1,
+        "unitAmount": 1000,
+        "amount": 1000,
+        "direction": -1,
+        "guest": "Cristina Cancelas Aguila",
+        "room": "307",
+        "pax": null,
+        "shiftId": "shift_mpy3b19n_5_j6nxol",
+        "shiftLabel": "PM",
+        "businessDate": "2026-11-19",
+        "staff": "darren",
+        "staffRole": "manager",
+        "note": "",
+        "towelNo": "421",
+        "oldTowelNo": "",
+        "towelLost": false,
+        "refundsSeq": 19749,
+        "exchangesSeq": null,
+        "mewsRes": "",
+        "privateRoom": false,
+        "reversesId": null,
+        "prevHash": "3c521bc2afd551655ef83b2de07f8eadfdc8fef11b310ae350f9c1a63e338a3c",
+        "hash": "6e3dec53e812334b0f03d8702a088d01ad9e45295ecd7f19209e634380226d24"
       }
     ],
     "audit": [
@@ -662463,6 +662494,41 @@
         },
         "prevHash": "6db4b642262853a7a75dab256979dd183bf6b8390213a01f1f303de724c25e33",
         "hash": "b01020c439b0f2edba108c3710da0a3ddc5da57f256293daecbebde1c075d28b"
+      },
+      {
+        "seq": 9327,
+        "id": "aud_mwmk3gz6_3z_ef6lsd",
+        "ts": "2026-11-18T20:10:55.026Z",
+        "actor": "darren",
+        "role": "manager",
+        "action": "backup.github",
+        "what": "Backup committed to thethreethreethree/FRONT-DESK-TRANSACTION-TRACKER@main (auto-sync)",
+        "details": {
+          "reason": "auto-sync",
+          "coh": 97000,
+          "entries": 19998
+        },
+        "prevHash": "b01020c439b0f2edba108c3710da0a3ddc5da57f256293daecbebde1c075d28b",
+        "hash": "1885a3bcc851b1b4d5c43a97e8790a6b9bc5b2fb679a149c0f8f1b5a6cceb44e"
+      },
+      {
+        "seq": 9328,
+        "id": "aud_mwmk6rp8_41_su0z5f",
+        "ts": "2026-11-18T20:13:28.892Z",
+        "actor": "darren",
+        "role": "manager",
+        "action": "refund.create",
+        "what": "Refund ₱1,000.00 · Towel ×1 · Cristina Cancelas Aguila",
+        "details": {
+          "ref": 19999,
+          "id": "txn_mwmk6rp8_40_pl7906",
+          "amount": 1000,
+          "item": "Towel",
+          "guest": "Cristina Cancelas Aguila",
+          "room": "307"
+        },
+        "prevHash": "1885a3bcc851b1b4d5c43a97e8790a6b9bc5b2fb679a149c0f8f1b5a6cceb44e",
+        "hash": "d01453f70cb137b73c8e03a78c8e3b7f4236cd1dae4d332b2e422ddbfba5baac"
       }
     ],
     "towels": [
