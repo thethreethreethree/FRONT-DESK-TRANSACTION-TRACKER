@@ -2,12 +2,12 @@
   "meta": {
     "app": "Frendz Front Desk Transaction Tracker",
     "build": "2026-08-19-merge-sync",
-    "writtenBy": "GINO",
-    "exportedAt": "2026-11-20T03:53:40.327Z",
+    "writtenBy": "Rebecca",
+    "exportedAt": "2026-11-20T04:30:53.940Z",
     "version": 1,
-    "coh": 92000,
+    "coh": 89000,
     "entries": 20044,
-    "auditEvents": 9414,
+    "auditEvents": 9413,
     "integrity": {
       "ok": true,
       "brokenAtSeq": null
@@ -41,8 +41,8 @@
         "path": "data/ledger-backup.json",
         "autoSync": true,
         "enabled": true,
-        "lastBackupAt": "2026-11-20T02:47:47.585Z",
-        "lastBackupSha": "c26e43722a6556facee8a6c0b71199adf8add4b6"
+        "lastBackupAt": "2026-11-20T03:52:06.506Z",
+        "lastBackupSha": "70a167c0d3d55ccadba971ce462596f5bcc7e88f"
       },
       "towelTracker": {
         "enabled": true,
@@ -505493,37 +505493,6 @@
       },
       {
         "seq": 20043,
-        "id": "txn_mwodpbh5_5_6ytv2w",
-        "ts": "2026-11-20T02:47:29.369Z",
-        "kind": "deposit",
-        "itemTypeId": "item_mpxxdbc3_2_s3d7ag",
-        "itemName": "Towel",
-        "qty": 1,
-        "unitAmount": 0,
-        "amount": 0,
-        "direction": 1,
-        "guest": "",
-        "room": "205",
-        "pax": null,
-        "shiftId": "shift_mpy3b19n_5_j6nxol",
-        "shiftLabel": "PM",
-        "businessDate": "2026-11-20",
-        "staff": "GINO",
-        "staffRole": "staff",
-        "note": "",
-        "towelNo": "139 400",
-        "oldTowelNo": "",
-        "towelLost": false,
-        "refundsSeq": null,
-        "exchangesSeq": null,
-        "mewsRes": "",
-        "privateRoom": true,
-        "reversesId": null,
-        "prevHash": "971c6951f7bea76389e6800d3bf4e4417e6933c0116a4c580e0c89cee8a5c23b",
-        "hash": "6312f59d185ed9703c661dc069f66ee1854236940a13223b1dd774d45e42d038"
-      },
-      {
-        "seq": 20044,
         "id": "txn_mwog00qy_1x_hrfwru",
         "ts": "2026-11-20T03:51:47.914Z",
         "kind": "deposit",
@@ -505550,8 +505519,39 @@
         "mewsRes": "",
         "privateRoom": true,
         "reversesId": null,
-        "prevHash": "6312f59d185ed9703c661dc069f66ee1854236940a13223b1dd774d45e42d038",
-        "hash": "66eb055e856bf66ebac3dada8d305ea3ae6f2708669e522d7bc6e731b4c4074b"
+        "prevHash": "971c6951f7bea76389e6800d3bf4e4417e6933c0116a4c580e0c89cee8a5c23b",
+        "hash": "73529e14cc38c0ab82a0f7082da19efbd3f34a6b5ebabf67f0eaaf307ba94b50"
+      },
+      {
+        "seq": 20044,
+        "id": "txn_mwohe5sy_20_pa17jv",
+        "ts": "2026-11-20T04:30:47.266Z",
+        "kind": "refund",
+        "itemTypeId": "item_mpxxdbc3_2_s3d7ag",
+        "itemName": "Towel",
+        "qty": 1,
+        "unitAmount": 3000,
+        "amount": 3000,
+        "direction": -1,
+        "guest": "ANARINA",
+        "room": "203",
+        "pax": null,
+        "shiftId": "shift_mpy3b19n_5_j6nxol",
+        "shiftLabel": "PM",
+        "businessDate": "2026-11-20",
+        "staff": "Rebecca",
+        "staffRole": "staff",
+        "note": "",
+        "towelNo": "453 402 111",
+        "oldTowelNo": "",
+        "towelLost": false,
+        "refundsSeq": 19937,
+        "exchangesSeq": null,
+        "mewsRes": "",
+        "privateRoom": false,
+        "reversesId": null,
+        "prevHash": "73529e14cc38c0ab82a0f7082da19efbd3f34a6b5ebabf67f0eaaf307ba94b50",
+        "hash": "9a4dc1b2f1418e0b528e898d2bf461177829cb92d279ff6e1950fb05684cbbb9"
       }
     ],
     "audit": [
@@ -665285,41 +665285,6 @@
       },
       {
         "seq": 9407,
-        "id": "aud_mwodpbh6_6_gu88q0",
-        "ts": "2026-11-20T02:47:29.370Z",
-        "actor": "GINO",
-        "role": "staff",
-        "action": "deposit.create",
-        "what": "Deposit ₱0.00 · Towel ×1 · 205",
-        "details": {
-          "ref": 20043,
-          "id": "txn_mwodpbh5_5_6ytv2w",
-          "amount": 0,
-          "item": "Towel",
-          "guest": "",
-          "room": "205"
-        },
-        "prevHash": "6e38c4df1982f76d7bdcb6253290e193dc5fc10d7bd18aaccd83092426b76890",
-        "hash": "0630e28598ec40a09752f71339992b2904bf13d628ce5b65a56312c4e0fda974"
-      },
-      {
-        "seq": 9408,
-        "id": "aud_mwodppj5_7_3dfl3a",
-        "ts": "2026-11-20T02:47:47.585Z",
-        "actor": "GINO",
-        "role": "staff",
-        "action": "backup.github",
-        "what": "Backup committed to thethreethreethree/FRONT-DESK-TRANSACTION-TRACKER@main (auto-sync)",
-        "details": {
-          "reason": "auto-sync",
-          "coh": 92000,
-          "entries": 20043
-        },
-        "prevHash": "0630e28598ec40a09752f71339992b2904bf13d628ce5b65a56312c4e0fda974",
-        "hash": "93d58512851b5955f8590f03ecf1a30f530170166369baa04de1b9e4f6c87fa6"
-      },
-      {
-        "seq": 9409,
         "id": "aud_mwofy547_1t_z6je40",
         "ts": "2026-11-20T03:50:20.263Z",
         "actor": "Monie",
@@ -665327,11 +665292,11 @@
         "action": "auth.logout",
         "what": "Monie signed out",
         "details": {},
-        "prevHash": "93d58512851b5955f8590f03ecf1a30f530170166369baa04de1b9e4f6c87fa6",
-        "hash": "034e445991a1d25282e6a9904f418cab841fdae30b8a7c7c93a9851e9b12e85c"
+        "prevHash": "6e38c4df1982f76d7bdcb6253290e193dc5fc10d7bd18aaccd83092426b76890",
+        "hash": "c77fd3bb228db5f9b4ab34ce6cd2885e308a33f418c9cc8ff96004ebbeb9f769"
       },
       {
-        "seq": 9410,
+        "seq": 9408,
         "id": "aud_mwofycg8_1u_4yar80",
         "ts": "2026-11-20T03:50:29.768Z",
         "actor": "Rebecca",
@@ -665341,11 +665306,11 @@
         "details": {
           "role": "staff"
         },
-        "prevHash": "034e445991a1d25282e6a9904f418cab841fdae30b8a7c7c93a9851e9b12e85c",
-        "hash": "4823f2d525ae71f2203afd6a13515a5ae82b1f36cd7f4ea93357d067fbb658bb"
+        "prevHash": "c77fd3bb228db5f9b4ab34ce6cd2885e308a33f418c9cc8ff96004ebbeb9f769",
+        "hash": "2d1a31689249d4096e43d9007ab4a2129a46691b54e8b43b310abb8ab25b78ac"
       },
       {
-        "seq": 9411,
+        "seq": 9409,
         "id": "aud_mwofyiqh_1v_1im0de",
         "ts": "2026-11-20T03:50:37.913Z",
         "actor": "Rebecca",
@@ -665357,11 +665322,11 @@
           "coh": 92000,
           "entries": 20042
         },
-        "prevHash": "4823f2d525ae71f2203afd6a13515a5ae82b1f36cd7f4ea93357d067fbb658bb",
-        "hash": "e711186276063bcc2cc030f2d1d9e30b9a4094965d43df9a1b3533961d53ea4c"
+        "prevHash": "2d1a31689249d4096e43d9007ab4a2129a46691b54e8b43b310abb8ab25b78ac",
+        "hash": "79ac88030f019763372869f6f803c72f08a74c69169ea43a18001c64d8475efc"
       },
       {
-        "seq": 9412,
+        "seq": 9410,
         "id": "aud_mwofyvqg_1w_xkmje0",
         "ts": "2026-11-20T03:50:54.760Z",
         "actor": "Rebecca",
@@ -665373,11 +665338,11 @@
           "coh": 92000,
           "entries": 20042
         },
-        "prevHash": "e711186276063bcc2cc030f2d1d9e30b9a4094965d43df9a1b3533961d53ea4c",
-        "hash": "16075305b8b743292dafdb69bfc90198162432a62129baa4e07cdc50b8766d0c"
+        "prevHash": "79ac88030f019763372869f6f803c72f08a74c69169ea43a18001c64d8475efc",
+        "hash": "0abaa3b45227832dba285e71b391a6ca131e1a011e7e33fe5be09c6380aa939a"
       },
       {
-        "seq": 9413,
+        "seq": 9411,
         "id": "aud_mwog00qy_1y_3dk37o",
         "ts": "2026-11-20T03:51:47.914Z",
         "actor": "Rebecca",
@@ -665392,24 +665357,43 @@
           "guest": "11/20",
           "room": "401"
         },
-        "prevHash": "16075305b8b743292dafdb69bfc90198162432a62129baa4e07cdc50b8766d0c",
-        "hash": "4a98beca1525a7c1c85247e485a859af0a7800d249b2da49dfe80262466326ae"
+        "prevHash": "0abaa3b45227832dba285e71b391a6ca131e1a011e7e33fe5be09c6380aa939a",
+        "hash": "99830fd92cd7f0778b4851ee3d0022e59cc3b663a5811b47b87ff016d7791b34"
       },
       {
-        "seq": 9414,
-        "id": "aud_mwog29pa_8_nq9j5i",
-        "ts": "2026-11-20T03:53:32.830Z",
-        "actor": "GINO",
+        "seq": 9412,
+        "id": "aud_mwog0f79_1z_285xwv",
+        "ts": "2026-11-20T03:52:06.645Z",
+        "actor": "Rebecca",
         "role": "staff",
-        "action": "sync.merge",
-        "what": "Merged 1 record from another device",
+        "action": "backup.github",
+        "what": "Backup committed to thethreethreethree/FRONT-DESK-TRANSACTION-TRACKER@main (auto-sync)",
         "details": {
-          "ledger": 1,
-          "travelista": 0,
-          "audit": 6
+          "reason": "auto-sync",
+          "coh": 92000,
+          "entries": 20043
         },
-        "prevHash": "4a98beca1525a7c1c85247e485a859af0a7800d249b2da49dfe80262466326ae",
-        "hash": "e970a16ac12bc8fb940fa8fed75ff7642feba54ec95cfbe82c09854a00b1fa53"
+        "prevHash": "99830fd92cd7f0778b4851ee3d0022e59cc3b663a5811b47b87ff016d7791b34",
+        "hash": "b96a85d8b3712528e474034b45c5060e2546a38481b707c3292eefa3dcf61495"
+      },
+      {
+        "seq": 9413,
+        "id": "aud_mwohe5sz_21_bdgmt6",
+        "ts": "2026-11-20T04:30:47.267Z",
+        "actor": "Rebecca",
+        "role": "staff",
+        "action": "refund.create",
+        "what": "Refund ₱3,000.00 · Towel ×1 · ANARINA",
+        "details": {
+          "ref": 20044,
+          "id": "txn_mwohe5sy_20_pa17jv",
+          "amount": 3000,
+          "item": "Towel",
+          "guest": "ANARINA",
+          "room": "203"
+        },
+        "prevHash": "b96a85d8b3712528e474034b45c5060e2546a38481b707c3292eefa3dcf61495",
+        "hash": "59b5a7ac95d3440e82734e3579392b57d7c5f714b2cf437badc255e900be72f3"
       }
     ],
     "towels": [
