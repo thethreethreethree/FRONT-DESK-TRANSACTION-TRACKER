@@ -3,11 +3,11 @@
     "app": "Frendz Front Desk Transaction Tracker",
     "build": "2026-08-19-merge-sync",
     "writtenBy": "GINO",
-    "exportedAt": "2026-11-20T10:36:38.242Z",
+    "exportedAt": "2026-11-20T10:37:18.427Z",
     "version": 1,
-    "coh": 66000,
-    "entries": 20068,
-    "auditEvents": 9466,
+    "coh": 69000,
+    "entries": 20070,
+    "auditEvents": 9468,
     "integrity": {
       "ok": true,
       "brokenAtSeq": null
@@ -42,7 +42,7 @@
         "autoSync": true,
         "enabled": true,
         "lastBackupAt": "2026-11-20T10:36:25.487Z",
-        "lastBackupSha": "6feff5e3d8be7a8a627d1f3f4a9caa5e805fc200"
+        "lastBackupSha": "593f2f7169b087add683ef8188b8c3d48c1c8a59"
       },
       "towelTracker": {
         "enabled": true,
@@ -506296,6 +506296,68 @@
         "reversesId": null,
         "prevHash": "eab33154eb5eef10356253cf6672058ce0ecc2ca58eddac98b96213b6a2286ce",
         "hash": "f03cb88a763189edd456bd61c791b92dfa7eaca40fc22f2d898c547673a2c4a1"
+      },
+      {
+        "seq": 20069,
+        "id": "txn_mwougu3e_f_6seih4",
+        "ts": "2026-11-20T10:36:47.066Z",
+        "kind": "deposit",
+        "itemTypeId": "item_mpxxdbc3_2_s3d7ag",
+        "itemName": "Towel",
+        "qty": 1,
+        "unitAmount": 1000,
+        "amount": 1000,
+        "direction": 1,
+        "guest": "ALIZEA",
+        "room": "407",
+        "pax": null,
+        "shiftId": "shift_mpy3b19n_5_j6nxol",
+        "shiftLabel": "PM",
+        "businessDate": "2026-11-20",
+        "staff": "GINO",
+        "staffRole": "staff",
+        "note": "",
+        "towelNo": "9",
+        "oldTowelNo": "",
+        "towelLost": false,
+        "refundsSeq": null,
+        "exchangesSeq": null,
+        "mewsRes": "",
+        "privateRoom": false,
+        "reversesId": null,
+        "prevHash": "f03cb88a763189edd456bd61c791b92dfa7eaca40fc22f2d898c547673a2c4a1",
+        "hash": "19cdaff56932c808443e04d29224b177dff8933c84abcb2cd8f5dc67d34f60d0"
+      },
+      {
+        "seq": 20070,
+        "id": "txn_mwouh8ky_h_lyo2fs",
+        "ts": "2026-11-20T10:37:05.842Z",
+        "kind": "deposit",
+        "itemTypeId": "item_mpxxdbc3_2_s3d7ag",
+        "itemName": "Towel",
+        "qty": 2,
+        "unitAmount": 1000,
+        "amount": 2000,
+        "direction": 1,
+        "guest": "LUKAS",
+        "room": "409",
+        "pax": null,
+        "shiftId": "shift_mpy3b19n_5_j6nxol",
+        "shiftLabel": "PM",
+        "businessDate": "2026-11-20",
+        "staff": "GINO",
+        "staffRole": "staff",
+        "note": "",
+        "towelNo": "419 21",
+        "oldTowelNo": "",
+        "towelLost": false,
+        "refundsSeq": null,
+        "exchangesSeq": null,
+        "mewsRes": "",
+        "privateRoom": false,
+        "reversesId": null,
+        "prevHash": "19cdaff56932c808443e04d29224b177dff8933c84abcb2cd8f5dc67d34f60d0",
+        "hash": "7d2f430167a646ecd6c2fbaf4bbc66d83725ec93dfcc528a81ef0b8b9c2d2bf2"
       }
     ],
     "audit": [
@@ -667057,6 +667119,44 @@
         },
         "prevHash": "3d34193e75f3a5bbf4c01f7bbb4f019c381a57b39ea264c4e546b24ae708e45d",
         "hash": "8648ae85e37c05a506cf176686466eb518e76f1e2638e7b37ae3cbf0df9325b7"
+      },
+      {
+        "seq": 9467,
+        "id": "aud_mwougu3e_g_xaw5vh",
+        "ts": "2026-11-20T10:36:47.066Z",
+        "actor": "GINO",
+        "role": "staff",
+        "action": "deposit.create",
+        "what": "Deposit ₱1,000.00 · Towel ×1 · ALIZEA",
+        "details": {
+          "ref": 20069,
+          "id": "txn_mwougu3e_f_6seih4",
+          "amount": 1000,
+          "item": "Towel",
+          "guest": "ALIZEA",
+          "room": "407"
+        },
+        "prevHash": "8648ae85e37c05a506cf176686466eb518e76f1e2638e7b37ae3cbf0df9325b7",
+        "hash": "2ae62556d1d05ccc9dc125ef0c2d6905e04800dee9b9c659fc1f659a843a141c"
+      },
+      {
+        "seq": 9468,
+        "id": "aud_mwouh8kz_i_cdzrqz",
+        "ts": "2026-11-20T10:37:05.843Z",
+        "actor": "GINO",
+        "role": "staff",
+        "action": "deposit.create",
+        "what": "Deposit ₱2,000.00 · Towel ×2 · LUKAS",
+        "details": {
+          "ref": 20070,
+          "id": "txn_mwouh8ky_h_lyo2fs",
+          "amount": 2000,
+          "item": "Towel",
+          "guest": "LUKAS",
+          "room": "409"
+        },
+        "prevHash": "2ae62556d1d05ccc9dc125ef0c2d6905e04800dee9b9c659fc1f659a843a141c",
+        "hash": "0d48d33bd025f8cd8c941d144c156afcb276132e02aaae7ef3c36d33f90949d4"
       }
     ],
     "towels": [
