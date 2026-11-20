@@ -2,12 +2,12 @@
   "meta": {
     "app": "Frendz Front Desk Transaction Tracker",
     "build": "2026-08-19-merge-sync",
-    "writtenBy": "Rebecca",
-    "exportedAt": "2026-11-20T04:40:53.224Z",
+    "writtenBy": "GINO",
+    "exportedAt": "2026-11-20T05:16:09.393Z",
     "version": 1,
     "coh": 62000,
     "entries": 20063,
-    "auditEvents": 9450,
+    "auditEvents": 9454,
     "integrity": {
       "ok": true,
       "brokenAtSeq": null
@@ -16,7 +16,7 @@
       "ok": true,
       "brokenAtSeq": null
     },
-    "travelistaEntries": 211,
+    "travelistaEntries": 212,
     "travelistaIntegrity": {
       "ok": true,
       "brokenAtSeq": null
@@ -41,8 +41,8 @@
         "path": "data/ledger-backup.json",
         "autoSync": true,
         "enabled": true,
-        "lastBackupAt": "2026-11-20T04:40:06.767Z",
-        "lastBackupSha": "5c4e3ba8d50cbda9526e54ea5d2bc76567a47010"
+        "lastBackupAt": "2026-11-20T04:41:03.421Z",
+        "lastBackupSha": "ed9acad6b951c2c78181dc4b938d6259d685e6c0"
       },
       "towelTracker": {
         "enabled": true,
@@ -666632,6 +666632,69 @@
         },
         "prevHash": "57749507ffbc63dba2170e1baae0d1ace347890c1c84dac592929fc73f513d47",
         "hash": "757d1880a052e672dac039e19e7ca1fc258d6c4bf5906836542b6141ac61d6be"
+      },
+      {
+        "seq": 9451,
+        "id": "aud_mwohrdc7_3m_90pday",
+        "ts": "2026-11-20T04:41:03.559Z",
+        "actor": "Rebecca",
+        "role": "staff",
+        "action": "backup.github",
+        "what": "Backup committed to thethreethreethree/FRONT-DESK-TRANSACTION-TRACKER@main (auto-sync)",
+        "details": {
+          "reason": "auto-sync",
+          "coh": 62000,
+          "entries": 20063
+        },
+        "prevHash": "757d1880a052e672dac039e19e7ca1fc258d6c4bf5906836542b6141ac61d6be",
+        "hash": "3bf998ebce4a9d184e968ab973ad0cde27a3f248e927ebbf1ff8dce0b5ad3786"
+      },
+      {
+        "seq": 9452,
+        "id": "aud_mwoilz5b_2_6vaj5v",
+        "ts": "2026-11-20T05:04:51.503Z",
+        "actor": "Rebecca",
+        "role": "staff",
+        "action": "tv.booking.create",
+        "what": "Travelista booking #212 · HOLLY ALMOND · PPS SHARING VAN ×2 pax · ₱1,500 (commission ₱200)",
+        "details": {
+          "ref": 212,
+          "id": "tv_mwoilz5a_1_1zp8ym",
+          "guest": "HOLLY ALMOND",
+          "destination": "PPS SHARING VAN",
+          "pax": 2,
+          "total": 1500,
+          "commission": 200,
+          "bookedBy": "BECCA"
+        },
+        "prevHash": "3bf998ebce4a9d184e968ab973ad0cde27a3f248e927ebbf1ff8dce0b5ad3786",
+        "hash": "ab46bc145c9a62d80c96c1596ebc5aaa62d00c6e474d0d12e0d3aeedf9fa0e78"
+      },
+      {
+        "seq": 9453,
+        "id": "aud_mwoj0cxu_1_mcwk28",
+        "ts": "2026-11-20T05:16:02.562Z",
+        "actor": "Rebecca",
+        "role": "staff",
+        "action": "auth.logout",
+        "what": "Rebecca signed out",
+        "details": {},
+        "prevHash": "ab46bc145c9a62d80c96c1596ebc5aaa62d00c6e474d0d12e0d3aeedf9fa0e78",
+        "hash": "61eefeb38cf6674dafe2c78bfda1af9485e8374cdd9debdcbe4fab561fd986fa"
+      },
+      {
+        "seq": 9454,
+        "id": "aud_mwoj0hq3_2_01f3u7",
+        "ts": "2026-11-20T05:16:08.763Z",
+        "actor": "GINO",
+        "role": "staff",
+        "action": "auth.login",
+        "what": "GINO signed in as staff",
+        "details": {
+          "role": "staff"
+        },
+        "prevHash": "61eefeb38cf6674dafe2c78bfda1af9485e8374cdd9debdcbe4fab561fd986fa",
+        "hash": "7460efe44a017e389dbfe997089469a25530bd32b161ee6cf8b24f8b2545e834"
       }
     ],
     "towels": [
@@ -681778,6 +681841,42 @@
           "reversesKind": null,
           "prevHash": "27280ba652de5e1d23572a3aa3b4f0251a88c62106872e3c085f203413238b15",
           "hash": "633069ff153666c6efb264111397d99d56a37ce818dac870cd4ef5efcea227b0"
+        },
+        {
+          "seq": 212,
+          "id": "tv_mwoilz5a_1_1zp8ym",
+          "ts": "2026-11-20T05:04:51.502Z",
+          "kind": "booking",
+          "direction": 1,
+          "amount": 1500,
+          "departureDate": "2026-11-21",
+          "guest": "HOLLY ALMOND",
+          "destination": "PPS SHARING VAN",
+          "destinationId": "dest_msrh2ktf_d_xyn4hg",
+          "pax": 2,
+          "fare": 750,
+          "fareBasis": "per_pax",
+          "total": 1500,
+          "travelistaShare": 1300,
+          "commission": 200,
+          "bookedBy": "BECCA",
+          "remarks": "ELLA MAY MOON",
+          "payoutType": "",
+          "payee": "",
+          "method": "",
+          "amendsSeq": null,
+          "dTotal": 0,
+          "dShare": 0,
+          "dCommission": 0,
+          "dPax": 0,
+          "periodKey": "2026-11-B",
+          "staff": "Rebecca",
+          "staffRole": "staff",
+          "businessDate": "2026-11-20",
+          "reversesId": null,
+          "reversesKind": null,
+          "prevHash": "633069ff153666c6efb264111397d99d56a37ce818dac870cd4ef5efcea227b0",
+          "hash": "fbadf480fbbebdc4adab5204d4aaab0cf686d2c1fb92fa21c0df2aeefb95286d"
         }
       ]
     }
