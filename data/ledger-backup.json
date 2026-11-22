@@ -3,11 +3,11 @@
     "app": "Frendz Front Desk Transaction Tracker",
     "build": "2026-08-19-merge-sync",
     "writtenBy": "DARREN",
-    "exportedAt": "2026-11-22T13:08:23.472Z",
+    "exportedAt": "2026-11-22T13:09:05.641Z",
     "version": 1,
-    "coh": 74000,
-    "entries": 20131,
-    "auditEvents": 9639,
+    "coh": 76000,
+    "entries": 20132,
+    "auditEvents": 9641,
     "integrity": {
       "ok": true,
       "brokenAtSeq": null
@@ -41,8 +41,8 @@
         "path": "data/ledger-backup.json",
         "autoSync": true,
         "enabled": true,
-        "lastBackupAt": "2026-11-22T13:06:33.775Z",
-        "lastBackupSha": "9274696cbb5c8e8906f8c2a1e5392f30ff601bc2"
+        "lastBackupAt": "2026-11-22T13:08:58.971Z",
+        "lastBackupSha": "a095e0e7eac274ba2b29dcf34d10c7897df1680d"
       },
       "towelTracker": {
         "enabled": true,
@@ -508249,6 +508249,37 @@
         "reversesId": null,
         "prevHash": "75c0d255e3b796dd9ac6185a163fd66114fa04fcee907b85bea598e894432c92",
         "hash": "f4ba69edead64166148cef38eb2fe00489d7d49231eface722d9371cfb8d3b1a"
+      },
+      {
+        "seq": 20132,
+        "id": "txn_mwrurjsz_j_e72slq",
+        "ts": "2026-11-22T13:08:25.475Z",
+        "kind": "deposit",
+        "itemTypeId": "item_mpxxdbc3_2_s3d7ag",
+        "itemName": "Towel",
+        "qty": 2,
+        "unitAmount": 1000,
+        "amount": 2000,
+        "direction": 1,
+        "guest": "Imke Linthuis",
+        "room": "409",
+        "pax": null,
+        "shiftId": "shift_mpy3b19n_5_j6nxol",
+        "shiftLabel": "PM",
+        "businessDate": "2026-11-22",
+        "staff": "DARREN",
+        "staffRole": "manager",
+        "note": "",
+        "towelNo": "471 134",
+        "oldTowelNo": "",
+        "towelLost": false,
+        "refundsSeq": null,
+        "exchangesSeq": null,
+        "mewsRes": "",
+        "privateRoom": false,
+        "reversesId": null,
+        "prevHash": "f4ba69edead64166148cef38eb2fe00489d7d49231eface722d9371cfb8d3b1a",
+        "hash": "d7977f7a25dff924305b83b62057d14b46d2543c8a1a2e2c2f2d26f11dd3500a"
       }
     ],
     "audit": [
@@ -672077,6 +672108,41 @@
         },
         "prevHash": "86b02dfcc947a0e5ba70bc8ab824cda92cb87f868d2e9a192c4a233112a05a2c",
         "hash": "5b591a426f69712138a09accaffa3af6be72cbddd2e40a75e23bb1d33843e162"
+      },
+      {
+        "seq": 9640,
+        "id": "aud_mwrurjsz_k_sc417q",
+        "ts": "2026-11-22T13:08:25.475Z",
+        "actor": "DARREN",
+        "role": "manager",
+        "action": "deposit.create",
+        "what": "Deposit ₱2,000.00 · Towel ×2 · Imke Linthuis",
+        "details": {
+          "ref": 20132,
+          "id": "txn_mwrurjsz_j_e72slq",
+          "amount": 2000,
+          "item": "Towel",
+          "guest": "Imke Linthuis",
+          "room": "409"
+        },
+        "prevHash": "5b591a426f69712138a09accaffa3af6be72cbddd2e40a75e23bb1d33843e162",
+        "hash": "5bcebc818545f372045c8a41e9d8ece6561498161ec5f913ffaef779eb3b8cf0"
+      },
+      {
+        "seq": 9641,
+        "id": "aud_mwrus9nf_l_3etvr7",
+        "ts": "2026-11-22T13:08:58.971Z",
+        "actor": "DARREN",
+        "role": "manager",
+        "action": "backup.github",
+        "what": "Backup committed to thethreethreethree/FRONT-DESK-TRANSACTION-TRACKER@main (auto-sync)",
+        "details": {
+          "reason": "auto-sync",
+          "coh": 74000,
+          "entries": 20132
+        },
+        "prevHash": "5bcebc818545f372045c8a41e9d8ece6561498161ec5f913ffaef779eb3b8cf0",
+        "hash": "e81ee0976d10c4b2a0a1531a77244e435878fe63e280fdeb46808346b1e1fb49"
       }
     ],
     "towels": [
