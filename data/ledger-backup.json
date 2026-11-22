@@ -3,11 +3,11 @@
     "app": "Frendz Front Desk Transaction Tracker",
     "build": "2026-08-19-merge-sync",
     "writtenBy": "DARREN",
-    "exportedAt": "2026-11-22T13:06:13.056Z",
+    "exportedAt": "2026-11-22T13:08:23.472Z",
     "version": 1,
-    "coh": 70000,
-    "entries": 20129,
-    "auditEvents": 9636,
+    "coh": 74000,
+    "entries": 20131,
+    "auditEvents": 9639,
     "integrity": {
       "ok": true,
       "brokenAtSeq": null
@@ -41,8 +41,8 @@
         "path": "data/ledger-backup.json",
         "autoSync": true,
         "enabled": true,
-        "lastBackupAt": "2026-11-22T13:06:05.382Z",
-        "lastBackupSha": "37750b92b66a0aa1b9c3d1803a508a1abdb2f2fe"
+        "lastBackupAt": "2026-11-22T13:06:33.775Z",
+        "lastBackupSha": "9274696cbb5c8e8906f8c2a1e5392f30ff601bc2"
       },
       "towelTracker": {
         "enabled": true,
@@ -508187,6 +508187,68 @@
         "reversesId": null,
         "prevHash": "22c69c0a7e605d840fa33844f71e27b4df87c9520fc8327c78f44f9f7c86c9ea",
         "hash": "91ceeae3558c88d4f73ae7814f4dac4eb6f165fd68938e23186003daf5a30f39"
+      },
+      {
+        "seq": 20130,
+        "id": "txn_mwrupi5m_f_0iyw4i",
+        "ts": "2026-11-22T13:06:50.026Z",
+        "kind": "deposit",
+        "itemTypeId": "item_mpxxdbc3_2_s3d7ag",
+        "itemName": "Towel",
+        "qty": 3,
+        "unitAmount": 1000,
+        "amount": 3000,
+        "direction": 1,
+        "guest": "Mia Schou-Hedegaard",
+        "room": "309",
+        "pax": null,
+        "shiftId": "shift_mpy3b19n_5_j6nxol",
+        "shiftLabel": "PM",
+        "businessDate": "2026-11-22",
+        "staff": "DARREN",
+        "staffRole": "manager",
+        "note": "",
+        "towelNo": "166 444 447",
+        "oldTowelNo": "",
+        "towelLost": false,
+        "refundsSeq": null,
+        "exchangesSeq": null,
+        "mewsRes": "",
+        "privateRoom": false,
+        "reversesId": null,
+        "prevHash": "91ceeae3558c88d4f73ae7814f4dac4eb6f165fd68938e23186003daf5a30f39",
+        "hash": "75c0d255e3b796dd9ac6185a163fd66114fa04fcee907b85bea598e894432c92"
+      },
+      {
+        "seq": 20131,
+        "id": "txn_mwruqhm3_h_1yqu2y",
+        "ts": "2026-11-22T13:07:35.979Z",
+        "kind": "deposit",
+        "itemTypeId": "item_mpxxdbc3_2_s3d7ag",
+        "itemName": "Towel",
+        "qty": 1,
+        "unitAmount": 1000,
+        "amount": 1000,
+        "direction": 1,
+        "guest": "Malthe Kock Larsen",
+        "room": "408",
+        "pax": null,
+        "shiftId": "shift_mpy3b19n_5_j6nxol",
+        "shiftLabel": "PM",
+        "businessDate": "2026-11-22",
+        "staff": "DARREN",
+        "staffRole": "manager",
+        "note": "",
+        "towelNo": "64",
+        "oldTowelNo": "",
+        "towelLost": false,
+        "refundsSeq": null,
+        "exchangesSeq": null,
+        "mewsRes": "",
+        "privateRoom": false,
+        "reversesId": null,
+        "prevHash": "75c0d255e3b796dd9ac6185a163fd66114fa04fcee907b85bea598e894432c92",
+        "hash": "f4ba69edead64166148cef38eb2fe00489d7d49231eface722d9371cfb8d3b1a"
       }
     ],
     "audit": [
@@ -671961,6 +672023,60 @@
         },
         "prevHash": "c575e27257ec38bdf231e4406e0681f67dfa079e3aca6aa3d8081e34d3857aaf",
         "hash": "75773a83373d82f2324571e3b5ee5ce1f80d75006fadbe3e4ddb40b019f2c76c"
+      },
+      {
+        "seq": 9637,
+        "id": "aud_mwrup5m7_e_5a9vhd",
+        "ts": "2026-11-22T13:06:33.775Z",
+        "actor": "DARREN",
+        "role": "manager",
+        "action": "backup.github",
+        "what": "Backup committed to thethreethreethree/FRONT-DESK-TRANSACTION-TRACKER@main (auto-sync)",
+        "details": {
+          "reason": "auto-sync",
+          "coh": 70000,
+          "entries": 20129
+        },
+        "prevHash": "75773a83373d82f2324571e3b5ee5ce1f80d75006fadbe3e4ddb40b019f2c76c",
+        "hash": "420c91af305bca5b839c3f1e10eb9330f8c27b89fa329a5331af509d3a291906"
+      },
+      {
+        "seq": 9638,
+        "id": "aud_mwrupi5m_g_2ff9s1",
+        "ts": "2026-11-22T13:06:50.026Z",
+        "actor": "DARREN",
+        "role": "manager",
+        "action": "deposit.create",
+        "what": "Deposit ₱3,000.00 · Towel ×3 · Mia Schou-Hedegaard",
+        "details": {
+          "ref": 20130,
+          "id": "txn_mwrupi5m_f_0iyw4i",
+          "amount": 3000,
+          "item": "Towel",
+          "guest": "Mia Schou-Hedegaard",
+          "room": "309"
+        },
+        "prevHash": "420c91af305bca5b839c3f1e10eb9330f8c27b89fa329a5331af509d3a291906",
+        "hash": "86b02dfcc947a0e5ba70bc8ab824cda92cb87f868d2e9a192c4a233112a05a2c"
+      },
+      {
+        "seq": 9639,
+        "id": "aud_mwruqhm3_i_xm070j",
+        "ts": "2026-11-22T13:07:35.979Z",
+        "actor": "DARREN",
+        "role": "manager",
+        "action": "deposit.create",
+        "what": "Deposit ₱1,000.00 · Towel ×1 · Malthe Kock Larsen",
+        "details": {
+          "ref": 20131,
+          "id": "txn_mwruqhm3_h_1yqu2y",
+          "amount": 1000,
+          "item": "Towel",
+          "guest": "Malthe Kock Larsen",
+          "room": "408"
+        },
+        "prevHash": "86b02dfcc947a0e5ba70bc8ab824cda92cb87f868d2e9a192c4a233112a05a2c",
+        "hash": "5b591a426f69712138a09accaffa3af6be72cbddd2e40a75e23bb1d33843e162"
       }
     ],
     "towels": [
