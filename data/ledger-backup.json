@@ -2,12 +2,12 @@
   "meta": {
     "app": "Frendz Front Desk Transaction Tracker",
     "build": "2026-08-19-merge-sync",
-    "writtenBy": "system",
-    "exportedAt": "2026-11-22T01:21:53.355Z",
+    "writtenBy": "James",
+    "exportedAt": "2026-11-22T01:22:42.448Z",
     "version": 1,
     "coh": 78000,
     "entries": 20113,
-    "auditEvents": 9568,
+    "auditEvents": 9571,
     "integrity": {
       "ok": true,
       "brokenAtSeq": null
@@ -41,7 +41,7 @@
         "path": "data/ledger-backup.json",
         "autoSync": true,
         "enabled": true,
-        "lastBackupAt": "2026-11-21T21:13:56.671Z",
+        "lastBackupAt": "2026-11-22T01:22:02.256Z",
         "lastBackupSha": "26fd63ade1d2ed281102dff84dbb8c95f9e83527"
       },
       "towelTracker": {
@@ -670199,6 +670199,53 @@
         "details": {},
         "prevHash": "314a8f41c8e42665f2c6552d0908879e267748a1b8ecf226de114ce9959640f5",
         "hash": "cb80860e175b496803e3f293b13732dac766a76bd6df9123914e130e88150152"
+      },
+      {
+        "seq": 9569,
+        "id": "aud_mwr5j2um_2_74zx0b",
+        "ts": "2026-11-22T01:21:59.854Z",
+        "actor": "James",
+        "role": "manager",
+        "action": "auth.login",
+        "what": "James signed in as manager",
+        "details": {
+          "role": "manager"
+        },
+        "prevHash": "cb80860e175b496803e3f293b13732dac766a76bd6df9123914e130e88150152",
+        "hash": "d9c0bc3bf68888dff0e0bb28d57f1869bebc8a08f307420f90deb8d8792e7abd"
+      },
+      {
+        "seq": 9570,
+        "id": "aud_mwr5j4su_3_ix0pmz",
+        "ts": "2026-11-22T01:22:02.382Z",
+        "actor": "James",
+        "role": "manager",
+        "action": "backup.github",
+        "what": "Backup committed to thethreethreethree/FRONT-DESK-TRANSACTION-TRACKER@main (auto-sync)",
+        "details": {
+          "reason": "auto-sync",
+          "coh": 78000,
+          "entries": 20113
+        },
+        "prevHash": "d9c0bc3bf68888dff0e0bb28d57f1869bebc8a08f307420f90deb8d8792e7abd",
+        "hash": "e470a1b37394dc5c59e2c6281617f868740994b6b7403774302f02d61243ad7a"
+      },
+      {
+        "seq": 9571,
+        "id": "aud_mwr5junt_4_kpc2uq",
+        "ts": "2026-11-22T01:22:35.897Z",
+        "actor": "James",
+        "role": "manager",
+        "action": "towel.add",
+        "what": "Added 1 towel to inventory",
+        "details": {
+          "count": 1,
+          "sample": [
+            "42"
+          ]
+        },
+        "prevHash": "e470a1b37394dc5c59e2c6281617f868740994b6b7403774302f02d61243ad7a",
+        "hash": "e66f5eaf8b6f086a5c748695d2ef0c1c1c1adbb02ad0d4c35fa0395c192bf564"
       }
     ],
     "towels": [
@@ -671510,6 +671557,11 @@
       {
         "no": "500",
         "createdAt": "2026-11-13T23:31:16.351Z",
+        "createdBy": "James"
+      },
+      {
+        "no": "42",
+        "createdAt": "2026-11-22T01:22:35.897Z",
         "createdBy": "James"
       }
     ],
