@@ -3,11 +3,11 @@
     "app": "Frendz Front Desk Transaction Tracker",
     "build": "2026-08-19-merge-sync",
     "writtenBy": "DARREN",
-    "exportedAt": "2026-11-22T13:10:30.884Z",
+    "exportedAt": "2026-11-22T13:11:19.885Z",
     "version": 1,
-    "coh": 78000,
-    "entries": 20134,
-    "auditEvents": 9645,
+    "coh": 79000,
+    "entries": 20135,
+    "auditEvents": 9647,
     "integrity": {
       "ok": true,
       "brokenAtSeq": null
@@ -41,8 +41,8 @@
         "path": "data/ledger-backup.json",
         "autoSync": true,
         "enabled": true,
-        "lastBackupAt": "2026-11-22T13:10:23.793Z",
-        "lastBackupSha": "73ad6b07b52f73a02f0ded9363d03da734ee7ea4"
+        "lastBackupAt": "2026-11-22T13:11:12.520Z",
+        "lastBackupSha": "ad178d5249db08453ef539a171d8fa3013aa1cab"
       },
       "towelTracker": {
         "enabled": true,
@@ -508342,6 +508342,37 @@
         "reversesId": null,
         "prevHash": "2f5e6811488b7795a9afec463ab29ef06d65b452b073c4b007a68ade538a7e31",
         "hash": "ed9a93dd594c3353ea8e28389c69dbdb5d9acd70ec97ef9fca04781695c82db4"
+      },
+      {
+        "seq": 20135,
+        "id": "txn_mwruuqpj_s_sto15v",
+        "ts": "2026-11-22T13:10:54.391Z",
+        "kind": "deposit",
+        "itemTypeId": "item_mpxxdbc3_2_s3d7ag",
+        "itemName": "Towel",
+        "qty": 1,
+        "unitAmount": 1000,
+        "amount": 1000,
+        "direction": 1,
+        "guest": "veronica sand",
+        "room": "308",
+        "pax": null,
+        "shiftId": "shift_mpy3b19n_5_j6nxol",
+        "shiftLabel": "PM",
+        "businessDate": "2026-11-22",
+        "staff": "DARREN",
+        "staffRole": "manager",
+        "note": "",
+        "towelNo": "283",
+        "oldTowelNo": "",
+        "towelLost": false,
+        "refundsSeq": null,
+        "exchangesSeq": null,
+        "mewsRes": "",
+        "privateRoom": false,
+        "reversesId": null,
+        "prevHash": "ed9a93dd594c3353ea8e28389c69dbdb5d9acd70ec97ef9fca04781695c82db4",
+        "hash": "451c177036ffa82c9ccc58b0b23051c4252713639c5e74b2cf021d0f395742da"
       }
     ],
     "audit": [
@@ -672275,6 +672306,41 @@
         },
         "prevHash": "47fe9f0164947e491e1fd9b4b7342a1525aaf379c2c5ba0a1cb5c374e31736af",
         "hash": "0ee28e2859d06deed112b4ef82bf91f025d61501e272748acc92e36848b3e11a"
+      },
+      {
+        "seq": 9646,
+        "id": "aud_mwruuqpj_t_hflm14",
+        "ts": "2026-11-22T13:10:54.391Z",
+        "actor": "DARREN",
+        "role": "manager",
+        "action": "deposit.create",
+        "what": "Deposit ₱1,000.00 · Towel ×1 · veronica sand",
+        "details": {
+          "ref": 20135,
+          "id": "txn_mwruuqpj_s_sto15v",
+          "amount": 1000,
+          "item": "Towel",
+          "guest": "veronica sand",
+          "room": "308"
+        },
+        "prevHash": "0ee28e2859d06deed112b4ef82bf91f025d61501e272748acc92e36848b3e11a",
+        "hash": "18579d5fe0e4c6515a797b362d99c0007a43b941bb16916e8a12c8a7150c1f88"
+      },
+      {
+        "seq": 9647,
+        "id": "aud_mwruv4p5_u_t3iisu",
+        "ts": "2026-11-22T13:11:12.521Z",
+        "actor": "DARREN",
+        "role": "manager",
+        "action": "backup.github",
+        "what": "Backup committed to thethreethreethree/FRONT-DESK-TRANSACTION-TRACKER@main (auto-sync)",
+        "details": {
+          "reason": "auto-sync",
+          "coh": 78000,
+          "entries": 20135
+        },
+        "prevHash": "18579d5fe0e4c6515a797b362d99c0007a43b941bb16916e8a12c8a7150c1f88",
+        "hash": "60879bdf6e724609db73edf80967282770d0e45a3a7b84aa2b8f385b16a28fcd"
       }
     ],
     "towels": [
