@@ -3,11 +3,11 @@
     "app": "Frendz Front Desk Transaction Tracker",
     "build": "2026-08-19-merge-sync",
     "writtenBy": "DARREN",
-    "exportedAt": "2026-11-22T13:05:12.045Z",
+    "exportedAt": "2026-11-22T13:06:13.056Z",
     "version": 1,
-    "coh": 69000,
-    "entries": 20128,
-    "auditEvents": 9634,
+    "coh": 70000,
+    "entries": 20129,
+    "auditEvents": 9636,
     "integrity": {
       "ok": true,
       "brokenAtSeq": null
@@ -41,8 +41,8 @@
         "path": "data/ledger-backup.json",
         "autoSync": true,
         "enabled": true,
-        "lastBackupAt": "2026-11-22T13:04:21.344Z",
-        "lastBackupSha": "02d2fd1b1782fcf302e5a4b4dd25557f2dfc50eb"
+        "lastBackupAt": "2026-11-22T13:06:05.382Z",
+        "lastBackupSha": "37750b92b66a0aa1b9c3d1803a508a1abdb2f2fe"
       },
       "towelTracker": {
         "enabled": true,
@@ -508156,6 +508156,37 @@
         "reversesId": null,
         "prevHash": "13940f84fe4edc1c1c8dbead09ca0a78d4cd2855e245452de1777b169a17b644",
         "hash": "22c69c0a7e605d840fa33844f71e27b4df87c9520fc8327c78f44f9f7c86c9ea"
+      },
+      {
+        "seq": 20129,
+        "id": "txn_mwruoevl_b_5e9pzv",
+        "ts": "2026-11-22T13:05:59.121Z",
+        "kind": "deposit",
+        "itemTypeId": "item_mpxxdbc3_2_s3d7ag",
+        "itemName": "Towel",
+        "qty": 1,
+        "unitAmount": 1000,
+        "amount": 1000,
+        "direction": 1,
+        "guest": "Ella Gibbs",
+        "room": "403",
+        "pax": null,
+        "shiftId": "shift_mpy3b19n_5_j6nxol",
+        "shiftLabel": "PM",
+        "businessDate": "2026-11-22",
+        "staff": "DARREN",
+        "staffRole": "manager",
+        "note": "",
+        "towelNo": "210",
+        "oldTowelNo": "",
+        "towelLost": false,
+        "refundsSeq": null,
+        "exchangesSeq": null,
+        "mewsRes": "",
+        "privateRoom": false,
+        "reversesId": null,
+        "prevHash": "22c69c0a7e605d840fa33844f71e27b4df87c9520fc8327c78f44f9f7c86c9ea",
+        "hash": "91ceeae3558c88d4f73ae7814f4dac4eb6f165fd68938e23186003daf5a30f39"
       }
     ],
     "audit": [
@@ -671895,6 +671926,41 @@
         },
         "prevHash": "2a36ca6aa86e5cae2371bb59aee3aa7d5b05287a572f1017493c5da42241e489",
         "hash": "ffdcee36dd4dc1c74e385f8bf7e21f90073e846d98bae3f647a8ed96ec53083a"
+      },
+      {
+        "seq": 9635,
+        "id": "aud_mwruoevm_c_us5etu",
+        "ts": "2026-11-22T13:05:59.122Z",
+        "actor": "DARREN",
+        "role": "manager",
+        "action": "deposit.create",
+        "what": "Deposit ₱1,000.00 · Towel ×1 · Ella Gibbs",
+        "details": {
+          "ref": 20129,
+          "id": "txn_mwruoevl_b_5e9pzv",
+          "amount": 1000,
+          "item": "Towel",
+          "guest": "Ella Gibbs",
+          "room": "403"
+        },
+        "prevHash": "ffdcee36dd4dc1c74e385f8bf7e21f90073e846d98bae3f647a8ed96ec53083a",
+        "hash": "c575e27257ec38bdf231e4406e0681f67dfa079e3aca6aa3d8081e34d3857aaf"
+      },
+      {
+        "seq": 9636,
+        "id": "aud_mwruojtd_d_bsbtah",
+        "ts": "2026-11-22T13:06:05.521Z",
+        "actor": "DARREN",
+        "role": "manager",
+        "action": "backup.github",
+        "what": "Backup committed to thethreethreethree/FRONT-DESK-TRANSACTION-TRACKER@main (auto-sync)",
+        "details": {
+          "reason": "auto-sync",
+          "coh": 69000,
+          "entries": 20129
+        },
+        "prevHash": "c575e27257ec38bdf231e4406e0681f67dfa079e3aca6aa3d8081e34d3857aaf",
+        "hash": "75773a83373d82f2324571e3b5ee5ce1f80d75006fadbe3e4ddb40b019f2c76c"
       }
     ],
     "towels": [
