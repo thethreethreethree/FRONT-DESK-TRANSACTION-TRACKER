@@ -3,11 +3,11 @@
     "app": "Frendz Front Desk Transaction Tracker",
     "build": "2026-08-19-merge-sync",
     "writtenBy": "Chalyn",
-    "exportedAt": "2026-11-25T02:24:02.365Z",
+    "exportedAt": "2026-11-25T02:24:20.563Z",
     "version": 1,
     "coh": 91200,
     "entries": 20222,
-    "auditEvents": 9825,
+    "auditEvents": 9827,
     "integrity": {
       "ok": true,
       "brokenAtSeq": null
@@ -16,7 +16,7 @@
       "ok": true,
       "brokenAtSeq": null
     },
-    "travelistaEntries": 227,
+    "travelistaEntries": 228,
     "travelistaIntegrity": {
       "ok": true,
       "brokenAtSeq": null
@@ -41,8 +41,8 @@
         "path": "data/ledger-backup.json",
         "autoSync": true,
         "enabled": true,
-        "lastBackupAt": "2026-11-25T00:25:34.617Z",
-        "lastBackupSha": "faa06cb7179a5277a9a1862db39aeb3cb95c4d13"
+        "lastBackupAt": "2026-11-25T02:24:13.621Z",
+        "lastBackupSha": "1d320c0af748f835f46b36c1fec16e6872200c01"
       },
       "towelTracker": {
         "enabled": true,
@@ -678119,6 +678119,43 @@
         },
         "prevHash": "679befefdfd0e27712c8dc09d91eed26bb992c44b7206fc9d4030406cfecfc23",
         "hash": "75a4d949501079bb8a6651326ce553c54d30f2692b5de74cdb52f734759bfbba"
+      },
+      {
+        "seq": 9826,
+        "id": "aud_mwvi2lyi_w_3jwi02",
+        "ts": "2026-11-25T02:24:11.178Z",
+        "actor": "Chalyn",
+        "role": "staff",
+        "action": "tv.booking.create",
+        "what": "Travelista booking #228 · EVAN VAN PROOSDIJ · PPS SHARING VAN ×2 pax · ₱1,500 (commission ₱200)",
+        "details": {
+          "ref": 228,
+          "id": "tv_mwvi2lyi_v_zyfunu",
+          "guest": "EVAN VAN PROOSDIJ",
+          "destination": "PPS SHARING VAN",
+          "pax": 2,
+          "total": 1500,
+          "commission": 200,
+          "bookedBy": "CHALYN"
+        },
+        "prevHash": "75a4d949501079bb8a6651326ce553c54d30f2692b5de74cdb52f734759bfbba",
+        "hash": "073a1e5f2b9d4709bb89b645e339831e1fc4db8a0459bc8afce34c152bb61320"
+      },
+      {
+        "seq": 9827,
+        "id": "aud_mwvi2nxz_x_b6jnrg",
+        "ts": "2026-11-25T02:24:13.751Z",
+        "actor": "Chalyn",
+        "role": "staff",
+        "action": "backup.github",
+        "what": "Backup committed to thethreethreethree/FRONT-DESK-TRANSACTION-TRACKER@main (auto-sync)",
+        "details": {
+          "reason": "auto-sync",
+          "coh": 91200,
+          "entries": 20222
+        },
+        "prevHash": "073a1e5f2b9d4709bb89b645e339831e1fc4db8a0459bc8afce34c152bb61320",
+        "hash": "ab9c755d1943ffdbe946e33828ae5fbfa4ff7c7162ca436039a968248fb6cf28"
       }
     ],
     "towels": [
@@ -695713,6 +695750,42 @@
           "reversesKind": null,
           "prevHash": "8d58cb9d77fc799c86e7f327b6fb3bd9f6522c7adbbd883d3bb536b8a48bf3f5",
           "hash": "63089781664b683b67c4d20806470304308dbf8eb88061993c89c6ce3c07eaeb"
+        },
+        {
+          "seq": 228,
+          "id": "tv_mwvi2lyi_v_zyfunu",
+          "ts": "2026-11-25T02:24:11.178Z",
+          "kind": "booking",
+          "direction": 1,
+          "amount": 1500,
+          "departureDate": "2026-11-26",
+          "guest": "EVAN VAN PROOSDIJ",
+          "destination": "PPS SHARING VAN",
+          "destinationId": "dest_msrh2ktf_d_xyn4hg",
+          "pax": 2,
+          "fare": 750,
+          "fareBasis": "per_pax",
+          "total": 1500,
+          "travelistaShare": 1300,
+          "commission": 200,
+          "bookedBy": "CHALYN",
+          "remarks": "",
+          "payoutType": "",
+          "payee": "",
+          "method": "",
+          "amendsSeq": null,
+          "dTotal": 0,
+          "dShare": 0,
+          "dCommission": 0,
+          "dPax": 0,
+          "periodKey": "2026-11-B",
+          "staff": "Chalyn",
+          "staffRole": "staff",
+          "businessDate": "2026-11-25",
+          "reversesId": null,
+          "reversesKind": null,
+          "prevHash": "63089781664b683b67c4d20806470304308dbf8eb88061993c89c6ce3c07eaeb",
+          "hash": "89376e7efdd3b9e95d3fcb92888981fc975bce15c031d618dec608b73ebf9ca5"
         }
       ]
     }
