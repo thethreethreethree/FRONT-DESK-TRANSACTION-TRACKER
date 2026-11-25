@@ -3,11 +3,11 @@
     "app": "Frendz Front Desk Transaction Tracker",
     "build": "2026-08-19-merge-sync",
     "writtenBy": "Kianne",
-    "exportedAt": "2026-11-25T11:33:49.164Z",
+    "exportedAt": "2026-11-25T11:35:04.147Z",
     "version": 1,
     "coh": 84000,
     "entries": 20260,
-    "auditEvents": 9891,
+    "auditEvents": 9893,
     "integrity": {
       "ok": true,
       "brokenAtSeq": null
@@ -16,7 +16,7 @@
       "ok": true,
       "brokenAtSeq": null
     },
-    "travelistaEntries": 230,
+    "travelistaEntries": 231,
     "travelistaIntegrity": {
       "ok": true,
       "brokenAtSeq": null
@@ -41,8 +41,8 @@
         "path": "data/ledger-backup.json",
         "autoSync": true,
         "enabled": true,
-        "lastBackupAt": "2026-11-25T11:33:42.361Z",
-        "lastBackupSha": "e6475ea2ad16dda0225be2f361c286fb86346207"
+        "lastBackupAt": "2026-11-25T11:34:16.674Z",
+        "lastBackupSha": "73dc6311e53b29dedf26b131853ec31af3bdadcc"
       },
       "towelTracker": {
         "enabled": true,
@@ -680468,6 +680468,43 @@
         },
         "prevHash": "d688475447066b89024b17fb3abe242a1f00c5cdf3c16fbe7b4e07c93afa8a17",
         "hash": "8d7ac14dc6f09dafe68ef807be4eddd2a72327af7b5cdc80c61b0b64c9d2e863"
+      },
+      {
+        "seq": 9892,
+        "id": "aud_mww1q15u_3v_zbys5s",
+        "ts": "2026-11-25T11:34:16.674Z",
+        "actor": "Kianne",
+        "role": "staff",
+        "action": "backup.github",
+        "what": "Backup committed to thethreethreethree/FRONT-DESK-TRANSACTION-TRACKER@main (auto-sync)",
+        "details": {
+          "reason": "auto-sync",
+          "coh": 84000,
+          "entries": 20260
+        },
+        "prevHash": "8d7ac14dc6f09dafe68ef807be4eddd2a72327af7b5cdc80c61b0b64c9d2e863",
+        "hash": "7aff34f69c50236ba72ea6885ff4c627da9ceb7e226a0f1734f7bc3c4f316f47"
+      },
+      {
+        "seq": 9893,
+        "id": "aud_mww1qw9z_3x_rhr6d6",
+        "ts": "2026-11-25T11:34:56.999Z",
+        "actor": "Kianne",
+        "role": "staff",
+        "action": "tv.booking.create",
+        "what": "Travelista booking #231 · KATE OLIJKAN · LIO AIRPORT ×1 pax · ₱2,000 (commission ₱500)",
+        "details": {
+          "ref": 231,
+          "id": "tv_mww1qw9z_3w_8gwxdn",
+          "guest": "KATE OLIJKAN",
+          "destination": "LIO AIRPORT",
+          "pax": 1,
+          "total": 2000,
+          "commission": 500,
+          "bookedBy": "DARREN"
+        },
+        "prevHash": "7aff34f69c50236ba72ea6885ff4c627da9ceb7e226a0f1734f7bc3c4f316f47",
+        "hash": "3868fb5466ccc0d71c5653d7cb4e6ef121c424825e6f6d76b392867a2517ad7f"
       }
     ],
     "towels": [
@@ -698176,6 +698213,42 @@
           "reversesKind": null,
           "prevHash": "39b9b70d73617dcae603fb3dbb16c01131cfbe40f0aa697d4092761c37b1acf3",
           "hash": "9c3e396b491368a68ffba528e52e8f01ad4c3a47c64c85496836732373851557"
+        },
+        {
+          "seq": 231,
+          "id": "tv_mww1qw9z_3w_8gwxdn",
+          "ts": "2026-11-25T11:34:56.999Z",
+          "kind": "booking",
+          "direction": 1,
+          "amount": 2000,
+          "departureDate": "2026-11-26",
+          "guest": "KATE OLIJKAN",
+          "destination": "LIO AIRPORT",
+          "destinationId": "dest_mttpa67e_2_el10b1",
+          "pax": 1,
+          "fare": 2000,
+          "fareBasis": "per_pax",
+          "total": 2000,
+          "travelistaShare": 1500,
+          "commission": 500,
+          "bookedBy": "DARREN",
+          "remarks": "COMMISSION P500 ONLY/ 1500 FOR TRAV",
+          "payoutType": "",
+          "payee": "",
+          "method": "",
+          "amendsSeq": null,
+          "dTotal": 0,
+          "dShare": 0,
+          "dCommission": 0,
+          "dPax": 0,
+          "periodKey": "2026-11-B",
+          "staff": "Kianne",
+          "staffRole": "staff",
+          "businessDate": "2026-11-25",
+          "reversesId": null,
+          "reversesKind": null,
+          "prevHash": "9c3e396b491368a68ffba528e52e8f01ad4c3a47c64c85496836732373851557",
+          "hash": "6e30e91219736baf97c2107ab2436157642e819b1da202832d59f50595764dfc"
         }
       ]
     }
