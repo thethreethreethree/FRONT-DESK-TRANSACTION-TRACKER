@@ -3,11 +3,11 @@
     "app": "Frendz Front Desk Transaction Tracker",
     "build": "2026-08-19-merge-sync",
     "writtenBy": "Marie",
-    "exportedAt": "2026-11-25T21:54:26.726Z",
+    "exportedAt": "2026-11-25T21:55:57.034Z",
     "version": 1,
-    "coh": 84000,
-    "entries": 20261,
-    "auditEvents": 9903,
+    "coh": 85000,
+    "entries": 20262,
+    "auditEvents": 9905,
     "integrity": {
       "ok": true,
       "brokenAtSeq": null
@@ -41,8 +41,8 @@
         "path": "data/ledger-backup.json",
         "autoSync": true,
         "enabled": true,
-        "lastBackupAt": "2026-11-25T14:48:01.093Z",
-        "lastBackupSha": "6bf36845f6da2b5a42a205c156367279f9d4d745"
+        "lastBackupAt": "2026-11-25T21:54:42.635Z",
+        "lastBackupSha": "2cbfd00e8520870a407cda3f1e92756a9a73d01d"
       },
       "towelTracker": {
         "enabled": true,
@@ -512286,6 +512286,37 @@
         "reversesId": null,
         "prevHash": "c254fdf794ffa2debd94a6439139985356e0cda5fd283436160be803ef0db970",
         "hash": "4dd498bbddae0bcfa31c66419d48c364c49f8a0062537a5e7a6662297a5c7a83"
+      },
+      {
+        "seq": 20262,
+        "id": "txn_mwwnxd6c_7_e8zqj5",
+        "ts": "2026-11-25T21:55:50.388Z",
+        "kind": "deposit",
+        "itemTypeId": "item_mpxxdbc3_2_s3d7ag",
+        "itemName": "Towel",
+        "qty": 1,
+        "unitAmount": 1000,
+        "amount": 1000,
+        "direction": 1,
+        "guest": "Cooper Gran",
+        "room": "304",
+        "pax": null,
+        "shiftId": "shift_mpy3b19n_5_j6nxol",
+        "shiftLabel": "PM",
+        "businessDate": "2026-11-26",
+        "staff": "Marie",
+        "staffRole": "staff",
+        "note": "",
+        "towelNo": "282",
+        "oldTowelNo": "",
+        "towelLost": false,
+        "refundsSeq": null,
+        "exchangesSeq": null,
+        "mewsRes": "",
+        "privateRoom": false,
+        "reversesId": null,
+        "prevHash": "4dd498bbddae0bcfa31c66419d48c364c49f8a0062537a5e7a6662297a5c7a83",
+        "hash": "8cfd12a70a9a41835fc248ac1a0293f3edada593d48c92a95ef291b05295e035"
       }
     ],
     "audit": [
@@ -680680,6 +680711,41 @@
         },
         "prevHash": "6fbc368d59f3a1ddb176d3a2ec292a86b4b5cda3b656a1e6cbe0882b4a676b12",
         "hash": "e2a6dd7b8b1c565092cce2f20bccf295c3d606b730d7d6a384612d16b6dc8e1f"
+      },
+      {
+        "seq": 9904,
+        "id": "aud_mwwnvx6o_6_v5vymb",
+        "ts": "2026-11-25T21:54:43.008Z",
+        "actor": "Marie",
+        "role": "staff",
+        "action": "backup.github",
+        "what": "Backup committed to thethreethreethree/FRONT-DESK-TRANSACTION-TRACKER@main (auto-sync)",
+        "details": {
+          "reason": "auto-sync",
+          "coh": 84000,
+          "entries": 20261
+        },
+        "prevHash": "e2a6dd7b8b1c565092cce2f20bccf295c3d606b730d7d6a384612d16b6dc8e1f",
+        "hash": "e20efd0fcc984f441e60c612cc1417d96c5918ca46c761d04da5772b06965514"
+      },
+      {
+        "seq": 9905,
+        "id": "aud_mwwnxd6d_8_5m3oni",
+        "ts": "2026-11-25T21:55:50.389Z",
+        "actor": "Marie",
+        "role": "staff",
+        "action": "deposit.create",
+        "what": "Deposit ₱1,000.00 · Towel ×1 · Cooper Gran",
+        "details": {
+          "ref": 20262,
+          "id": "txn_mwwnxd6c_7_e8zqj5",
+          "amount": 1000,
+          "item": "Towel",
+          "guest": "Cooper Gran",
+          "room": "304"
+        },
+        "prevHash": "e20efd0fcc984f441e60c612cc1417d96c5918ca46c761d04da5772b06965514",
+        "hash": "53669cbc666258eb743459b8fac775e9488c7625aabeba79b41d1544fd77eca3"
       }
     ],
     "towels": [
