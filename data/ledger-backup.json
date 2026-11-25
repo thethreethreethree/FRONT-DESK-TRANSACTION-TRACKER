@@ -3,11 +3,11 @@
     "app": "Frendz Front Desk Transaction Tracker",
     "build": "2026-08-19-merge-sync",
     "writtenBy": "Chalyn",
-    "exportedAt": "2026-11-25T02:28:48.704Z",
+    "exportedAt": "2026-11-25T02:29:06.867Z",
     "version": 1,
-    "coh": 88200,
-    "entries": 20224,
-    "auditEvents": 9831,
+    "coh": 84200,
+    "entries": 20225,
+    "auditEvents": 9833,
     "integrity": {
       "ok": true,
       "brokenAtSeq": null
@@ -41,8 +41,8 @@
         "path": "data/ledger-backup.json",
         "autoSync": true,
         "enabled": true,
-        "lastBackupAt": "2026-11-25T02:28:41.980Z",
-        "lastBackupSha": "3236985fdba4180f9883a3c88fbed1eeeba3f978"
+        "lastBackupAt": "2026-11-25T02:29:00.212Z",
+        "lastBackupSha": "b3e3eb49e15ca9c9904828a0936ca25dff6d59e1"
       },
       "towelTracker": {
         "enabled": true,
@@ -511139,6 +511139,37 @@
         "reversesId": null,
         "prevHash": "5e9369272a40ac27717aadaf004d29e18c6098cc9e3b028c2b570d00c4b5ebac",
         "hash": "c14aec3b0aaed70f90ccea0a4a8d068bd3572fb6b733922a91d62834ce86cfc6"
+      },
+      {
+        "seq": 20225,
+        "id": "txn_mwvi8psi_14_ku4o8d",
+        "ts": "2026-11-25T02:28:56.082Z",
+        "kind": "refund",
+        "itemTypeId": "item_mpxxdbc3_2_s3d7ag",
+        "itemName": "Towel",
+        "qty": 1,
+        "unitAmount": 4000,
+        "amount": 4000,
+        "direction": -1,
+        "guest": "Sam Vernon",
+        "room": "304",
+        "pax": null,
+        "shiftId": "shift_mpy3b19n_5_j6nxol",
+        "shiftLabel": "PM",
+        "businessDate": "2026-11-25",
+        "staff": "Chalyn",
+        "staffRole": "staff",
+        "note": "",
+        "towelNo": "44 411 478 117",
+        "oldTowelNo": "",
+        "towelLost": false,
+        "refundsSeq": 20143,
+        "exchangesSeq": null,
+        "mewsRes": "",
+        "privateRoom": false,
+        "reversesId": null,
+        "prevHash": "c14aec3b0aaed70f90ccea0a4a8d068bd3572fb6b733922a91d62834ce86cfc6",
+        "hash": "ed00c391050cadeb60dfdfe27c61dbcdeea156a09a62213c6025545c6eaa2330"
       }
     ],
     "audit": [
@@ -678288,6 +678319,41 @@
         },
         "prevHash": "2235ad047fcb43b5fd25d11967e68af1b1eb94a2e6686ae09151524d001eac1c",
         "hash": "d02f7349f7305547760a4176c9038703d9e5cd97a3328216306e711b92f16ea1"
+      },
+      {
+        "seq": 9832,
+        "id": "aud_mwvi8psi_15_jk48rz",
+        "ts": "2026-11-25T02:28:56.082Z",
+        "actor": "Chalyn",
+        "role": "staff",
+        "action": "refund.create",
+        "what": "Refund ₱4,000.00 · Towel ×1 · Sam Vernon",
+        "details": {
+          "ref": 20225,
+          "id": "txn_mwvi8psi_14_ku4o8d",
+          "amount": 4000,
+          "item": "Towel",
+          "guest": "Sam Vernon",
+          "room": "304"
+        },
+        "prevHash": "d02f7349f7305547760a4176c9038703d9e5cd97a3328216306e711b92f16ea1",
+        "hash": "dc3890edbca81fd457ce27eec65ef3d6710d838fda1319f90696f7e429027281"
+      },
+      {
+        "seq": 9833,
+        "id": "aud_mwvi8sz8_16_76dob7",
+        "ts": "2026-11-25T02:29:00.212Z",
+        "actor": "Chalyn",
+        "role": "staff",
+        "action": "backup.github",
+        "what": "Backup committed to thethreethreethree/FRONT-DESK-TRANSACTION-TRACKER@main (auto-sync)",
+        "details": {
+          "reason": "auto-sync",
+          "coh": 88200,
+          "entries": 20225
+        },
+        "prevHash": "dc3890edbca81fd457ce27eec65ef3d6710d838fda1319f90696f7e429027281",
+        "hash": "99a69a04e385415f3483c9e69d17bab08cc128b48961822c826e41affba43ad0"
       }
     ],
     "towels": [
