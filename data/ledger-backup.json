@@ -2,12 +2,12 @@
   "meta": {
     "app": "Frendz Front Desk Transaction Tracker",
     "build": "2026-08-19-merge-sync",
-    "writtenBy": "Marie",
-    "exportedAt": "2026-11-25T13:41:18.928Z",
+    "writtenBy": "DARREN",
+    "exportedAt": "2026-11-25T14:47:27.220Z",
     "version": 1,
     "coh": 84000,
-    "entries": 20260,
-    "auditEvents": 9896,
+    "entries": 20261,
+    "auditEvents": 9900,
     "integrity": {
       "ok": true,
       "brokenAtSeq": null
@@ -41,8 +41,8 @@
         "path": "data/ledger-backup.json",
         "autoSync": true,
         "enabled": true,
-        "lastBackupAt": "2026-11-25T11:36:03.296Z",
-        "lastBackupSha": "e03eb2eaf33d43591bd5028d85b0113407da141d"
+        "lastBackupAt": "2026-11-25T13:41:41.999Z",
+        "lastBackupSha": "93e3bdb2918f577e58598c2c51e02bfa7bd91b12"
       },
       "towelTracker": {
         "enabled": true,
@@ -512255,6 +512255,37 @@
         "reversesId": null,
         "prevHash": "1348cd77c02cd0ca54b63f036f3473a0db561ef4266fcb24787d3fbfbd3d331d",
         "hash": "c254fdf794ffa2debd94a6439139985356e0cda5fd283436160be803ef0db970"
+      },
+      {
+        "seq": 20261,
+        "id": "txn_mww768y7_1_d1cd33",
+        "ts": "2026-11-25T14:06:51.343Z",
+        "kind": "exchange",
+        "itemTypeId": "item_mpxxdbc3_2_s3d7ag",
+        "itemName": "Towel",
+        "qty": 1,
+        "unitAmount": 0,
+        "amount": 0,
+        "direction": 0,
+        "guest": "Kevin",
+        "room": "308",
+        "pax": null,
+        "shiftId": "shift_mpy3b19n_5_j6nxol",
+        "shiftLabel": "PM",
+        "businessDate": "2026-11-25",
+        "staff": "DARREN",
+        "staffRole": "manager",
+        "note": "Towel exchange: #97 → #283 (deposit #20161)",
+        "towelNo": "283",
+        "oldTowelNo": "97",
+        "towelLost": false,
+        "refundsSeq": null,
+        "exchangesSeq": 20161,
+        "mewsRes": "",
+        "privateRoom": false,
+        "reversesId": null,
+        "prevHash": "c254fdf794ffa2debd94a6439139985356e0cda5fd283436160be803ef0db970",
+        "hash": "4dd498bbddae0bcfa31c66419d48c364c49f8a0062537a5e7a6662297a5c7a83"
       }
     ],
     "audit": [
@@ -680547,6 +680578,66 @@
         },
         "prevHash": "1b752df9a7ffb6ff03f64f3f09197f6245c46e75e30ae79f4653ee8c57965b33",
         "hash": "a525ae5e62c706f758f9dc07f3fd9958b3926b5ce924fceef167cedfb5bfde82"
+      },
+      {
+        "seq": 9897,
+        "id": "aud_mww69whx_41_82qnp4",
+        "ts": "2026-11-25T13:41:42.213Z",
+        "actor": "Marie",
+        "role": "staff",
+        "action": "backup.github",
+        "what": "Backup committed to thethreethreethree/FRONT-DESK-TRANSACTION-TRACKER@main (auto-sync)",
+        "details": {
+          "reason": "auto-sync",
+          "coh": 84000,
+          "entries": 20260
+        },
+        "prevHash": "a525ae5e62c706f758f9dc07f3fd9958b3926b5ce924fceef167cedfb5bfde82",
+        "hash": "3d072549daaca01bd55a28c17047e656dd03fe5ac0cebecfe1cca34e84c4db7b"
+      },
+      {
+        "seq": 9898,
+        "id": "aud_mww6lg07_1_fo4wmx",
+        "ts": "2026-11-25T13:50:40.711Z",
+        "actor": "Marie",
+        "role": "staff",
+        "action": "auth.logout",
+        "what": "Marie signed out",
+        "details": {},
+        "prevHash": "3d072549daaca01bd55a28c17047e656dd03fe5ac0cebecfe1cca34e84c4db7b",
+        "hash": "f48acbd70f8bd2eed1a48f840f46276797a0067ba66d83f52cfa700a8614f859"
+      },
+      {
+        "seq": 9899,
+        "id": "aud_mww6lkxp_2_sgnwaq",
+        "ts": "2026-11-25T13:50:47.101Z",
+        "actor": "DARREN",
+        "role": "manager",
+        "action": "auth.login",
+        "what": "DARREN signed in as manager",
+        "details": {
+          "role": "manager"
+        },
+        "prevHash": "f48acbd70f8bd2eed1a48f840f46276797a0067ba66d83f52cfa700a8614f859",
+        "hash": "ffe3efc862a860be4adb60ef302b880aa92ad65773124877ac0ef1ca768a7dd3"
+      },
+      {
+        "seq": 9900,
+        "id": "aud_mww768y8_2_dgrkj9",
+        "ts": "2026-11-25T14:06:51.344Z",
+        "actor": "DARREN",
+        "role": "manager",
+        "action": "towel.exchange",
+        "what": "Towel exchange · Kevin · #97 → #283 (deposit #20161)",
+        "details": {
+          "oldTowelNo": "97",
+          "newTowelNo": "283",
+          "exchangesSeq": 20161,
+          "guest": "Kevin",
+          "room": "308"
+        },
+        "prevHash": "ffe3efc862a860be4adb60ef302b880aa92ad65773124877ac0ef1ca768a7dd3",
+        "hash": "143e42ee8e5e7394e08f5f60497a0e9fa47fd7fd22dd657de1e0b503f5142c38"
       }
     ],
     "towels": [
