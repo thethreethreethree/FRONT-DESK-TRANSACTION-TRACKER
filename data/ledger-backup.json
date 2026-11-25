@@ -3,11 +3,11 @@
     "app": "Frendz Front Desk Transaction Tracker",
     "build": "2026-08-19-merge-sync",
     "writtenBy": "Chalyn",
-    "exportedAt": "2026-11-25T02:31:16.531Z",
+    "exportedAt": "2026-11-25T02:32:02.532Z",
     "version": 1,
-    "coh": 72000,
-    "entries": 20230,
-    "auditEvents": 9842,
+    "coh": 71000,
+    "entries": 20231,
+    "auditEvents": 9844,
     "integrity": {
       "ok": true,
       "brokenAtSeq": null
@@ -41,8 +41,8 @@
         "path": "data/ledger-backup.json",
         "autoSync": true,
         "enabled": true,
-        "lastBackupAt": "2026-11-25T02:31:09.788Z",
-        "lastBackupSha": "132326039e63684fd2b03a1ca3c120f136cfc261"
+        "lastBackupAt": "2026-11-25T02:31:28.738Z",
+        "lastBackupSha": "34b27583a0b74533521e719819eb2b12b27bce7c"
       },
       "towelTracker": {
         "enabled": true,
@@ -511325,6 +511325,37 @@
         "reversesId": null,
         "prevHash": "b78d64e4acf1b234dadb6aa43aee4b2b4a2228ac336c20d462cdfafae9dbe494",
         "hash": "bab664d7cfeab79533f9440c432f262e819b23cf769dae7f2528dd828403518e"
+      },
+      {
+        "seq": 20231,
+        "id": "txn_mwvickia_1m_249hbd",
+        "ts": "2026-11-25T02:31:55.858Z",
+        "kind": "refund",
+        "itemTypeId": "item_mpxxdbc3_2_s3d7ag",
+        "itemName": "Towel",
+        "qty": 1,
+        "unitAmount": 1000,
+        "amount": 1000,
+        "direction": -1,
+        "guest": "Marie-Jade Auclair",
+        "room": "302",
+        "pax": null,
+        "shiftId": "shift_mpy3b19n_5_j6nxol",
+        "shiftLabel": "PM",
+        "businessDate": "2026-11-25",
+        "staff": "Chalyn",
+        "staffRole": "staff",
+        "note": "",
+        "towelNo": "100",
+        "oldTowelNo": "",
+        "towelLost": false,
+        "refundsSeq": 20181,
+        "exchangesSeq": null,
+        "mewsRes": "",
+        "privateRoom": false,
+        "reversesId": null,
+        "prevHash": "bab664d7cfeab79533f9440c432f262e819b23cf769dae7f2528dd828403518e",
+        "hash": "0bf3e5cc61d7571429fab3381767c23174a45962c99c96970491e52666060525"
       }
     ],
     "audit": [
@@ -678668,6 +678699,41 @@
         },
         "prevHash": "8967b15ca20f6c6ac4ba2b74994ab11349d21b6199dc30ecb05de5efa6102a1c",
         "hash": "ba2b1b5872385ce7556ce4c1a9e9d38c7bc13c161b4cb1b58e0fc58fe6710ee9"
+      },
+      {
+        "seq": 9843,
+        "id": "aud_mwvibzkz_1l_ys51wt",
+        "ts": "2026-11-25T02:31:28.739Z",
+        "actor": "Chalyn",
+        "role": "staff",
+        "action": "backup.github",
+        "what": "Backup committed to thethreethreethree/FRONT-DESK-TRANSACTION-TRACKER@main (auto-sync)",
+        "details": {
+          "reason": "auto-sync",
+          "coh": 72000,
+          "entries": 20230
+        },
+        "prevHash": "ba2b1b5872385ce7556ce4c1a9e9d38c7bc13c161b4cb1b58e0fc58fe6710ee9",
+        "hash": "f54dc90971870f75086d5ecf1c4a23a359a17f6c2f87bfffefb0dd932e37b33a"
+      },
+      {
+        "seq": 9844,
+        "id": "aud_mwvickia_1n_88u6ly",
+        "ts": "2026-11-25T02:31:55.858Z",
+        "actor": "Chalyn",
+        "role": "staff",
+        "action": "refund.create",
+        "what": "Refund ₱1,000.00 · Towel ×1 · Marie-Jade Auclair",
+        "details": {
+          "ref": 20231,
+          "id": "txn_mwvickia_1m_249hbd",
+          "amount": 1000,
+          "item": "Towel",
+          "guest": "Marie-Jade Auclair",
+          "room": "302"
+        },
+        "prevHash": "f54dc90971870f75086d5ecf1c4a23a359a17f6c2f87bfffefb0dd932e37b33a",
+        "hash": "f384c9df995dc2b162d0b3fb4442ff31e38450bc22a3e1de9a831ed8b0c1c10b"
       }
     ],
     "towels": [
