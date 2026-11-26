@@ -3,11 +3,11 @@
     "app": "Frendz Front Desk Transaction Tracker",
     "build": "2026-08-19-merge-sync",
     "writtenBy": "James",
-    "exportedAt": "2026-11-26T23:32:57.007Z",
+    "exportedAt": "2026-11-26T23:33:56.444Z",
     "version": 1,
-    "coh": 92000,
-    "entries": 20305,
-    "auditEvents": 10023,
+    "coh": 89000,
+    "entries": 20306,
+    "auditEvents": 10025,
     "integrity": {
       "ok": true,
       "brokenAtSeq": null
@@ -41,8 +41,8 @@
         "path": "data/ledger-backup.json",
         "autoSync": true,
         "enabled": true,
-        "lastBackupAt": "2026-11-26T23:32:49.933Z",
-        "lastBackupSha": "6dc2b6735bcfe4933a8a22c27b32c28edb070767"
+        "lastBackupAt": "2026-11-26T23:33:07.809Z",
+        "lastBackupSha": "c26bc501535e60cbd4d8f132476abda9e2bcab39"
       },
       "towelTracker": {
         "enabled": true,
@@ -513650,6 +513650,37 @@
         "reversesId": null,
         "prevHash": "429719d41a452a26b00f5275da8650c22092e5042f87d4ae3af2412df218ca4c",
         "hash": "647f71787a800833e9082b401df219d2138488d9b6935112fe02fb36a37a27eb"
+      },
+      {
+        "seq": 20306,
+        "id": "txn_mwy6v8gb_10_x1alv7",
+        "ts": "2026-11-26T23:33:49.835Z",
+        "kind": "reversal",
+        "itemTypeId": "item_mpxxdbc3_2_s3d7ag",
+        "itemName": "Towel",
+        "qty": 3,
+        "unitAmount": 1000,
+        "amount": 3000,
+        "direction": -1,
+        "guest": "kim",
+        "room": "203",
+        "pax": null,
+        "shiftId": "shift_mpy3b19n_5_j6nxol",
+        "shiftLabel": "PM",
+        "businessDate": "2026-11-27",
+        "staff": "James",
+        "staffRole": "manager",
+        "note": "VOID of #20305 (deposit Towel kim). Reason: Double input.",
+        "towelNo": "412 200 306",
+        "oldTowelNo": "",
+        "towelLost": false,
+        "refundsSeq": null,
+        "exchangesSeq": null,
+        "mewsRes": "",
+        "privateRoom": false,
+        "reversesId": "txn_mwy2o8x4_q_zxcjsu",
+        "prevHash": "647f71787a800833e9082b401df219d2138488d9b6935112fe02fb36a37a27eb",
+        "hash": "c61644add0eb7e8e92d7bafe97786a55023aefe14a41179ca635e5717984cd69"
       }
     ],
     "audit": [
@@ -684060,6 +684091,38 @@
         },
         "prevHash": "b05e882534c474722a0cc0bf3593b738dc606c09e61a0612e5e0a106d5b21d50",
         "hash": "d11cd54b09a55a6abdcc288c96fb384f6eaaaa47105c6cc61781036fa178025d"
+      },
+      {
+        "seq": 10024,
+        "id": "aud_mwy6uc0y_z_lmnmjf",
+        "ts": "2026-11-26T23:33:07.810Z",
+        "actor": "James",
+        "role": "manager",
+        "action": "backup.github",
+        "what": "Backup committed to thethreethreethree/FRONT-DESK-TRANSACTION-TRACKER@main (auto-sync)",
+        "details": {
+          "reason": "auto-sync",
+          "coh": 92000,
+          "entries": 20305
+        },
+        "prevHash": "d11cd54b09a55a6abdcc288c96fb384f6eaaaa47105c6cc61781036fa178025d",
+        "hash": "98255c79068989160c8bdd15d946c5cbebe3e484a0fa51f254869c8d59ef125c"
+      },
+      {
+        "seq": 10025,
+        "id": "aud_mwy6v8gb_11_jcz3bc",
+        "ts": "2026-11-26T23:33:49.835Z",
+        "actor": "James",
+        "role": "manager",
+        "action": "txn.void",
+        "what": "Voided #20305 (deposit Towel · kim · ₱3,000.00)",
+        "details": {
+          "ref": 20305,
+          "reversalSeq": 20306,
+          "reason": "Double input."
+        },
+        "prevHash": "98255c79068989160c8bdd15d946c5cbebe3e484a0fa51f254869c8d59ef125c",
+        "hash": "300f2e94cc378ba172784e144cd41b0faea273fd3dc5587409ad4ffc0c0534ff"
       }
     ],
     "towels": [
