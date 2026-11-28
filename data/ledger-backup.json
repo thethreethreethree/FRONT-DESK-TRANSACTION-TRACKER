@@ -2,12 +2,12 @@
   "meta": {
     "app": "Frendz Front Desk Transaction Tracker",
     "build": "2026-08-19-merge-sync",
-    "writtenBy": "Rebecca",
-    "exportedAt": "2026-11-28T04:50:45.975Z",
+    "writtenBy": "GINO",
+    "exportedAt": "2026-11-28T05:41:49.885Z",
     "version": 1,
-    "coh": 57000,
-    "entries": 20360,
-    "auditEvents": 10139,
+    "coh": 56000,
+    "entries": 20361,
+    "auditEvents": 10143,
     "integrity": {
       "ok": true,
       "brokenAtSeq": null
@@ -41,8 +41,8 @@
         "path": "data/ledger-backup.json",
         "autoSync": true,
         "enabled": true,
-        "lastBackupAt": "2026-11-28T04:17:23.674Z",
-        "lastBackupSha": "7a6661babc1af5bf5ebfe4d71a3733aca978cd83"
+        "lastBackupAt": "2026-11-28T04:50:56.043Z",
+        "lastBackupSha": "8f8abcc6b4bd248b86aaa8e2f08b92010da28fc1"
       },
       "towelTracker": {
         "enabled": true,
@@ -515355,6 +515355,37 @@
         "reversesId": null,
         "prevHash": "d82736f6b1f26899c769f8e7baff3e5c212f178ba757f471e506d9f687e67cc8",
         "hash": "407b775ac1cdb760efc2dee8855e700b5d48b45dcdeb7db9f35ff418205cc115"
+      },
+      {
+        "seq": 20361,
+        "id": "txn_mwzy3890_1_2sapj2",
+        "ts": "2026-11-28T05:03:38.628Z",
+        "kind": "refund",
+        "itemTypeId": "item_mpxxdbc3_2_s3d7ag",
+        "itemName": "Towel",
+        "qty": 1,
+        "unitAmount": 1000,
+        "amount": 1000,
+        "direction": -1,
+        "guest": "JADE",
+        "room": "409",
+        "pax": null,
+        "shiftId": "shift_mpy3b19n_5_j6nxol",
+        "shiftLabel": "PM",
+        "businessDate": "2026-11-28",
+        "staff": "Rebecca",
+        "staffRole": "staff",
+        "note": "",
+        "towelNo": "255",
+        "oldTowelNo": "",
+        "towelLost": false,
+        "refundsSeq": 20250,
+        "exchangesSeq": null,
+        "mewsRes": "",
+        "privateRoom": false,
+        "reversesId": null,
+        "prevHash": "407b775ac1cdb760efc2dee8855e700b5d48b45dcdeb7db9f35ff418205cc115",
+        "hash": "92804e1ca2616b2948ef05d99a708b8cd4ffe88b506434f6a1579670a7b4811f"
       }
     ],
     "audit": [
@@ -687762,6 +687793,67 @@
         },
         "prevHash": "afd9614fa28e3ace2d1a2ef89d9544c53224c2a769af767cd0755a779e6177a2",
         "hash": "b452f3adc6845feafc25989ed8db738c704b12389a903b0c074e1cd5cbaaf374"
+      },
+      {
+        "seq": 10140,
+        "id": "aud_mwzxmvu4_4_k3zdqj",
+        "ts": "2026-11-28T04:50:56.044Z",
+        "actor": "Rebecca",
+        "role": "staff",
+        "action": "backup.github",
+        "what": "Backup committed to thethreethreethree/FRONT-DESK-TRANSACTION-TRACKER@main (auto-sync)",
+        "details": {
+          "reason": "auto-sync",
+          "coh": 57000,
+          "entries": 20360
+        },
+        "prevHash": "b452f3adc6845feafc25989ed8db738c704b12389a903b0c074e1cd5cbaaf374",
+        "hash": "2e6e1af3f6c38a7daf7dfe1f9dedbd00867409961145115408c8e11fa363d9f7"
+      },
+      {
+        "seq": 10141,
+        "id": "aud_mwzy3890_2_po5lx5",
+        "ts": "2026-11-28T05:03:38.628Z",
+        "actor": "Rebecca",
+        "role": "staff",
+        "action": "refund.create",
+        "what": "Refund ₱1,000.00 · Towel ×1 · JADE",
+        "details": {
+          "ref": 20361,
+          "id": "txn_mwzy3890_1_2sapj2",
+          "amount": 1000,
+          "item": "Towel",
+          "guest": "JADE",
+          "room": "409"
+        },
+        "prevHash": "2e6e1af3f6c38a7daf7dfe1f9dedbd00867409961145115408c8e11fa363d9f7",
+        "hash": "399cc87313c4f5b3c9d25906c83aec0ea5a8263df9487893f57028fba7c81dcf"
+      },
+      {
+        "seq": 10142,
+        "id": "aud_mwzz5nyt_1_kq36j2",
+        "ts": "2026-11-28T05:33:31.925Z",
+        "actor": "Rebecca",
+        "role": "staff",
+        "action": "auth.logout",
+        "what": "Rebecca signed out",
+        "details": {},
+        "prevHash": "399cc87313c4f5b3c9d25906c83aec0ea5a8263df9487893f57028fba7c81dcf",
+        "hash": "9fa926eabf9ec578445cdc9b0253988937cf92931829ee768e91ae59f8a28cb1"
+      },
+      {
+        "seq": 10143,
+        "id": "aud_mwzz5tm5_2_4vmann",
+        "ts": "2026-11-28T05:33:39.245Z",
+        "actor": "GINO",
+        "role": "staff",
+        "action": "auth.login",
+        "what": "GINO signed in as staff",
+        "details": {
+          "role": "staff"
+        },
+        "prevHash": "9fa926eabf9ec578445cdc9b0253988937cf92931829ee768e91ae59f8a28cb1",
+        "hash": "17df41a141b073143e6e338e5c55b1f70292e6cb1329588aa2e075377e616bdd"
       }
     ],
     "towels": [
