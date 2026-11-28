@@ -2,12 +2,12 @@
   "meta": {
     "app": "Frendz Front Desk Transaction Tracker",
     "build": "2026-08-19-merge-sync",
-    "writtenBy": "GINO",
-    "exportedAt": "2026-11-28T11:34:55.498Z",
+    "writtenBy": "Chalyn",
+    "exportedAt": "2026-11-28T18:35:51.866Z",
     "version": 1,
     "coh": 73000,
     "entries": 20371,
-    "auditEvents": 10167,
+    "auditEvents": 10171,
     "integrity": {
       "ok": true,
       "brokenAtSeq": null
@@ -16,7 +16,7 @@
       "ok": true,
       "brokenAtSeq": null
     },
-    "travelistaEntries": 238,
+    "travelistaEntries": 239,
     "travelistaIntegrity": {
       "ok": true,
       "brokenAtSeq": null
@@ -41,8 +41,8 @@
         "path": "data/ledger-backup.json",
         "autoSync": true,
         "enabled": true,
-        "lastBackupAt": "2026-11-28T11:30:26.036Z",
-        "lastBackupSha": "9ddc8a07599949e3d009ce1d9c33b697c2d860be"
+        "lastBackupAt": "2026-11-28T11:35:06.551Z",
+        "lastBackupSha": "efcf63d93f2642d8863970b5870698ae530cbe0b"
       },
       "towelTracker": {
         "enabled": true,
@@ -688583,6 +688583,69 @@
         },
         "prevHash": "265a4f586bfdb0b3ecd2b5b0ec48b6666753ecce5e15ab14c5693208052a97d4",
         "hash": "f2d8539b44ae503ff67d2ad8a193d0bf8c9515c0f6eb1840bc30066a068d68a1"
+      },
+      {
+        "seq": 10168,
+        "id": "aud_mx0c2nnf_a_txs1wp",
+        "ts": "2026-11-28T11:35:06.555Z",
+        "actor": "GINO",
+        "role": "staff",
+        "action": "backup.github",
+        "what": "Backup committed to thethreethreethree/FRONT-DESK-TRANSACTION-TRACKER@main (auto-sync)",
+        "details": {
+          "reason": "auto-sync",
+          "coh": 73000,
+          "entries": 20371
+        },
+        "prevHash": "f2d8539b44ae503ff67d2ad8a193d0bf8c9515c0f6eb1840bc30066a068d68a1",
+        "hash": "b125e7c4c10da841b1cf5308076f8290754b7bf63ba1e566c1dda1d9c83f42ef"
+      },
+      {
+        "seq": 10169,
+        "id": "aud_mx0fh56t_b_mkxq2j",
+        "ts": "2026-11-28T13:10:21.317Z",
+        "actor": "GINO",
+        "role": "staff",
+        "action": "auth.logout",
+        "what": "GINO signed out",
+        "details": {},
+        "prevHash": "b125e7c4c10da841b1cf5308076f8290754b7bf63ba1e566c1dda1d9c83f42ef",
+        "hash": "79b9bd3476834a454b54b77a90066852ecc714d02de2dd7db3dcbaaaef5ce0d9"
+      },
+      {
+        "seq": 10170,
+        "id": "aud_mx0fh8j8_c_lr5omw",
+        "ts": "2026-11-28T13:10:25.652Z",
+        "actor": "Chalyn",
+        "role": "staff",
+        "action": "auth.login",
+        "what": "Chalyn signed in as staff",
+        "details": {
+          "role": "staff"
+        },
+        "prevHash": "79b9bd3476834a454b54b77a90066852ecc714d02de2dd7db3dcbaaaef5ce0d9",
+        "hash": "1ffef4ee92e85b0fbc5949edf87a0cb72668b1a1137e61eb4fd354823a9f0577"
+      },
+      {
+        "seq": 10171,
+        "id": "aud_mx0lwabb_e_5ogqtq",
+        "ts": "2026-11-28T16:10:05.495Z",
+        "actor": "Chalyn",
+        "role": "staff",
+        "action": "tv.booking.create",
+        "what": "Travelista booking #239 · LARISSA BUGGLE · PPS SHARING VAN ×1 pax · ₱750 (commission ₱100)",
+        "details": {
+          "ref": 239,
+          "id": "tv_mx0lwaba_d_dbne9e",
+          "guest": "LARISSA BUGGLE",
+          "destination": "PPS SHARING VAN",
+          "pax": 1,
+          "total": 750,
+          "commission": 100,
+          "bookedBy": "CHALYN"
+        },
+        "prevHash": "1ffef4ee92e85b0fbc5949edf87a0cb72668b1a1137e61eb4fd354823a9f0577",
+        "hash": "0e660073bd335eb50c84e2f28ef0935ca403bb009159aabfbf66f60a7dcf581b"
       }
     ],
     "towels": [
@@ -706584,6 +706647,42 @@
           "reversesKind": null,
           "prevHash": "ce2f1e9a223cb53204ef53c8f17f375c859143faad2760823cc7bde1205c00e7",
           "hash": "7aca989e44b462f06b27d8e564c402c33e2c5830e8ec8c4e63b8c27d5d5a49f8"
+        },
+        {
+          "seq": 239,
+          "id": "tv_mx0lwaba_d_dbne9e",
+          "ts": "2026-11-28T16:10:05.494Z",
+          "kind": "booking",
+          "direction": 1,
+          "amount": 750,
+          "departureDate": "2026-11-30",
+          "guest": "LARISSA BUGGLE",
+          "destination": "PPS SHARING VAN",
+          "destinationId": "dest_msrh2ktf_d_xyn4hg",
+          "pax": 1,
+          "fare": 750,
+          "fareBasis": "per_pax",
+          "total": 750,
+          "travelistaShare": 650,
+          "commission": 100,
+          "bookedBy": "CHALYN",
+          "remarks": "",
+          "payoutType": "",
+          "payee": "",
+          "method": "",
+          "amendsSeq": null,
+          "dTotal": 0,
+          "dShare": 0,
+          "dCommission": 0,
+          "dPax": 0,
+          "periodKey": "2026-11-B",
+          "staff": "Chalyn",
+          "staffRole": "staff",
+          "businessDate": "2026-11-29",
+          "reversesId": null,
+          "reversesKind": null,
+          "prevHash": "7aca989e44b462f06b27d8e564c402c33e2c5830e8ec8c4e63b8c27d5d5a49f8",
+          "hash": "32f87583f8b4a1ce9eba32a298416936285612dc78b03469ed3a1b1cb0f5eda5"
         }
       ]
     }
