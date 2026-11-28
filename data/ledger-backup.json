@@ -3,11 +3,11 @@
     "app": "Frendz Front Desk Transaction Tracker",
     "build": "2026-08-19-merge-sync",
     "writtenBy": "Rebecca",
-    "exportedAt": "2026-11-28T01:05:10.759Z",
+    "exportedAt": "2026-11-28T01:35:21.494Z",
     "version": 1,
     "coh": 84000,
     "entries": 20341,
-    "auditEvents": 10113,
+    "auditEvents": 10115,
     "integrity": {
       "ok": true,
       "brokenAtSeq": null
@@ -16,7 +16,7 @@
       "ok": true,
       "brokenAtSeq": null
     },
-    "travelistaEntries": 235,
+    "travelistaEntries": 237,
     "travelistaIntegrity": {
       "ok": true,
       "brokenAtSeq": null
@@ -42,7 +42,7 @@
         "autoSync": true,
         "enabled": true,
         "lastBackupAt": "2026-11-27T22:25:00.685Z",
-        "lastBackupSha": "25afae3ad851e0eb521ad017997fb572f7f74e54"
+        "lastBackupSha": "7b53c9826118ad79755a0bb9102e361b56904a06"
       },
       "towelTracker": {
         "enabled": true,
@@ -686690,6 +686690,48 @@
         },
         "prevHash": "e1cff78ae8041ad1dd63e11931f9b86f4638053587ad4565c1ee39ec4d1c06bd",
         "hash": "59cddea169774a287a8d221ed9eb3f4a841703cfcb591dfe0a8f80e1943e5152"
+      },
+      {
+        "seq": 10114,
+        "id": "aud_mwzq5vhd_3e_hein8g",
+        "ts": "2026-11-28T01:21:45.121Z",
+        "actor": "Rebecca",
+        "role": "staff",
+        "action": "tv.booking.create",
+        "what": "Travelista booking #236 · JAVIER ALCARAZ · PPS SHARING VAN ×4 pax · ₱3,000 (commission ₱400)",
+        "details": {
+          "ref": 236,
+          "id": "tv_mwzq5vhd_3d_u095b0",
+          "guest": "JAVIER ALCARAZ",
+          "destination": "PPS SHARING VAN",
+          "pax": 4,
+          "total": 3000,
+          "commission": 400,
+          "bookedBy": "BECCA"
+        },
+        "prevHash": "59cddea169774a287a8d221ed9eb3f4a841703cfcb591dfe0a8f80e1943e5152",
+        "hash": "ca0b7e48451b8cdcadf8df3bf18b30344cd65923bf2379a5c53a8b4e0a82a7bb"
+      },
+      {
+        "seq": 10115,
+        "id": "aud_mwzq6w9t_3g_1y6jub",
+        "ts": "2026-11-28T01:22:32.801Z",
+        "actor": "Rebecca",
+        "role": "staff",
+        "action": "tv.booking.create",
+        "what": "Travelista booking #237 · LUDWIG ANDREAS · PPS SHARING VAN ×1 pax · ₱750 (commission ₱100)",
+        "details": {
+          "ref": 237,
+          "id": "tv_mwzq6w9s_3f_7tpcou",
+          "guest": "LUDWIG ANDREAS",
+          "destination": "PPS SHARING VAN",
+          "pax": 1,
+          "total": 750,
+          "commission": 100,
+          "bookedBy": "KC"
+        },
+        "prevHash": "ca0b7e48451b8cdcadf8df3bf18b30344cd65923bf2379a5c53a8b4e0a82a7bb",
+        "hash": "6786956df234cfd9f4bbbfea12971bbcea8307ca80e5fe2739cf1bd2ad080b44"
       }
     ],
     "towels": [
@@ -704583,6 +704625,78 @@
           "reversesKind": null,
           "prevHash": "1722de17bbbbd27faa9ca8db9126a16b222e2dd9a081b893bb29c043403011d9",
           "hash": "eba1565067eb867afcac6a6f75f8af791fb80854598e7f518008f70d77537f2f"
+        },
+        {
+          "seq": 236,
+          "id": "tv_mwzq5vhd_3d_u095b0",
+          "ts": "2026-11-28T01:21:45.121Z",
+          "kind": "booking",
+          "direction": 1,
+          "amount": 3000,
+          "departureDate": "2026-11-28",
+          "guest": "JAVIER ALCARAZ",
+          "destination": "PPS SHARING VAN",
+          "destinationId": "dest_msrh2ktf_d_xyn4hg",
+          "pax": 4,
+          "fare": 750,
+          "fareBasis": "per_pax",
+          "total": 3000,
+          "travelistaShare": 2600,
+          "commission": 400,
+          "bookedBy": "BECCA",
+          "remarks": "",
+          "payoutType": "",
+          "payee": "",
+          "method": "",
+          "amendsSeq": null,
+          "dTotal": 0,
+          "dShare": 0,
+          "dCommission": 0,
+          "dPax": 0,
+          "periodKey": "2026-11-B",
+          "staff": "Rebecca",
+          "staffRole": "staff",
+          "businessDate": "2026-11-28",
+          "reversesId": null,
+          "reversesKind": null,
+          "prevHash": "eba1565067eb867afcac6a6f75f8af791fb80854598e7f518008f70d77537f2f",
+          "hash": "b0f44ef372274aaede29420849a2455c020acd782ef44a57568915fed06e48d4"
+        },
+        {
+          "seq": 237,
+          "id": "tv_mwzq6w9s_3f_7tpcou",
+          "ts": "2026-11-28T01:22:32.800Z",
+          "kind": "booking",
+          "direction": 1,
+          "amount": 750,
+          "departureDate": "2026-11-29",
+          "guest": "LUDWIG ANDREAS",
+          "destination": "PPS SHARING VAN",
+          "destinationId": "dest_msrh2ktf_d_xyn4hg",
+          "pax": 1,
+          "fare": 750,
+          "fareBasis": "per_pax",
+          "total": 750,
+          "travelistaShare": 650,
+          "commission": 100,
+          "bookedBy": "KC",
+          "remarks": "",
+          "payoutType": "",
+          "payee": "",
+          "method": "",
+          "amendsSeq": null,
+          "dTotal": 0,
+          "dShare": 0,
+          "dCommission": 0,
+          "dPax": 0,
+          "periodKey": "2026-11-B",
+          "staff": "Rebecca",
+          "staffRole": "staff",
+          "businessDate": "2026-11-28",
+          "reversesId": null,
+          "reversesKind": null,
+          "prevHash": "b0f44ef372274aaede29420849a2455c020acd782ef44a57568915fed06e48d4",
+          "hash": "ce2f1e9a223cb53204ef53c8f17f375c859143faad2760823cc7bde1205c00e7"
         }
       ]
     }
